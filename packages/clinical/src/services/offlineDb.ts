@@ -85,6 +85,13 @@ class OfflineDatabaseService {
       if (saved) {
         this.activeClinicId = saved;
       }
+      
+      // Higienização automática: Remove dados fictícios de teste do IVS mantendo apenas dados reais
+      const cleanedFlagKey = 'optomed_ivs_mock_purged_v1';
+      if (!localStorage.getItem(cleanedFlagKey)) {
+        this.removeMockPatients('ivs');
+        localStorage.setItem(cleanedFlagKey, 'true');
+      }
     } catch {
       this.activeClinicId = 'ivs';
     }
@@ -309,29 +316,10 @@ class OfflineDatabaseService {
     return encounters.filter(e => e.syncStatus === 'pending_sync').length;
   }
 
-  // Dados iniciais específicos por consultório
+  // Dados iniciais específicos por consultório (IVS inicia 100% limpo, apenas dados reais cadastrados pelo usuário)
   private getInitialPatientsForClinic(clinicId: string): Patient[] {
     if (clinicId === 'ivs') {
-      return [
-        {
-          id: 'p1-ivs',
-          fullName: 'Maria Helena dos Santos',
-          birthDate: '1984-05-14',
-          sex: 'F',
-          nationality: 'BR',
-          documentType: 'CPF',
-          documentNumber: '123.456.789-00',
-          phoneCountryCode: '+55',
-          phone: '+55 (45) 98765-4321',
-          city: 'Foz do Iguaçu',
-          country: 'Brasil',
-          notes: 'Queixa de cansaço visual e cefaleia ao final do dia de trabalho no computador.',
-          lgpdConsent: true,
-          lgpdConsentDate: new Date().toISOString(),
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        }
-      ];
+      return [];
     } else if (clinicId === 'megastar') {
       return [
         {
@@ -597,6 +585,77 @@ class OfflineDatabaseService {
       return true;
     } catch {
       return false;
+    }
+  }
+
+  // --- LIMPEZA DE DADOS FICTÍCIOS / ZERAR CONSULTÓRIO PARA DADOS 100% REAIS ---
+  public clearClinicData(clinicId = this.activeClinicId): void {
+    try {
+      localStorage.removeItem(this.getKey('patients', clinicId));
+      localStorage.removeItem(this.getKey('encounters', clinicId));
+      localStorage.removeItem(this.getKey('prescriptions', clinicId));
+      localStorage.removeItem(this.getKey('appointments', clinicId));
+      localStorage.removeItem(this.getKey('financial_transactions', clinicId));
+      localStorage.removeItem(this.getKey('work_sessions', clinicId));
+      
+      // Salva explicitamente arrays vazios para evitar recriação de mocks automáticos
+      this.savePatients([], clinicId);
+      this.saveEncounters([], clinicId);
+      this.saveAppointments([], clinicId);
+      this.saveTransactions([], clinicId);
+      this.saveWorkSessions([], clinicId);
+
+      this.logAudit('DELETE', 'PATIENT', 'DATABASE_CLEAR', 'Dados fictícios removidos do consultório; pronto para dados 100% reais.', clinicId);
+
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('optomed_appointment_updated', { detail: { clinicId, appointments: [] } }));
+        window.dispatchEvent(new CustomEvent('optomed_finance_updated', { detail: { clinicId } }));
+      }
+    } catch {}
+  }
+
+  // Remove dados fictícios conhecidos (Maria Helena, Enzo Gabriel, Juan Carlos Benítez) de um consultório
+  public removeMockPatients(clinicId = this.activeClinicId): void {
+    const mockNames = [
+      'maria helena dos santos',
+      'maria helena',
+      'enzo gabriel silva (menor)',
+      'enzo gabriel silva',
+      'juan carlos benítez',
+      'juan carlos benitez'
+    ];
+
+    // 1. Filtrar pacientes
+    const currentPatients = this.getPatients(clinicId);
+    const mockPatientIds = currentPatients
+      .filter(p => mockNames.includes(p.fullName.toLowerCase().trim()))
+      .map(p => p.id);
+
+    const realPatients = currentPatients.filter(p => !mockNames.includes(p.fullName.toLowerCase().trim()));
+    this.savePatients(realPatients, clinicId);
+
+    // 2. Filtrar agendamentos
+    const currentApts = this.getAppointments(clinicId);
+    const realApts = currentApts.filter(a => !mockNames.includes(a.patientName.toLowerCase().trim()) && !mockPatientIds.includes(a.patientId));
+    this.saveAppointments(realApts, clinicId);
+
+    // 3. Filtrar prontuários (por patientId ou prescrição)
+    const currentEncounters = this.getEncounters(clinicId);
+    const realEncounters = currentEncounters.filter(e => {
+      if (mockPatientIds.includes(e.patientId)) return false;
+      if (e.prescription?.patientName && mockNames.includes(e.prescription.patientName.toLowerCase().trim())) return false;
+      return true;
+    });
+    this.saveEncounters(realEncounters, clinicId);
+
+    // 4. Filtrar transações financeiras vinculadas a pacientes fictícios
+    const currentTxs = this.getTransactions(clinicId);
+    const realTxs = currentTxs.filter(t => !t.patientName || !mockNames.includes(t.patientName.toLowerCase().trim()));
+    this.saveTransactions(realTxs, clinicId);
+
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('optomed_appointment_updated', { detail: { clinicId, appointments: realApts } }));
+      window.dispatchEvent(new CustomEvent('optomed_finance_updated', { detail: { clinicId } }));
     }
   }
 
@@ -1027,27 +1086,7 @@ class OfflineDatabaseService {
   private getInitialAppointmentsForClinic(clinicId: string): Appointment[] {
     const today = new Date().toISOString().split('T')[0];
     if (clinicId === 'ivs') {
-      return [
-        {
-          id: 'apt-ivs-1',
-          patientId: 'p1-ivs',
-          patientName: 'Maria Helena dos Santos',
-          patientNationality: 'BR',
-          patientPhone: '+55 (45) 98765-4321',
-          patientDocument: '123.456.789-00',
-          examinerId: 'user-examinador',
-          examinerName: 'Dr. Rudson Meirelles',
-          date: today,
-          time: '08:30',
-          durationMinutes: 30,
-          type: 'refrativo',
-          status: 'waiting',
-          notes: 'Paciente aguardando na recepção.',
-          room: 'Consultório IVS',
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        }
-      ];
+      return [];
     } else if (clinicId === 'megastar') {
       return [
         {

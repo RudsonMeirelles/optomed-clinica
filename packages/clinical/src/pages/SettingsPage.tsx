@@ -680,6 +680,22 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ currentUser, onClini
                   className="hidden"
                 />
               </label>
+
+              <button
+                type="button"
+                onClick={() => {
+                  if (confirm(`Deseja remover todos os registros de demonstração/testes de ${clinics.find(c => c.id === selectedClinicId)?.name} e deixar apenas cadastros reais?`)) {
+                    offlineDb.removeMockPatients(selectedClinicId);
+                    loadData();
+                    showNotification('Dados de teste removidos! Consultório com dados 100% reais.');
+                  }
+                }}
+                className="px-4 py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold text-xs rounded-xl flex items-center gap-2 transition-colors cursor-pointer"
+                title="Limpa cadastros de demonstração do consultório atual"
+              >
+                <Trash2 className="w-4 h-4 text-rose-600" />
+                <span>Limpar Pacientes de Teste</span>
+              </button>
             </div>
           </div>
 
