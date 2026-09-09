@@ -24,42 +24,76 @@ export function useDPad(handlers: DPadHandlers, enabled: boolean = true) {
     }
 
     const key = e.key;
-    const keyCode = e.keyCode;
+    const keyCode = e.keyCode || e.which;
 
-    // Up (Key Up / 38 / Gamepad)
-    if (key === 'ArrowUp' || key === 'Up' || key === 'GamepadDPadUp' || keyCode === 38 || keyCode === 19) {
+    // Up (Key Up / 38 / Gamepad / FireTV)
+    if (
+      key === 'ArrowUp' || 
+      key === 'Up' || 
+      key === 'GamepadDPadUp' || 
+      key === 'VolumeUp' ||
+      keyCode === 38 || 
+      keyCode === 19 ||
+      keyCode === 29460
+    ) {
       e.preventDefault();
       handlers.onUp?.();
       return;
     }
 
-    // Down (Key Down / 40 / Gamepad)
-    if (key === 'ArrowDown' || key === 'Down' || key === 'GamepadDPadDown' || keyCode === 40 || keyCode === 20) {
+    // Down (Key Down / 40 / Gamepad / FireTV)
+    if (
+      key === 'ArrowDown' || 
+      key === 'Down' || 
+      key === 'GamepadDPadDown' || 
+      key === 'VolumeDown' ||
+      keyCode === 40 || 
+      keyCode === 20 ||
+      keyCode === 29461
+    ) {
       e.preventDefault();
       handlers.onDown?.();
       return;
     }
 
-    // Left (Key Left / 37 / Gamepad)
-    if (key === 'ArrowLeft' || key === 'Left' || key === 'GamepadDPadLeft' || keyCode === 37 || keyCode === 21) {
+    // Left (Key Left / 37 / Gamepad / FireTV / Rewind)
+    if (
+      key === 'ArrowLeft' || 
+      key === 'Left' || 
+      key === 'GamepadDPadLeft' || 
+      key === 'MediaRewind' ||
+      key === 'FastFwd' ||
+      keyCode === 37 || 
+      keyCode === 21 ||
+      keyCode === 89
+    ) {
       e.preventDefault();
       handlers.onLeft?.();
       return;
     }
 
-    // Right (Key Right / 39 / Gamepad)
-    if (key === 'ArrowRight' || key === 'Right' || key === 'GamepadDPadRight' || keyCode === 39 || keyCode === 22) {
+    // Right (Key Right / 39 / Gamepad / FireTV / FastForward)
+    if (
+      key === 'ArrowRight' || 
+      key === 'Right' || 
+      key === 'GamepadDPadRight' || 
+      key === 'MediaFastForward' ||
+      keyCode === 39 || 
+      keyCode === 22 ||
+      keyCode === 90
+    ) {
       e.preventDefault();
       handlers.onRight?.();
       return;
     }
 
-    // Center Select / OK / Enter (13 / 23 / 66 / 10009)
+    // Center Select / OK / Enter (13 / 23 / 66 / 10009 / GamepadA)
     if (
       key === 'Enter' ||
       key === 'Select' ||
       key === 'GamepadA' ||
       key === 'Ok' ||
+      key === 'Accept' ||
       keyCode === 13 ||
       keyCode === 23 ||
       keyCode === 66
@@ -94,8 +128,8 @@ export function useDPad(handlers: DPadHandlers, enabled: boolean = true) {
       return;
     }
 
-    // Play/Pause (179 / MediaPlayPause)
-    if (key === 'MediaPlayPause' || keyCode === 179) {
+    // Play/Pause (179 / MediaPlayPause / Space)
+    if (key === 'MediaPlayPause' || key === ' ' || keyCode === 179 || keyCode === 32 || keyCode === 85) {
       e.preventDefault();
       handlers.onPlayPause?.();
       return;

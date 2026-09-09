@@ -367,6 +367,33 @@ export interface Prescription {
   expirationDate: string;
 }
 
+export interface OphthalmicImageRecord {
+  id: string;
+  encounterId: string;
+  category: 'anterior_segment' | 'posterior_segment' | 'retina' | 'cornea' | 'exam_upload' | 'other';
+  eye: 'OD' | 'OE' | 'AO';
+  title: string;
+  notes?: string;
+  dataUrl: string; // Base64 data URL
+  createdAt: string;
+}
+
+export interface EyeDrawingAnnotation {
+  x: number; // Porcentagem 0-100
+  y: number; // Porcentagem 0-100
+  text: string;
+  color: string;
+}
+
+export interface EyeDrawingData {
+  anteriorSegmentOD?: string; // Base64 canvas drawing
+  anteriorSegmentOE?: string;
+  retinaOD?: string;
+  retinaOE?: string;
+  notes?: string;
+  updatedAt: string;
+}
+
 export interface ClinicalEncounter {
   id: string; // UUID v4
   patientId: string;
@@ -391,10 +418,15 @@ export interface ClinicalEncounter {
   returnInWeeks?: number;
   returnInstructions?: string; // Indicação de retorno em texto livre
   
+  // Imagens e Desenhos Anatômicos Oculares
+  clinicalImages?: OphthalmicImageRecord[];
+  eyeDrawing?: EyeDrawingData;
+
   // Controle de sincronização offline
   syncStatus: 'synced' | 'pending_sync';
   updatedAt: string;
 }
+
 
 export interface AuditLogEntry {
   id: string;

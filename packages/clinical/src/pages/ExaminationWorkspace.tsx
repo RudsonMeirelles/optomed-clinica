@@ -41,7 +41,8 @@ import {
   FileCheck,
   ChevronRight,
   Eye,
-  Sliders
+  Sliders,
+  Image as ImageIcon
 } from 'lucide-react';
 import { RemoteControlPanel } from '../components/RemoteControlPanel';
 import { RefractionDials } from '../components/RefractionDials';
@@ -51,7 +52,9 @@ import { UnifiedPrintCenterModal } from '../components/UnifiedPrintCenterModal';
 import { ClinicalReportModal } from '../components/ClinicalReportModal';
 import { TherapeuticGuideModal } from '../components/TherapeuticGuideModal';
 import { TherapeuticPlanModal } from '../components/TherapeuticPlanModal';
+import { ClinicalGalleryModal } from '../components/gallery/ClinicalGalleryModal';
 import { offlineDb, generateUUID } from '../services/offlineDb';
+
 import { OphthalmicDrug } from '../services/ophthalmicDrugsDb';
 import { TherapeuticProtocol, ClinicalProtocolDrug } from '../services/therapeuticProtocolsDb';
 import { NationalityType, DocumentType } from '@optotipo/shared';
@@ -304,7 +307,9 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
   const [isReportModalOpen, setIsReportModalOpen] = useState<boolean>(false);
   const [isTherapeuticGuideOpen, setIsTherapeuticGuideOpen] = useState<boolean>(false);
   const [isTherapeuticPlanModalOpen, setIsTherapeuticPlanModalOpen] = useState<boolean>(false);
+  const [isGalleryModalOpen, setIsGalleryModalOpen] = useState<boolean>(false);
   const [activePrescription, setActivePrescription] = useState<Prescription | null>(null);
+
   const [pendingPrescriptionDrugs, setPendingPrescriptionDrugs] = useState<ClinicalProtocolDrug[]>([]);
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
 
@@ -554,6 +559,21 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
             </button>
           </div>
 
+          {/* Botão: Galeria de Imagens, Desenho Anatômico e Atlas */}
+          <button
+            onClick={() => setIsGalleryModalOpen(true)}
+            className="px-3 py-1.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold text-xs rounded-xl flex items-center gap-1.5 shadow-md shadow-cyan-600/20 active:scale-95 transition-all cursor-pointer"
+            title="Galeria de Imagens, Desenho Anatômico Ocular e Atlas de Patologias"
+          >
+            <ImageIcon className="w-4 h-4 text-cyan-200" />
+            <span>Galeria & Desenho</span>
+            {(currentEncounter.clinicalImages?.length || 0) > 0 && (
+              <span className="bg-white text-blue-900 text-[10px] font-black px-1.5 py-0.2 rounded-full">
+                {currentEncounter.clinicalImages?.length}
+              </span>
+            )}
+          </button>
+
           {/* Botão: Traçar Plano Terapêutico */}
           <button
             onClick={() => setIsTherapeuticPlanModalOpen(true)}
@@ -563,6 +583,7 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
             <Compass className="w-4 h-4 text-blue-600" />
             <span>Plano Terapêutico</span>
           </button>
+
 
           {/* Relatório Clínico */}
           <button
@@ -1758,7 +1779,33 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
         onSelectDrug={handleApplyDrugToEncounter}
       />
 
-      {/* 5. Modal de Edição de Dados do Paciente Durante o Atendimento */}
+      {/* 5. Modal de Galeria Clínica, Fotos do Paciente, Desenho Anatômico e Atlas */}
+      <ClinicalGalleryModal
+        isOpen={isGalleryModalOpen}
+        onClose={() => setIsGalleryModalOpen(false)}
+        patientName={patient.fullName}
+        images={currentEncounter.clinicalImages || []}
+        eyeDrawing={currentEncounter.eyeDrawing}
+        onUpdateImages={(updatedImages) => {
+          const updated = {
+            ...currentEncounter,
+            clinicalImages: updatedImages
+          };
+          setCurrentEncounter(updated);
+          offlineDb.saveEncounter(updated);
+        }}
+        onUpdateEyeDrawing={(updatedDrawing) => {
+          const updated = {
+            ...currentEncounter,
+            eyeDrawing: updatedDrawing
+          };
+          setCurrentEncounter(updated);
+          offlineDb.saveEncounter(updated);
+        }}
+      />
+
+      {/* 6. Modal de Edição de Dados do Paciente Durante o Atendimento */}
+
       {isEditPatientModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
           <div className="bg-white rounded-2xl shadow-2xl max-w-xl w-full p-6 text-slate-900 border border-slate-200 my-8">

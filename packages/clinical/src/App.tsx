@@ -48,6 +48,8 @@ export function App() {
   const [activeEncounter, setActiveEncounter] = useState<ClinicalEncounter | undefined>(undefined);
   const [activeClinic, setActiveClinic] = useState<ClinicConfig>(offlineDb.getActiveClinic());
   const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
+
 
   // Verifica se a URL foi aberta diretamente para o Painel da TV da Recepção (?tv=1 ou ?tela=espera)
   const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
@@ -134,15 +136,37 @@ export function App() {
       )}
 
       <div className="flex-1 flex overflow-hidden">
-        {/* Barra Lateral de Navegação Premium */}
-        <aside className="w-68 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100 flex flex-col justify-between border-r border-slate-800/80 shrink-0 no-print shadow-2xl z-20">
+        {/* Backdrop escuro no celular/tablet quando o menu lateral estiver aberto */}
+        {isMobileMenuOpen && (
+          <div 
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="fixed inset-0 bg-black/60 z-30 lg:hidden backdrop-blur-xs transition-opacity"
+          />
+        )}
+
+
+        {/* Barra Lateral de Navegação Premium (Responsiva: Drawer no Celular, Fixa no PC) */}
+        <aside className={`
+          fixed lg:static top-0 bottom-0 left-0 z-40 w-72 lg:w-68 
+          bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100 
+          flex flex-col justify-between border-r border-slate-800/80 shrink-0 no-print shadow-2xl 
+          transition-transform duration-300 ease-in-out
+          ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+        `}>
           <div className="overflow-y-auto">
             
             {/* NOVO LOGOTIPO OFICIAL OPTOMED (Olho Geométrico + Cruz Médica + Escudo Protetor) */}
-            <div className="p-4 border-b border-slate-800/70">
-              <div className="p-2.5 bg-slate-900/80 rounded-2xl border border-slate-800/80 shadow-inner">
+            <div className="p-4 border-b border-slate-800/70 flex items-center justify-between">
+              <div className="p-2.5 bg-slate-900/80 rounded-2xl border border-slate-800/80 shadow-inner flex-1">
                 <OptomedBrandLogo size="md" showText={true} />
               </div>
+              <button 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="lg:hidden ml-2 p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800"
+                title="Fechar Menu"
+              >
+                ✕
+              </button>
             </div>
 
             {/* Troca Rápida de Consultório (Exclusivo para Super Administrador e Admin) */}
@@ -190,7 +214,15 @@ export function App() {
             )}
 
             {/* Itens do Menu com Conjunto Completo de Ícones Modernos */}
-            <nav className="p-3 space-y-1.5 mt-2">
+            <nav 
+              className="p-3 space-y-1.5 mt-2"
+              onClick={() => {
+                if (window.innerWidth < 1024) {
+                  setIsMobileMenuOpen(false);
+                }
+              }}
+            >
+
               
               {/* Botão Master SaaS para Super Admin */}
               {isSuperAdmin && (
@@ -358,17 +390,27 @@ export function App() {
           
           {/* Top Header com Identificação do Consultório e SyncStatus */}
           {currentPage !== 'examination' && (
-            <header className="bg-white/80 backdrop-blur-md border-b border-slate-200/80 px-6 py-3 flex items-center justify-between shadow-xs no-print sticky top-0 z-10">
-              <div className="flex items-center gap-3 text-xs font-bold text-slate-700">
+            <header className="bg-white/80 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between shadow-xs no-print sticky top-0 z-10">
+              <div className="flex items-center gap-2 sm:gap-3 text-xs font-bold text-slate-700">
+                {/* Botão Hamburger para Celular e Tablet */}
+                <button
+                  type="button"
+                  onClick={() => setIsMobileMenuOpen(true)}
+                  className="lg:hidden p-2 -ml-1 text-slate-700 hover:text-blue-600 hover:bg-slate-100 rounded-xl transition-colors cursor-pointer"
+                  title="Abrir Menu"
+                >
+                  <span className="text-lg leading-none font-bold">☰</span>
+                </button>
+
                 <div 
-                  className="w-3 h-3 rounded-full shadow-sm ring-2 ring-white" 
+                  className="w-3 h-3 rounded-full shadow-sm ring-2 ring-white shrink-0" 
                   style={{ backgroundColor: isSuperAdmin ? '#D97706' : (activeClinic.primaryColor || '#2563EB') }}
                 />
-                <span className="text-slate-900 font-extrabold tracking-tight">
-                  {isSuperAdmin ? 'Painel de Administração Master SaaS' : activeClinic.name}
+                <span className="text-slate-900 font-extrabold tracking-tight truncate max-w-[140px] sm:max-w-none">
+                  {isSuperAdmin ? 'Painel Master SaaS' : activeClinic.name}
                 </span>
-                <span className="text-slate-300">&bull;</span>
-                <span className="text-slate-500 font-mono text-[11px]">
+                <span className="hidden sm:inline text-slate-300">&bull;</span>
+                <span className="hidden sm:inline text-slate-500 font-mono text-[11px]">
                   SALA: <strong className="text-slate-900">{lanController.getPairedRoom()}</strong>
                 </span>
               </div>

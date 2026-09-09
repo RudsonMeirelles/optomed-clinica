@@ -265,7 +265,14 @@ const GRID_COLS = 6;
 export function App() {
   const [calibration, setCalibration] = useState<DisplayCalibrationData>(loadCalibration());
   const [settings, setSettings] = useState<TVAppSettings>(loadSettings());
-  const [activeModule, setActiveModule] = useState<ActiveModuleType | 'menu'>('menu');
+  // Suporte a abertura direta do teste de acuidade via URL (ideal para TV Fire Stick)
+  const isDirectOptotype = typeof window !== 'undefined' && (
+    window.location.search.includes('optotype=1') || 
+    window.location.search.includes('direct=1') ||
+    window.location.search.includes('test=1')
+  );
+
+  const [activeModule, setActiveModule] = useState<ActiveModuleType | 'menu'>(isDirectOptotype ? 'av_distance' : 'menu');
   const [isCalibrationOpen, setIsCalibrationOpen] = useState<boolean>(false);
   const [isScreenSaverActive, setIsScreenSaverActive] = useState<boolean>(false);
   const [focusedMenuIndex, setFocusedMenuIndex] = useState<number>(0);
@@ -274,6 +281,7 @@ export function App() {
   const [currentOptotypeType, setCurrentOptotypeType] = useState<OptotypeType>('sloan');
   const [activePatientCall, setActivePatientCall] = useState<any | null>(null);
   const [showQRPairing, setShowQRPairing] = useState<boolean>(false);
+
 
   // Inicializa serviço de pareamento LAN
   useEffect(() => {

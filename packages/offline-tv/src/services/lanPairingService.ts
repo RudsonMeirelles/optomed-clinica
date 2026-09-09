@@ -43,7 +43,16 @@ class LanPairingService {
 
     let targetUrl = host;
     if (!targetUrl.startsWith('ws://') && !targetUrl.startsWith('wss://')) {
-      targetUrl = `ws://${host}:8765/tv`;
+      if (typeof window !== 'undefined' && window.location.protocol === 'https:') {
+        // Se estiver em https://tv.optomed.app.br, conecta em wss://ws.optomed.app.br/tv
+        if (window.location.hostname.includes('optomed.app.br')) {
+          targetUrl = 'wss://ws.optomed.app.br/tv';
+        } else {
+          targetUrl = `wss://${window.location.hostname}:8765/tv`;
+        }
+      } else {
+        targetUrl = `ws://${host}:8765/tv`;
+      }
     }
 
     try {
