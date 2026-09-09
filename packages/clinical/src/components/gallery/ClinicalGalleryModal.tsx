@@ -356,11 +356,32 @@ export const ClinicalGalleryModal: React.FC<ClinicalGalleryModalProps> = ({
                     </span>
                   </div>
 
-                  {/* Renderização do SVG Anatômico Realista */}
-                  <div 
-                    className="w-full flex items-center justify-center p-2 rounded-2xl bg-[#0B1329] border border-slate-800 shadow-inner"
-                    dangerouslySetInnerHTML={{ __html: selectedAtlasCondition.svgIllustration }}
-                  />
+                  {/* Renderização da Imagem Médica Oficial em Alta Resolução ou SVG */}
+                  <div className="w-full flex items-center justify-center p-2 rounded-2xl bg-[#0B1329] border border-slate-800 shadow-inner overflow-hidden min-h-[220px]">
+                    {selectedAtlasCondition.imageUrl ? (
+                      <div className="relative group w-full flex items-center justify-center">
+                        <img 
+                          src={selectedAtlasCondition.imageUrl} 
+                          alt={selectedAtlasCondition.name} 
+                          className="max-h-[380px] w-auto max-w-full rounded-xl object-contain shadow-2xl transition-transform duration-300 group-hover:scale-[1.02]"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setPreviewImage(selectedAtlasCondition.imageUrl || null)}
+                          className="absolute bottom-3 right-3 p-2.5 bg-black/60 hover:bg-black/80 text-white rounded-xl backdrop-blur-md opacity-80 group-hover:opacity-100 transition-all flex items-center gap-1.5 text-xs font-bold shadow-lg"
+                        >
+                          <ZoomIn className="w-4 h-4 text-blue-400" />
+                          <span>Ampliar em Tela Cheia</span>
+                        </button>
+                      </div>
+                    ) : (
+                      <div 
+                        className="w-full"
+                        dangerouslySetInnerHTML={{ __html: selectedAtlasCondition.svgIllustration || '' }}
+                      />
+                    )}
+                  </div>
+
 
                   {/* Informações Clínicas */}
                   <div className="space-y-3 text-xs">

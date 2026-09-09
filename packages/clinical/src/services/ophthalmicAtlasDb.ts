@@ -1,31 +1,145 @@
 // Atlas Clínico Oftalmológico e Optométrico: Patologias e Ametropias
-// Fornece ilustrações anatômicas e ópticas realistas para educação do paciente e laudos
+// Integra ilustrações anatômicas médicas oficiais em alta resolução para educação do paciente e laudos
+
+import imgAstigmatismo from '../assets/atlas/astigmatismo.png';
+import imgCatarata from '../assets/atlas/catarata.png';
+import imgCeratocone from '../assets/atlas/ceratocone.png';
+import imgRetinopatia from '../assets/atlas/retinopatia_diabetica.png';
+import imgMacula from '../assets/atlas/degeneracao_macular.png';
 
 export interface OphthalmicCondition {
   id: string;
-  category: 'ametropia' | 'cornea' | 'retina' | 'cristalino' | 'glaucoma' | 'anexos';
+  category: 'ametropia' | 'cornea' | 'retina' | 'cristalino' | 'glaucoma';
   name: string;
   scientificName: string;
   shortDescription: string;
   symptoms: string[];
   findings: string[];
   management: string;
-  illustrationType: 'optics_diagram' | 'anterior_segment' | 'fundus' | 'slit_lamp';
-  svgIllustration: string;
+  imageUrl?: string;
+  svgIllustration?: string;
 }
 
 export const OPHTHALMIC_ATLAS: OphthalmicCondition[] = [
-  // ================= AMETROPIAS =================
+  // 1. ASTIGMATISMO (IMAGEM OFICIAL)
+  {
+    id: 'astigmatism',
+    category: 'ametropia',
+    name: 'Astigmatismo',
+    scientificName: 'Astigmatismus regularis / irregularis',
+    shortDescription: 'Córnea com curvatura irregular (mais curva em um meridiano e menos curva no perpendicular). A luz que entra no olho não é focalizada em um único ponto, gerando foco anterior e foco posterior, causando visão distorcida, borrada ou com duplicação de contornos.',
+    symptoms: [
+      'Visão distorcida para longe e para perto',
+      'Borramento ou duplicação de contornos e letras',
+      'Fadiga ocular, dor de cabeça frontal e astenopia',
+      'Sensibilidade e ofuscamento com luzes à noite'
+    ],
+    findings: [
+      'Curvatura irregular da superfície corneana',
+      'Dois meridianos focais principais com potências distintas',
+      'Avaliação pelo disco de plácido e ceratometria (K1 ≠ K2)'
+    ],
+    management: 'Correção com lentes esferocilíndricas (tóricas) com eixo orientado, lentes de contato tóricas ou cirurgia refrativa personalizada.',
+    imageUrl: imgAstigmatismo
+  },
+
+  // 2. CATARATA (IMAGEM OFICIAL)
+  {
+    id: 'cataract',
+    category: 'cristalino',
+    name: 'Catarata',
+    scientificName: 'Cataracta senilis / opacitas lentis',
+    shortDescription: 'Com o envelhecimento ou por outras causas, as proteínas do cristalino se alteram e acumulam, tornando-o opaco. Isso dificulta a passagem da luz até a retina, provocando visão embaçada e perda de contraste.',
+    symptoms: [
+      'Visão embaçada, opaca e cores desbotadas',
+      'Diminuição acentuada da sensibilidade ao contraste',
+      'Halos e brilho incômodo ao redor de faróis e luzes',
+      'Necessidade de trocas frequentes de óculos (miopização)'
+    ],
+    findings: [
+      'Cristalino opacificado (nuclear, cortical ou subcapsular)',
+      'Perda de transparência do meio refrativo ocular',
+      'Diminuição da acuidade visual não corrigível totalmente por lentes'
+    ],
+    management: 'A catarata é tratável. A cirurgia de Facoemulsificação com implante de Lente Intraocular (LIO) é segura e eficaz, devolvendo a nitidez e as cores vivas na maioria dos casos.',
+    imageUrl: imgCatarata
+  },
+
+  // 3. CERATOCONE (IMAGEM OFICIAL)
+  {
+    id: 'keratoconus',
+    category: 'cornea',
+    name: 'Ceratocone',
+    scientificName: 'Keratoconus progressivus',
+    shortDescription: 'Afinamento e protrusão progressiva da córnea em formato cônico, gerando astigmatismo irregular acentuado com assimetria e encurvamento inferior evidente no mapa topográfico.',
+    symptoms: [
+      'Distorção e diminuição progressiva da visão',
+      'Troca rápida de óculos sem atingir nitidez de 100%',
+      'Imagens fantasmas (poliopia monocular) e halos noturnos'
+    ],
+    findings: [
+      'Perfil corneano com protrusão cônica (vermelho) comparado à curvatura regular (azul)',
+      'Assimetria e encurvamento inferior no mapa topográfico',
+      'Afinamento estromal apical, anel de Fleischer e estrias de Vogt'
+    ],
+    management: 'Avaliação especializada com topografia/tomografia corneana. Manejo com óculos (fases iniciais), Lentes de Contato Especiais (RGP / Esclerais), Crosslinking de Colágeno (CXL) para frear a progressão ou Anel Intraestromal.',
+    imageUrl: imgCeratocone
+  },
+
+  // 4. ALTERAÇÕES MICROVASCULARES / RETINOPATIA DIABÉTICA (IMAGEM OFICIAL)
+  {
+    id: 'diabetic_retinopathy',
+    category: 'retina',
+    name: 'Alterações Microvasculares da Retina',
+    scientificName: 'Retinopathia diabetica / vascularis',
+    shortDescription: 'Comprometimento da microcirculação retiniana decorrente de hiperglicemia, hipertensão ou vasculopatias, levando a microaneurismas, hemorragias e exsudatos lipídicos na retina.',
+    symptoms: [
+      'Pode ser assintomático nas fases iniciais',
+      'Visão embaçada, manchas escuras ou moscas volantes',
+      'Distorção central caso haja presença de edema macular'
+    ],
+    findings: [
+      'Microaneurismas e hemorragias puntiformes e em chama de vela',
+      'Exsudatos duros lipídicos amarelos agrupados',
+      'Potencial presença de edema macular com espessamento retiniano',
+      'Necessita avaliação retiniana completa com dilatação e mapeamento de retina'
+    ],
+    management: 'Controle sistêmico rigoroso (glicemia e pressão arterial). Exame periódico de fundo de olho, mapeamento de retina, OCT e indicação de fotocoagulação a laser ou injeções anti-VEGF conforme gravidade.',
+    imageUrl: imgRetinopatia
+  },
+
+  // 5. ALTERAÇÃO MACULAR CENTRAL / DMRI (IMAGEM OFICIAL)
+  {
+    id: 'macular_degeneration',
+    category: 'retina',
+    name: 'Alteração Macular Central (DMRI)',
+    scientificName: 'Degeneratio maculae luteae / Maculopathia',
+    shortDescription: 'Comprometimento da mácula (região central da retina responsável pela visão fina de detalhes), com presença de drusas e alterações pigmentares, podendo distorcer a visão central.',
+    symptoms: [
+      'Distorção central da visão (linhas retas parecem onduladas)',
+      'Mancha escura ou borrada no centro do campo visual',
+      'Dificuldade para reconhecer rostos e realizar leitura fina',
+      'Distorção evidenciada na Tela de Amsler'
+    ],
+    findings: [
+      'Comprometimento da mácula com presença de drusas (depósitos amarelados)',
+      'Tela de Amsler alterada (metamorfopsia ou escotoma central)',
+      'Alteração do reflexo foveal requerendo correlação com OCT'
+    ],
+    management: 'Suplementação vitamínica antioxidante específica (fórmula AREDS 2), monitoramento domiciliar regular com Tela de Amsler e acompanhamento com retinólogo.',
+    imageUrl: imgMacula
+  },
+
+  // 6. MIOPIA (SIMULAÇÃO ÓPTICA)
   {
     id: 'myopia',
     category: 'ametropia',
     name: 'Miopia',
     scientificName: 'Myopia axialis / refractiva',
-    shortDescription: 'O olho é mais longo que o normal ou a córnea tem curvatura excessiva. O ponto focal dos raios luminosos converge antes da retina, provocando visão borrada para longe.',
-    symptoms: ['Visão turva para longe', 'Apertar os olhos para focar', 'Cefaleia frontal ao dirigir ou na lousa'],
-    findings: ['Globo ocular axialmente aumentado', 'Refração com esférico negativo (-)', 'Melhora imediata com lente divergente'],
-    management: 'Lentes esféricas negativas (-), lentes de contato ou cirurgia refrativa (LASIK/PRK).',
-    illustrationType: 'optics_diagram',
+    shortDescription: 'O olho é mais longo que o normal ou a córnea é muito curva. Os raios luminosos convergem antes da retina, provocando visão borrada para objetos distantes.',
+    symptoms: ['Visão turva para longe', 'Apertar as pálpebras para focar', 'Cansaço visual ao dirigir'],
+    findings: ['Globo ocular longo', 'Refração com esférico negativo (-)', 'Ponto focal anterior à retina'],
+    management: 'Lentes divergentes com dioptria negativa (-), lentes de contato ou cirurgia a laser.',
     svgIllustration: `<svg viewBox="0 0 400 240" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <radialGradient id="myoEyeGrad" cx="50%" cy="50%" r="50%">
@@ -51,16 +165,17 @@ export const OPHTHALMIC_ATLAS: OphthalmicCondition[] = [
       <text x="200" y="225" fill="#94A3B8" font-size="11" font-weight="bold" text-anchor="middle">Raios convergem ANTES da retina</text>
     </svg>`
   },
+
+  // 7. HIPERMETROPIA (SIMULAÇÃO ÓPTICA)
   {
     id: 'hyperopia',
     category: 'ametropia',
     name: 'Hipermetropia',
     scientificName: 'Hypermetropia axialis',
-    shortDescription: 'O olho é mais curto no sentido anteroposterior ou o sistema dióptrico é mais plano. Os raios convergem virtualmente atrás da retina, exigindo esforço acomodativo constante.',
-    symptoms: ['Astenopia (cansaço ocular)', 'Dor de cabeça ao ler ou usar telas', 'Dificuldade maior para perto'],
-    findings: ['Globo ocular curto', 'Câmara anterior mais rasa', 'Refração com esférico positivo (+)'],
-    management: 'Lentes esféricas convergentes (+), aliviando o esforço acomodativo do músculo ciliar.',
-    illustrationType: 'optics_diagram',
+    shortDescription: 'O olho é mais curto ou a curvatura é menor. Os raios luminosos convergem teoricamente atrás da retina, exigindo acomodação constante do cristalino.',
+    symptoms: ['Cansaço e queimação nos olhos ao ler', 'Dor de cabeça ao fim do dia', 'Dificuldade maior de foco para perto'],
+    findings: ['Globo ocular curto', 'Refração com esférico positivo (+)', 'Foco virtual posterior à retina'],
+    management: 'Lentes convergentes com dioptria positiva (+), relaxando a musculatura ciliar.',
     svgIllustration: `<svg viewBox="0 0 400 240" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <radialGradient id="hypEyeGrad" cx="50%" cy="50%" r="50%">
@@ -86,89 +201,17 @@ export const OPHTHALMIC_ATLAS: OphthalmicCondition[] = [
       <text x="200" y="225" fill="#94A3B8" font-size="11" font-weight="bold" text-anchor="middle">Raios convergem ATRÁS da retina</text>
     </svg>`
   },
-  {
-    id: 'astigmatism',
-    category: 'ametropia',
-    name: 'Astigmatismo',
-    scientificName: 'Astigmatismus regularis',
-    shortDescription: 'Assimetria nas curvaturas corneanas ou cristalinianas, gerando múltiplos pontos focais (Conoide de Sturm).',
-    symptoms: ['Distorção das bordas das letras', 'Trocar letras parecidas', 'Visão borrada para longe e perto'],
-    findings: ['Diferença de curvatura em ceratometria', 'Refração com componente cilíndrico (-) e eixo'],
-    management: 'Lentes cilíndricas/tóricas orientadas no contra-eixo refrativo.',
-    illustrationType: 'optics_diagram',
-    svgIllustration: `<svg viewBox="0 0 400 240" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
-      <rect width="400" height="240" fill="#0F172A" rx="16"/>
-      <ellipse cx="90" cy="120" rx="18" ry="50" fill="none" stroke="#818CF8" stroke-width="3.5"/>
-      <ellipse cx="90" cy="120" rx="12" ry="35" fill="#6366F1" fill-opacity="0.2"/>
-      <line x1="90" y1="80" x2="250" y2="120" stroke="#38BDF8" stroke-width="2.5" stroke-dasharray="3 3"/>
-      <line x1="90" y1="160" x2="250" y2="120" stroke="#38BDF8" stroke-width="2.5" stroke-dasharray="3 3"/>
-      <circle cx="250" cy="120" r="5" fill="#38BDF8"/>
-      <text x="250" y="105" fill="#38BDF8" font-size="10" font-weight="bold" text-anchor="middle">Foco Meridiano 1</text>
-      <line x1="90" y1="100" x2="330" y2="120" stroke="#F43F5E" stroke-width="2.5"/>
-      <line x1="90" y1="140" x2="330" y2="120" stroke="#F43F5E" stroke-width="2.5"/>
-      <circle cx="330" cy="120" r="5" fill="#F43F5E"/>
-      <text x="330" y="105" fill="#F43F5E" font-size="10" font-weight="bold" text-anchor="middle">Foco Meridiano 2</text>
-      <line x1="300" y1="60" x2="300" y2="180" stroke="#F59E0B" stroke-width="3"/>
-      <text x="300" y="50" fill="#F59E0B" font-size="11" font-weight="bold" text-anchor="middle">Plano Retiniano</text>
-      <text x="200" y="220" fill="#E2E8F0" font-size="11" font-weight="bold" text-anchor="middle">Conoide de Sturm: 2 planos focais distintos</text>
-    </svg>`
-  },
-  {
-    id: 'pterygium',
-    category: 'cornea',
-    name: 'Pterígio',
-    scientificName: 'Pterygium conjunctivae',
-    shortDescription: 'Crescimento fibrovascular benigno da conjuntiva bulbar que avança sobre a superfície corneana límbica, frequentemente no setor nasal.',
-    symptoms: ['Hiperemia conjuntival (olho vermelho)', 'Sensação de corpo estranho ou areia', 'Ardor e queimação'],
-    findings: ['Tecido fibrovascular triangular com ápice em direção ao centro da córnea', 'Linha de Stocker'],
-    management: 'Óculos com proteção UV400, lubrificantes sem conservante e exérese cirúrgica com transplante conjuntival quando indicado.',
-    illustrationType: 'anterior_segment',
-    svgIllustration: `<svg viewBox="0 0 400 240" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
-      <rect width="400" height="240" fill="#0B1329" rx="16"/>
-      <ellipse cx="200" cy="120" rx="130" ry="75" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="2"/>
-      <path d="M 90 120 Q 120 110, 145 118" stroke="#F87171" stroke-width="1.5" fill="none"/>
-      <path d="M 85 105 Q 115 108, 140 112" stroke="#EF4444" stroke-width="1.8" fill="none"/>
-      <circle cx="200" cy="120" r="50" fill="#0284C7" stroke="#0369A1" stroke-width="3"/>
-      <circle cx="200" cy="120" r="22" fill="#0F172A"/>
-      <circle cx="192" cy="112" r="5" fill="white" fill-opacity="0.8"/>
-      <path d="M 70 120 Q 110 95, 175 116 Q 165 125, 110 145 Z" fill="#FCA5A5" fill-opacity="0.85" stroke="#EF4444" stroke-width="2"/>
-      <path d="M 90 120 Q 130 112, 170 118" stroke="#B91C1C" stroke-width="2" fill="none"/>
-      <path d="M 100 128 Q 135 122, 165 121" stroke="#DC2626" stroke-width="1.5" fill="none"/>
-      <text x="140" y="80" fill="#F87171" font-size="11" font-weight="black">Pterígio Nasal</text>
-      <text x="200" y="220" fill="#94A3B8" font-size="11" text-anchor="middle">Proliferação fibrovascular conjuntival sobre o limbo</text>
-    </svg>`
-  },
-  {
-    id: 'cataract',
-    category: 'cristalino',
-    name: 'Catarata Senil',
-    scientificName: 'Cataracta senilis nuclearis',
-    shortDescription: 'Opacificação progressiva das fibras do cristalino por oxidação proteica, perda de transparência e dispersão anômala da luz.',
-    symptoms: ['Visão embaçada como vidro sujo', 'Piora da sensibilidade ao contraste', 'Ofuscamento com faróis à noite'],
-    findings: ['Opacidade visível à iluminação oblíqua', 'Esclerose e amarelamento nuclear'],
-    management: 'Cirurgia de Facoemulsificação com implante de Lente Intraocular (LIO).',
-    illustrationType: 'anterior_segment',
-    svgIllustration: `<svg viewBox="0 0 400 240" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
-      <rect width="400" height="240" fill="#0B1329" rx="16"/>
-      <ellipse cx="200" cy="120" rx="130" ry="75" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="2"/>
-      <circle cx="200" cy="120" r="50" fill="#78350F" stroke="#451A03" stroke-width="3"/>
-      <circle cx="200" cy="120" r="24" fill="#D97706" fill-opacity="0.8"/>
-      <circle cx="200" cy="120" r="16" fill="#FDE68A" fill-opacity="0.9"/>
-      <circle cx="188" cy="110" r="4" fill="white" fill-opacity="0.7"/>
-      <text x="200" y="45" fill="#FBBF24" font-size="12" font-weight="black" text-anchor="middle">Opacidade Cristaliniana Nuclear</text>
-      <text x="200" y="220" fill="#94A3B8" font-size="11" text-anchor="middle">Bloqueio e dispersão da luz para a retina</text>
-    </svg>`
-  },
+
+  // 8. GLAUCOMA (SIMULAÇÃO ANATÔMICA)
   {
     id: 'glaucoma',
     category: 'glaucoma',
-    name: 'Glaucoma Primário de Ângulo Aberto',
+    name: 'Glaucoma',
     scientificName: 'Glaucoma simplex / GPAA',
-    shortDescription: 'Neuropatia óptica crônica com escavação patológica aumentada, perda do anel neurorretiniano e campo visual concêntrico.',
-    symptoms: ['Assintomático até fases avançadas', 'Perda gradual da visão periférica'],
-    findings: ['Relação Escavação/Disco (E/D) > 0.6', 'Rechaço dos vasos em baioneta', 'Regra ISNT violada'],
-    management: 'Colírios hipotensores oculares, Trabeculoplastia a Laser (SLT) ou cirurgia fistulizante.',
-    illustrationType: 'fundus',
+    shortDescription: 'Aumento patológico da escavação da papila óptica e afinamento da camada de fibras nervosas, com perda concêntrica de campo visual.',
+    symptoms: ['Silencioso nas fases iniciais', 'Perda gradual da visão periférica', 'Visão tubular tardia'],
+    findings: ['Escavação aumentada (E/D > 0.6)', 'Rechaço vascular em baioneta', 'Pressão intraocular elevada ou limítrofe'],
+    management: 'Colírios hipotensores oculares para preservação do campo visual e proteção do nervo óptico.',
     svgIllustration: `<svg viewBox="0 0 400 240" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
       <rect width="400" height="240" fill="#0B1329" rx="16"/>
       <circle cx="200" cy="120" r="90" fill="#9A3412" stroke="#EA580C" stroke-width="3"/>
@@ -180,50 +223,6 @@ export const OPHTHALMIC_ATLAS: OphthalmicCondition[] = [
       <path d="M 200 120 Q 220 145, 250 155 Q 275 160, 290 165" stroke="#B91C1C" stroke-width="2.5" fill="none"/>
       <text x="200" y="25" fill="#EF4444" font-size="12" font-weight="black" text-anchor="middle">Papila Glaucomatosa (E/D 0.8)</text>
       <text x="200" y="225" fill="#FEF08A" font-size="10" font-weight="bold" text-anchor="middle">Escavação aumentada com rechaço vascular</text>
-    </svg>`
-  },
-  {
-    id: 'diabetic_retinopathy',
-    category: 'retina',
-    name: 'Retinopatia Diabética',
-    scientificName: 'Retinopathia diabetica',
-    shortDescription: 'Microangiopatia oclusiva causada por hiperglicemia crônica, com microaneurismas, hemorragias e exsudatos.',
-    symptoms: ['Moscas volantes', 'Visão embaçada ou torta', 'Perda súbita de visão'],
-    findings: ['Microaneurismas', 'Hemorragias em chama de vela', 'Exsudatos duros lipídicos e algodonosos'],
-    management: 'Controle glicêmico rigoroso (HbA1c < 7%), Fotocoagulação a Laser e anti-VEGF para edema.',
-    illustrationType: 'fundus',
-    svgIllustration: `<svg viewBox="0 0 400 240" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
-      <rect width="400" height="240" fill="#0B1329" rx="16"/>
-      <circle cx="200" cy="120" r="95" fill="#B45309" stroke="#EA580C" stroke-width="3"/>
-      <circle cx="150" cy="120" r="22" fill="#FDE68A"/>
-      <circle cx="230" cy="120" r="16" fill="#78350F" fill-opacity="0.6"/>
-      <path d="M 150 120 Q 180 85, 230 75 Q 265 72, 290 70" stroke="#991B1B" stroke-width="2.5" fill="none"/>
-      <path d="M 150 120 Q 180 155, 230 165 Q 265 168, 290 170" stroke="#991B1B" stroke-width="2.5" fill="none"/>
-      <circle cx="210" cy="105" r="2.5" fill="#DC2626"/>
-      <circle cx="240" cy="98" r="2" fill="#DC2626"/>
-      <ellipse cx="195" cy="90" rx="8" ry="4" fill="#991B1B" transform="rotate(-20 195 90)"/>
-      <circle cx="245" cy="135" r="2.5" fill="#FEF08A"/>
-      <circle cx="250" cy="138" r="2" fill="#FEF08A"/>
-      <text x="200" y="220" fill="#FEF08A" font-size="11" font-weight="bold" text-anchor="middle">Microaneurismas • Hemorragias • Exsudatos</text>
-    </svg>`
-  },
-  {
-    id: 'keratoconus',
-    category: 'cornea',
-    name: 'Ceratocone',
-    scientificName: 'Keratoconus progressivus',
-    shortDescription: 'Ectasia corneana bilateral progressiva com afinamento estromal e protrusão apical cônica.',
-    symptoms: ['Piora rápida do astigmatismo', 'Fantasmas nas imagens', 'Dificuldade de acuidade com óculos'],
-    findings: ['Protrusão cônica da córnea', 'Anel de Fleischer', 'Estrias de Vogt'],
-    management: 'Lentes de contato RGP/Esclerais, Crosslinking de Colágeno (CXL) ou Anel Intraestromal.',
-    illustrationType: 'slit_lamp',
-    svgIllustration: `<svg viewBox="0 0 400 240" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
-      <rect width="400" height="240" fill="#0B1329" rx="16"/>
-      <path d="M 60 40 C 90 80, 120 100, 200 100 C 230 100, 250 115, 270 120 C 250 125, 230 140, 200 140 C 120 140, 90 160, 60 200" fill="none" stroke="#38BDF8" stroke-width="4"/>
-      <path d="M 120 60 Q 230 110, 260 120 Q 230 130, 120 180" fill="none" stroke="#22D3EE" stroke-width="6" stroke-linecap="round" opacity="0.85"/>
-      <circle cx="265" cy="120" r="5" fill="#F43F5E"/>
-      <text x="290" y="110" fill="#F43F5E" font-size="11" font-weight="black">Ápice Cônico</text>
-      <text x="200" y="225" fill="#94A3B8" font-size="11" text-anchor="middle">Afinamento estromal e protrusão cônica</text>
     </svg>`
   }
 ];
