@@ -27,7 +27,10 @@ import {
   Check,
   FileSpreadsheet,
   Briefcase,
-  Layers
+  Layers,
+  EyeOff,
+  Archive,
+  RotateCcw
 } from 'lucide-react';
 import { 
   FinancialTransaction, 
@@ -63,6 +66,14 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
   const [settlementReport, setSettlementReport] = useState<ProfessionalSettlementReport>(offlineDb.getProfessionalSettlementReport());
   const [searchTerm, setSearchTerm] = useState<string>('');
   
+  // Modo de visualização do extrato: 'daily' (Dia Atual) ou 'monthly' (Extrato Mensal Completo)
+  const [statementMode, setStatementMode] = useState<'daily' | 'monthly'>('daily');
+  const [selectedMonth, setSelectedMonth] = useState<string>(() => {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+  });
+  const [showSettled, setShowSettled] = useState<boolean>(false);
+
   // Modalidade de Contrato Atual Selecionada para o Examinador
   const [contractType, setContractType] = useState<ProfessionalContractType>('period_half_day');
   
@@ -286,16 +297,41 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
     }
   };
 
-  // Filtragem de transações
+  // Dar Baixa / Liquidar Lançamento (ou reabrir)
+  const handleToggleSettle = (id: string, currentSettled?: boolean) => {
+    const nextSettled = !currentSettled;
+    offlineDb.settleTransaction(id, nextSettled);
+    loadData();
+  };
+
+  // Filtragem de transações com regra de liquidação:
+  // - Valores liquidados (isSettled) são OCULTADOS por padrão
+  // - Aparecem apenas quando solicitado o Extrato Mensal ('monthly') OU na Pesquisa Específica (searchTerm) OU quando showSettled estiver ativo
   const filteredTransactions = transactions.filter(t => {
-    if (!searchTerm) return true;
-    const q = searchTerm.toLowerCase();
-    return (
-      t.description.toLowerCase().includes(q) ||
-      (t.patientName && t.patientName.toLowerCase().includes(q)) ||
-      (t.receiptNumber && t.receiptNumber.toLowerCase().includes(q)) ||
-      t.category.toLowerCase().includes(q)
-    );
+    // 1. Pesquisa textual específica (se houver busca, pesquisa em tudo, inclusive liquidados)
+    if (searchTerm.trim()) {
+      const q = searchTerm.toLowerCase().trim();
+      return (
+        t.description.toLowerCase().includes(q) ||
+        (t.patientName && t.patientName.toLowerCase().includes(q)) ||
+        (t.receiptNumber && t.receiptNumber.toLowerCase().includes(q)) ||
+        t.category.toLowerCase().includes(q)
+      );
+    }
+
+    // 2. No modo Extrato Mensal, filtra pelo mês selecionado (YYYY-MM)
+    if (statementMode === 'monthly') {
+      const txMonth = (t.date || t.createdAt).slice(0, 7);
+      return txMonth === selectedMonth;
+    }
+
+    // 3. No modo Caixa do Dia ('daily'):
+    // Ocultar liquidados por padrão, exceto se showSettled for explicitamente marcado
+    if (t.isSettled && !showSettled) {
+      return false;
+    }
+
+    return true;
   });
 
   return (
@@ -430,60 +466,165 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
         </div>
 
         {activeTab === 'cash_flow' && (
-          <div className="relative w-full sm:w-72">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              placeholder="Buscar por descrição, paciente ou recibo..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500"
-            />
+          <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+            {/* Seletor Diário vs Extrato Mensal */}
+            <div className="flex items-center gap-1 bg-white border border-slate-200 p-1 rounded-2xl shadow-xs">
+              <button
+                type="button"
+                onClick={() => setStatementMode('daily')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  statementMode === 'daily'
+                    ? 'bg-slate-900 text-white shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                }`}
+              >
+                Caixa do Dia
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setStatementMode('monthly')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                  statementMode === 'monthly'
+                    ? 'bg-blue-600 text-white shadow-xs'
+                    : 'text-slate-600 hover:text-blue-600 hover:bg-blue-50'
+                }`}
+              >
+                <Calendar className="w-3.5 h-3.5" />
+                <span>Extrato Mensal</span>
+              </button>
+            </div>
+
+            {/* Seletor do Mês quando no modo Extrato Mensal */}
+            {statementMode === 'monthly' && (
+              <div className="flex items-center gap-1.5 bg-white border border-blue-200 px-3 py-1.5 rounded-xl shadow-xs">
+                <span className="text-[11px] font-bold text-slate-500 uppercase">Mês:</span>
+                <input
+                  type="month"
+                  value={selectedMonth}
+                  onChange={(e) => setSelectedMonth(e.target.value)}
+                  className="text-xs font-black text-blue-900 bg-transparent focus:outline-none cursor-pointer"
+                />
+              </div>
+            )}
+
+            {/* Toggle Ocultar/Exibir Liquidados no Caixa Diário */}
+            {statementMode === 'daily' && (
+              <button
+                type="button"
+                onClick={() => setShowSettled(!showSettled)}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all flex items-center gap-1.5 cursor-pointer ${
+                  showSettled
+                    ? 'bg-amber-50 border-amber-300 text-amber-900'
+                    : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                }`}
+                title={showSettled ? 'Ocultar valores já liquidados da tela' : 'Exibir valores já baixados/liquidados'}
+              >
+                {showSettled ? <EyeOff className="w-3.5 h-3.5 text-amber-600" /> : <Archive className="w-3.5 h-3.5 text-slate-500" />}
+                <span>{showSettled ? 'Ocultar Baixados' : 'Ver Baixados'}</span>
+              </button>
+            )}
+
+            {/* Busca textual */}
+            <div className="relative w-full sm:w-64">
+              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                placeholder="Pesquisar recibo, paciente ou item..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-9 pr-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500"
+              />
+            </div>
           </div>
         )}
       </div>
 
-      {/* ABA 1: FLUXO DE CAIXA / EXTRATO DO DIA */}
+      {/* ABA 1: FLUXO DE CAIXA / EXTRATO DO DIA & EXTRATO MENSAL */}
       {activeTab === 'cash_flow' && (
         <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs">
+          
+          {/* Banner explicativo de modo de extrato */}
+          <div className="bg-slate-50 px-6 py-2.5 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-slate-700">
+                {statementMode === 'monthly' ? `Extrato Mensal Consolidado (${selectedMonth.split('-').reverse().join('/')})` : 'Lançamentos em Aberto (Caixa do Dia)'}
+              </span>
+              <span className="text-[11px] text-slate-400">
+                • {filteredTransactions.length} registro(s) exibido(s)
+              </span>
+            </div>
+
+            <div className="text-[11px] text-slate-500 flex items-center gap-2">
+              <span className="inline-flex items-center gap-1 font-semibold text-slate-600">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> Valores pagos/baixados saem da visualização do dia
+              </span>
+            </div>
+          </div>
+
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead className="bg-slate-50 text-slate-500 uppercase font-bold text-[10px] tracking-wider border-b border-slate-200">
                 <tr>
                   <th className="px-6 py-3.5">Data / Hora</th>
-                  <th className="px-6 py-3.5">Tipo</th>
+                  <th className="px-6 py-3.5">Tipo / Status</th>
                   <th className="px-6 py-3.5">Descrição / Paciente</th>
                   <th className="px-6 py-3.5">Categoria</th>
                   <th className="px-6 py-3.5">Forma de Pagamento</th>
                   <th className="px-6 py-3.5">Valor (R$)</th>
-                  <th className="px-6 py-3.5 text-right">Ações</th>
+                  <th className="px-6 py-3.5 text-right">Ações & Baixa</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 text-slate-700">
                 {filteredTransactions.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="px-6 py-8 text-center text-slate-400">
-                      Nenhum lançamento financeiro registrado até o momento.
+                    <td colSpan={7} className="px-6 py-12 text-center text-slate-400 space-y-2">
+                      <Archive className="w-8 h-8 mx-auto text-slate-300" />
+                      <p className="font-bold text-slate-600">
+                        {statementMode === 'daily'
+                          ? 'Nenhuma pendência ativa no caixa do dia (valores liquidados foram baixados).'
+                          : 'Nenhum lançamento encontrado para o período selecionado.'}
+                      </p>
+                      {statementMode === 'daily' && (
+                        <p className="text-xs text-slate-400">
+                          Clique em <strong className="text-slate-700">"Extrato Mensal"</strong> ou <strong className="text-slate-700">"Ver Baixados"</strong> para consultar o histórico completo.
+                        </p>
+                      )}
                     </td>
                   </tr>
                 ) : (
                   filteredTransactions.map((tx) => (
-                    <tr key={tx.id} className="hover:bg-slate-50/70 transition-colors">
+                    <tr 
+                      key={tx.id} 
+                      className={`hover:bg-slate-50/80 transition-colors ${tx.isSettled ? 'bg-slate-50/40 opacity-75' : ''}`}
+                    >
                       
                       <td className="px-6 py-3.5 font-mono text-[11px] text-slate-500">
                         {tx.date ? tx.date.split('-').reverse().join('/') : new Date(tx.createdAt).toLocaleDateString('pt-BR')} {new Date(tx.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
                       </td>
 
                       <td className="px-6 py-3.5">
-                        {tx.type === 'income' ? (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[10px]">
-                            <ArrowUpRight className="w-3 h-3" /> Entrada
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 font-bold text-[10px]">
-                            <ArrowDownRight className="w-3 h-3" /> Saída
-                          </span>
-                        )}
+                        <div className="flex flex-col gap-1">
+                          {tx.type === 'income' ? (
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[10px] w-fit">
+                              <ArrowUpRight className="w-3 h-3" /> Entrada
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 font-bold text-[10px] w-fit">
+                              <ArrowDownRight className="w-3 h-3" /> Saída
+                            </span>
+                          )}
+
+                          {tx.isSettled ? (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-200 text-slate-700 font-bold text-[9px] w-fit">
+                              <CheckCircle2 className="w-2.5 h-2.5 text-emerald-600" /> Liquidado
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-100 text-amber-800 font-bold text-[9px] w-fit">
+                              <Clock className="w-2.5 h-2.5 text-amber-600" /> Em Aberto
+                            </span>
+                          )}
+                        </div>
                       </td>
 
                       <td className="px-6 py-3.5">
@@ -514,6 +655,30 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
 
                       <td className="px-6 py-3.5 text-right">
                         <div className="flex items-center justify-end gap-2">
+                          {/* Botão Dar Baixa / Liquidar */}
+                          <button
+                            type="button"
+                            onClick={() => handleToggleSettle(tx.id, tx.isSettled)}
+                            className={`px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1 cursor-pointer ${
+                              tx.isSettled
+                                ? 'bg-slate-100 hover:bg-slate-200 text-slate-600 border border-slate-200'
+                                : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-xs'
+                            }`}
+                            title={tx.isSettled ? 'Reabrir lançamento no caixa diário' : 'Dar baixa e ocultar da tela do dia'}
+                          >
+                            {tx.isSettled ? (
+                              <>
+                                <RotateCcw className="w-3.5 h-3.5" />
+                                <span className="hidden sm:inline text-[11px]">Reabrir</span>
+                              </>
+                            ) : (
+                              <>
+                                <Check className="w-3.5 h-3.5" />
+                                <span className="text-[11px]">Dar Baixa</span>
+                              </>
+                            )}
+                          </button>
+
                           <button
                             onClick={() => setReceiptTx(tx)}
                             title="Ver Recibo"
@@ -521,6 +686,7 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
                           >
                             <Printer className="w-4 h-4" />
                           </button>
+
                           <button
                             onClick={() => handleDeleteTx(tx.id)}
                             title="Remover"

@@ -705,6 +705,20 @@ class OfflineDatabaseService {
     this.logAudit('DELETE', 'FINANCE' as any, id, 'Lançamento financeiro removido', clinicId);
   }
 
+  public settleTransaction(id: string, isSettled: boolean = true, clinicId = this.activeClinicId): void {
+    const list = this.getTransactions(clinicId);
+    const idx = list.findIndex(t => t.id === id);
+    if (idx >= 0) {
+      list[idx] = {
+        ...list[idx],
+        isSettled,
+        settledAt: isSettled ? new Date().toISOString() : undefined
+      };
+      this.saveTransactions(list, clinicId);
+      this.logAudit('UPDATE', 'FINANCE' as any, id, `Lançamento ${isSettled ? 'liquidado (baixa efetuada)' : 'reaberto'} no financeiro`, clinicId);
+    }
+  }
+
   public getCashRegisterSummary(dateStr?: string, clinicId = this.activeClinicId): CashRegisterSummary {
     const today = dateStr || new Date().toISOString().split('T')[0];
     const txs = this.getTransactions(clinicId).filter(t => t.date === today && t.status === 'completed');

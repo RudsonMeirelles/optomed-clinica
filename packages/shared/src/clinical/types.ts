@@ -64,6 +64,8 @@ export interface FinancialTransaction {
   encounterId?: string;
   receiptNumber?: string; // Número do recibo/comprovante
   status: 'completed' | 'pending' | 'canceled';
+  isSettled?: boolean; // Se o valor já foi liquidado/baixado
+  settledAt?: string; // Data/hora da liquidação
   createdBy: string;
   createdAt: string;
 }

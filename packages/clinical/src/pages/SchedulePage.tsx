@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Appointment, AppointmentStatus, AppointmentType, Patient, UserAccount, ReturnReminder, NationalityType, DocumentType } from '@optotipo/shared';
+import { Appointment, AppointmentStatus, AppointmentType, Patient, UserAccount, ReturnReminder, NationalityType, DocumentType, ClinicalEncounter } from '@optotipo/shared';
 import { 
   Calendar as CalendarIcon, 
   Clock, 
@@ -237,6 +237,7 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
   const [selectedDate, setSelectedDate] = useState<string>(todayIso);
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [patients, setPatients] = useState<Patient[]>([]);
+  const [encounters, setEncounters] = useState<ClinicalEncounter[]>([]);
   const [returnReminders, setReturnReminders] = useState<ReturnReminder[]>([]);
   const [filterStatus, setFilterStatus] = useState<string>('ALL');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -269,9 +270,25 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
   const [completeGuardianName, setCompleteGuardianName] = useState<string>('');
   const [completeSex, setCompleteSex] = useState<Patient['sex']>('uninformed');
 
+  const getLocalDateStr = (dStr?: string): string => {
+    if (!dStr) return '';
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dStr)) return dStr;
+    try {
+      const d = new Date(dStr);
+      if (isNaN(d.getTime())) return dStr.slice(0, 10);
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    } catch {
+      return dStr.slice(0, 10);
+    }
+  };
+
   const loadData = () => {
     setAppointments(offlineDb.getAppointments());
     setPatients(offlineDb.getPatients());
+    setEncounters(offlineDb.getEncounters());
     setReturnReminders(offlineDb.getReturnReminders());
   };
 
@@ -542,8 +559,84 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
     setConflictWarning(null);
   };
 
+  // Consolidação completa em tempo real na Agenda (Agendamentos + Prontuários + Cadastros de Hoje)
+  const getMergedDayAppointments = (): Appointment[] => {
+    const map = new Map<string, Appointment>();
+
+    // 1. Agendamentos na data
+    appointments.filter(a => getLocalDateStr(a.date) === selectedDate).forEach(apt => {
+      map.set(apt.patientId || apt.id, { ...apt });
+    });
+
+    // 2. Encounters realizados na data selecionada
+    encounters.filter(e => getLocalDateStr(e.date) === selectedDate).forEach(enc => {
+      const patientObj = patients.find(p => p.id === enc.patientId);
+      const existing = map.get(enc.patientId);
+      if (existing) {
+        if (enc.status === 'completed') existing.status = 'completed';
+        else if (enc.status === 'in_progress' && existing.status !== 'completed') existing.status = 'in_consultation';
+      } else {
+        const timeFromDate = enc.date && enc.date.includes('T')
+          ? new Date(enc.date).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+          : '08:00';
+
+        map.set(enc.patientId, {
+          id: `apt-enc-${enc.id}`,
+          patientId: enc.patientId,
+          patientName: patientObj?.fullName || 'Paciente em Atendimento',
+          patientNationality: patientObj?.nationality || 'BR',
+          patientPhone: patientObj?.phone,
+          patientDocument: patientObj?.documentNumber,
+          examinerId: 'user-examinador',
+          examinerName: enc.examinerName || 'Dr. Rudson Meirelles',
+          date: selectedDate,
+          time: timeFromDate,
+          durationMinutes: 30,
+          type: 'refrativo',
+          status: enc.status === 'completed' ? 'completed' : 'in_consultation',
+          ticketNumber: 'P-01',
+          notes: enc.anamnesis?.chiefComplaint || 'Atendimento registrado no consultório.',
+          room: 'Consultório 1',
+          createdAt: enc.date || new Date().toISOString(),
+          updatedAt: enc.updatedAt || new Date().toISOString()
+        });
+      }
+    });
+
+    // 3. Se a data for hoje, inclui pacientes cadastrados hoje
+    const todayStr = getLocalDateStr(new Date().toISOString());
+    if (selectedDate === todayStr) {
+      patients.filter(p => getLocalDateStr(p.createdAt) === todayStr).forEach((p, idx) => {
+        if (!map.has(p.id)) {
+          map.set(p.id, {
+            id: `apt-pat-${p.id}`,
+            patientId: p.id,
+            patientName: p.fullName,
+            patientNationality: p.nationality,
+            patientPhone: p.phone,
+            patientDocument: p.documentNumber,
+            examinerId: 'user-examinador',
+            examinerName: 'Dr. Rudson Meirelles',
+            date: selectedDate,
+            time: p.createdAt ? new Date(p.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '08:00',
+            durationMinutes: 30,
+            type: 'refrativo',
+            status: 'waiting',
+            ticketNumber: `P-${String(idx + 1).padStart(2, '0')}`,
+            notes: p.notes || 'Paciente cadastrado na recepção hoje.',
+            room: 'Consultório 1',
+            createdAt: p.createdAt || new Date().toISOString(),
+            updatedAt: p.updatedAt || new Date().toISOString()
+          });
+        }
+      });
+    }
+
+    return Array.from(map.values()).sort((a, b) => (a.time || '').localeCompare(b.time || ''));
+  };
+
   // Filtragem da agenda
-  const dayAppointments = appointments.filter(a => a.date === selectedDate);
+  const dayAppointments = getMergedDayAppointments();
   const filteredAppointments = dayAppointments.filter(a => {
     const matchesStatus = filterStatus === 'ALL' || a.status === filterStatus;
     const matchesQuery = !searchQuery || 

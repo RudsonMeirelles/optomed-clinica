@@ -96,6 +96,22 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
     };
   }, []);
 
+  // Utilitário para extrair 'YYYY-MM-DD' na timezone local a partir de qualquer string de data/timestamp
+  const getLocalDateStr = (dStr?: string): string => {
+    if (!dStr) return '';
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dStr)) return dStr;
+    try {
+      const d = new Date(dStr);
+      if (isNaN(d.getTime())) return dStr.slice(0, 10);
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    } catch {
+      return dStr.slice(0, 10);
+    }
+  };
+
   // Consolidação completa em tempo real de:
   // 1. Agendamentos do dia (appointments)
   // 2. Prontuários atendidos/iniciados na data (encounters)
@@ -104,18 +120,22 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
     const map = new Map<string, Appointment>();
 
     // 1. Inclui agendamentos cadastrados para o dia selecionado
-    appointments.filter(a => a.date === selectedDate).forEach(apt => {
+    appointments.filter(a => getLocalDateStr(a.date) === selectedDate).forEach(apt => {
       map.set(apt.patientId || apt.id, { ...apt });
     });
 
     // 2. Inclui atendimentos clínicos (encounters) realizados na data selecionada
-    encounters.filter(e => e.date?.startsWith(selectedDate)).forEach(enc => {
+    encounters.filter(e => getLocalDateStr(e.date) === selectedDate).forEach(enc => {
       const patientObj = patients.find(p => p.id === enc.patientId);
       const existing = map.get(enc.patientId);
       if (existing) {
         if (enc.status === 'completed') existing.status = 'completed';
         else if (enc.status === 'in_progress' && existing.status !== 'completed') existing.status = 'in_consultation';
       } else {
+        const timeFromDate = enc.date && enc.date.includes('T')
+          ? new Date(enc.date).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+          : '08:00';
+
         map.set(enc.patientId, {
           id: `apt-enc-${enc.id}`,
           patientId: enc.patientId,
@@ -126,7 +146,7 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
           examinerId: 'user-examinador',
           examinerName: enc.examinerName || currentUser.fullName,
           date: selectedDate,
-          time: enc.date?.split('T')[1]?.slice(0, 5) || '08:00',
+          time: timeFromDate,
           durationMinutes: 30,
           type: 'refrativo',
           status: enc.status === 'completed' ? 'completed' : 'in_consultation',
@@ -140,9 +160,9 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
     });
 
     // 3. Se a data for hoje, inclui pacientes cadastrados hoje mesmo que não possuam agendamento explícito
-    const todayStr = new Date().toISOString().split('T')[0];
+    const todayStr = getLocalDateStr(new Date().toISOString());
     if (selectedDate === todayStr) {
-      patients.filter(p => p.createdAt?.startsWith(todayStr)).forEach((p, idx) => {
+      patients.filter(p => getLocalDateStr(p.createdAt) === todayStr).forEach((p, idx) => {
         if (!map.has(p.id)) {
           map.set(p.id, {
             id: `apt-pat-${p.id}`,
@@ -191,7 +211,7 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
 
   // Cálculo do Tempo Médio de Atendimento por Paciente (baseado nos encounters concluídos)
   const calculateAverageConsultTime = (): number => {
-    const dayEncounters = encounters.filter(e => e.date?.startsWith(selectedDate) && e.status === 'completed');
+    const dayEncounters = encounters.filter(e => getLocalDateStr(e.date) === selectedDate && e.status === 'completed');
     if (dayEncounters.length === 0) return 22; // Tempo médio de referência clínica: 22 minutos
     
     // Calcula a média das durações se registradas, ou estima baseado nos horários
@@ -244,7 +264,7 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
     };
 
     // Busca prontuário existente mais recente
-    const latestEncounter = encounters.find(e => e.patientId === patientObj.id && e.date?.startsWith(selectedDate)) ||
+    const latestEncounter = encounters.find(e => e.patientId === patientObj.id && getLocalDateStr(e.date) === selectedDate) ||
       encounters.find(e => e.patientId === patientObj.id);
 
     onStartEncounter(patientObj, latestEncounter);
@@ -473,6 +493,25 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
           >
             Concluídos ({completedList.length})
           </button>
+
+          {/* Atalho para ver todos os pacientes se a busca local não encontrar */}
+          {dayAppointments.length === 0 && patients.length > 0 && (
+            <button
+              type="button"
+              onClick={() => {
+                // Se houver pacientes cadastrados mas nenhum na data selecionada, seleciona a data do mais recente
+                const sorted = [...patients].sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
+                if (sorted[0]?.createdAt) {
+                  setSelectedDate(getLocalDateStr(sorted[0].createdAt));
+                }
+              }}
+              className="px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 transition-all cursor-pointer flex items-center gap-1 shadow-xs"
+              title="Ir para a data do último atendimento/cadastro realizado"
+            >
+              <History className="w-3.5 h-3.5 text-amber-700" />
+              <span>Ver Últimos Atendimentos</span>
+            </button>
+          )}
         </div>
       </div>
 
