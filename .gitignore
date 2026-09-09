@@ -1,0 +1,12 @@
+﻿node_modules/
+dist/
+build/
+.gradle/
+*.log
+.env
+.env.local
+.DS_Store
+Thumbs.db
+optomed-release.jks
+*.apk
+*.aab

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Optotipo Meirelles Digital</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        -moz-user-select: none;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #0B0F19;
+        color: #F3F4F6;
+        overflow: hidden;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+      .dpad-focusable:focus, .dpad-focused {
+        outline: 4px solid #3B82F6 !important;
+        outline-offset: 4px !important;
+        box-shadow: 0 0 20px rgba(59, 130, 246, 0.7) !important;
+        transform: scale(1.03);
+        transition: transform 0.12s ease-in-out, outline 0.12s ease-in-out;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // Desativa e limpa caches antigos do Service Worker que causavam tela preta
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+          for (var r of registrations) {
+            r.unregister();
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

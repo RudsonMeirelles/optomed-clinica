@@ -1,0 +1,24 @@
+{
+  "name": "optotipo-meirelles-v2",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Plataforma profissional para apoio à avaliação visual (Offline TV + Clinical)",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:shared": "npm --workspace=@optotipo/shared run build --watch",
+    "dev:tv": "npm --workspace=@optotipo/offline-tv run dev",
+    "dev:clinical": "npm --workspace=@optotipo/clinical run dev",
+    "dev:server": "npm --workspace=@optotipo/server run dev",
+    "dev": "concurrently \"npm run dev:tv\" \"npm run dev:clinical\" \"npm run dev:server\"",
+    "build": "npm --workspace=@optotipo/shared run build && npm --workspace=@optotipo/offline-tv run build && npm --workspace=@optotipo/clinical run build && npm --workspace=@optotipo/server run build",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.5.1",
+    "concurrently": "^9.1.2",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.7"
+  }
+}
