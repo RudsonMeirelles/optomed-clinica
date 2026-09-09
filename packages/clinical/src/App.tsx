@@ -145,66 +145,71 @@ export function App() {
         )}
 
 
-        {/* Barra Lateral de Navegação Premium (Responsiva: Drawer no Celular, Fixa no PC) */}
+        {/* Barra Lateral de Navegação Executiva Clean (Paleta em Cores Pastel, Tons Suaves e Organização Intuitiva) */}
         <aside className={`
           fixed lg:static top-0 bottom-0 left-0 z-40 w-72 lg:w-68 
-          bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100 
-          flex flex-col justify-between border-r border-slate-800/80 shrink-0 no-print shadow-2xl 
+          bg-white/95 backdrop-blur-md text-slate-700 
+          flex flex-col justify-between border-r border-slate-200/80 shrink-0 no-print shadow-lg lg:shadow-xs 
           transition-transform duration-300 ease-in-out
           ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
         `}>
-          <div className="overflow-y-auto">
+          <div className="flex-1 overflow-y-auto custom-scrollbar">
             
-            {/* NOVO LOGOTIPO OFICIAL OPTOMED (Olho Geométrico + Cruz Médica + Escudo Protetor) */}
-            <div className="p-4 border-b border-slate-800/70 flex items-center justify-between">
-              <div className="p-2.5 bg-slate-900/80 rounded-2xl border border-slate-800/80 shadow-inner flex-1">
-                <OptomedBrandLogo size="md" showText={true} />
+            {/* LOGOTIPO OFICIAL OPTOMED (Modo Clean Pastel) */}
+            <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+              <div className="p-2 bg-white rounded-2xl border border-slate-200/60 shadow-xs flex-1">
+                <OptomedBrandLogo size="md" showText={true} darkText={true} />
               </div>
               <button 
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="lg:hidden ml-2 p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800"
+                className="lg:hidden ml-2 p-2 text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-100 transition-colors"
                 title="Fechar Menu"
               >
                 ✕
               </button>
             </div>
 
-            {/* Troca Rápida de Consultório (Exclusivo para Super Administrador e Admin) */}
+            {/* Seletor Executivo de Consultório / Unidade */}
             {(isSuperAdmin || currentUser.role === 'admin') ? (
-              <div className="px-4 pt-3">
-                <label className="text-[10px] uppercase font-bold text-slate-400 block mb-1 tracking-wider">
-                  Unidade Selecionada:
-                </label>
+              <div className="px-4 pt-3.5 pb-2">
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+                    Unidade Ativa
+                  </span>
+                  <span className="text-[10px] font-semibold text-sky-600 bg-sky-50 px-1.5 py-0.5 rounded-md border border-sky-100">
+                    {activeClinic.code}
+                  </span>
+                </div>
                 <div className="relative">
                   <select
                     value={activeClinic.id}
                     onChange={(e) => handleClinicChange(e.target.value)}
-                    className="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3 py-2 text-xs font-bold text-slate-100 focus:outline-none focus:border-blue-500 appearance-none shadow-sm cursor-pointer"
+                    className="w-full bg-slate-50 hover:bg-slate-100/80 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 appearance-none shadow-xs cursor-pointer transition-all pr-8"
                   >
                     {clinicsList.map(c => (
                       <option key={c.id} value={c.id}>
-                        🏥 {c.name} ({c.code})
+                        {c.name}
                       </option>
                     ))}
                   </select>
-                  <ChevronDown className="w-4 h-4 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 </div>
               </div>
             ) : (
-              /* Perfil Ativo Badge */
-              <div className="px-4 pt-3">
-                <div className={`p-2.5 rounded-xl border text-xs flex items-center justify-between shadow-sm ${
+              /* Perfil Ativo Badge Clean Pastel */
+              <div className="px-4 pt-3 pb-1">
+                <div className={`p-2.5 rounded-xl border text-xs flex items-center justify-between shadow-xs ${
                   currentUser.role === 'examiner'
-                    ? 'bg-emerald-950/40 border-emerald-800/60 text-emerald-300'
-                    : 'bg-purple-950/40 border-purple-800/60 text-purple-300'
+                    ? 'bg-emerald-50/70 border-emerald-200/80 text-emerald-900'
+                    : 'bg-indigo-50/70 border-indigo-200/80 text-indigo-900'
                 }`}>
-                  <div className="flex items-center gap-2.5">
-                    <div className={`p-1.5 rounded-lg ${currentUser.role === 'examiner' ? 'bg-emerald-900/60 text-emerald-200' : 'bg-purple-900/60 text-purple-200'}`}>
+                  <div className="flex items-center gap-2.5 overflow-hidden">
+                    <div className={`p-1.5 rounded-lg ${currentUser.role === 'examiner' ? 'bg-emerald-100 text-emerald-700' : 'bg-indigo-100 text-indigo-700'}`}>
                       <UserCheck className="w-4 h-4" />
                     </div>
                     <div className="overflow-hidden">
-                      <div className="font-bold truncate text-[11px] text-white">{currentUser.fullName}</div>
-                      <div className="text-[9px] uppercase tracking-wider opacity-80">
+                      <div className="font-bold truncate text-[12px]">{currentUser.fullName}</div>
+                      <div className="text-[10px] font-medium opacity-75">
                         {currentUser.role === 'reception' ? 'Recepção' : 'Examinador'} • {activeClinic.code}
                       </div>
                     </div>
@@ -213,173 +218,250 @@ export function App() {
               </div>
             )}
 
-            {/* Itens do Menu com Conjunto Completo de Ícones Modernos */}
+            {/* Itens de Navegação em Blocos Executivos com Tons Pastel */}
             <nav 
-              className="p-3 space-y-1.5 mt-2"
+              className="px-3 py-2 space-y-4"
               onClick={() => {
                 if (window.innerWidth < 1024) {
                   setIsMobileMenuOpen(false);
                 }
               }}
             >
-
               
-              {/* Botão Master SaaS para Super Admin */}
+              {/* Bloco Super Admin: Gestão Master SaaS */}
               {isSuperAdmin && (
-                <button
-                  onClick={() => setCurrentPage('master_admin')}
-                  className={`w-full px-3.5 py-3 rounded-xl font-bold text-xs flex items-center gap-3 transition-all cursor-pointer ${
-                    currentPage === 'master_admin'
-                      ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-lg shadow-amber-600/30'
-                      : 'text-amber-400 hover:text-white hover:bg-slate-800/60 border border-amber-500/20'
-                  }`}
-                >
-                  <Crown className="w-4 h-4 text-amber-300" />
-                  <span>Gestão Master SaaS</span>
-                </button>
+                <div>
+                  <div className="px-2 pb-1 text-[10px] font-bold uppercase tracking-wider text-amber-600/90 flex items-center gap-1.5">
+                    <Crown className="w-3 h-3 text-amber-500" />
+                    <span>Administração Geral</span>
+                  </div>
+                  <button
+                    onClick={() => setCurrentPage('master_admin')}
+                    className={`w-full px-3 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2.5 transition-all cursor-pointer ${
+                      currentPage === 'master_admin'
+                        ? 'bg-amber-100/90 text-amber-900 border border-amber-300/80 shadow-xs'
+                        : 'text-slate-600 hover:text-amber-900 hover:bg-amber-50/70'
+                    }`}
+                  >
+                    <div className="w-7 h-7 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+                      <Crown className="w-4 h-4" />
+                    </div>
+                    <div className="text-left">
+                      <div className="leading-tight font-bold">Gestão Master SaaS</div>
+                      <div className="text-[10px] text-amber-700 font-normal">Clínicas, Licenças & Faturas</div>
+                    </div>
+                  </button>
+                </div>
               )}
 
-              {/* Painel do Examinador (Exclusivo para Examinadores e Admins) */}
-              {currentUser.role !== 'reception' && (
-                <button
-                  onClick={() => setCurrentPage('doctor_workspace')}
-                  className={`w-full px-3.5 py-3 rounded-xl font-bold text-xs flex items-center gap-3 transition-all cursor-pointer ${
-                    currentPage === 'doctor_workspace'
-                      ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-600/30'
-                      : 'text-emerald-400 hover:text-white hover:bg-slate-800/60 border border-emerald-500/20'
-                  }`}
-                >
-                  <div className="w-5 h-5 rounded-lg bg-emerald-500/20 text-emerald-300 flex items-center justify-center font-black text-[10px] shrink-0 border border-emerald-500/40">
-                    🩺
-                  </div>
-                  <div className="text-left">
-                    <div className="leading-tight">Painel do Examinador</div>
-                    <div className="text-[9px] text-emerald-300 font-normal">Fila & Métricas do Dia</div>
-                  </div>
-                </button>
-              )}
-
-              <button
-                onClick={() => setCurrentPage('schedule')}
-                className={`w-full px-3.5 py-3 rounded-xl font-bold text-xs flex items-center gap-3 transition-all cursor-pointer ${
-                  currentPage === 'schedule'
-                    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-600/30'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
-                }`}
-              >
-                <IconAgendaCalendar className="w-5 h-5 shrink-0" />
-                <span>Agenda do Consultório</span>
-              </button>
-
-              {/* TV 1: Sala de Espera da Recepção (Chamador de Senhas + Propaganda) */}
-              <button
-                onClick={() => setCurrentPage('waiting_room')}
-                className={`w-full px-3.5 py-3 rounded-xl font-bold text-xs flex items-center gap-3 transition-all cursor-pointer ${
-                  currentPage === 'waiting_room'
-                    ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-lg shadow-cyan-600/30'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
-                }`}
-              >
-                <div className="w-5 h-5 rounded-lg bg-cyan-500/20 text-cyan-300 flex items-center justify-center font-black text-[10px] shrink-0 border border-cyan-500/40">
-                  📢
+              {/* SEÇÃO 1: CLÍNICA & ATENDIMENTO */}
+              <div>
+                <div className="px-2 pb-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  Atendimento Clínico
                 </div>
-                <div className="text-left">
-                  <div className="leading-tight text-white">TV Sala de Espera</div>
-                  <div className="text-[9px] text-cyan-300 font-normal">Painel de Senhas & Mídia</div>
+                <div className="space-y-1">
+                  {/* Painel do Examinador */}
+                  {currentUser.role !== 'reception' && (
+                    <button
+                      onClick={() => setCurrentPage('doctor_workspace')}
+                      className={`w-full px-3 py-2.5 rounded-xl font-semibold text-xs flex items-center gap-2.5 transition-all cursor-pointer ${
+                        currentPage === 'doctor_workspace'
+                          ? 'bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold shadow-xs'
+                          : 'text-slate-600 hover:text-emerald-800 hover:bg-emerald-50/50'
+                      }`}
+                    >
+                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${
+                        currentPage === 'doctor_workspace' ? 'bg-emerald-200/80 text-emerald-800' : 'bg-emerald-100/60 text-emerald-700'
+                      }`}>
+                        🩺
+                      </div>
+                      <div className="text-left flex-1">
+                        <div className="leading-tight">Painel do Examinador</div>
+                        <div className="text-[10px] text-slate-400 font-normal">Fila & Consultório</div>
+                      </div>
+                    </button>
+                  )}
+
+                  {/* Agenda do Consultório */}
+                  <button
+                    onClick={() => setCurrentPage('schedule')}
+                    className={`w-full px-3 py-2.5 rounded-xl font-semibold text-xs flex items-center gap-2.5 transition-all cursor-pointer ${
+                      currentPage === 'schedule'
+                        ? 'bg-sky-50 text-sky-800 border border-sky-200 font-bold shadow-xs'
+                        : 'text-slate-600 hover:text-sky-800 hover:bg-sky-50/50'
+                    }`}
+                  >
+                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${
+                      currentPage === 'schedule' ? 'bg-sky-200/80 text-sky-800' : 'bg-sky-100/60 text-sky-700'
+                    }`}>
+                      <IconAgendaCalendar className="w-4 h-4" />
+                    </div>
+                    <div className="text-left flex-1">
+                      <div className="leading-tight">Agenda Médica</div>
+                      <div className="text-[10px] text-slate-400 font-normal">Horários e Agendamentos</div>
+                    </div>
+                  </button>
+
+                  {/* Recepção & Pacientes */}
+                  <button
+                    onClick={() => setCurrentPage('patients')}
+                    className={`w-full px-3 py-2.5 rounded-xl font-semibold text-xs flex items-center gap-2.5 transition-all cursor-pointer ${
+                      currentPage === 'patients'
+                        ? 'bg-blue-50 text-blue-800 border border-blue-200 font-bold shadow-xs'
+                        : 'text-slate-600 hover:text-blue-800 hover:bg-blue-50/50'
+                    }`}
+                  >
+                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${
+                      currentPage === 'patients' ? 'bg-blue-200/80 text-blue-800' : 'bg-blue-100/60 text-blue-700'
+                    }`}>
+                      <IconPatientProfile className="w-4 h-4" />
+                    </div>
+                    <div className="text-left flex-1">
+                      <div className="leading-tight">Pacientes & Triagem</div>
+                      <div className="text-[10px] text-slate-400 font-normal">Cadastros e Prontuários</div>
+                    </div>
+                  </button>
                 </div>
-              </button>
+              </div>
 
-              {/* TV 2: TV Optotipo do Consultório (17 Módulos de Testes Visuais na Porta 5173) */}
-              <a
-                href="http://optomed.app.br:5173"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full px-3.5 py-3 rounded-xl font-bold text-xs flex items-center gap-3 transition-all cursor-pointer text-indigo-300 hover:text-white hover:bg-indigo-950/50 border border-indigo-500/20 group"
-                title="Abrir a TV Optotipo de Acuidade Visual e Exames (Porta 5173)"
-              >
-                <div className="w-5 h-5 rounded-lg bg-indigo-500/20 text-indigo-300 flex items-center justify-center font-black text-[10px] shrink-0 border border-indigo-500/40 group-hover:scale-110 transition-transform">
-                  👁️
+              {/* SEÇÃO 2: TELAS & DISPOSITIVOS */}
+              <div>
+                <div className="px-2 pb-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  Telas & Equipamentos
                 </div>
-                <div className="text-left flex-1">
-                  <div className="leading-tight text-white flex items-center justify-between">
-                    <span>TV Optotipo</span>
-                    <span className="text-[8px] bg-indigo-500/30 text-indigo-200 px-1.5 py-0.5 rounded font-mono">:5173</span>
-                  </div>
-                  <div className="text-[9px] text-indigo-300 font-normal">Exames Clínicos (17 Módulos)</div>
+                <div className="space-y-1">
+                  {/* TV Sala de Espera */}
+                  <button
+                    onClick={() => setCurrentPage('waiting_room')}
+                    className={`w-full px-3 py-2 rounded-xl font-semibold text-xs flex items-center gap-2.5 transition-all cursor-pointer ${
+                      currentPage === 'waiting_room'
+                        ? 'bg-cyan-50 text-cyan-800 border border-cyan-200 font-bold shadow-xs'
+                        : 'text-slate-600 hover:text-cyan-800 hover:bg-cyan-50/50'
+                    }`}
+                  >
+                    <div className="w-7 h-7 rounded-lg bg-cyan-100/70 text-cyan-700 flex items-center justify-center shrink-0">
+                      📢
+                    </div>
+                    <div className="text-left flex-1">
+                      <div className="leading-tight">TV Sala de Espera</div>
+                      <div className="text-[10px] text-slate-400 font-normal">Chamador & Mídia</div>
+                    </div>
+                  </button>
+
+                  {/* TV Optotipo Exames (:5173) */}
+                  <a
+                    href="http://optomed.app.br:5173"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full px-3 py-2 rounded-xl font-semibold text-xs flex items-center gap-2.5 transition-all cursor-pointer text-slate-600 hover:text-purple-900 hover:bg-purple-50/60 border border-slate-100 group"
+                    title="Abrir a TV Optotipo de Acuidade Visual (Porta 5173)"
+                  >
+                    <div className="w-7 h-7 rounded-lg bg-purple-100/70 text-purple-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                      👁️
+                    </div>
+                    <div className="text-left flex-1">
+                      <div className="leading-tight flex items-center justify-between">
+                        <span>TV Optotipo</span>
+                        <span className="text-[9px] bg-purple-100 text-purple-700 px-1.5 py-0.2 rounded font-mono font-bold">:5173</span>
+                      </div>
+                      <div className="text-[10px] text-slate-400 font-normal">17 Módulos de Testes</div>
+                    </div>
+                  </a>
+
+                  {/* Pareamento TV LAN */}
+                  {currentUser.role !== 'reception' && (
+                    <button
+                      onClick={() => setCurrentPage('pairing')}
+                      className={`w-full px-3 py-2 rounded-xl font-semibold text-xs flex items-center gap-2.5 transition-all cursor-pointer ${
+                        currentPage === 'pairing'
+                          ? 'bg-slate-100 text-slate-900 border border-slate-300 font-bold shadow-xs'
+                          : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'
+                      }`}
+                    >
+                      <div className="w-7 h-7 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center shrink-0">
+                        <IconMonitorTV className="w-4 h-4" />
+                      </div>
+                      <div className="text-left flex-1">
+                        <div className="leading-tight">Pareamento TV</div>
+                        <div className="text-[10px] text-slate-400 font-normal">Sincronização LAN</div>
+                      </div>
+                    </button>
+                  )}
                 </div>
-              </a>
+              </div>
 
-              <button
-                onClick={() => setCurrentPage('patients')}
-                className={`w-full px-3.5 py-3 rounded-xl font-bold text-xs flex items-center gap-3 transition-all cursor-pointer ${
-                  currentPage === 'patients'
-                    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-600/30'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
-                }`}
-              >
-                <IconPatientProfile className="w-5 h-5 shrink-0" />
-                <span>Recepção & Pacientes (BR/PY)</span>
-              </button>
+              {/* SEÇÃO 3: GESTÃO & RESULTADOS */}
+              <div>
+                <div className="px-2 pb-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  Gestão & Unidade
+                </div>
+                <div className="space-y-1">
+                  {/* Gestão Clínica & PDV */}
+                  <button
+                    onClick={() => setCurrentPage('finance')}
+                    className={`w-full px-3 py-2 rounded-xl font-semibold text-xs flex items-center gap-2.5 transition-all cursor-pointer ${
+                      currentPage === 'finance'
+                        ? 'bg-teal-50 text-teal-900 border border-teal-200 font-bold shadow-xs'
+                        : 'text-slate-600 hover:text-teal-900 hover:bg-teal-50/50'
+                    }`}
+                  >
+                    <div className="w-7 h-7 rounded-lg bg-teal-100/70 text-teal-700 flex items-center justify-center shrink-0">
+                      <IconClinicPOS className="w-4 h-4" />
+                    </div>
+                    <div className="text-left flex-1">
+                      <div className="leading-tight">Financeiro & PDV</div>
+                      <div className="text-[10px] text-slate-400 font-normal">Caixa, Vendas e Ordens</div>
+                    </div>
+                  </button>
 
-              <button
-                onClick={() => setCurrentPage('finance')}
-                className={`w-full px-3.5 py-3 rounded-xl font-bold text-xs flex items-center gap-3 transition-all cursor-pointer ${
-                  currentPage === 'finance'
-                    ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-600/30'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
-                }`}
-              >
-                <IconClinicPOS className="w-5 h-5 shrink-0" />
-                <span>Gestão da Clínica & PDV</span>
-              </button>
+                  {/* Relatórios */}
+                  <button
+                    onClick={() => setCurrentPage('reports')}
+                    className={`w-full px-3 py-2 rounded-xl font-semibold text-xs flex items-center gap-2.5 transition-all cursor-pointer ${
+                      currentPage === 'reports'
+                        ? 'bg-slate-100 text-slate-900 border border-slate-300 font-bold shadow-xs'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'
+                    }`}
+                  >
+                    <div className="w-7 h-7 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center shrink-0">
+                      <IconReportsAnalytics className="w-4 h-4" />
+                    </div>
+                    <div className="text-left flex-1">
+                      <div className="leading-tight">Relatórios</div>
+                      <div className="text-[10px] text-slate-400 font-normal">Estatísticas & Exportação</div>
+                    </div>
+                  </button>
 
-              <button
-                onClick={() => setCurrentPage('reports')}
-                className={`w-full px-3.5 py-3 rounded-xl font-bold text-xs flex items-center gap-3 transition-all cursor-pointer ${
-                  currentPage === 'reports'
-                    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-600/30'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
-                }`}
-              >
-                <IconReportsAnalytics className="w-5 h-5 shrink-0" />
-                <span>Relatórios & Estatísticas</span>
-              </button>
+                  {/* Configurações & Licença */}
+                  <button
+                    onClick={() => setCurrentPage('settings')}
+                    className={`w-full px-3 py-2 rounded-xl font-semibold text-xs flex items-center gap-2.5 transition-all cursor-pointer ${
+                      currentPage === 'settings'
+                        ? 'bg-slate-100 text-slate-900 border border-slate-300 font-bold shadow-xs'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'
+                    }`}
+                  >
+                    <div className="w-7 h-7 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center shrink-0">
+                      <IconSettingsLicense className="w-4 h-4" />
+                    </div>
+                    <div className="text-left flex-1">
+                      <div className="leading-tight">Configurações</div>
+                      <div className="text-[10px] text-slate-400 font-normal">Dados & Licença</div>
+                    </div>
+                  </button>
+                </div>
+              </div>
 
-              {currentUser.role !== 'reception' && (
-                <button
-                  onClick={() => setCurrentPage('pairing')}
-                  className={`w-full px-3.5 py-3 rounded-xl font-bold text-xs flex items-center gap-3 transition-all cursor-pointer ${
-                    currentPage === 'pairing'
-                      ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-600/30'
-                      : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
-                  }`}
-                >
-                  <IconMonitorTV className="w-5 h-5 shrink-0" />
-                  <span>Pareamento TV (LAN)</span>
-                </button>
-              )}
-
-              <button
-                onClick={() => setCurrentPage('settings')}
-                className={`w-full px-3.5 py-3 rounded-xl font-bold text-xs flex items-center gap-3 transition-all cursor-pointer ${
-                  currentPage === 'settings'
-                    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-600/30'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
-                }`}
-              >
-                <IconSettingsLicense className="w-5 h-5 shrink-0" />
-                <span>Configurações & Licença</span>
-              </button>
             </nav>
           </div>
 
-          {/* Rodapé com Card do Usuário e Logout */}
-          <div className="p-3 border-t border-slate-800/80 bg-slate-950/40 space-y-2 shrink-0">
+          {/* Rodapé Executivo Clean com Card de Usuário e Logout */}
+          <div className="p-3 border-t border-slate-100 bg-slate-50/60 space-y-2 shrink-0">
             <button
               onClick={handleLogout}
-              className="w-full py-2.5 bg-slate-900 hover:bg-rose-950/60 hover:text-rose-300 text-slate-400 rounded-xl text-xs font-bold flex items-center justify-center gap-2 border border-slate-800 transition-all cursor-pointer shadow-xs active:scale-95"
+              className="w-full py-2 bg-white hover:bg-rose-50 hover:text-rose-700 hover:border-rose-200 text-slate-600 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 border border-slate-200 transition-all cursor-pointer shadow-2xs active:scale-98"
             >
-              <IconDoorLogout className="w-4 h-4" />
+              <IconDoorLogout className="w-3.5 h-3.5 text-slate-500" />
               <span>Trocar Usuário / Sair</span>
             </button>
           </div>

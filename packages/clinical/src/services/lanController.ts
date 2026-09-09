@@ -14,7 +14,13 @@ class LanControllerService {
 
   public connect(serverUrl?: string): void {
     const host = typeof window !== 'undefined' && window.location.hostname ? window.location.hostname : 'localhost';
-    const targetUrl = serverUrl || `ws://${host}:8765/clinical`;
+    const isHttps = typeof window !== 'undefined' && window.location.protocol === 'https:';
+    
+    let defaultUrl = `ws://${host}:8765/clinical`;
+    if (isHttps) {
+      defaultUrl = host.includes('optomed.app.br') ? `wss://ws.optomed.app.br/clinical` : `wss://${host}:8765/clinical`;
+    }
+    const targetUrl = serverUrl || defaultUrl;
 
     try {
       this.socket = new WebSocket(targetUrl);

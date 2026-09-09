@@ -75,10 +75,11 @@ export const SyncStatusBadge: React.FC = () => {
 // -------------------------------------------------------------
 
 // 1. Logotipo Oficial OPTOMED (Ícone Olho Geométrico com Cruz Médica e Arco Protetor + Tipografia)
-export const OptomedBrandLogo: React.FC<{ size?: 'sm' | 'md' | 'lg'; showText?: boolean; className?: string }> = ({
+export const OptomedBrandLogo: React.FC<{ size?: 'sm' | 'md' | 'lg'; showText?: boolean; className?: string; darkText?: boolean }> = ({
   size = 'md',
   showText = true,
-  className = ''
+  className = '',
+  darkText = false
 }) => {
   const sizeMap = {
     sm: { icon: 28, textMain: 'text-sm', textSub: 'text-[8px]' },
@@ -92,7 +93,7 @@ export const OptomedBrandLogo: React.FC<{ size?: 'sm' | 'md' | 'lg'; showText?: 
     <div className={`flex items-center gap-3 select-none ${className}`}>
       {/* Ícone Vetorial Oficial OPTOMED */}
       <div 
-        className="relative shrink-0 flex items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 p-1.5 shadow-md shadow-blue-600/30 ring-1 ring-white/20"
+        className="relative shrink-0 flex items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 p-1.5 shadow-sm ring-1 ring-blue-500/20"
         style={{ width: currentSize.icon + 8, height: currentSize.icon + 8 }}
       >
         <svg 
@@ -104,7 +105,7 @@ export const OptomedBrandLogo: React.FC<{ size?: 'sm' | 'md' | 'lg'; showText?: 
           {/* Arco Protetor Superior em Escudo / Visão */}
           <path 
             d="M8 32C8 32 18 16 32 16C46 16 56 32 56 32C56 32 46 48 32 48C18 48 8 32 8 32Z" 
-            stroke="#93C5FD" 
+            stroke="#BFDBFE" 
             strokeWidth="3.5" 
             strokeLinecap="round" 
             strokeLinejoin="round" 
@@ -121,11 +122,11 @@ export const OptomedBrandLogo: React.FC<{ size?: 'sm' | 'md' | 'lg'; showText?: 
 
       {showText && (
         <div className="flex flex-col leading-tight">
-          <span className={`font-black tracking-tight text-white ${currentSize.textMain} flex items-center gap-1.5`}>
+          <span className={`font-black tracking-tight ${darkText ? 'text-slate-800' : 'text-white'} ${currentSize.textMain} flex items-center gap-1.5`}>
             OPTOMED
-            <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse" />
+            <span className="w-1.5 h-1.5 rounded-full bg-teal-500 animate-pulse" />
           </span>
-          <span className={`font-bold tracking-wider text-teal-300 uppercase font-mono ${currentSize.textSub}`}>
+          <span className={`font-bold tracking-wider ${darkText ? 'text-teal-700' : 'text-teal-300'} uppercase font-mono ${currentSize.textSub}`}>
             Instituto de Visão e Saúde
           </span>
         </div>
