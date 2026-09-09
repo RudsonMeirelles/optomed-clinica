@@ -149,6 +149,72 @@ class AuthService {
     this.saveUsers(list);
   }
 
+  public getUsersByClinic(clinicId: string): (UserAccount & { passwordHash?: string })[] {
+    const users = this.getUsers();
+    if (clinicId === 'all') return users;
+    return users.filter(u => u.clinicId === clinicId || u.clinicId === 'all');
+  }
+
+  public addStaffMember(data: {
+    clinicId: string;
+    fullName: string;
+    username: string;
+    role: UserRole;
+    password?: string;
+    email?: string;
+    phone?: string;
+    registryNumber?: string;
+  }): { success: boolean; error?: string; user?: UserAccount } {
+    const users = this.getUsers();
+    const cleanUsername = data.username.toLowerCase().trim();
+
+    if (users.some(u => u.username.toLowerCase() === cleanUsername)) {
+      return { success: false, error: 'Nome de usuário (login) já em uso. Escolha outro.' };
+    }
+
+    const clinic = offlineDb.getClinics().find(c => c.id === data.clinicId);
+    if (!clinic && data.clinicId !== 'all') {
+      return { success: false, error: 'Clínica não encontrada.' };
+    }
+
+    const newUser: UserAccount & { passwordHash: string } = {
+      id: `usr_${Date.now()}_${Math.random().toString(36).substring(2, 5)}`,
+      username: cleanUsername,
+      fullName: data.fullName.trim(),
+      role: data.role,
+      clinicId: data.clinicId,
+      clinicName: clinic ? clinic.name : 'Gestão Global',
+      email: data.email?.trim(),
+      phone: data.phone?.trim(),
+      registryNumber: data.registryNumber?.trim(),
+      passwordHash: data.password || '123456',
+      isActive: true,
+      createdAt: new Date().toISOString()
+    };
+
+    this.saveUser(newUser);
+    return { success: true, user: newUser };
+  }
+
+  public updateUser(userId: string, partial: Partial<UserAccount & { passwordHash?: string }>): boolean {
+    const users = this.getUsers();
+    const idx = users.findIndex(u => u.id === userId);
+    if (idx === -1) return false;
+
+    users[idx] = { ...users[idx], ...partial };
+    this.saveUsers(users);
+    return true;
+  }
+
+  public toggleUserActive(userId: string): boolean {
+    const users = this.getUsers();
+    const user = users.find(u => u.id === userId);
+    if (!user) return false;
+    user.isActive = user.isActive === undefined ? false : !user.isActive;
+    this.saveUsers(users);
+    return true;
+  }
+
   // Criação autônoma de nova clínica (Self-Service Onboarding)
   public registerNewClinic(data: {
     clinicName: string;
@@ -196,8 +262,9 @@ class AuthService {
         autoRenew: true,
         priceAmount: 0,
         hasManagementModule: (data.plan as any) !== 'basic_monthly',
-        maxUsers: 5,
-        maxDoctors: 2
+        maxUsers: data.plan === 'annual' ? 99 : 5,
+        maxDoctors: data.plan === 'annual' ? 99 : 2,
+        licenseKey: `OPTO-${now.getFullYear()}-${(data.plan || 'trial').slice(0, 3).toUpperCase()}-${clinicCode.slice(0, 4)}-${Math.floor(1000 + Math.random() * 9000)}`
       }
     };
 

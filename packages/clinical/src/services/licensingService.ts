@@ -117,10 +117,34 @@ class LicensingService {
       priceAmount: 0,
       hasManagementModule: true,
       maxUsers: 5,
-      maxDoctors: 2
+      maxDoctors: 2,
+      licenseKey: this.generateLicenseKey(targetId, 'trial')
     };
 
     return defaultSub;
+  }
+
+  // Gera uma Chave de Licença Serial Criptográfica & Legível
+  public generateLicenseKey(clinicId: string, plan: SubscriptionPlan): string {
+    const year = new Date().getFullYear();
+    const cleanId = clinicId.replace(/[^a-zA-Z0-9]/g, '').slice(-4).toUpperCase() || 'OPT1';
+    let planCode = 'TRL';
+    if (plan === 'basic_monthly') planCode = 'BAS';
+    if (plan === 'monthly') planCode = 'MEN';
+    if (plan === 'semiannual') planCode = 'SEM';
+    if (plan === 'annual') planCode = 'ANU';
+
+    // Hash pseudo-aleatório determinístico
+    let hash = 0;
+    const seed = `${clinicId}-${plan}-${year}-optomed-auth`;
+    for (let i = 0; i < seed.length; i++) {
+      hash = (hash << 5) - hash + seed.charCodeAt(i);
+      hash |= 0;
+    }
+    const hexCheck = Math.abs(hash).toString(16).toUpperCase().padStart(4, '0').slice(-4);
+    const randPart = Math.floor(1000 + Math.random() * 9000);
+
+    return `OPTO-${year}-${planCode}-${cleanId}-${randPart}`;
   }
 
   // Verifica se o módulo de gestão financeira está habilitado para a clínica
@@ -266,7 +290,8 @@ class LicensingService {
         hasManagementModule: invoice.plan !== 'basic_monthly',
         lastPaymentDate: now.toISOString(),
         maxUsers: invoice.plan === 'annual' ? 99 : 5,
-        maxDoctors: invoice.plan === 'annual' ? 99 : 3
+        maxDoctors: invoice.plan === 'annual' ? 99 : 3,
+        licenseKey: clinics[clinicIndex].subscription?.licenseKey || this.generateLicenseKey(invoice.clinicId, invoice.plan)
       };
 
       offlineDb.saveClinic(clinics[clinicIndex]);
@@ -302,7 +327,8 @@ class LicensingService {
       hasManagementModule: plan !== 'basic_monthly',
       lastPaymentDate: now.toISOString(),
       maxUsers: 20,
-      maxDoctors: 10
+      maxDoctors: 10,
+      licenseKey: clinic.subscription?.licenseKey || this.generateLicenseKey(clinicId, plan)
     };
 
     offlineDb.saveClinic(clinic);

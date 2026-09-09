@@ -27,6 +27,10 @@ export interface ClinicSubscription {
   lastPaymentDate?: string;
   maxUsers?: number;
   maxDoctors?: number;
+  licenseKey?: string; // Ex: OPTO-2026-BR-9281-B892
+  contractTermsAccepted?: boolean;
+  contractAcceptedAt?: string;
+  licensedDevices?: string[]; // IDs de dispositivos autorizados (TV, PC, etc.)
 }
 
 export type TransactionType = 'income' | 'expense';
