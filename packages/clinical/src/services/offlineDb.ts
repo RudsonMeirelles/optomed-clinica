@@ -242,6 +242,9 @@ class OfflineDatabaseService {
 
   public saveAppointments(appointments: Appointment[], clinicId = this.activeClinicId): void {
     localStorage.setItem(this.getKey('appointments', clinicId), JSON.stringify(appointments));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('optomed_appointment_updated', { detail: { clinicId, appointments } }));
+    }
   }
 
   public saveAppointment(appointment: Appointment, clinicId = this.activeClinicId): void {

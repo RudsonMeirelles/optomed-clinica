@@ -278,15 +278,26 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
   useEffect(() => {
     loadData();
 
-    // Sincronização e Atualização Automática Diária a cada 60 segundos
-    const timer = setInterval(() => {
-      const currentToday = getTodayIso();
-      const currentNow = new Date();
-      // Atualiza os dados locais e sincroniza o dia caso vire a meia-noite
+    // Ouvintes de eventos em tempo real para sincronização instantânea de agendamentos
+    const handleUpdate = () => {
       loadData();
-    }, 60000);
+    };
 
-    return () => clearInterval(timer);
+    window.addEventListener('optomed_appointment_updated', handleUpdate);
+    window.addEventListener('optomed_new_patient_registered', handleUpdate);
+    window.addEventListener('storage', handleUpdate);
+
+    // Polling ultrarrápido a cada 2.5 segundos para garantir sincronização entre diferentes abas e dispositivos na LAN
+    const timer = setInterval(() => {
+      loadData();
+    }, 2500);
+
+    return () => {
+      clearInterval(timer);
+      window.removeEventListener('optomed_appointment_updated', handleUpdate);
+      window.removeEventListener('optomed_new_patient_registered', handleUpdate);
+      window.removeEventListener('storage', handleUpdate);
+    };
   }, []);
 
   const openScheduleReturnModal = (reminder: ReturnReminder) => {
@@ -613,7 +624,7 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
     }
   };
 
-  const isToday = selectedDate === '2026-09-05';
+  const isToday = selectedDate === todayIso;
 
   // Cálculos do grid do mês atual
   const firstDayOfMonth = new Date(calendarYear, calendarMonth - 1, 1).getDay();
@@ -994,7 +1005,7 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                     const schedule = getDayOfficialSchedule(dateStr);
                     const dayApts = appointments.filter(a => a.date === dateStr);
                     const isSelected = selectedDate === dateStr;
-                    const isTodayCell = dateStr === '2026-09-05';
+                    const isTodayCell = dateStr === todayIso;
 
                     return (
                       <div
@@ -1064,11 +1075,13 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                           )}
                         </div>
 
-                        {/* Rodapé do Card */}
-                        <div className="text-[8px] text-slate-400 font-bold truncate">
-                          {dateStr === '2026-09-03' && '12 consultas'}
-                          {dateStr === '2026-09-04' && '5 consultas'}
-                          {dateStr === '2026-09-05' && 'Meia Diária (5h)'}
+                        {/* Rodapé do Card: Contagem Real em Tempo Real */}
+                        <div className="text-[8px] text-slate-500 font-bold truncate">
+                          {dayApts.length > 0 
+                            ? `${dayApts.length} ${dayApts.length === 1 ? 'consulta' : 'consultas'}` 
+                            : schedule.shifts.length > 0 
+                            ? schedule.shifts[0].shortName 
+                            : ''}
                         </div>
                       </div>
                     );
