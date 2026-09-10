@@ -45,8 +45,10 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
   initialDrugs = [],
   onClose
 }) => {
-  // Idioma (Padrão: se paciente for PY -> 'es', senão -> 'pt')
+  // Idioma (Padrão: clínica com defaultLanguage es-PY ou paciente PY -> 'es', senão -> 'pt')
   const [language, setLanguage] = useState<PrescriptionLanguage>(() => {
+    const activeClinic = offlineDb.getActiveClinic();
+    if (activeClinic?.defaultLanguage === 'es-PY' || activeClinic?.id === 'vision') return 'es';
     return patient?.nationality === 'PY' ? 'es' : 'pt';
   });
 
@@ -72,10 +74,13 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
   const [generalInstructions, setGeneralInstructions] = useState<string>('');
 
   useEffect(() => {
-    if (patient) {
+    const activeClinic = offlineDb.getActiveClinic();
+    if (activeClinic?.defaultLanguage === 'es-PY' || activeClinic?.id === 'vision') {
+      setLanguage('es');
+    } else if (patient) {
       setLanguage(patient.nationality === 'PY' ? 'es' : 'pt');
     }
-  }, [patient]);
+  }, [patient, isOpen]);
 
   useEffect(() => {
     if (initialMode === 'dioptria') {

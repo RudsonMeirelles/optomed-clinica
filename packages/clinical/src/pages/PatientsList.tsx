@@ -58,16 +58,19 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, use
   }, []);
 
   const openNewPatientModal = () => {
+    const activeClinic = offlineDb.getActiveClinic();
+    const isPyClinic = activeClinic?.defaultLanguage === 'es-PY' || activeClinic?.id === 'vision';
+
     setEditingPatient(null);
     setFullName('');
     setBirthDate('');
     setSex('uninformed');
-    setNationality('BR');
-    setDocumentType('CPF');
+    setNationality(isPyClinic ? 'PY' : 'BR');
+    setDocumentType(isPyClinic ? 'CI_PY' : 'CPF');
     setDocumentNumber('');
-    setPhoneCountryCode('+55');
+    setPhoneCountryCode(isPyClinic ? '+595' : '+55');
     setPhone('');
-    setCity('Foz do Iguaçu');
+    setCity(isPyClinic ? 'Pedro Juan Caballero' : 'Foz do Iguaçu');
     setAddress('');
     setGuardianName('');
     setNotes('');

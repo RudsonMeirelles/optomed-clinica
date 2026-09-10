@@ -153,6 +153,29 @@ export const WaitingRoomPage: React.FC<WaitingRoomPageProps> = ({ activeClinic, 
     return url;
   };
 
+  const isEs = activeClinic?.defaultLanguage === 'es-PY' || activeClinic?.id === 'vision';
+
+  const t = {
+    panelTitle: isEs ? 'Panel de Sala de Espera (TV)' : 'Painel da Sala de Espera (TV)',
+    panelSubtitle: isEs ? 'Llamador Oficial de Pacientes y Central Multimedia de Recepción' : 'Chamador Oficial de Pacientes & Central Multimídia da Recepção',
+    lastCall: isEs ? 'ÚLTIMO TURNO LLAMADO POR EL PROFESIONAL' : 'ÚLTIMA SENHA CHAMADA PELO EXAMINADOR',
+    prefTicket: isEs ? 'TURNO PREFERENCIAL' : 'SENHA PREFERENCIAL',
+    regularTicket: isEs ? 'TURNO DE ATENCIÓN' : 'SENHA DE ATENDIMENTO',
+    patient: isEs ? 'PACIENTE' : 'PACIENTE',
+    goTo: isEs ? 'DIRIGIRSE A' : 'DIRIGIR-SE AO',
+    examiner: isEs ? 'PROFESIONAL' : 'EXAMINADOR',
+    waitingCall: isEs ? 'Esperando llamada de paciente por el profesional...' : 'Aguardando chamada de paciente pelo examinador...',
+    waitingCallSub: isEs ? 'Al hacer clic en "Atender Paciente" o "Llamar en TV", el turno aparece con anuncio visual y sonoro inmediato.' : 'Ao clicar em "Atender Paciente" ou "Chamar na TV" no consultório, a senha surge com anúncio visual e sonoro imediato.',
+    syncLan: isEs ? 'Sincronización en Tiempo Real vía Red LAN' : 'Sincronização em Tempo Real via Rede LAN',
+    waitingQueue: isEs ? 'EN ESPERA DE ATENCIÓN' : 'AGUARDANDO ATENDIMENTO',
+    dayQueue: isEs ? 'Turnos de Hoy' : 'Fila do Dia',
+    noWaiting: isEs ? 'Ningún paciente en espera en este momento.' : 'Nenhum paciente aguardando no momento.',
+    clinicSpace: isEs ? 'Espacio de la Clínica e Informes' : 'Espaço da Clínica & Informes',
+    recentCalls: isEs ? 'Últimos Turnos' : 'Últimas Chamadas',
+    infoBadge: isEs ? 'Informativo' : 'Informativo',
+    defaultMarquee: isEs ? '🌟 ¡Bienvenidos a Vision Clínica de Ojos! Excelencia en Optometría y Contactología Especializada.' : '🌟 Bem-vindo! Cuide da saúde dos seus olhos. Atendimento oftalmológico de excelência.'
+  };
+
   return (
     <div className={`w-full min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between select-none overflow-x-hidden ${isStandalone ? 'p-4 sm:p-6' : 'p-4 sm:p-8'}`}>
       
@@ -169,11 +192,11 @@ export const WaitingRoomPage: React.FC<WaitingRoomPageProps> = ({ activeClinic, 
               </h1>
               <span className="px-3 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30 text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5">
                 <Radio className="w-3 h-3 text-emerald-400 animate-pulse" />
-                Painel da Sala de Espera (TV)
+                {t.panelTitle}
               </span>
             </div>
             <p className="text-xs text-slate-400 font-medium mt-0.5">
-              Chamador Oficial de Pacientes & Central Multimídia da Recepção
+              {t.panelSubtitle}
             </p>
           </div>
         </div>
@@ -189,7 +212,7 @@ export const WaitingRoomPage: React.FC<WaitingRoomPageProps> = ({ activeClinic, 
             type="button"
             onClick={toggleFullscreen}
             className="p-3 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-2xl border border-slate-700 transition-colors cursor-pointer shadow-md"
-            title={isFullscreen ? 'Sair da Tela Cheia' : 'Abrir Tela Cheia no Telão da TV'}
+            title={isFullscreen ? (isEs ? 'Salir de Pantalla Completa' : 'Sair da Tela Cheia') : (isEs ? 'Abrir Pantalla Completa' : 'Abrir Tela Cheia no Telão da TV')}
           >
             {isFullscreen ? <Minimize2 className="w-5 h-5" /> : <Maximize2 className="w-5 h-5" />}
           </button>
@@ -210,13 +233,13 @@ export const WaitingRoomPage: React.FC<WaitingRoomPageProps> = ({ activeClinic, 
               <div className="space-y-6 animate-scaleUp my-auto">
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 text-xs font-black uppercase tracking-widest shadow-md">
                   <Bell className="w-4 h-4 text-amber-400 animate-bounce" />
-                  <span>ÚLTIMA SENHA CHAMADA PELO EXAMINADOR</span>
+                  <span>{t.lastCall}</span>
                 </div>
 
                 {/* Senha Grande */}
                 <div>
                   <span className="text-xs font-bold text-slate-400 uppercase tracking-widest block mb-1">
-                    {activeCall.priority ? 'SENHA PREFERENCIAL' : 'SENHA DE ATENDIMENTO'}
+                    {activeCall.priority ? t.prefTicket : t.regularTicket}
                   </span>
                   <div className="text-6xl sm:text-8xl md:text-9xl font-black font-mono tracking-widest bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-400 bg-clip-text text-transparent drop-shadow-[0_10px_25px_rgba(245,158,11,0.4)]">
                     {activeCall.ticketNumber}
@@ -226,7 +249,7 @@ export const WaitingRoomPage: React.FC<WaitingRoomPageProps> = ({ activeClinic, 
                 {/* Nome do Paciente */}
                 <div className="bg-slate-800/90 border border-slate-700/80 p-5 rounded-3xl shadow-inner max-w-2xl mx-auto">
                   <span className="text-[11px] font-bold text-blue-400 uppercase tracking-widest block mb-1">
-                    PACIENTE
+                    {t.patient}
                   </span>
                   <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white capitalize tracking-tight line-clamp-2">
                     {activeCall.patientName}
@@ -240,7 +263,7 @@ export const WaitingRoomPage: React.FC<WaitingRoomPageProps> = ({ activeClinic, 
                       <MapPin className="w-6 h-6" />
                     </div>
                     <div>
-                      <span className="text-[10px] font-extrabold uppercase text-blue-300 block">DIRIGIR-SE AO</span>
+                      <span className="text-[10px] font-extrabold uppercase text-blue-300 block">{t.goTo}</span>
                       <span className="text-lg sm:text-xl font-black text-white block">{activeCall.roomName}</span>
                     </div>
                   </div>
@@ -250,7 +273,7 @@ export const WaitingRoomPage: React.FC<WaitingRoomPageProps> = ({ activeClinic, 
                       <Stethoscope className="w-6 h-6" />
                     </div>
                     <div>
-                      <span className="text-[10px] font-extrabold uppercase text-indigo-300 block">EXAMINADOR</span>
+                      <span className="text-[10px] font-extrabold uppercase text-indigo-300 block">{t.examiner}</span>
                       <span className="text-lg sm:text-xl font-black text-white block truncate max-w-[180px]">{activeCall.examinerName}</span>
                     </div>
                   </div>
@@ -259,15 +282,15 @@ export const WaitingRoomPage: React.FC<WaitingRoomPageProps> = ({ activeClinic, 
             ) : (
               <div className="my-auto py-12 space-y-4 text-slate-500">
                 <Users className="w-16 h-16 mx-auto text-slate-700 animate-pulse" />
-                <p className="text-xl font-bold text-slate-300">Aguardando chamada de paciente pelo examinador...</p>
+                <p className="text-xl font-bold text-slate-300">{t.waitingCall}</p>
                 <p className="text-xs text-slate-500 max-w-md mx-auto">
-                  Ao clicar em <strong>"Atender Paciente"</strong> ou <strong>"Chamar na TV"</strong> no consultório, a senha surge com anúncio visual e sonoro imediato.
+                  {t.waitingCallSub}
                 </p>
               </div>
             )}
 
             <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-500">
-              <span>Sincronização em Tempo Real via Rede LAN</span>
+              <span>{t.syncLan}</span>
               <span>{activeClinic.code}</span>
             </div>
           </div>
@@ -277,17 +300,17 @@ export const WaitingRoomPage: React.FC<WaitingRoomPageProps> = ({ activeClinic, 
             <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
               <div className="flex items-center gap-2 font-black text-xs sm:text-sm text-amber-400">
                 <Clock className="w-4 h-4" />
-                <span>AGUARDANDO ATENDIMENTO ({waitingPatients.length})</span>
+                <span>{t.waitingQueue} ({waitingPatients.length})</span>
               </div>
               <span className="text-[10px] font-bold text-slate-400 bg-slate-800 px-2.5 py-0.5 rounded-full">
-                Fila do Dia
+                {t.dayQueue}
               </span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5 max-h-40 overflow-y-auto">
               {waitingPatients.length === 0 ? (
                 <div className="col-span-full py-4 text-center text-slate-600 text-xs font-medium">
-                  Nenhum paciente aguardando no momento.
+                  {t.noWaiting}
                 </div>
               ) : (
                 waitingPatients.slice(0, 6).map((apt, idx) => (
@@ -318,7 +341,7 @@ export const WaitingRoomPage: React.FC<WaitingRoomPageProps> = ({ activeClinic, 
               <div className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-amber-400" />
                 <h3 className="text-xs font-black uppercase tracking-wider text-slate-200">
-                  Espaço da Clínica & Informes
+                  {t.clinicSpace}
                 </h3>
               </div>
               {activeMediaItems.length > 1 && (
@@ -402,7 +425,7 @@ export const WaitingRoomPage: React.FC<WaitingRoomPageProps> = ({ activeClinic, 
             {callHistory.length > 0 && (
               <div className="mt-4 pt-3 border-t border-slate-800/80 space-y-2">
                 <span className="text-[10px] font-black uppercase text-slate-500 block">
-                  Últimas Chamadas
+                  {t.recentCalls}
                 </span>
                 <div className="flex items-center gap-2 overflow-x-auto pb-1">
                   {callHistory.slice(0, 4).map((item, idx) => (
@@ -422,12 +445,12 @@ export const WaitingRoomPage: React.FC<WaitingRoomPageProps> = ({ activeClinic, 
       <footer className="bg-slate-900 border border-slate-800 rounded-2xl px-4 py-2.5 shadow-xl flex items-center gap-3 overflow-hidden shrink-0">
         <div className="flex items-center gap-2 bg-blue-600 text-white px-3 py-1 rounded-xl text-[10px] font-black uppercase tracking-wider shrink-0 shadow-md">
           <Sparkles className="w-3.5 h-3.5" />
-          <span>Informativo</span>
+          <span>{t.infoBadge}</span>
         </div>
 
         <div className="overflow-hidden whitespace-nowrap flex-1">
           <div className="inline-block animate-marquee text-xs font-bold text-slate-300 tracking-wide">
-            {mediaSettings.marqueeText || '🌟 Bem-vindo! Cuide da saúde dos seus olhos. Atendimento oftalmológico de excelência.'}
+            {mediaSettings.marqueeText || t.defaultMarquee}
           </div>
         </div>
       </footer>

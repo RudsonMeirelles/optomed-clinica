@@ -19,7 +19,6 @@ import {
   ProfessionalSettlementReport
 } from '@optotipo/shared';
 import { RECOVERED_RECORDS } from '../data/recoveredClinicalData';
-
 export const DEFAULT_CLINICS: ClinicConfig[] = [
   {
     id: 'ivs',
@@ -28,6 +27,9 @@ export const DEFAULT_CLINICS: ClinicConfig[] = [
     tagline: 'Oftalmologia Especializada & Exames Avançados',
     primaryColor: '#2563EB', // Blue
     city: 'Foz do Iguaçu',
+    country: 'Brasil',
+    defaultLanguage: 'pt-BR',
+    defaultCurrency: 'BRL',
     address: 'Av. Jorge Schimmelpfeng, 500',
     phone: '+55 (45) 3522-1000'
   },
@@ -38,18 +40,24 @@ export const DEFAULT_CLINICS: ClinicConfig[] = [
     tagline: 'Centro de Diagnóstico e Refração Visual',
     primaryColor: '#7C3AED', // Purple
     city: 'Ciudad del Este',
+    country: 'Paraguai',
+    defaultLanguage: 'es-PY',
+    defaultCurrency: 'PYG',
     address: 'Shopping Mega Star, Piso 3',
     phone: '+595 981 123456'
   },
   {
     id: 'vision',
     code: 'VISION',
-    name: 'Vision Clínica dos Olhos',
-    tagline: 'Excelência em Optometria e Contatologia',
+    name: 'Vision Clínica de Ojos',
+    tagline: 'Excelencia en Optometría y Contactología Especializada',
     primaryColor: '#059669', // Emerald Green
-    city: 'Foz do Iguaçu',
-    address: 'Rua Almirante Barroso, 1200',
-    phone: '+55 (45) 3028-5050'
+    city: 'Pedro Juan Caballero / Ciudad del Este',
+    country: 'Paraguai',
+    defaultLanguage: 'es-PY',
+    defaultCurrency: 'PYG',
+    address: 'Av. Dr. Francia / Centro Médico Vision',
+    phone: '+595 981 302850'
   },
   {
     id: 'outro',
@@ -58,6 +66,9 @@ export const DEFAULT_CLINICS: ClinicConfig[] = [
     tagline: 'Atendimento Clínico Personalizado',
     primaryColor: '#EA580C', // Amber/Orange
     city: 'Foz do Iguaçu',
+    country: 'Brasil',
+    defaultLanguage: 'pt-BR',
+    defaultCurrency: 'BRL',
     address: 'Centro Médico Integrado, Sala 402',
     phone: '+55 (45) 99999-8888'
   }
@@ -117,7 +128,30 @@ class OfflineDatabaseService {
         this.saveClinics(DEFAULT_CLINICS);
         return DEFAULT_CLINICS;
       }
-      return JSON.parse(raw);
+      const parsed: ClinicConfig[] = JSON.parse(raw);
+      // Garantir integridade da clínica Vision com Espanhol (Paraguay)
+      let modified = false;
+      const updated: ClinicConfig[] = parsed.map(c => {
+        if (c.id === 'vision' || c.code === 'VISION') {
+          if (c.defaultLanguage !== 'es-PY' || c.country !== 'Paraguai') {
+            modified = true;
+            return {
+              ...c,
+              name: c.name && !c.name.includes('IVS') ? c.name : 'Vision Clínica de Ojos',
+              tagline: c.tagline && !c.tagline.includes('Português') ? c.tagline : 'Excelencia en Optometría y Contactología Especializada',
+              country: 'Paraguai' as const,
+              defaultLanguage: 'es-PY' as const,
+              defaultCurrency: 'PYG' as const,
+              city: c.city || 'Pedro Juan Caballero / Ciudad del Este'
+            };
+          }
+        }
+        return c;
+      });
+      if (modified) {
+        this.saveClinics(updated);
+      }
+      return updated;
     } catch {
       return DEFAULT_CLINICS;
     }

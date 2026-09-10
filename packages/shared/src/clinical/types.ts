@@ -153,6 +153,8 @@ export interface ClinicConfig {
   address?: string;
   city?: string;
   country?: 'Brasil' | 'Paraguai' | 'other';
+  defaultLanguage?: 'pt-BR' | 'es-PY';
+  defaultCurrency?: 'BRL' | 'PYG' | 'USD';
   documentCnpjOrRuc?: string;
   ownerEmail?: string;
   ownerName?: string;

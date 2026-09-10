@@ -46,6 +46,9 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ currentUser, onClini
   const [clinicAddress, setClinicAddress] = useState<string>('');
   const [clinicCity, setClinicCity] = useState<string>('');
   const [clinicLogoUrl, setClinicLogoUrl] = useState<string>('');
+  const [clinicLanguage, setClinicLanguage] = useState<'pt-BR' | 'es-PY'>('pt-BR');
+  const [clinicCountry, setClinicCountry] = useState<'Brasil' | 'Paraguai' | 'other'>('Brasil');
+  const [clinicCurrency, setClinicCurrency] = useState<'BRL' | 'PYG' | 'USD'>('BRL');
 
   // Novo Usuário Form
   const [newUsername, setNewUsername] = useState<string>('');
@@ -70,6 +73,9 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ currentUser, onClini
       setClinicAddress(active.address || '');
       setClinicCity(active.city || '');
       setClinicLogoUrl(active.logoUrl || '');
+      setClinicLanguage(active.defaultLanguage || (active.id === 'vision' || active.id === 'megastar' ? 'es-PY' : 'pt-BR'));
+      setClinicCountry(active.country || (active.id === 'vision' || active.id === 'megastar' ? 'Paraguai' : 'Brasil'));
+      setClinicCurrency(active.defaultCurrency || (active.id === 'vision' || active.id === 'megastar' ? 'PYG' : 'BRL'));
     }
   };
 
@@ -94,7 +100,10 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ currentUser, onClini
       phone: clinicPhone,
       address: clinicAddress,
       city: clinicCity,
-      logoUrl: clinicLogoUrl
+      logoUrl: clinicLogoUrl,
+      defaultLanguage: clinicLanguage,
+      country: clinicCountry,
+      defaultCurrency: clinicCurrency
     };
 
     offlineDb.saveClinic(updated);
@@ -385,6 +394,46 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ currentUser, onClini
                   onChange={(e) => setClinicAddress(e.target.value)}
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900"
                 />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-blue-50/40 p-3.5 rounded-xl border border-blue-100">
+                <div>
+                  <label className="text-[11px] font-black text-slate-700 block mb-1">IDIOMA PRINCIPAL / PADRÃO</label>
+                  <select
+                    value={clinicLanguage}
+                    onChange={(e) => setClinicLanguage(e.target.value as any)}
+                    className="w-full bg-white border border-slate-300 rounded-xl px-2.5 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="pt-BR">🇧🇷 Português (Brasil)</option>
+                    <option value="es-PY">🇵🇾 Español (Paraguay)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-[11px] font-black text-slate-700 block mb-1">PAÍS SEDE</label>
+                  <select
+                    value={clinicCountry}
+                    onChange={(e) => setClinicCountry(e.target.value as any)}
+                    className="w-full bg-white border border-slate-300 rounded-xl px-2.5 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="Brasil">🇧🇷 Brasil</option>
+                    <option value="Paraguai">🇵🇾 Paraguai</option>
+                    <option value="other">Outro</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-[11px] font-black text-slate-700 block mb-1">MOEDA PADRÃO</label>
+                  <select
+                    value={clinicCurrency}
+                    onChange={(e) => setClinicCurrency(e.target.value as any)}
+                    className="w-full bg-white border border-slate-300 rounded-xl px-2.5 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="BRL">R$ Real (BRL)</option>
+                    <option value="PYG">₲ Guaraní (PYG)</option>
+                    <option value="USD">$ Dólar (USD)</option>
+                  </select>
+                </div>
               </div>
 
               <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
