@@ -1,0 +1,38 @@
+{
+  "recoveredAt": "2026-09-10T15:45:18.271Z",
+  "patients": [
+    {
+      "id": "p1-ivs",
+      "fullName": "Maria Helena dos Santos",
+      "birthDate": "1984-05-14",
+      "sex": "F",
+      "nationality": "BR",
+      "documentType": "CPF",
+      "documentNumber": "123.456.789-00",
+      "phoneCountryCode": "+55",
+      "phone": "+55 (45) 98765-4321",
+      "city": "Foz do Iguaçu",
+      "country": "Brasil",
+      "notes": "Queixa de cansaço visual e cefaleia ao final do dia de trabalho no computador.",
+      "lgpdConsent": true,
+      "lgpdConsentDate": "2026-09-07T22:26:56.362Z",
+      "createdAt": "2026-09-07T22:26:56.362Z",
+      "updatedAt": "2026-09-07T22:26:56.362Z"
+    },
+    {
+      "id": "p1-1111-2222-3333",
+      "fullName": "Maria Helena dos Santos",
+      "birthDate": "1984-05-14",
+      "sex": "F",
+      "phone": "(11) 98765-4321",
+      "document": "123.456.789-00",
+      "address": "Av. Paulista, 1000 - São Paulo, SP",
+      "notes": "Queixa de cansaço visual e cefaleia ao final do dia de trabalho no computador.",
+      "createdAt": "2026-09-02T01:08:35.768Z",
+      "updatedAt": "2026-09-02T01:08:35.774Z"
+    }
+  ],
+  "encounters": [],
+  "appointments": [],
+  "prescriptions": []
+}

@@ -18,6 +18,7 @@ import {
   ProfessionalWorkSession,
   ProfessionalSettlementReport
 } from '@optotipo/shared';
+import { RECOVERED_RECORDS } from '../data/recoveredClinicalData';
 
 export const DEFAULT_CLINICS: ClinicConfig[] = [
   {
@@ -86,11 +87,11 @@ class OfflineDatabaseService {
         this.activeClinicId = saved;
       }
       
-      // Higienização automática: Remove dados fictícios de teste do IVS mantendo apenas dados reais
-      const cleanedFlagKey = 'optomed_ivs_mock_purged_v1';
-      if (!localStorage.getItem(cleanedFlagKey)) {
-        this.removeMockPatients('ivs');
-        localStorage.setItem(cleanedFlagKey, 'true');
+      // Auto-recuperação de todos os pacientes e prontuários históricos desde 25/08/2026
+      const recoveryFlagKey = 'optomed_historical_recovery_2026_v1';
+      if (!localStorage.getItem(recoveryFlagKey)) {
+        this.restoreRecoveredHistoricalData();
+        localStorage.setItem(recoveryFlagKey, 'true');
       }
     } catch {
       this.activeClinicId = 'ivs';
@@ -612,6 +613,97 @@ class OfflineDatabaseService {
         window.dispatchEvent(new CustomEvent('optomed_finance_updated', { detail: { clinicId } }));
       }
     } catch {}
+  }
+
+  // --- RESTAURAÇÃO HISTÓRICA COMPLETA DE DADOS CLÍNICOS E PACIENTES (DESDE 25/08/2026) ---
+  public restoreRecoveredHistoricalData(clinicId = 'ivs'): void {
+    try {
+      // 1. Pacientes: mescla sem duplicar
+      const currentPatients = this.getPatients(clinicId);
+      const patientMap = new Map<string, Patient>();
+      currentPatients.forEach(p => patientMap.set(p.id, p));
+
+      RECOVERED_RECORDS.forEach(rec => {
+        if (!patientMap.has(rec.patient.id)) {
+          patientMap.set(rec.patient.id, rec.patient as Patient);
+        }
+      });
+      const updatedPatients = Array.from(patientMap.values());
+      this.savePatients(updatedPatients, clinicId);
+
+      // 2. Prontuários (Encounters): mescla sem duplicar
+      const currentEncounters = this.getEncounters(clinicId);
+      const encounterMap = new Map<string, ClinicalEncounter>();
+      currentEncounters.forEach(e => encounterMap.set(e.id, e));
+
+      RECOVERED_RECORDS.forEach(rec => {
+        if (rec.encounter && !encounterMap.has(rec.encounter.id)) {
+          encounterMap.set(rec.encounter.id, rec.encounter as ClinicalEncounter);
+        }
+      });
+      const updatedEncounters = Array.from(encounterMap.values());
+      this.saveEncounters(updatedEncounters, clinicId);
+
+      // 3. Receitas ópticas (Prescriptions): mescla sem duplicar
+      const currentPrescriptions = this.getPrescriptions(clinicId);
+      const prescriptionMap = new Map<string, Prescription>();
+      currentPrescriptions.forEach(p => prescriptionMap.set(p.id, p));
+
+      RECOVERED_RECORDS.forEach(rec => {
+        if (rec.prescription && !prescriptionMap.has(rec.prescription.id)) {
+          prescriptionMap.set(rec.prescription.id, rec.prescription as Prescription);
+        }
+      });
+      const updatedPrescriptions = Array.from(prescriptionMap.values());
+      localStorage.setItem(this.getKey('prescriptions', clinicId), JSON.stringify(updatedPrescriptions));
+
+      // 4. Agendamentos históricos para a agenda e painel do médico
+      const currentApts = this.getAppointments(clinicId);
+      const aptMap = new Map<string, Appointment>();
+      currentApts.forEach(a => aptMap.set(a.id, a));
+
+      RECOVERED_RECORDS.forEach((rec, idx) => {
+        const aptId = `apt-rec-${rec.patient.id}`;
+        if (!aptMap.has(aptId)) {
+          const encDate = rec.encounter?.date || rec.patient.createdAt;
+          const dateStr = encDate ? encDate.split('T')[0] : '2026-09-08';
+          const timeStr = encDate && encDate.includes('T')
+            ? new Date(encDate).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+            : '08:30';
+
+          aptMap.set(aptId, {
+            id: aptId,
+            patientId: rec.patient.id,
+            patientName: rec.patient.fullName,
+            patientNationality: rec.patient.nationality || 'BR',
+            patientPhone: rec.patient.phone,
+            patientDocument: rec.patient.documentNumber,
+            examinerId: 'user-examinador',
+            examinerName: 'Dr. Rudson Meirelles',
+            date: dateStr,
+            time: timeStr,
+            durationMinutes: 30,
+            type: 'refrativo',
+            status: rec.encounter?.status === 'completed' ? 'completed' : 'in_consultation',
+            ticketNumber: `P-${String(idx + 1).padStart(2, '0')}`,
+            notes: rec.patient.notes || 'Atendimento registrado no consultório.',
+            room: 'Consultório 1',
+            createdAt: rec.patient.createdAt,
+            updatedAt: rec.patient.updatedAt
+          });
+        }
+      });
+      const updatedApts = Array.from(aptMap.values());
+      this.saveAppointments(updatedApts, clinicId);
+
+      this.logAudit('UPDATE', 'PATIENT', 'HISTORICAL_RECOVERY', `Recuperados com sucesso ${RECOVERED_RECORDS.length} pacientes e prontuários históricos desde 25/08/2026`, clinicId);
+
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('optomed_appointment_updated', { detail: { clinicId, appointments: updatedApts } }));
+      }
+    } catch (e) {
+      console.error('Erro na recuperação histórica:', e);
+    }
   }
 
   // Remove dados fictícios conhecidos (Maria Helena, Enzo Gabriel, Juan Carlos Benítez) de um consultório

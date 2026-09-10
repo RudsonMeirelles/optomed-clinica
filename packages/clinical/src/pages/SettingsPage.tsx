@@ -16,7 +16,8 @@ import {
   Save,
   Check,
   RefreshCw,
-  Sparkles
+  Sparkles,
+  History
 } from 'lucide-react';
 import { offlineDb, DEFAULT_CLINICS, generateUUID } from '../services/offlineDb';
 import { authService } from '../services/authService';
@@ -680,6 +681,20 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ currentUser, onClini
                   className="hidden"
                 />
               </label>
+
+              <button
+                type="button"
+                onClick={() => {
+                  offlineDb.restoreRecoveredHistoricalData(selectedClinicId);
+                  loadData();
+                  showNotification('Histórico clínico restaurado com sucesso (pacientes e prontuários recuperados desde 25/08/2026)!');
+                }}
+                className="px-4 py-2.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold text-xs rounded-xl flex items-center gap-2 transition-colors cursor-pointer shadow-xs"
+                title="Restaura todos os pacientes e prontuários históricos recuperados"
+              >
+                <History className="w-4 h-4 text-emerald-600" />
+                <span>Restaurar Histórico (desde 25/08/2026)</span>
+              </button>
 
               <button
                 type="button"
