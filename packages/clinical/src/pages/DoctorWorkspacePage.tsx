@@ -60,6 +60,7 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
     const d = String(now.getDate()).padStart(2, '0');
     return `${y}-${m}-${d}`;
   });
+  const [viewScope, setViewScope] = useState<'day' | 'all_history'>('day');
   const [searchName, setSearchName] = useState<string>('');
   const [statusFilter, setStatusFilter] = useState<'ALL' | 'waiting' | 'in_consultation' | 'completed'>('ALL');
   
@@ -116,21 +117,36 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
   // 1. Agendamentos do dia (appointments)
   // 2. Prontuários atendidos/iniciados na data (encounters)
   // 3. Novos pacientes cadastrados na recepção na data (patients)
+  // Consolidação completa em tempo real de:
+  // 1. Agendamentos (appointments)
+  // 2. Prontuários atendidos/iniciados (encounters)
+  // 3. Pacientes cadastrados (patients)
+  // Permite modo 'day' (apenas data selecionada) e modo 'all_history' (todo o histórico clínico da vida da clínica)
   const getMergedDayAppointments = (): Appointment[] => {
     const map = new Map<string, Appointment>();
+    const isGlobal = viewScope === 'all_history' || searchName.trim().length > 0;
 
-    // 1. Inclui agendamentos cadastrados para o dia selecionado
-    appointments.filter(a => getLocalDateStr(a.date) === selectedDate).forEach(apt => {
+    // 1. Inclui agendamentos cadastrados (se global, todos; se day, filtra pela data selecionada)
+    const aptSource = isGlobal 
+      ? appointments 
+      : appointments.filter(a => getLocalDateStr(a.date) === selectedDate);
+
+    aptSource.forEach(apt => {
       map.set(apt.patientId || apt.id, { ...apt });
     });
 
-    // 2. Inclui atendimentos clínicos (encounters) realizados na data selecionada
-    encounters.filter(e => getLocalDateStr(e.date) === selectedDate).forEach(enc => {
+    // 2. Inclui atendimentos clínicos (encounters)
+    const encSource = isGlobal 
+      ? encounters 
+      : encounters.filter(e => getLocalDateStr(e.date) === selectedDate);
+
+    encSource.forEach(enc => {
       const patientObj = patients.find(p => p.id === enc.patientId);
       const existing = map.get(enc.patientId);
       if (existing) {
         if (enc.status === 'completed') existing.status = 'completed';
         else if (enc.status === 'in_progress' && existing.status !== 'completed') existing.status = 'in_consultation';
+        if (!existing.date) existing.date = getLocalDateStr(enc.date) || selectedDate;
       } else {
         const timeFromDate = enc.date && enc.date.includes('T')
           ? new Date(enc.date).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
@@ -145,7 +161,7 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
           patientDocument: patientObj?.documentNumber,
           examinerId: 'user-examinador',
           examinerName: enc.examinerName || currentUser.fullName,
-          date: selectedDate,
+          date: getLocalDateStr(enc.date) || selectedDate,
           time: timeFromDate,
           durationMinutes: 30,
           type: 'refrativo',
@@ -159,36 +175,47 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
       }
     });
 
-    // 3. Se a data for hoje, inclui pacientes cadastrados hoje mesmo que não possuam agendamento explícito
+    // 3. Inclui pacientes cadastrados que ainda não possuem atendimento ou agendamento explícito
     const todayStr = getLocalDateStr(new Date().toISOString());
-    if (selectedDate === todayStr) {
-      patients.filter(p => getLocalDateStr(p.createdAt) === todayStr).forEach((p, idx) => {
-        if (!map.has(p.id)) {
-          map.set(p.id, {
-            id: `apt-pat-${p.id}`,
-            patientId: p.id,
-            patientName: p.fullName,
-            patientNationality: p.nationality,
-            patientPhone: p.phone,
-            patientDocument: p.documentNumber,
-            examinerId: 'user-examinador',
-            examinerName: currentUser.fullName,
-            date: selectedDate,
-            time: p.createdAt ? new Date(p.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '08:00',
-            durationMinutes: 30,
-            type: 'refrativo',
-            status: 'waiting',
-            ticketNumber: `P-${String(idx + 1).padStart(2, '0')}`,
-            notes: p.notes || 'Paciente cadastrado na recepção hoje.',
-            room: 'Consultório 1',
-            createdAt: p.createdAt || new Date().toISOString(),
-            updatedAt: p.updatedAt || new Date().toISOString()
-          });
-        }
-      });
-    }
+    const patSource = isGlobal 
+      ? patients 
+      : (selectedDate === todayStr ? patients.filter(p => getLocalDateStr(p.createdAt) === todayStr) : []);
 
-    return Array.from(map.values()).sort((a, b) => (b.time || '').localeCompare(a.time || ''));
+    patSource.forEach((p, idx) => {
+      if (!map.has(p.id)) {
+        const patDate = getLocalDateStr(p.createdAt) || selectedDate;
+        map.set(p.id, {
+          id: `apt-pat-${p.id}`,
+          patientId: p.id,
+          patientName: p.fullName,
+          patientNationality: p.nationality,
+          patientPhone: p.phone,
+          patientDocument: p.documentNumber,
+          examinerId: 'user-examinador',
+          examinerName: currentUser.fullName,
+          date: patDate,
+          time: p.createdAt ? new Date(p.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '08:00',
+          durationMinutes: 30,
+          type: 'refrativo',
+          status: 'waiting',
+          ticketNumber: `P-${String(idx + 1).padStart(2, '0')}`,
+          notes: p.notes || (isGlobal ? 'Paciente cadastrado no sistema.' : 'Paciente cadastrado na recepção hoje.'),
+          room: 'Consultório 1',
+          createdAt: p.createdAt || new Date().toISOString(),
+          updatedAt: p.updatedAt || new Date().toISOString()
+        });
+      }
+    });
+
+    // Ordenação: se for histórico geral, ordena por data decrescente e horário decrescente (mais recentes primeiro)
+    return Array.from(map.values()).sort((a, b) => {
+      const dateA = a.date || '';
+      const dateB = b.date || '';
+      if (dateA !== dateB) {
+        return dateB.localeCompare(dateA);
+      }
+      return (b.time || '').localeCompare(a.time || '');
+    });
   };
 
   const dayAppointments = getMergedDayAppointments();
@@ -315,31 +342,62 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
           </div>
         </div>
 
-        {/* Seletor de Data & Botão Hoje */}
-        <div className="flex items-center gap-3 self-end md:self-auto">
-          <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 p-1 rounded-2xl shadow-inner">
-            <CalendarIcon className="w-4 h-4 text-slate-500 ml-2" />
-            <input
-              type="date"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-              className="bg-transparent border-0 text-xs font-black text-slate-800 focus:outline-none pr-3 py-1.5 cursor-pointer font-mono"
-            />
+        {/* Seletor de Escopo & Data */}
+        <div className="flex flex-wrap items-center gap-3 self-end md:self-auto">
+          {/* Seletor de Modo: Hoje vs Histórico Completo */}
+          <div className="flex items-center bg-slate-100 p-1 rounded-2xl border border-slate-200">
+            <button
+              type="button"
+              onClick={() => setViewScope('day')}
+              className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer ${
+                viewScope === 'day'
+                  ? 'bg-white text-blue-700 shadow-xs border border-slate-200'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              Atendimentos do Dia
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewScope('all_history')}
+              className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 ${
+                viewScope === 'all_history'
+                  ? 'bg-blue-600 text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <History className="w-3.5 h-3.5" />
+              <span>Histórico Completo ({encounters.length || patients.length})</span>
+            </button>
           </div>
 
-          <button
-            type="button"
-            onClick={() => {
-              const now = new Date();
-              const y = now.getFullYear();
-              const m = String(now.getMonth() + 1).padStart(2, '0');
-              const d = String(now.getDate()).padStart(2, '0');
-              setSelectedDate(`${y}-${m}-${d}`);
-            }}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-black transition-all shadow-sm cursor-pointer"
-          >
-            Hoje
-          </button>
+          {viewScope === 'day' && (
+            <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 p-1 rounded-2xl shadow-inner">
+              <CalendarIcon className="w-4 h-4 text-slate-500 ml-2" />
+              <input
+                type="date"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+                className="bg-transparent border-0 text-xs font-black text-slate-800 focus:outline-none pr-3 py-1.5 cursor-pointer font-mono"
+              />
+            </div>
+          )}
+
+          {viewScope === 'day' && (
+            <button
+              type="button"
+              onClick={() => {
+                const now = new Date();
+                const y = now.getFullYear();
+                const m = String(now.getMonth() + 1).padStart(2, '0');
+                const d = String(now.getDate()).padStart(2, '0');
+                setSelectedDate(`${y}-${m}-${d}`);
+              }}
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-black transition-all shadow-sm cursor-pointer"
+            >
+              Hoje
+            </button>
+          )}
         </div>
       </div>
 
@@ -515,12 +573,14 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
         </div>
       </div>
 
-      {/* 4. LISTA PRINCIPAL DE PACIENTES DO DIA */}
+      {/* 4. LISTA PRINCIPAL DE PACIENTES */}
       <div className="bg-white rounded-3xl border border-slate-200/80 shadow-xs overflow-hidden">
         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
           <h3 className="font-black text-sm text-slate-900 flex items-center gap-2">
             <Users className="w-4 h-4 text-blue-600" />
-            Fila de Atendimento do Dia ({filteredAppointments.length} pacientes)
+            {viewScope === 'all_history' 
+              ? `Todo o Histórico de Atendimentos (${filteredAppointments.length} registros)`
+              : `Fila de Atendimento do Dia (${filteredAppointments.length} pacientes)`}
           </h3>
           <span className="text-[11px] font-mono text-slate-400">
             Atualizado em tempo real
@@ -586,6 +646,12 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
                       </div>
 
                       <div className="flex items-center gap-4 text-xs text-slate-500 flex-wrap">
+                        {apt.date && (
+                          <span className="flex items-center gap-1 font-mono font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded-md text-[11px] border border-slate-200">
+                            <CalendarIcon className="w-3 h-3 text-blue-600" />
+                            {apt.date.split('-').reverse().join('/')}
+                          </span>
+                        )}
                         {age && (
                           <span>Idade: <strong className="text-slate-700">{age.formatted}</strong></span>
                         )}
