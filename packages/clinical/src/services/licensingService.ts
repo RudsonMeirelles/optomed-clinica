@@ -438,29 +438,35 @@ export class CalendarIntegrationService {
   }
 
   /**
-   * Gera o link direto para adicionar o compromisso ao Google Calendar com 1 clique
+   * Gera o link direto para adicionar o compromisso ao Google Calendar com 1 clique.
+   * Demarcação explícita como Atendimento Clínico para a agenda "Atendimentos" do Dr. Rudson Meirelles.
    */
   public generateGoogleCalendarUrl(appointment: Appointment, clinic: ClinicConfig): string {
     const [year, month, day] = appointment.date.split('-');
-    const [hour, min] = appointment.time.split(':');
+    const [hour, min] = (appointment.time || '08:00').split(':');
 
-    const startDate = new Date(Number(year), Number(month) - 1, Number(day), Number(hour), Number(min));
+    const startDate = new Date(Number(year), Number(month) - 1, Number(day), Number(hour || 8), Number(min || 0));
     const endDate = new Date(startDate.getTime() + (appointment.durationMinutes || 30) * 60000);
 
     const formatGoogleDate = (d: Date) => {
       return d.toISOString().replace(/-|:|\.\d+/g, '');
     };
 
-    const title = encodeURIComponent(`[${clinic.code}] Consulta: ${appointment.patientName} - ${appointment.examinerName}`);
+    // Título demarcado como [Atendimento] + Unidade + Paciente
+    const title = encodeURIComponent(`[Atendimento] ${appointment.patientName} - ${clinic.name}`);
     const details = encodeURIComponent(
-      `Consulta Clínica Oftalmológica / Optométrica\n` +
-      `Paciente: ${appointment.patientName}\n` +
-      `Telefone: ${appointment.patientPhone || 'N/A'}\n` +
-      `Tipo: ${appointment.type}\n` +
-      `Unidade de Atendimento: ${clinic.name}\n` +
-      `Endereço: ${clinic.address || ''}, ${clinic.city || ''}\n` +
-      `Observações: ${appointment.notes || 'Sem observações adicionais'}\n\n` +
-      `Sistema de Atendimento Integrado OptoMed 2.0`
+      `📋 ATENDIMENTO CLÍNICO OFTALMOLÓGICO / OPTOMÉTRICO\n` +
+      `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+      `👤 Paciente: ${appointment.patientName}\n` +
+      `📞 Telefone/WhatsApp: ${appointment.patientPhone || 'Não informado'}\n` +
+      `🏷️ Categoria: Atendimentos\n` +
+      `🩺 Tipo de Consulta: ${appointment.type}\n` +
+      `👨‍⚕️ Examinador: ${appointment.examinerName || 'Dr. Rudson Meirelles'}\n` +
+      `🏥 Unidade / Clínica: ${clinic.name} (${clinic.code})\n` +
+      `📍 Local: ${clinic.address || ''}, ${clinic.city || ''}\n` +
+      `📝 Observações / Queixa: ${appointment.notes || 'Sem observações adicionais'}\n` +
+      `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+      `Sincronização Integrada OptoMed Multi-Clínica`
     );
     const location = encodeURIComponent(`${clinic.name} - ${clinic.address || ''}, ${clinic.city || ''}`);
     const dates = `${formatGoogleDate(startDate)}/${formatGoogleDate(endDate)}`;
@@ -470,12 +476,13 @@ export class CalendarIntegrationService {
 
   /**
    * Gera arquivo .ics para importar diretamente em qualquer aplicativo de calendário (Google, Outlook, Apple Calendar)
+   * Demarcado com categoria "Atendimentos" para importação direta na agenda Atendimentos do Google Calendar.
    */
   public downloadICalFile(appointment: Appointment, clinic: ClinicConfig): void {
     const [year, month, day] = appointment.date.split('-');
-    const [hour, min] = appointment.time.split(':');
+    const [hour, min] = (appointment.time || '08:00').split(':');
 
-    const startDate = new Date(Number(year), Number(month) - 1, Number(day), Number(hour), Number(min));
+    const startDate = new Date(Number(year), Number(month) - 1, Number(day), Number(hour || 8), Number(min || 0));
     const endDate = new Date(startDate.getTime() + (appointment.durationMinutes || 30) * 60000);
 
     const formatDateICal = (d: Date) => {
@@ -488,14 +495,16 @@ export class CalendarIntegrationService {
       'PRODID:-//OptoMed Clinical SaaS//PT_BR',
       'CALSCALE:GREGORIAN',
       'METHOD:PUBLISH',
+      'X-WR-CALNAME:Atendimentos',
       'BEGIN:VEVENT',
       `UID:${appointment.id}@optomed.app`,
       `DTSTAMP:${formatDateICal(new Date())}`,
       `DTSTART:${formatDateICal(startDate)}`,
       `DTEND:${formatDateICal(endDate)}`,
-      `SUMMARY:[${clinic.code}] ${appointment.patientName} - ${appointment.examinerName}`,
-      `DESCRIPTION:Consulta ${appointment.type}\\nPaciente: ${appointment.patientName}\\nTel: ${appointment.patientPhone || 'N/A'}\\nLocal: ${clinic.name}\\nObs: ${appointment.notes || ''}`,
+      `SUMMARY:[Atendimento] ${appointment.patientName} - ${clinic.name}`,
+      `DESCRIPTION:Atendimento Clínico - ${appointment.type}\\nPaciente: ${appointment.patientName}\\nTel: ${appointment.patientPhone || 'N/A'}\\nExaminador: ${appointment.examinerName || 'Dr. Rudson Meirelles'}\\nClínica: ${clinic.name}\\nObs: ${appointment.notes || ''}`,
       `LOCATION:${clinic.name}, ${clinic.city || ''}`,
+      'CATEGORIES:Atendimentos,Consultas Clínicas',
       'STATUS:CONFIRMED',
       'END:VEVENT',
       'END:VCALENDAR'
@@ -505,11 +514,78 @@ export class CalendarIntegrationService {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', `agendamento_${appointment.patientName.replace(/\s+/g, '_')}_${appointment.date}.ics`);
+    link.setAttribute('download', `atendimento_${appointment.patientName.replace(/\s+/g, '_')}_${appointment.date}.ics`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
+  }
+
+  /**
+   * Exporta TODOS os agendamentos de TODAS as clínicas em um único arquivo .ics
+   * Perfeito para a tela de "Importar e Exportar" do Google Agenda mostrada na foto do Dr. Meirelles,
+   * inserindo instantaneamente na agenda "Atendimentos" com todas as unidades sincronizadas.
+   */
+  public downloadAllAppointmentsICalFile(targetClinicId?: string): { count: number; filename: string } {
+    const clinics = offlineDb.getClinics();
+    const all = this.getAllClinicsAppointments().filter(a => {
+      if (targetClinicId && targetClinicId !== 'all') {
+        return a.clinicId === targetClinicId;
+      }
+      return true;
+    });
+
+    const formatDateICal = (d: Date) => {
+      return d.toISOString().replace(/-|:|\.\d+/g, '');
+    };
+
+    const eventsIcs: string[] = [];
+
+    all.forEach(apt => {
+      const [year, month, day] = (apt.date || '').split('-');
+      if (!year || !month || !day) return;
+      const [hour, min] = (apt.time || '08:00').split(':');
+      const startDate = new Date(Number(year), Number(month) - 1, Number(day), Number(hour || 8), Number(min || 0));
+      const endDate = new Date(startDate.getTime() + (apt.durationMinutes || 30) * 60000);
+
+      eventsIcs.push([
+        'BEGIN:VEVENT',
+        `UID:${apt.id}@optomed.app`,
+        `DTSTAMP:${formatDateICal(new Date())}`,
+        `DTSTART:${formatDateICal(startDate)}`,
+        `DTEND:${formatDateICal(endDate)}`,
+        `SUMMARY:[Atendimento] ${apt.patientName} - ${apt.clinicName}`,
+        `DESCRIPTION:Atendimento Clínico - ${apt.type}\\nPaciente: ${apt.patientName}\\nTelefone: ${apt.patientPhone || 'N/A'}\\nExaminador: ${apt.examinerName || 'Dr. Rudson Meirelles'}\\nUnidade: ${apt.clinicName}\\nObs: ${apt.notes || ''}`,
+        `LOCATION:${apt.clinicName}`,
+        'CATEGORIES:Atendimentos,Consultas Clínicas',
+        'STATUS:CONFIRMED',
+        'END:VEVENT'
+      ].join('\r\n'));
+    });
+
+    const icsContent = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//OptoMed Clinical SaaS//PT_BR',
+      'CALSCALE:GREGORIAN',
+      'METHOD:PUBLISH',
+      'X-WR-CALNAME:Atendimentos',
+      ...eventsIcs,
+      'END:VCALENDAR'
+    ].join('\r\n');
+
+    const filename = `atendimentos_dr_meirelles_todas_clinicas.ics`;
+    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    return { count: all.length, filename };
   }
 
   /**

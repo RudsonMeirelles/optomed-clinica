@@ -636,6 +636,20 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
             </button>
           )}
 
+          {/* Botão Sincronizar Google Agenda para a agenda Atendimentos */}
+          <button
+            type="button"
+            onClick={() => {
+              const res = calendarIntegrationService.downloadAllAppointmentsICalFile();
+              alert(`✅ Arquivo de sincronização gerado com sucesso!\n\nForam exportados ${res.count} atendimentos de todas as clínicas cadastradas para a sua agenda "Atendimentos".\n\nBasta clicar no botão "Selecionar arquivo no seu computador" da tela do Google Agenda e selecionar o arquivo baixado.`);
+            }}
+            className="px-3.5 py-2 bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all shadow-xs cursor-pointer"
+            title="Exportar todos os atendimentos para a agenda Atendimentos do Google Calendar"
+          >
+            <CalendarPlus className="w-4 h-4 text-blue-600" />
+            <span className="hidden sm:inline">Sincronizar Google Agenda</span>
+          </button>
+
           {/* Botão Novo Agendamento pelo Examinador */}
           <button
             type="button"
@@ -868,8 +882,11 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
                         <h4 className="font-black text-base text-slate-900 capitalize tracking-tight">
                           {apt.patientName}
                         </h4>
-                        
-                        {/* Status Badge */}
+
+                        {/* Demarcação como Atendimento */}
+                        <span className="px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-900 border border-emerald-300 text-[10px] font-black uppercase tracking-wider flex items-center gap-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" /> Atendimento
+                        </span>
                         {apt.status === 'waiting' && (
                           <span className="px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-300 text-[10px] font-black uppercase flex items-center gap-1 animate-pulse">
                             <Clock className="w-3 h-3 text-amber-600" /> Aguardando
