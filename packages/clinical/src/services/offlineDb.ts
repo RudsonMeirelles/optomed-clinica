@@ -313,6 +313,12 @@ class OfflineDatabaseService {
     }
   }
 
+  public deleteAppointment(id: string, clinicId = this.activeClinicId): void {
+    const list = this.getAppointments(clinicId).filter(a => a.id !== id);
+    this.saveAppointments(list, clinicId);
+    this.logAudit('DELETE', 'PATIENT', id, 'Agendamento removido da agenda', clinicId);
+  }
+
   // --- AUDITORIA LGPD ---
   public getAuditLogs(clinicId = this.activeClinicId): AuditLogEntry[] {
     try {

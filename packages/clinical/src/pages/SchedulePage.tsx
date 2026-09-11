@@ -39,7 +39,9 @@ import {
   ShieldCheck,
   Download,
   CalendarPlus,
-  Send
+  Send,
+  Edit3,
+  Trash2
 } from 'lucide-react';
 import { offlineDb, generateUUID } from '../services/offlineDb';
 import { calendarIntegrationService } from '../services/licensingService';
@@ -247,7 +249,9 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
   const [conflictWarning, setConflictWarning] = useState<string | null>(null);
   const [copySuccess, setCopySuccess] = useState<boolean>(false);
 
-  // Form de Novo Agendamento
+  // Form de Agendamento (Criação e Edição)
+  const [editingAppointmentId, setEditingAppointmentId] = useState<string | null>(null);
+  const [appointmentDate, setAppointmentDate] = useState<string>(selectedDate);
   const [bookingMode, setBookingMode] = useState<'existing' | 'quick'>('quick');
   const [selectedPatientId, setSelectedPatientId] = useState<string>('');
   const [quickPatientName, setQuickPatientName] = useState<string>('');
@@ -449,6 +453,47 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
     setTargetAppointmentToComplete(null);
   };
 
+  const openNewAppointmentModal = () => {
+    setEditingAppointmentId(null);
+    setAppointmentDate(selectedDate);
+    setSelectedPatientId('');
+    setQuickPatientName('');
+    setQuickPatientPhone('');
+    setQuickPatientNationality('BR');
+    setNewTime('10:30');
+    setNewType('refrativo');
+    setNewNotes('');
+    setNewExaminerName('Dr. Rudson Meirelles');
+    setConflictWarning(null);
+    setIsNewModalOpen(true);
+  };
+
+  const openEditAppointmentModal = (apt: Appointment, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    setEditingAppointmentId(apt.id);
+    setAppointmentDate(apt.date || selectedDate);
+    setSelectedPatientId(apt.patientId || '');
+    setQuickPatientName(apt.patientName || '');
+    setQuickPatientPhone(apt.patientPhone || '');
+    setQuickPatientNationality(apt.patientNationality || 'BR');
+    setNewTime(apt.time || '10:30');
+    setNewType(apt.type || 'refrativo');
+    setNewNotes(apt.notes || '');
+    setNewExaminerName(apt.examinerName || 'Dr. Rudson Meirelles');
+    setBookingMode(apt.patientId && patients.some(p => p.id === apt.patientId) ? 'existing' : 'quick');
+    setConflictWarning(null);
+    setIsNewModalOpen(true);
+  };
+
+  const handleDeleteAppointment = (apt: Appointment, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    const confirmed = window.confirm(`Deseja realmente excluir/cancelar o agendamento de "${apt.patientName}" às ${apt.time}?`);
+    if (!confirmed) return;
+
+    offlineDb.deleteAppointment(apt.id, activeClinic.id);
+    loadData();
+  };
+
   const handleCreateAppointment = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -469,38 +514,66 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
     } else {
       // Modo Agendamento Rápido (Apenas Nome + Telefone)
       if (!quickPatientName.trim()) return;
-      const newPatientId = generateUUID();
-      const newQuickPatient: Patient = {
-        id: newPatientId,
-        fullName: quickPatientName.trim(),
-        birthDate: '',
-        sex: 'uninformed',
-        nationality: quickPatientNationality,
-        documentType: quickPatientNationality === 'PY' ? 'CI_PY' : 'CPF',
-        documentNumber: '',
-        phoneCountryCode: quickPatientNationality === 'PY' ? '+595' : '+55',
-        phone: quickPatientPhone.trim() ? `${quickPatientNationality === 'PY' ? '+595' : '+55'} ${quickPatientPhone.trim()}` : undefined,
-        city: quickPatientNationality === 'PY' ? 'Ciudad del Este' : 'Foz do Iguaçu',
-        country: quickPatientNationality === 'PY' ? 'Paraguai' : 'Brasil',
-        address: '',
-        notes: newNotes.trim() || 'Agendamento rápido realizado via agenda',
-        lgpdConsent: true,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      };
-      offlineDb.savePatient(newQuickPatient);
-      patientId = newPatientId;
-      patientName = newQuickPatient.fullName;
-      patientPhone = newQuickPatient.phone || '';
-      patientNat = quickPatientNationality;
+
+      if (editingAppointmentId) {
+        // Se estiver editando, busca paciente já existente para atualizar nome e telefone
+        const existingPatient = patients.find(p => p.id === selectedPatientId);
+        if (existingPatient) {
+          patientId = existingPatient.id;
+          const updatedPat: Patient = {
+            ...existingPatient,
+            fullName: quickPatientName.trim(),
+            phone: quickPatientPhone.trim() ? `${quickPatientNationality === 'PY' ? '+595' : '+55'} ${quickPatientPhone.trim()}` : existingPatient.phone,
+            nationality: quickPatientNationality,
+            updatedAt: new Date().toISOString()
+          };
+          offlineDb.savePatient(updatedPat);
+          patientName = updatedPat.fullName;
+          patientPhone = updatedPat.phone || '';
+          patientNat = quickPatientNationality;
+        } else {
+          patientId = selectedPatientId || generateUUID();
+          patientName = quickPatientName.trim();
+          patientPhone = quickPatientPhone.trim();
+          patientNat = quickPatientNationality;
+        }
+      } else {
+        const newPatientId = generateUUID();
+        const newQuickPatient: Patient = {
+          id: newPatientId,
+          fullName: quickPatientName.trim(),
+          birthDate: '',
+          sex: 'uninformed',
+          nationality: quickPatientNationality,
+          documentType: quickPatientNationality === 'PY' ? 'CI_PY' : 'CPF',
+          documentNumber: '',
+          phoneCountryCode: quickPatientNationality === 'PY' ? '+595' : '+55',
+          phone: quickPatientPhone.trim() ? `${quickPatientNationality === 'PY' ? '+595' : '+55'} ${quickPatientPhone.trim()}` : undefined,
+          city: quickPatientNationality === 'PY' ? 'Ciudad del Este' : 'Foz do Iguaçu',
+          country: quickPatientNationality === 'PY' ? 'Paraguai' : 'Brasil',
+          address: '',
+          notes: newNotes.trim() || 'Agendamento rápido realizado via agenda',
+          lgpdConsent: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        };
+        offlineDb.savePatient(newQuickPatient);
+        patientId = newPatientId;
+        patientName = newQuickPatient.fullName;
+        patientPhone = newQuickPatient.phone || '';
+        patientNat = quickPatientNationality;
+      }
     }
+
+    const targetDate = appointmentDate || selectedDate;
 
     // 🔒 Verificação de Anti-Conflito de Compromissos Multi-Clínica
     const conflict = calendarIntegrationService.checkAppointmentConflict(
       activeClinic.id,
-      selectedDate,
+      targetDate,
       newTime,
-      30
+      30,
+      editingAppointmentId || undefined
     );
 
     if (conflict.hasConflict) {
@@ -510,8 +583,49 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
 
     setConflictWarning(null);
 
+    if (editingAppointmentId) {
+      // ✏️ Atualização de Agendamento Existente
+      const existingApt = appointments.find(a => a.id === editingAppointmentId);
+      const updatedApt: Appointment = {
+        id: editingAppointmentId,
+        patientId: patientId || existingApt?.patientId || generateUUID(),
+        patientName: patientName || existingApt?.patientName || 'Paciente',
+        patientNationality: patientNat,
+        patientPhone: patientPhone,
+        patientDocument: patientDoc || existingApt?.patientDocument,
+        examinerId: existingApt?.examinerId || 'user-examinador',
+        examinerName: newExaminerName,
+        date: targetDate,
+        time: newTime,
+        durationMinutes: existingApt?.durationMinutes || 30,
+        type: newType,
+        status: existingApt?.status || 'scheduled',
+        ticketNumber: existingApt?.ticketNumber || 'P-01',
+        notes: newNotes,
+        room: existingApt?.room || 'Consultório 1',
+        createdAt: existingApt?.createdAt || new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+
+      offlineDb.saveAppointment(updatedApt);
+      loadData();
+
+      // Notifica alteração para o examinador e agenda em tempo real
+      window.dispatchEvent(new CustomEvent('optomed_appointment_updated', { detail: updatedApt }));
+
+      setIsNewModalOpen(false);
+      setEditingAppointmentId(null);
+      setSelectedPatientId('');
+      setQuickPatientName('');
+      setQuickPatientPhone('');
+      setNewNotes('');
+      setConflictWarning(null);
+      return;
+    }
+
+    // ➕ Criação de Novo Agendamento
     // Gerar Senha Sequencial Diária (ex: P-01, P-02...)
-    const existingDayCount = appointments.filter(a => a.date === selectedDate).length;
+    const existingDayCount = appointments.filter(a => a.date === targetDate).length;
     const generatedTicket = `P-${String(existingDayCount + 1).padStart(2, '0')}`;
 
     const newApt: Appointment = {
@@ -523,11 +637,11 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
       patientDocument: patientDoc,
       examinerId: 'user-examinador',
       examinerName: newExaminerName,
-      date: selectedDate,
+      date: targetDate,
       time: newTime,
       durationMinutes: 30,
       type: newType,
-      status: 'scheduled', // Agendamento prévio ou rápido (pode virar waiting ao chegar)
+      status: 'scheduled',
       ticketNumber: generatedTicket,
       notes: newNotes,
       room: 'Consultório 1',
@@ -552,6 +666,7 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
     }));
 
     setIsNewModalOpen(false);
+    setEditingAppointmentId(null);
     setSelectedPatientId('');
     setQuickPatientName('');
     setQuickPatientPhone('');
@@ -764,10 +879,7 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
           </button>
 
           <button
-            onClick={() => {
-              setConflictWarning(null);
-              setIsNewModalOpen(true);
-            }}
+            onClick={openNewAppointmentModal}
             className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-2xl text-xs font-black flex items-center gap-2 shadow-lg shadow-blue-600/25 active:scale-95 transition-all cursor-pointer"
           >
             <Plus className="w-4 h-4" /> Novo Agendamento
@@ -1455,6 +1567,27 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                         <span>Dados / Cadastro</span>
                       </button>
 
+                      {/* Botão Editar Agendamento (Disponível para Examinador e Recepção) */}
+                      <button
+                        type="button"
+                        onClick={(e) => openEditAppointmentModal(apt, e)}
+                        className="p-2 bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 border border-slate-200 hover:border-blue-300 rounded-xl text-xs font-bold flex items-center gap-1 transition-colors cursor-pointer"
+                        title="Editar data, horário, tipo, profissional ou notas deste agendamento"
+                      >
+                        <Edit3 className="w-3.5 h-3.5" />
+                        <span className="hidden sm:inline">Editar</span>
+                      </button>
+
+                      {/* Botão Excluir Agendamento */}
+                      <button
+                        type="button"
+                        onClick={(e) => handleDeleteAppointment(apt, e)}
+                        className="p-2 bg-slate-100 hover:bg-rose-50 text-slate-500 hover:text-rose-600 border border-slate-200 hover:border-rose-300 rounded-xl text-xs font-bold flex items-center gap-1 transition-colors cursor-pointer"
+                        title="Excluir ou cancelar este agendamento"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+
                       {currentUser.role === 'reception' && (
                         <>
                           {apt.status === 'scheduled' && (
@@ -1501,11 +1634,14 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
             <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
               <div className="flex items-center gap-2 text-blue-600 font-black">
                 <CalendarIcon className="w-5 h-5" />
-                <span>NOVO AGENDAMENTO DE CONSULTA</span>
+                <span>{editingAppointmentId ? 'EDITAR AGENDAMENTO DE CONSULTA' : 'NOVO AGENDAMENTO DE CONSULTA'}</span>
               </div>
               <button
                 type="button"
-                onClick={() => setIsNewModalOpen(false)}
+                onClick={() => {
+                  setIsNewModalOpen(false);
+                  setEditingAppointmentId(null);
+                }}
                 className="text-slate-400 hover:text-slate-600 cursor-pointer"
               >
                 <X className="w-5 h-5" />
@@ -1547,6 +1683,18 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                   </div>
                 </div>
               )}
+
+              {/* Data da Consulta (Permite reprogramar ao editar ou selecionar data específica) */}
+              <div className="bg-slate-50 p-3 rounded-2xl border border-slate-200">
+                <label className="font-bold text-slate-700 block mb-1">DATA DA CONSULTA *</label>
+                <input
+                  type="date"
+                  required
+                  value={appointmentDate}
+                  onChange={(e) => setAppointmentDate(e.target.value)}
+                  className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:border-blue-500 cursor-pointer"
+                />
+              </div>
 
               {bookingMode === 'quick' ? (
                 <div className="space-y-3 bg-blue-50/50 p-4 rounded-2xl border border-blue-100">
@@ -1665,7 +1813,10 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
               <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
                 <button
                   type="button"
-                  onClick={() => setIsNewModalOpen(false)}
+                  onClick={() => {
+                    setIsNewModalOpen(false);
+                    setEditingAppointmentId(null);
+                  }}
                   className="px-4 py-2 font-bold text-slate-600 hover:text-slate-800 cursor-pointer"
                 >
                   Cancelar
@@ -1674,7 +1825,7 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                   type="submit"
                   className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl shadow-md shadow-blue-600/20 active:scale-95 transition-transform cursor-pointer"
                 >
-                  Confirmar Agendamento
+                  {editingAppointmentId ? 'Salvar Alterações' : 'Confirmar Agendamento'}
                 </button>
               </div>
             </form>

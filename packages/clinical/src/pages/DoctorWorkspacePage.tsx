@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { 
   Patient, 
   Appointment, 
+  AppointmentType,
   ClinicalEncounter, 
   UserAccount, 
   ClinicConfig, 
+  NationalityType,
   calculateAge 
 } from '@optotipo/shared';
 import { 
@@ -29,10 +31,17 @@ import {
   Radio, 
   X,
   History,
-  Timer
+  Timer,
+  Plus,
+  Edit3,
+  Trash2,
+  CalendarPlus,
+  Download,
+  AlertTriangle
 } from 'lucide-react';
-import { offlineDb } from '../services/offlineDb';
+import { offlineDb, generateUUID } from '../services/offlineDb';
 import { lanController } from '../services/lanController';
+import { calendarIntegrationService } from '../services/licensingService';
 
 interface DoctorWorkspacePageProps {
   currentUser: UserAccount;
@@ -68,6 +77,20 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
   const [previewPatient, setPreviewPatient] = useState<Patient | null>(null);
   const [previewEncounterHistory, setPreviewEncounterHistory] = useState<ClinicalEncounter[]>([]);
 
+  // Modal de Agendamento do Examinador (Criação e Edição com Sincronização em Tempo Real)
+  const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState<boolean>(false);
+  const [editingAppointmentId, setEditingAppointmentId] = useState<string | null>(null);
+  const [appointmentDate, setAppointmentDate] = useState<string>(selectedDate);
+  const [bookingMode, setBookingMode] = useState<'existing' | 'quick'>('quick');
+  const [selectedPatientId, setSelectedPatientId] = useState<string>('');
+  const [quickPatientName, setQuickPatientName] = useState<string>('');
+  const [quickPatientPhone, setQuickPatientPhone] = useState<string>('');
+  const [quickPatientNationality, setQuickPatientNationality] = useState<NationalityType>('BR');
+  const [newTime, setNewTime] = useState<string>('10:30');
+  const [newType, setNewType] = useState<AppointmentType>('refrativo');
+  const [newNotes, setNewNotes] = useState<string>('');
+  const [conflictWarning, setConflictWarning] = useState<string | null>(null);
+
   const loadData = () => {
     const allApts = offlineDb.getAppointments();
     const allPatients = offlineDb.getPatients();
@@ -82,17 +105,19 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
     loadData();
     const interval = setInterval(loadData, 2000);
 
-    // Eventos customizados em tempo real de cadastro e chamada
+    // Eventos customizados em tempo real de cadastro, agendamento e chamada
     const handlePatientRegistered = () => {
       loadData();
     };
 
     window.addEventListener('optomed_new_patient_registered', handlePatientRegistered);
+    window.addEventListener('optomed_appointment_updated', handlePatientRegistered);
     window.addEventListener('storage', handlePatientRegistered);
 
     return () => {
       clearInterval(interval);
       window.removeEventListener('optomed_new_patient_registered', handlePatientRegistered);
+      window.removeEventListener('optomed_appointment_updated', handlePatientRegistered);
       window.removeEventListener('storage', handlePatientRegistered);
     };
   }, []);
@@ -317,6 +342,218 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
     setPreviewEncounterHistory(history);
   };
 
+  // Funções de Agendamento do Examinador
+  const openNewAppointmentModal = () => {
+    setEditingAppointmentId(null);
+    setAppointmentDate(selectedDate);
+    setSelectedPatientId('');
+    setQuickPatientName('');
+    setQuickPatientPhone('');
+    setQuickPatientNationality('BR');
+    setNewTime('10:30');
+    setNewType('refrativo');
+    setNewNotes('');
+    setConflictWarning(null);
+    setIsAppointmentModalOpen(true);
+  };
+
+  const openEditAppointmentModal = (apt: Appointment, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    setEditingAppointmentId(apt.id);
+    setAppointmentDate(apt.date || selectedDate);
+    setSelectedPatientId(apt.patientId || '');
+    setQuickPatientName(apt.patientName || '');
+    setQuickPatientPhone(apt.patientPhone || '');
+    setQuickPatientNationality(apt.patientNationality || 'BR');
+    setNewTime(apt.time || '10:30');
+    setNewType(apt.type || 'refrativo');
+    setNewNotes(apt.notes || '');
+    setBookingMode(apt.patientId && patients.some(p => p.id === apt.patientId) ? 'existing' : 'quick');
+    setConflictWarning(null);
+    setIsAppointmentModalOpen(true);
+  };
+
+  const handleDeleteAppointment = (apt: Appointment, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    const confirmed = window.confirm(`Deseja realmente excluir/cancelar o agendamento de "${apt.patientName}" às ${apt.time}?`);
+    if (!confirmed) return;
+
+    offlineDb.deleteAppointment(apt.id, activeClinic.id);
+    loadData();
+  };
+
+  const handleSaveAppointment = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    let patientId = selectedPatientId;
+    let patientName = '';
+    let patientPhone = '';
+    let patientNat: NationalityType = 'BR';
+    let patientDoc = '';
+
+    if (bookingMode === 'existing') {
+      const existing = patients.find(p => p.id === selectedPatientId);
+      if (!existing) return;
+      patientId = existing.id;
+      patientName = existing.fullName;
+      patientPhone = existing.phone || '';
+      patientNat = existing.nationality || 'BR';
+      patientDoc = existing.documentNumber || '';
+    } else {
+      if (!quickPatientName.trim()) return;
+
+      if (editingAppointmentId) {
+        const existingPatient = patients.find(p => p.id === selectedPatientId);
+        if (existingPatient) {
+          patientId = existingPatient.id;
+          const updatedPat: Patient = {
+            ...existingPatient,
+            fullName: quickPatientName.trim(),
+            phone: quickPatientPhone.trim() ? `${quickPatientNationality === 'PY' ? '+595' : '+55'} ${quickPatientPhone.trim()}` : existingPatient.phone,
+            nationality: quickPatientNationality,
+            updatedAt: new Date().toISOString()
+          };
+          offlineDb.savePatient(updatedPat);
+          patientName = updatedPat.fullName;
+          patientPhone = updatedPat.phone || '';
+          patientNat = quickPatientNationality;
+        } else {
+          patientId = selectedPatientId || generateUUID();
+          patientName = quickPatientName.trim();
+          patientPhone = quickPatientPhone.trim();
+          patientNat = quickPatientNationality;
+        }
+      } else {
+        const newPatientId = generateUUID();
+        const newQuickPatient: Patient = {
+          id: newPatientId,
+          fullName: quickPatientName.trim(),
+          birthDate: '',
+          sex: 'uninformed',
+          nationality: quickPatientNationality,
+          documentType: quickPatientNationality === 'PY' ? 'CI_PY' : 'CPF',
+          documentNumber: '',
+          phoneCountryCode: quickPatientNationality === 'PY' ? '+595' : '+55',
+          phone: quickPatientPhone.trim() ? `${quickPatientNationality === 'PY' ? '+595' : '+55'} ${quickPatientPhone.trim()}` : undefined,
+          city: quickPatientNationality === 'PY' ? 'Ciudad del Este' : 'Foz do Iguaçu',
+          country: quickPatientNationality === 'PY' ? 'Paraguai' : 'Brasil',
+          address: '',
+          notes: newNotes.trim() || 'Agendamento rápido realizado via consultório do examinador',
+          lgpdConsent: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        };
+        offlineDb.savePatient(newQuickPatient);
+        patientId = newPatientId;
+        patientName = newQuickPatient.fullName;
+        patientPhone = newQuickPatient.phone || '';
+        patientNat = quickPatientNationality;
+      }
+    }
+
+    const targetDate = appointmentDate || selectedDate;
+
+    // Verificação de conflito entre clínicas para o examinador
+    const conflict = calendarIntegrationService.checkAppointmentConflict(
+      activeClinic.id,
+      targetDate,
+      newTime,
+      30,
+      editingAppointmentId || undefined
+    );
+
+    if (conflict.hasConflict) {
+      setConflictWarning(conflict.message || 'Existe um conflito de horário agendado para o examinador.');
+      return;
+    }
+
+    setConflictWarning(null);
+
+    if (editingAppointmentId) {
+      const existingApt = appointments.find(a => a.id === editingAppointmentId);
+      const updatedApt: Appointment = {
+        id: editingAppointmentId,
+        patientId: patientId || existingApt?.patientId || generateUUID(),
+        patientName: patientName || existingApt?.patientName || 'Paciente',
+        patientNationality: patientNat,
+        patientPhone: patientPhone,
+        patientDocument: patientDoc || existingApt?.patientDocument,
+        examinerId: existingApt?.examinerId || 'user-examinador',
+        examinerName: currentUser.fullName,
+        date: targetDate,
+        time: newTime,
+        durationMinutes: existingApt?.durationMinutes || 30,
+        type: newType,
+        status: existingApt?.status || 'scheduled',
+        ticketNumber: existingApt?.ticketNumber || 'P-01',
+        notes: newNotes,
+        room: existingApt?.room || 'Consultório 1',
+        createdAt: existingApt?.createdAt || new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+
+      offlineDb.saveAppointment(updatedApt);
+      loadData();
+      window.dispatchEvent(new CustomEvent('optomed_appointment_updated', { detail: updatedApt }));
+
+      setIsAppointmentModalOpen(false);
+      setEditingAppointmentId(null);
+      setSelectedPatientId('');
+      setQuickPatientName('');
+      setQuickPatientPhone('');
+      setNewNotes('');
+      setConflictWarning(null);
+      return;
+    }
+
+    const existingDayCount = appointments.filter(a => a.date === targetDate).length;
+    const generatedTicket = `P-${String(existingDayCount + 1).padStart(2, '0')}`;
+
+    const newApt: Appointment = {
+      id: generateUUID(),
+      patientId: patientId,
+      patientName: patientName,
+      patientNationality: patientNat,
+      patientPhone: patientPhone,
+      patientDocument: patientDoc,
+      examinerId: 'user-examinador',
+      examinerName: currentUser.fullName,
+      date: targetDate,
+      time: newTime,
+      durationMinutes: 30,
+      type: newType,
+      status: 'scheduled',
+      ticketNumber: generatedTicket,
+      notes: newNotes,
+      room: 'Consultório 1',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+
+    offlineDb.saveAppointment(newApt);
+    loadData();
+
+    window.dispatchEvent(new CustomEvent('optomed_new_patient_registered', {
+      detail: {
+        patientName: newApt.patientName,
+        patientId: newApt.patientId,
+        ticketNumber: newApt.ticketNumber,
+        time: newApt.time,
+        type: newApt.type === 'refrativo' ? 'Refração & Grau' : 'Consulta Geral',
+        isPriority: newApt.isPriority,
+        appointmentId: newApt.id
+      }
+    }));
+
+    setIsAppointmentModalOpen(false);
+    setEditingAppointmentId(null);
+    setSelectedPatientId('');
+    setQuickPatientName('');
+    setQuickPatientPhone('');
+    setNewNotes('');
+    setConflictWarning(null);
+  };
+
   return (
     <div className="p-4 sm:p-8 max-w-7xl mx-auto space-y-6 select-none animate-fadeIn">
       
@@ -398,6 +635,17 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
               Hoje
             </button>
           )}
+
+          {/* Botão Novo Agendamento pelo Examinador */}
+          <button
+            type="button"
+            onClick={openNewAppointmentModal}
+            className="px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-xl text-xs font-black flex items-center gap-1.5 shadow-md shadow-emerald-600/20 active:scale-95 transition-all cursor-pointer"
+            title="Adicionar ou agendar paciente diretamente pelo consultório"
+          >
+            <Plus className="w-4 h-4" />
+            <span>+ Novo Agendamento</span>
+          </button>
         </div>
       </div>
 
@@ -682,15 +930,58 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
                       <span>Chamar TV</span>
                     </button>
 
+                    {/* Botão Adicionar ao Google Agenda */}
+                    <a
+                      href={calendarIntegrationService.generateGoogleCalendarUrl(apt, activeClinic)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-2 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+                      title="Sincronizar no Google Agenda / Calendar do examinador"
+                    >
+                      <CalendarPlus className="w-3.5 h-3.5" />
+                      <span className="hidden lg:inline">Agenda</span>
+                    </a>
+
+                    {/* Botão Baixar .ics */}
+                    <button
+                      type="button"
+                      onClick={() => calendarIntegrationService.downloadICalFile(apt, activeClinic)}
+                      className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 rounded-xl text-xs font-bold flex items-center gap-1 transition-colors cursor-pointer"
+                      title="Baixar arquivo de calendário (.ics)"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                    </button>
+
+                    {/* Botão Editar Agendamento */}
+                    <button
+                      type="button"
+                      onClick={(e) => openEditAppointmentModal(apt, e)}
+                      className="p-2 bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 border border-slate-200 hover:border-blue-300 rounded-xl text-xs font-bold flex items-center gap-1 transition-colors cursor-pointer"
+                      title="Editar agendamento (horário, data, tipo, notas)"
+                    >
+                      <Edit3 className="w-3.5 h-3.5" />
+                      <span className="hidden lg:inline">Editar</span>
+                    </button>
+
+                    {/* Botão Excluir Agendamento */}
+                    <button
+                      type="button"
+                      onClick={(e) => handleDeleteAppointment(apt, e)}
+                      className="p-2 bg-slate-100 hover:bg-rose-50 text-slate-500 hover:text-rose-600 border border-slate-200 hover:border-rose-300 rounded-xl text-xs font-bold flex items-center gap-1 transition-colors cursor-pointer"
+                      title="Excluir ou desmarcar este agendamento"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+
                     {/* Botão Visualizar Cadastro */}
                     <button
                       type="button"
                       onClick={(e) => handleOpenPreview(apt, e)}
-                      className="px-3.5 py-2 bg-white border border-slate-300 hover:border-slate-400 text-slate-700 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all shadow-xs cursor-pointer"
+                      className="px-3 py-2 bg-white border border-slate-300 hover:border-slate-400 text-slate-700 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all shadow-xs cursor-pointer"
                       title="Visualizar dados cadastrais e histórico clínico"
                     >
                       <Eye className="w-3.5 h-3.5 text-slate-500" />
-                      <span>Visualizar</span>
+                      <span className="hidden sm:inline">Cadastro</span>
                     </button>
 
                     {/* Botão Iniciar Atendimento ou Ver Prontuário */}
@@ -835,6 +1126,202 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
                 <span>Iniciar Atendimento Agora</span>
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL DE AGENDAMENTO / EDIÇÃO DO EXAMINADOR */}
+      {isAppointmentModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto animate-fadeIn">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-6 text-slate-900 border border-slate-200">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+              <div className="flex items-center gap-2 text-emerald-700 font-black">
+                <CalendarIcon className="w-5 h-5 text-emerald-600" />
+                <span>{editingAppointmentId ? 'EDITAR AGENDAMENTO DO EXAMINADOR' : 'NOVO AGENDAMENTO DO EXAMINADOR'}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsAppointmentModalOpen(false);
+                  setEditingAppointmentId(null);
+                }}
+                className="text-slate-400 hover:text-slate-600 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Alternador entre Agendamento Rápido e Paciente Cadastrado */}
+            <div className="flex bg-slate-100 p-1 rounded-2xl mb-4 text-xs font-bold">
+              <button
+                type="button"
+                onClick={() => setBookingMode('quick')}
+                className={`flex-1 py-2 rounded-xl transition-all cursor-pointer ${
+                  bookingMode === 'quick' ? 'bg-white text-emerald-800 shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                ⚡ Agendamento Rápido (Nome + Tel)
+              </button>
+              <button
+                type="button"
+                onClick={() => setBookingMode('existing')}
+                className={`flex-1 py-2 rounded-xl transition-all cursor-pointer ${
+                  bookingMode === 'existing' ? 'bg-white text-emerald-800 shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                👤 Paciente Cadastrado
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveAppointment} className="space-y-4 text-xs">
+              {conflictWarning && (
+                <div className="p-3.5 bg-amber-50 border border-amber-300 rounded-2xl text-amber-900 flex items-start gap-2.5 animate-fadeIn">
+                  <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+                  <div className="space-y-1">
+                    <span className="font-black text-xs block">Bloqueio de Duplicidade de Compromisso</span>
+                    <p className="text-[11px] leading-relaxed font-medium">{conflictWarning}</p>
+                    <span className="text-[10px] text-amber-800 block">
+                      💡 Selecione outro horário ou verifique a agenda do Dr. Meirelles nas demais unidades.
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              {/* Data da Consulta */}
+              <div className="bg-slate-50 p-3 rounded-2xl border border-slate-200">
+                <label className="font-bold text-slate-700 block mb-1">DATA DA CONSULTA *</label>
+                <input
+                  type="date"
+                  required
+                  value={appointmentDate}
+                  onChange={(e) => setAppointmentDate(e.target.value)}
+                  className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:border-emerald-500 cursor-pointer"
+                />
+              </div>
+
+              {bookingMode === 'quick' ? (
+                <div className="space-y-3 bg-emerald-50/50 p-4 rounded-2xl border border-emerald-100">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-emerald-900 text-xs">Dados Rápidos do Paciente</span>
+                    <span className="text-[10px] text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full font-bold">
+                      Preenchimento do examinador
+                    </span>
+                  </div>
+
+                  <div>
+                    <label className="font-bold text-slate-700 block mb-1">NOME COMPLETO *</label>
+                    <input
+                      type="text"
+                      required
+                      value={quickPatientName}
+                      onChange={(e) => setQuickPatientName(e.target.value)}
+                      placeholder="Ex: João da Silva ou María González"
+                      className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-emerald-500"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="font-bold text-slate-700 block mb-1">TELEFONE / WHATSAPP</label>
+                      <input
+                        type="text"
+                        value={quickPatientPhone}
+                        onChange={(e) => setQuickPatientPhone(e.target.value)}
+                        placeholder="Ex: (45) 99999-9999"
+                        className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-emerald-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="font-bold text-slate-700 block mb-1">PAÍS / NACIONALIDADE</label>
+                      <select
+                        value={quickPatientNationality}
+                        onChange={(e) => setQuickPatientNationality(e.target.value as NationalityType)}
+                        className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-emerald-500 cursor-pointer"
+                      >
+                        <option value="BR">🇧🇷 Brasil (+55)</option>
+                        <option value="PY">🇵🇾 Paraguai (+595)</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div>
+                  <label className="font-bold text-slate-700 block mb-1">SELECIONE O PACIENTE *</label>
+                  <select
+                    required
+                    value={selectedPatientId}
+                    onChange={(e) => setSelectedPatientId(e.target.value)}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-emerald-500 cursor-pointer"
+                  >
+                    <option value="" disabled>Selecione um paciente cadastrado...</option>
+                    {patients.map(p => (
+                      <option key={p.id} value={p.id}>
+                        {p.fullName} ({p.nationality === 'PY' ? '🇵🇾 Paraguai' : '🇧🇷 Brasil'})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="font-bold text-slate-700 block mb-1">HORÁRIO *</label>
+                  <input
+                    type="time"
+                    required
+                    value={newTime}
+                    onChange={(e) => setNewTime(e.target.value)}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:border-emerald-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="font-bold text-slate-700 block mb-1">TIPO DE CONSULTA</label>
+                  <select
+                    value={newType}
+                    onChange={(e) => setNewType(e.target.value as any)}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-medium text-slate-900 focus:outline-none focus:border-emerald-500 cursor-pointer"
+                  >
+                    <option value="refrativo">Refração & Grau</option>
+                    <option value="consulta_geral">Consulta Geral</option>
+                    <option value="retorno">Retorno</option>
+                    <option value="pediatrico">Pediátrico</option>
+                    <option value="baixa_visao">Baixa Visão</option>
+                    <option value="urgencia">Urgência</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="font-bold text-slate-700 block mb-1">OBSERVAÇÕES DO EXAMINADOR</label>
+                <textarea
+                  rows={2}
+                  value={newNotes}
+                  onChange={(e) => setNewNotes(e.target.value)}
+                  placeholder="Queixa principal, encaixe de retorno ou observações..."
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-emerald-500"
+                />
+              </div>
+
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsAppointmentModalOpen(false);
+                    setEditingAppointmentId(null);
+                  }}
+                  className="px-4 py-2 font-bold text-slate-600 hover:text-slate-800 cursor-pointer"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl shadow-md shadow-emerald-600/20 active:scale-95 transition-transform cursor-pointer"
+                >
+                  {editingAppointmentId ? 'Salvar Alterações' : 'Confirmar Agendamento'}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
