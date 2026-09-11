@@ -1,0 +1,206 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//OptoMed Clinical SaaS//PT_BR
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Atendimentos
+X-WR-TIMEZONE:America/Asuncion
+BEGIN:VEVENT
+UID:apt-rec-0@optomed.app
+DTSTAMP:20260911T015236Z
+DTSTART:20260909T133903Z
+DTEND:20260909T140903Z
+SUMMARY:[Atendimento] Maria Valentina - IVS - Instituto da Visão e Saúde
+DESCRIPTION:Atendimento Clínico - Refração & Grau\nPaciente: Maria Valentina\nTelefone: +55 67 99307-2606\nExaminador: Dr. Rudson Meirelles\nUnidade: IVS - Instituto da Visão e Saúde\nCategoria: Atendimentos
+LOCATION:IVS - Instituto da Visão e Saúde, Foz do Iguaçu
+CATEGORIES:Atendimentos,Consultas Clínicas
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:apt-rec-1@optomed.app
+DTSTAMP:20260911T015236Z
+DTSTART:20260909T131208Z
+DTEND:20260909T134208Z
+SUMMARY:[Atendimento] Maria José - IVS - Instituto da Visão e Saúde
+DESCRIPTION:Atendimento Clínico - Refração & Grau\nPaciente: Maria José\nTelefone: +55 67 99149-7839\nExaminador: Dr. Rudson Meirelles\nUnidade: IVS - Instituto da Visão e Saúde\nCategoria: Atendimentos
+LOCATION:IVS - Instituto da Visão e Saúde, Foz do Iguaçu
+CATEGORIES:Atendimentos,Consultas Clínicas
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:apt-rec-2@optomed.app
+DTSTAMP:20260911T015236Z
+DTSTART:20260908T175817Z
+DTEND:20260908T182817Z
+SUMMARY:[Atendimento] Keli Cristina da Rocha Stuck - IVS - Instituto da Visão e Saúde
+DESCRIPTION:Atendimento Clínico - Refração & Grau\nPaciente: Keli Cristina da Rocha Stuck\nTelefone: +55 67 99184-5211\nExaminador: Dr. Rudson Meirelles\nUnidade: IVS - Instituto da Visão e Saúde\nCategoria: Atendimentos
+LOCATION:IVS - Instituto da Visão e Saúde, Foz do Iguaçu
+CATEGORIES:Atendimentos,Consultas Clínicas
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:apt-rec-3@optomed.app
+DTSTAMP:20260911T015236Z
+DTSTART:20260908T184000Z
+DTEND:20260908T191000Z
+SUMMARY:[Atendimento] Vitoria Coelho Saraiva de Lima - IVS - Instituto da Visão e Saúde
+DESCRIPTION:Atendimento Clínico - Refração & Grau\nPaciente: Vitoria Coelho Saraiva de Lima\nTelefone: +55 67 99245-1234\nExaminador: Dr. Rudson Meirelles\nUnidade: IVS - Instituto da Visão e Saúde\nCategoria: Atendimentos
+LOCATION:IVS - Instituto da Visão e Saúde, Foz do Iguaçu
+CATEGORIES:Atendimentos,Consultas Clínicas
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:apt-rec-4@optomed.app
+DTSTAMP:20260911T015236Z
+DTSTART:20260908T212000Z
+DTEND:20260908T215000Z
+SUMMARY:[Atendimento] Jose Francisco - IVS - Instituto da Visão e Saúde
+DESCRIPTION:Atendimento Clínico - Refração & Grau\nPaciente: Jose Francisco\nTelefone: +55 67 99871-1718\nExaminador: Dr. Rudson Meirelles\nUnidade: IVS - Instituto da Visão e Saúde\nCategoria: Atendimentos
+LOCATION:IVS - Instituto da Visão e Saúde, Foz do Iguaçu
+CATEGORIES:Atendimentos,Consultas Clínicas
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:apt-rec-5@optomed.app
+DTSTAMP:20260911T015236Z
+DTSTART:20260908T182500Z
+DTEND:20260908T185500Z
+SUMMARY:[Atendimento] Lidia Noemi Lopez - IVS - Instituto da Visão e Saúde
+DESCRIPTION:Atendimento Clínico - Refração & Grau\nPaciente: Lidia Noemi Lopez\nTelefone: +595 981 334455\nExaminador: Dr. Rudson Meirelles\nUnidade: IVS - Instituto da Visão e Saúde\nCategoria: Atendimentos
+LOCATION:IVS - Instituto da Visão e Saúde, Foz do Iguaçu
+CATEGORIES:Atendimentos,Consultas Clínicas
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:apt-rec-6@optomed.app
+DTSTAMP:20260911T015236Z
+DTSTART:20260905T081500Z
+DTEND:20260905T084500Z
+SUMMARY:[Atendimento] Jean Lucas Viana - IVS - Instituto da Visão e Saúde
+DESCRIPTION:Atendimento Clínico - Refração & Grau\nPaciente: Jean Lucas Viana\nTelefone: +55 67 99214-5588\nExaminador: Dr. Rudson Meirelles\nUnidade: IVS - Instituto da Visão e Saúde\nCategoria: Atendimentos
+LOCATION:IVS - Instituto da Visão e Saúde, Foz do Iguaçu
+CATEGORIES:Atendimentos,Consultas Clínicas
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:apt-rec-7@optomed.app
+DTSTAMP:20260911T015236Z
+DTSTART:20260905T091000Z
+DTEND:20260905T094000Z
+SUMMARY:[Atendimento] Zoraide Santos Ferreira - IVS - Instituto da Visão e Saúde
+DESCRIPTION:Atendimento Clínico - Refração & Grau\nPaciente: Zoraide Santos Ferreira\nTelefone: +55 67 99654-7890\nExaminador: Dr. Rudson Meirelles\nUnidade: IVS - Instituto da Visão e Saúde\nCategoria: Atendimentos
+LOCATION:IVS - Instituto da Visão e Saúde, Foz do Iguaçu
+CATEGORIES:Atendimentos,Consultas Clínicas
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:apt-rec-8@optomed.app
+DTSTAMP:20260911T015236Z
+DTSTART:20260905T094000Z
+DTEND:20260905T101000Z
+SUMMARY:[Atendimento] Larissa Mayara de Almeida - IVS - Instituto da Visão e Saúde
+DESCRIPTION:Atendimento Clínico - Refração & Grau\nPaciente: Larissa Mayara de Almeida\nTelefone: +55 67 99312-4411\nExaminador: Dr. Rudson Meirelles\nUnidade: IVS - Instituto da Visão e Saúde\nCategoria: Atendimentos
+LOCATION:IVS - Instituto da Visão e Saúde, Foz do Iguaçu
+CATEGORIES:Atendimentos,Consultas Clínicas
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:apt-rec-9@optomed.app
+DTSTAMP:20260911T015236Z
+DTSTART:20260905T103000Z
+DTEND:20260905T110000Z
+SUMMARY:[Atendimento] Gabriel da Mota Brito - IVS - Instituto da Visão e Saúde
+DESCRIPTION:Atendimento Clínico - Refração & Grau\nPaciente: Gabriel da Mota Brito\nTelefone: +55 67 99120-7733\nExaminador: Dr. Rudson Meirelles\nUnidade: IVS - Instituto da Visão e Saúde\nCategoria: Atendimentos
+LOCATION:IVS - Instituto da Visão e Saúde, Foz do Iguaçu
+CATEGORIES:Atendimentos,Consultas Clínicas
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:apt-rec-10@optomed.app
+DTSTAMP:20260911T015236Z
+DTSTART:20260905T102500Z
+DTEND:20260905T105500Z
+SUMMARY:[Atendimento] Zeni Martins - IVS - Instituto da Visão e Saúde
+DESCRIPTION:Atendimento Clínico - Refração & Grau\nPaciente: Zeni Martins\nTelefone: +55 67 99288-4455\nExaminador: Dr. Rudson Meirelles\nUnidade: IVS - Instituto da Visão e Saúde\nCategoria: Atendimentos
+LOCATION:IVS - Instituto da Visão e Saúde, Foz do Iguaçu
+CATEGORIES:Atendimentos,Consultas Clínicas
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:apt-rec-11@optomed.app
+DTSTAMP:20260911T015236Z
+DTSTART:20260905T114500Z
+DTEND:20260905T121500Z
+SUMMARY:[Atendimento] Ramona Ribeiro Brito - IVS - Instituto da Visão e Saúde
+DESCRIPTION:Atendimento Clínico - Refração & Grau\nPaciente: Ramona Ribeiro Brito\nTelefone: +55 67 99177-8899\nExaminador: Dr. Rudson Meirelles\nUnidade: IVS - Instituto da Visão e Saúde\nCategoria: Atendimentos
+LOCATION:IVS - Instituto da Visão e Saúde, Foz do Iguaçu
+CATEGORIES:Atendimentos,Consultas Clínicas
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:apt-rec-12@optomed.app
+DTSTAMP:20260911T015236Z
+DTSTART:20260905T172500Z
+DTEND:20260905T175500Z
+SUMMARY:[Atendimento] Kelli Cristina - IVS - Instituto da Visão e Saúde
+DESCRIPTION:Atendimento Clínico - Refração & Grau\nPaciente: Kelli Cristina\nTelefone: +55 67 99233-1122\nExaminador: Dr. Rudson Meirelles\nUnidade: IVS - Instituto da Visão e Saúde\nCategoria: Atendimentos
+LOCATION:IVS - Instituto da Visão e Saúde, Foz do Iguaçu
+CATEGORIES:Atendimentos,Consultas Clínicas
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:apt-ms-1@optomed.app
+DTSTAMP:20260911T015236Z
+DTSTART:20260910T131500Z
+DTEND:20260910T134500Z
+SUMMARY:[Atendimento] Juan Carlos Benítez - Mega Star Consultório Oftalmológico
+DESCRIPTION:Atendimento Clínico - Consulta Geral\nPaciente: Juan Carlos Benítez\nTelefone: +595 981 456789\nExaminador: Dr. Rudson Meirelles\nUnidade: Mega Star Consultório Oftalmológico\nCategoria: Atendimentos
+LOCATION:Mega Star Consultório Oftalmológico, Shopping Mega Star Piso 3, Ciudad del Este
+CATEGORIES:Atendimentos,Consultas Clínicas
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:apt-vis-1@optomed.app
+DTSTAMP:20260911T015236Z
+DTSTART:20260910T140000Z
+DTEND:20260910T143000Z
+SUMMARY:[Atendimento] Enzo Gabriel Silva (Menor) - Vision Clínica de Ojos
+DESCRIPTION:Atendimento Clínico - Pediátrico\nPaciente: Enzo Gabriel Silva (Menor)\nTelefone: +55 (45) 97777-8888\nExaminador: Dr. Rudson Meirelles\nUnidade: Vision Clínica de Ojos\nCategoria: Atendimentos
+LOCATION:Vision Clínica de Ojos, Centro Médico Vision, Pedro Juan Caballero / Ciudad del Este
+CATEGORIES:Atendimentos,Consultas Clínicas
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:escala-central-1@optomed.app
+DTSTAMP:20260911T015236Z
+DTSTART:20260916T170000Z
+DTEND:20260916T194500Z
+SUMMARY:[Atendimento] Turno Clínico - Clínica Central (PY)
+DESCRIPTION:Atendimentos Clínicos Optométricos e Oftalmológicos\nExaminador: Dr. Rudson Meirelles\nHorário: 13:00 às 15:45\nUnidade: Clínica Central (PY)\nCategoria: Atendimentos
+LOCATION:Clínica Central (PY), Ciudad del Este
+CATEGORIES:Atendimentos,Consultas Clínicas
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:escala-visual-1@optomed.app
+DTSTAMP:20260911T015236Z
+DTSTART:20260916T200000Z
+DTEND:20260916T213000Z
+SUMMARY:[Atendimento] Turno Clínico - Clínica Visual (PY)
+DESCRIPTION:Atendimentos Clínicos Optométricos e Oftalmológicos\nExaminador: Dr. Rudson Meirelles\nHorário: 16:00 às 17:30\nUnidade: Clínica Visual (PY)\nCategoria: Atendimentos
+LOCATION:Clínica Visual (PY), Hernandarias
+CATEGORIES:Atendimentos,Consultas Clínicas
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:escala-santarosa-1@optomed.app
+DTSTAMP:20260911T015236Z
+DTSTART:20260917T120000Z
+DTEND:20260917T220000Z
+SUMMARY:[Atendimento] Plantão Clínico - Hospital Santa Rosa PY
+DESCRIPTION:Atendimentos Oftalmológicos e Cirúrgicos\nExaminador: Dr. Rudson Meirelles\nUnidade: Hospital Santa Rosa PY\nCategoria: Atendimentos
+LOCATION:Hospital Santa Rosa PY, Santa Rosa del Aguaray
+CATEGORIES:Atendimentos,Consultas Clínicas
+STATUS:CONFIRMED
+END:VEVENT
+END:VCALENDAR
