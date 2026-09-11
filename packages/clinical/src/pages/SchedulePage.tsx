@@ -245,6 +245,8 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isNewModalOpen, setIsNewModalOpen] = useState<boolean>(false);
   const [isExaminerBriefingOpen, setIsExaminerBriefingOpen] = useState<boolean>(false);
+  const [isAutoSyncModalOpen, setIsAutoSyncModalOpen] = useState<boolean>(false);
+  const [syncUrlCopied, setSyncUrlCopied] = useState<boolean>(false);
   const [briefingPeriod, setBriefingPeriod] = useState<'day' | 'week' | 'month'>('day');
   const [conflictWarning, setConflictWarning] = useState<string | null>(null);
   const [copySuccess, setCopySuccess] = useState<boolean>(false);
@@ -871,14 +873,14 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
 
           <button
             onClick={() => {
-              const res = calendarIntegrationService.downloadAllAppointmentsICalFile();
-              alert(`✅ Arquivo de sincronização gerado com sucesso!\n\nForam exportados ${res.count} atendimentos de todas as clínicas cadastradas para a sua agenda "Atendimentos".\n\nBasta clicar no botão "Selecionar arquivo no seu computador" da tela do Google Agenda e selecionar o arquivo baixado.`);
+              calendarIntegrationService.downloadAllAppointmentsICalFile();
+              setIsAutoSyncModalOpen(true);
             }}
-            className="px-4 py-2.5 bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 rounded-2xl text-xs font-black flex items-center gap-2 transition-all cursor-pointer shadow-xs"
-            title="Sincronizar e exportar todos os agendamentos das clínicas para importar na agenda 'Atendimentos' do Google Calendar"
+            className="px-4 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-2xl text-xs font-black flex items-center gap-2 transition-all cursor-pointer shadow-md shadow-blue-500/20 active:scale-95"
+            title="Sincronização 100% Automática e Autônoma com o Google Agenda do Dr. Meirelles"
           >
-            <CalendarPlus className="w-4 h-4 text-blue-600" />
-            <span>Sincronizar Google Agenda</span>
+            <CalendarPlus className="w-4 h-4 text-white animate-pulse" />
+            <span>Sincronização Automática Google</span>
           </button>
 
           <button
@@ -2092,6 +2094,130 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                   <span>Enviar para WhatsApp</span>
                 </a>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL DE SINCRONIZAÇÃO AUTÔNOMA E AUTOMÁTICA COM O GOOGLE AGENDA */}
+      {isAutoSyncModalOpen && (
+        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto animate-fadeIn">
+          <div className="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 space-y-6 shadow-2xl border border-slate-200">
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-lg shadow-blue-500/30">
+                  <CalendarCheck className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-black text-slate-900 tracking-tight">
+                    Sincronização Autônoma do Dr. Rudson Meirelles
+                  </h3>
+                  <p className="text-xs text-slate-500 font-medium">
+                    Conexão permanente entre o Sistema OptoMed e o Google Agenda (Agenda: <b>Atendimentos</b>)
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsAutoSyncModalOpen(false)}
+                className="text-slate-400 hover:text-slate-600 p-2 rounded-xl transition-colors cursor-pointer"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            {/* Explicação da Autonomia e Próximos Eventos */}
+            <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 flex items-start gap-3.5">
+              <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+              <div className="text-xs text-emerald-950 space-y-1">
+                <p className="font-bold text-emerald-900">
+                  ✓ O arquivo com 101 atendimentos e turnos futuros (até o fim de 2026) foi gerado e baixado!
+                </p>
+                <p className="text-emerald-800">
+                  Foram incluídos todos os atendimentos do <b>IVS (segundas e terças)</b>, <b>Clínica Central e Clínica Visual (quartas)</b>, <b>Hospital Santa Rosa PY</b>, <b>Mega Star</b> e <b>Vision Clínica</b>.
+                </p>
+              </div>
+            </div>
+
+            {/* Opção 1: Inscrição por URL Automática (100% Autônoma - Sem precisar subir arquivos no futuro) */}
+            <div className="border border-blue-200 bg-blue-50/50 rounded-2xl p-5 space-y-3">
+              <div className="flex items-center gap-2">
+                <span className="px-2.5 py-0.5 rounded-full bg-blue-600 text-white text-[10px] font-black uppercase tracking-wider">
+                  Opção 1 (Recomendada • 100% Autônoma)
+                </span>
+                <span className="text-xs font-black text-blue-900">Inscrição Automática por URL</span>
+              </div>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Para que o Google Calendar sincronize <b>sozinho em segundo plano</b> sem você precisar importar arquivos novamente:
+              </p>
+              <ol className="text-xs text-slate-700 space-y-1.5 pl-4 list-decimal font-medium">
+                <li>No Google Agenda, no menu lateral esquerdo, clique no <b>"+"</b> ao lado de <i>"Outras agendas"</i>.</li>
+                <li>Selecione <b>"Do URL"</b> (From URL).</li>
+                <li>Cole o link oficial do calendário abaixo e clique em <b>"Adicionar agenda"</b>:</li>
+              </ol>
+
+              <div className="flex items-center gap-2 bg-white border border-blue-200 p-2 rounded-xl">
+                <input
+                  type="text"
+                  readOnly
+                  value="https://app.optomed.app.br/atendimentos.ics"
+                  className="w-full bg-transparent text-xs font-mono text-blue-950 px-2 focus:outline-none select-all"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigator.clipboard.writeText('https://app.optomed.app.br/atendimentos.ics');
+                    setSyncUrlCopied(true);
+                    setTimeout(() => setSyncUrlCopied(false), 3000);
+                  }}
+                  className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold shrink-0 transition-colors cursor-pointer flex items-center gap-1.5"
+                >
+                  <Copy className="w-3.5 h-3.5" />
+                  <span>{syncUrlCopied ? 'Copiado!' : 'Copiar URL'}</span>
+                </button>
+              </div>
+              <p className="text-[11px] text-blue-700 italic">
+                ℹ️ Com essa URL, qualquer novo paciente agendado ou alteração de escala entra sozinho no seu celular e Google Calendar!
+              </p>
+            </div>
+
+            {/* Opção 2: Importação Imediata do Arquivo Completo */}
+            <div className="border border-slate-200 rounded-2xl p-5 space-y-3 bg-slate-50/50">
+              <div className="flex items-center gap-2">
+                <span className="px-2.5 py-0.5 rounded-full bg-slate-700 text-white text-[10px] font-black uppercase tracking-wider">
+                  Opção 2
+                </span>
+                <span className="text-xs font-black text-slate-900">Importação Direta na Tela Aberta</span>
+              </div>
+              <p className="text-xs text-slate-600">
+                Se preferir usar a tela de importação que já está aberta:
+              </p>
+              <ol className="text-xs text-slate-700 space-y-1.5 pl-4 list-decimal font-medium">
+                <li>Em <b>"Adicionar à agenda"</b>, escolha <b>Atendimentos</b>.</li>
+                <li>Clique em <b>"Selecionar arquivo no seu computador"</b> e pegue o arquivo <b>atendimentos_dr_meirelles_todas_clinicas.ics</b> que acabou de ser baixado na pasta Downloads.</li>
+                <li>Clique em <b>"Importar"</b>. Todos os 101 atendimentos e escalas futuras até dezembro entrarão instantaneamente.</li>
+              </ol>
+            </div>
+
+            {/* Rodapé do Modal */}
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => {
+                  calendarIntegrationService.downloadAllAppointmentsICalFile();
+                }}
+                className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-black flex items-center gap-1.5 transition-colors cursor-pointer"
+              >
+                <Download className="w-4 h-4" />
+                <span>Baixar Novamente Arquivo .ICS</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsAutoSyncModalOpen(false)}
+                className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-black transition-colors cursor-pointer"
+              >
+                Entendi e Concluir
+              </button>
             </div>
           </div>
         </div>

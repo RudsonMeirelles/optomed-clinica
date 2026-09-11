@@ -541,6 +541,7 @@ export class CalendarIntegrationService {
 
     const eventsIcs: string[] = [];
 
+    // 1. Adiciona todos os atendimentos cadastrados dos pacientes
     all.forEach(apt => {
       const [year, month, day] = (apt.date || '').split('-');
       if (!year || !month || !day) return;
@@ -562,6 +563,60 @@ export class CalendarIntegrationService {
         'END:VEVENT'
       ].join('\r\n'));
     });
+
+    // 2. Adiciona automaticamente toda a escala de Atendimentos futuros do Dr. Meirelles até o fim de 2026
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const startRange = new Date(2026, 8, 1);
+    const endRange = new Date(2026, 11, 31);
+
+    for (let cur = new Date(startRange); cur <= endRange; cur.setDate(cur.getDate() + 1)) {
+      const y = cur.getFullYear();
+      const m = cur.getMonth() + 1;
+      const d = cur.getDate();
+      const dow = cur.getDay(); // 0: Dom, 1: Seg, 2: Ter, 3: Qua, 4: Qui, 5: Sex, 6: Sáb
+      if (dow === 0) continue;
+
+      const pushShift = (name: string, loc: string, sh: number, sm: number, eh: number, em: number, desc: string) => {
+        const sDate = new Date(y, m - 1, d, sh, sm, 0);
+        const eDate = new Date(y, m - 1, d, eh, em, 0);
+        eventsIcs.push([
+          'BEGIN:VEVENT',
+          `UID:shift-${name.toLowerCase().replace(/[^a-z0-9]/g, '')}-${y}${pad(m)}${pad(d)}@optomed.app`,
+          `DTSTAMP:${formatDateICal(new Date())}`,
+          `DTSTART:${formatDateICal(sDate)}`,
+          `DTEND:${formatDateICal(eDate)}`,
+          `SUMMARY:[Atendimento] ${name}`,
+          `DESCRIPTION:${desc}\\nExaminador: Dr. Rudson Meirelles\\nUnidade: ${name}\\nHorário: ${pad(sh)}:${pad(sm)} às ${pad(eh)}:${pad(em)}\\nCategoria: Atendimentos`,
+          `LOCATION:${loc}`,
+          'CATEGORIES:Atendimentos,Consultas Clínicas',
+          'STATUS:CONFIRMED',
+          'END:VEVENT'
+        ].join('\r\n'));
+      };
+
+      if (dow === 1 || dow === 2) {
+        pushShift('IVS - Instituto da Visão e Saúde', 'Av. Jorge Schimmelpfeng, 500, Foz do Iguaçu', 8, 0, 18, 0, 'Turno de Atendimentos Clínicos do Examinador (08:00 às 18:00 Br)');
+      } else if (dow === 3) {
+        pushShift('Clínica Central (PY)', 'Ciudad del Este, Paraguai', 13, 0, 15, 45, 'Turno Duplo PY: Atendimentos Clínica Central');
+        pushShift('Clínica Visual (PY)', 'Hernandarias, Paraguai', 16, 0, 17, 30, 'Turno Duplo PY: Atendimentos Clínica Visual');
+      }
+
+      // Hospital Santa Rosa PY
+      if ((m === 9 && (d === 10 || d === 11 || d === 24 || d === 25)) ||
+          (m === 10 && (d === 8 || d === 9))) {
+        pushShift('Hospital Santa Rosa PY', 'Santa Rosa del Aguaray, Paraguai', 8, 0, 18, 0, 'Plantão de Atendimentos Clínicos Santa Rosa PY');
+      }
+
+      // Mega Star PY
+      if ((m === 9 && d === 26) || (m === 10 && d === 31) || (m === 11 && d === 28) || (m === 12 && d === 19)) {
+        pushShift('Mega Star Consultório Oftalmológico', 'Shopping Mega Star, Piso 3, Ciudad del Este', 7, 30, 14, 0, 'Atendimentos Clínicos e Refração Visual Mega Star');
+      }
+
+      // Vision Clínica de Ojos
+      if (dow === 5 && !((m === 9 && (d === 11 || d === 25)) || (m === 10 && d === 9))) {
+        pushShift('Vision Clínica de Ojos', 'Av. Dr. Francia / Centro Médico Vision, Pedro Juan Caballero / Ciudad del Este', 8, 30, 17, 0, 'Atendimentos de Optometria e Lentes Vision Clínica');
+      }
+    }
 
     const icsContent = [
       'BEGIN:VCALENDAR',
@@ -585,7 +640,7 @@ export class CalendarIntegrationService {
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
 
-    return { count: all.length, filename };
+    return { count: eventsIcs.length, filename };
   }
 
   /**

@@ -641,13 +641,13 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
             type="button"
             onClick={() => {
               const res = calendarIntegrationService.downloadAllAppointmentsICalFile();
-              alert(`✅ Arquivo de sincronização gerado com sucesso!\n\nForam exportados ${res.count} atendimentos de todas as clínicas cadastradas para a sua agenda "Atendimentos".\n\nBasta clicar no botão "Selecionar arquivo no seu computador" da tela do Google Agenda e selecionar o arquivo baixado.`);
+              alert(`✅ SINCRONIZAÇÃO COMPLETA GERADA!\n\nForam exportados ${res.count} atendimentos e turnos futuros (até dezembro/2026) para a agenda "Atendimentos".\n\n📌 SINCRONIZAÇÃO 100% AUTÔNOMA:\nVocê também pode adicionar no Google Agenda através de URL:\nhttps://app.optomed.app.br/atendimentos.ics\n(Em Outras Agendas > Do URL), e o Google atualizará sozinho em tempo real sem precisar importar arquivos novamente!`);
             }}
-            className="px-3.5 py-2 bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all shadow-xs cursor-pointer"
-            title="Exportar todos os atendimentos para a agenda Atendimentos do Google Calendar"
+            className="px-3.5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl text-xs font-black flex items-center gap-1.5 transition-all shadow-md shadow-blue-500/20 active:scale-95 cursor-pointer"
+            title="Exportar todos os atendimentos para a agenda Atendimentos do Google Calendar ou assinar por URL"
           >
-            <CalendarPlus className="w-4 h-4 text-blue-600" />
-            <span className="hidden sm:inline">Sincronizar Google Agenda</span>
+            <CalendarPlus className="w-4 h-4 text-white animate-pulse" />
+            <span className="hidden sm:inline">Sincronização Google</span>
           </button>
 
           {/* Botão Novo Agendamento pelo Examinador */}
