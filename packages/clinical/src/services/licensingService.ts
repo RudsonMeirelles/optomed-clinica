@@ -549,22 +549,35 @@ export class CalendarIntegrationService {
       const startDate = new Date(Number(year), Number(month) - 1, Number(day), Number(hour || 8), Number(min || 0));
       const endDate = new Date(startDate.getTime() + (apt.durationMinutes || 30) * 60000);
 
+      const clinicName = apt.clinicName || 'Consultório';
+      let symbol = '🟢';
+      let colorHex = '#2563EB';
+      if (clinicName.includes('Central')) { symbol = '🟦'; colorHex = '#06B6D4'; }
+      else if (clinicName.includes('Visual')) { symbol = '🌸'; colorHex = '#F43F5E'; }
+      else if (clinicName.includes('Santa Rosa')) { symbol = '⬛'; colorHex = '#334155'; }
+      else if (clinicName.includes('Mega Star')) { symbol = '🟢'; colorHex = '#059669'; }
+      else if (clinicName.includes('Vision')) { symbol = '🟢'; colorHex = '#10B981'; }
+      else { symbol = '🔵'; colorHex = '#2563EB'; }
+
       eventsIcs.push([
         'BEGIN:VEVENT',
         `UID:${apt.id}@optomed.app`,
         `DTSTAMP:${formatDateICal(new Date())}`,
         `DTSTART:${formatDateICal(startDate)}`,
         `DTEND:${formatDateICal(endDate)}`,
-        `SUMMARY:[Atendimento] ${apt.patientName} - ${apt.clinicName}`,
-        `DESCRIPTION:Atendimento Clínico - ${apt.type}\\nPaciente: ${apt.patientName}\\nTelefone: ${apt.patientPhone || 'N/A'}\\nExaminador: ${apt.examinerName || 'Dr. Rudson Meirelles'}\\nUnidade: ${apt.clinicName}\\nObs: ${apt.notes || ''}`,
-        `LOCATION:${apt.clinicName}`,
+        `SUMMARY:${symbol} [Atendimento] ${apt.patientName} - ${clinicName}`,
+        `DESCRIPTION:Atendimento Clínico - ${apt.type}\\nPaciente: ${apt.patientName}\\nTelefone: ${apt.patientPhone || 'N/A'}\\nExaminador: ${apt.examinerName || 'Dr. Rudson Meirelles'}\\nUnidade: ${clinicName}\\nCor no Sistema: ${colorHex}\\nObs: ${apt.notes || ''}`,
+        `LOCATION:${clinicName}`,
+        `COLOR:${colorHex}`,
+        `X-COLOR:${colorHex}`,
+        `X-APPLE-CALENDAR-COLOR:${colorHex}`,
         'CATEGORIES:Atendimentos,Consultas Clínicas',
         'STATUS:CONFIRMED',
         'END:VEVENT'
       ].join('\r\n'));
     });
 
-    // 2. Adiciona automaticamente toda a escala de Atendimentos futuros do Dr. Meirelles até o fim de 2026
+    // 2. Adiciona automaticamente toda a escala de Atendimentos futuros do Dr. Meirelles até o fim de 2026 com títulos e cores idênticas ao sistema
     const pad = (n: number) => String(n).padStart(2, '0');
     const startRange = new Date(2026, 8, 1);
     const endRange = new Date(2026, 11, 31);
@@ -576,45 +589,112 @@ export class CalendarIntegrationService {
       const dow = cur.getDay(); // 0: Dom, 1: Seg, 2: Ter, 3: Qua, 4: Qui, 5: Sex, 6: Sáb
       if (dow === 0) continue;
 
-      const pushShift = (name: string, loc: string, sh: number, sm: number, eh: number, em: number, desc: string) => {
+      const pushShift = (
+        name: string,
+        loc: string,
+        sh: number,
+        sm: number,
+        eh: number,
+        em: number,
+        desc: string,
+        symbol: string,
+        colorHex: string,
+        customTitle?: string
+      ) => {
         const sDate = new Date(y, m - 1, d, sh, sm, 0);
         const eDate = new Date(y, m - 1, d, eh, em, 0);
+        const title = customTitle || `${symbol} ${name}`;
+
         eventsIcs.push([
           'BEGIN:VEVENT',
-          `UID:shift-${name.toLowerCase().replace(/[^a-z0-9]/g, '')}-${y}${pad(m)}${pad(d)}@optomed.app`,
+          `UID:shift-${name.toLowerCase().replace(/[^a-z0-9]/g, '')}-${y}${pad(m)}${pad(d)}${sh >= 16 ? '-t2' : ''}@optomed.app`,
           `DTSTAMP:${formatDateICal(new Date())}`,
           `DTSTART:${formatDateICal(sDate)}`,
           `DTEND:${formatDateICal(eDate)}`,
-          `SUMMARY:[Atendimento] ${name}`,
-          `DESCRIPTION:${desc}\\nExaminador: Dr. Rudson Meirelles\\nUnidade: ${name}\\nHorário: ${pad(sh)}:${pad(sm)} às ${pad(eh)}:${pad(em)}\\nCategoria: Atendimentos`,
+          `SUMMARY:${title}`,
+          `DESCRIPTION:${desc}\\nExaminador: Dr. Rudson Meirelles\\nUnidade: ${name}\\nHorário: ${pad(sh)}:${pad(sm)} às ${pad(eh)}:${pad(em)}\\nCor no Sistema: ${colorHex}\\nCategoria: Atendimentos`,
           `LOCATION:${loc}`,
+          `COLOR:${colorHex}`,
+          `X-COLOR:${colorHex}`,
+          `X-APPLE-CALENDAR-COLOR:${colorHex}`,
           'CATEGORIES:Atendimentos,Consultas Clínicas',
           'STATUS:CONFIRMED',
           'END:VEVENT'
         ].join('\r\n'));
       };
 
+      // 1. Instituto (Segundas e Terças - Azul)
       if (dow === 1 || dow === 2) {
-        pushShift('IVS - Instituto da Visão e Saúde', 'Av. Jorge Schimmelpfeng, 500, Foz do Iguaçu', 8, 0, 18, 0, 'Turno de Atendimentos Clínicos do Examinador (08:00 às 18:00 Br)');
+        pushShift(
+          'Instituto da Visão e Saúde (IVS)',
+          'Av. Jorge Schimmelpfeng, 500, Foz do Iguaçu',
+          8, 0, 18, 0,
+          'Turno de Atendimentos Clínicos do Examinador (08:00 às 18:00 Br)',
+          '🔵',
+          '#2563EB',
+          '🔵 Instituto (08:00 às 18:00 Br)'
+        );
       } else if (dow === 3) {
-        pushShift('Clínica Central (PY)', 'Ciudad del Este, Paraguai', 13, 0, 15, 45, 'Turno Duplo PY: Atendimentos Clínica Central');
-        pushShift('Clínica Visual (PY)', 'Hernandarias, Paraguai', 16, 0, 17, 30, 'Turno Duplo PY: Atendimentos Clínica Visual');
+        // 2. Clínica Central (Quartas Turno 1 - Ciano)
+        pushShift(
+          'Clínica Central (PY)',
+          'Ciudad del Este, Paraguai',
+          13, 0, 15, 45,
+          'Turno Duplo PY: Atendimentos Clínica Central',
+          '🟦',
+          '#06B6D4',
+          '🟦 Clínica Central (13:00 às 15:45 Py)'
+        );
+        // 3. Clínica Visual (Quartas Turno 2 - Rosa)
+        pushShift(
+          'Clínica Visual (PY)',
+          'Hernandarias, Paraguai',
+          16, 0, 17, 30,
+          'Turno Duplo PY: Atendimentos Clínica Visual',
+          '🌸',
+          '#F43F5E',
+          '🌸 Clínica Visual (16:00 às 17:30 Py)'
+        );
       }
 
-      // Hospital Santa Rosa PY
+      // 4. Hospital Santa Rosa PY (Grafite/Slate)
       if ((m === 9 && (d === 10 || d === 11 || d === 24 || d === 25)) ||
           (m === 10 && (d === 8 || d === 9))) {
-        pushShift('Hospital Santa Rosa PY', 'Santa Rosa del Aguaray, Paraguai', 8, 0, 18, 0, 'Plantão de Atendimentos Clínicos Santa Rosa PY');
+        pushShift(
+          'Hospital Santa Rosa PY',
+          'Santa Rosa del Aguaray, Paraguai',
+          8, 0, 18, 0,
+          'Plantão de Atendimentos Clínicos Santa Rosa PY',
+          '⬛',
+          '#334155',
+          '⬛ Santa Rosa PY (Dia Inteiro)'
+        );
       }
 
-      // Mega Star PY
+      // 5. Mega Star PY (Verde Esmeralda)
       if ((m === 9 && d === 26) || (m === 10 && d === 31) || (m === 11 && d === 28) || (m === 12 && d === 19)) {
-        pushShift('Mega Star Consultório Oftalmológico', 'Shopping Mega Star, Piso 3, Ciudad del Este', 7, 30, 14, 0, 'Atendimentos Clínicos e Refração Visual Mega Star');
+        pushShift(
+          'Mega Star Consultório Oftalmológico',
+          'Shopping Mega Star, Piso 3, Ciudad del Este',
+          7, 30, 14, 0,
+          'Atendimentos Clínicos e Refração Visual Mega Star',
+          '🟢',
+          '#059669',
+          '🟢 Mega Star (07:30 às 14:00)'
+        );
       }
 
-      // Vision Clínica de Ojos
+      // 6. Vision Clínica de Ojos (Verde)
       if (dow === 5 && !((m === 9 && (d === 11 || d === 25)) || (m === 10 && d === 9))) {
-        pushShift('Vision Clínica de Ojos', 'Av. Dr. Francia / Centro Médico Vision, Pedro Juan Caballero / Ciudad del Este', 8, 30, 17, 0, 'Atendimentos de Optometria e Lentes Vision Clínica');
+        pushShift(
+          'Vision Clínica de Ojos',
+          'Av. Dr. Francia / Centro Médico Vision, Pedro Juan Caballero / Ciudad del Este',
+          8, 30, 17, 0,
+          'Atendimentos de Optometria e Lentes Vision Clínica',
+          '🟢',
+          '#10B981',
+          '🟢 Vision Clínica (08:30 às 17:00)'
+        );
       }
     }
 
