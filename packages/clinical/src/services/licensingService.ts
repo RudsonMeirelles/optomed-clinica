@@ -395,7 +395,7 @@ export class CalendarIntegrationService {
     targetClinicId: string,
     date: string,
     time: string,
-    durationMinutes: number = 30,
+    durationMinutes: number = 3,
     ignoreAppointmentId?: string
   ): CalendarConflict {
     const allAppointments = this.getAllClinicsAppointments();
@@ -409,7 +409,7 @@ export class CalendarIntegrationService {
       if (apt.status === 'canceled') continue;
 
       const aptStartMinutes = this.timeToMinutes(apt.time);
-      const aptEndMinutes = aptStartMinutes + (apt.durationMinutes || 30);
+      const aptEndMinutes = aptStartMinutes + (apt.durationMinutes || 3);
 
       const hasOverlap = targetStartMinutes < aptEndMinutes && targetEndMinutes > aptStartMinutes;
 
@@ -446,7 +446,7 @@ export class CalendarIntegrationService {
     const [hour, min] = (appointment.time || '08:00').split(':');
 
     const startDate = new Date(Number(year), Number(month) - 1, Number(day), Number(hour || 8), Number(min || 0));
-    const endDate = new Date(startDate.getTime() + (appointment.durationMinutes || 30) * 60000);
+    const endDate = new Date(startDate.getTime() + (appointment.durationMinutes || 3) * 60000);
 
     const formatGoogleDate = (d: Date) => {
       return d.toISOString().replace(/-|:|\.\d+/g, '');
@@ -483,7 +483,7 @@ export class CalendarIntegrationService {
     const [hour, min] = (appointment.time || '08:00').split(':');
 
     const startDate = new Date(Number(year), Number(month) - 1, Number(day), Number(hour || 8), Number(min || 0));
-    const endDate = new Date(startDate.getTime() + (appointment.durationMinutes || 30) * 60000);
+    const endDate = new Date(startDate.getTime() + (appointment.durationMinutes || 3) * 60000);
 
     const formatDateICal = (d: Date) => {
       return d.toISOString().replace(/-|:|\.\d+/g, '');
@@ -547,7 +547,7 @@ export class CalendarIntegrationService {
       if (!year || !month || !day) return;
       const [hour, min] = (apt.time || '08:00').split(':');
       const startDate = new Date(Number(year), Number(month) - 1, Number(day), Number(hour || 8), Number(min || 0));
-      const endDate = new Date(startDate.getTime() + (apt.durationMinutes || 30) * 60000);
+      const endDate = new Date(startDate.getTime() + (apt.durationMinutes || 3) * 60000);
 
       const clinicName = apt.clinicName || 'Consultório';
       let symbol = '🟢';

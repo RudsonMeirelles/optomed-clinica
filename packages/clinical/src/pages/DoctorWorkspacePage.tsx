@@ -87,9 +87,21 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
   const [quickPatientPhone, setQuickPatientPhone] = useState<string>('');
   const [quickPatientNationality, setQuickPatientNationality] = useState<NationalityType>('BR');
   const [newTime, setNewTime] = useState<string>('10:30');
+  const [newDurationMinutes, setNewDurationMinutes] = useState<number>(3);
   const [newType, setNewType] = useState<AppointmentType>('refrativo');
   const [newNotes, setNewNotes] = useState<string>('');
   const [conflictWarning, setConflictWarning] = useState<string | null>(null);
+
+  // Ajusta o horário em saltos de 3 minutos
+  const adjustTimeByMinutes = (currentTime: string, deltaMin: number): string => {
+    const [h, m] = (currentTime || '08:00').split(':').map(Number);
+    let total = (isNaN(h) ? 8 : h) * 60 + (isNaN(m) ? 0 : m) + deltaMin;
+    if (total < 0) total = 0;
+    if (total >= 1440) total = 1437;
+    const newH = Math.floor(total / 60);
+    const newM = total % 60;
+    return `${String(newH).padStart(2, '0')}:${String(newM).padStart(2, '0')}`;
+  };
 
   const loadData = () => {
     const allApts = offlineDb.getAppointments();
@@ -188,7 +200,7 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
           examinerName: enc.examinerName || currentUser.fullName,
           date: getLocalDateStr(enc.date) || selectedDate,
           time: timeFromDate,
-          durationMinutes: 30,
+          durationMinutes: 3,
           type: 'refrativo',
           status: enc.status === 'completed' ? 'completed' : 'in_consultation',
           ticketNumber: 'P-01',
@@ -220,7 +232,7 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
           examinerName: currentUser.fullName,
           date: patDate,
           time: p.createdAt ? new Date(p.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '08:00',
-          durationMinutes: 30,
+          durationMinutes: 3,
           type: 'refrativo',
           status: 'waiting',
           ticketNumber: `P-${String(idx + 1).padStart(2, '0')}`,
@@ -350,7 +362,21 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
     setQuickPatientName('');
     setQuickPatientPhone('');
     setQuickPatientNationality('BR');
-    setNewTime('10:30');
+
+    // Sugere o próximo horário vago em saltos de 3 minutos
+    const dayApts = appointments.filter(a => a.date === selectedDate && a.status !== 'canceled');
+    if (dayApts.length > 0) {
+      const sortedTimes = dayApts
+        .map(a => a.time || '08:00')
+        .sort((a, b) => a.localeCompare(b));
+      const lastTime = sortedTimes[sortedTimes.length - 1];
+      const nextTime = adjustTimeByMinutes(lastTime, 3);
+      setNewTime(nextTime);
+    } else {
+      setNewTime('08:00');
+    }
+
+    setNewDurationMinutes(3);
     setNewType('refrativo');
     setNewNotes('');
     setConflictWarning(null);
@@ -365,7 +391,8 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
     setQuickPatientName(apt.patientName || '');
     setQuickPatientPhone(apt.patientPhone || '');
     setQuickPatientNationality(apt.patientNationality || 'BR');
-    setNewTime(apt.time || '10:30');
+    setNewTime(apt.time || '08:00');
+    setNewDurationMinutes(apt.durationMinutes || 3);
     setNewType(apt.type || 'refrativo');
     setNewNotes(apt.notes || '');
     setBookingMode(apt.patientId && patients.some(p => p.id === apt.patientId) ? 'existing' : 'quick');
@@ -453,12 +480,12 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
 
     const targetDate = appointmentDate || selectedDate;
 
-    // Verificação de conflito entre clínicas para o examinador
+    // Verificação de conflito entre clínicas para o examinador (intervalo de 3 min)
     const conflict = calendarIntegrationService.checkAppointmentConflict(
       activeClinic.id,
       targetDate,
       newTime,
-      30,
+      newDurationMinutes || 3,
       editingAppointmentId || undefined
     );
 
@@ -482,7 +509,7 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
         examinerName: currentUser.fullName,
         date: targetDate,
         time: newTime,
-        durationMinutes: existingApt?.durationMinutes || 30,
+        durationMinutes: newDurationMinutes || existingApt?.durationMinutes || 3,
         type: newType,
         status: existingApt?.status || 'scheduled',
         ticketNumber: existingApt?.ticketNumber || 'P-01',
@@ -520,7 +547,7 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
       examinerName: currentUser.fullName,
       date: targetDate,
       time: newTime,
-      durationMinutes: 30,
+      durationMinutes: newDurationMinutes || 3,
       type: newType,
       status: 'scheduled',
       ticketNumber: generatedTicket,
@@ -1282,14 +1309,36 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="font-bold text-slate-700 block mb-1">HORÁRIO *</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="font-bold text-slate-700">HORÁRIO *</label>
+                    <div className="flex items-center gap-1">
+                      <button
+                        type="button"
+                        onClick={() => setNewTime(adjustTimeByMinutes(newTime, -3))}
+                        className="px-1.5 py-0.5 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded text-[10px] font-bold font-mono transition-colors cursor-pointer"
+                        title="Subtrair 3 minutos"
+                      >
+                        -3m
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setNewTime(adjustTimeByMinutes(newTime, 3))}
+                        className="px-1.5 py-0.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 rounded text-[10px] font-bold font-mono transition-colors cursor-pointer"
+                        title="Adicionar 3 minutos"
+                      >
+                        +3m
+                      </button>
+                    </div>
+                  </div>
                   <input
                     type="time"
+                    step="180"
                     required
                     value={newTime}
                     onChange={(e) => setNewTime(e.target.value)}
                     className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:border-emerald-500"
                   />
+                  <span className="text-[10px] text-slate-400 mt-0.5 block">Intervalo de 3 em 3 minutos</span>
                 </div>
 
                 <div>

@@ -190,7 +190,7 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, use
         examinerName: 'Dr. Rudson Meirelles',
         date: today,
         time: timeNow,
-        durationMinutes: 30,
+        durationMinutes: 3,
         type: 'refrativo',
         status: 'waiting', // Entra direto na fila de espera da recepção para o examinador
         ticketNumber: generatedTicket,

@@ -722,7 +722,7 @@ class OfflineDatabaseService {
             examinerName: 'Dr. Rudson Meirelles',
             date: dateStr,
             time: timeStr,
-            durationMinutes: 30,
+            durationMinutes: 3,
             type: 'refrativo',
             status: rec.encounter?.status === 'completed' ? 'completed' : 'in_consultation',
             ticketNumber: `P-${String(idx + 1).padStart(2, '0')}`,
