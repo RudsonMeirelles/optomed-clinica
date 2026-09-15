@@ -383,10 +383,7 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
                   setOdSphere(e.target.value);
                   emitUpdate(e.target.value);
                 }}
-                onWheel={(e) => handleWheelAdjust(e, odSphere, setOdSphere, 0.25, false, 1)}
-                onKeyDown={(e) => handleKeyDownAdjust(e, odSphere, setOdSphere, 0.25, false, 1)}
                 placeholder="+ / - 0.00"
-                title="Dica: Use a roda do mouse ou setas ↑/↓ para ajustar em passos de ±0.25 D"
                 className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-1 font-mono font-black text-sm text-center focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-900"
               />
             </div>
@@ -407,10 +404,7 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
                   setOdCylinder(e.target.value);
                   emitUpdate(undefined, e.target.value);
                 }}
-                onWheel={(e) => handleWheelAdjust(e, odCylinder, setOdCylinder, 0.25, false, 2)}
-                onKeyDown={(e) => handleKeyDownAdjust(e, odCylinder, setOdCylinder, 0.25, false, 2)}
                 placeholder="- 0.00"
-                title="Dica: Use a roda do mouse ou setas ↑/↓ para ajustar em passos de ±0.25 D"
                 className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-1 font-mono font-black text-sm text-center focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-900"
               />
             </div>
@@ -431,10 +425,7 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
                   setOdAxis(e.target.value);
                   emitUpdate(undefined, undefined, e.target.value);
                 }}
-                onWheel={(e) => handleWheelAdjust(e, odAxis, setOdAxis, 5, true, 3)}
-                onKeyDown={(e) => handleKeyDownAdjust(e, odAxis, setOdAxis, 1, true, 3)}
                 placeholder="180"
-                title="Dica: Use a roda do mouse para saltos de 5° ou setas ↑/↓ para 1°"
                 className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-1 font-mono font-black text-sm text-center focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-900"
               />
             </div>
@@ -488,10 +479,7 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
                   setOeSphere(e.target.value);
                   emitUpdate(undefined, undefined, undefined, undefined, e.target.value);
                 }}
-                onWheel={(e) => handleWheelAdjust(e, oeSphere, setOeSphere, 0.25, false, 4)}
-                onKeyDown={(e) => handleKeyDownAdjust(e, oeSphere, setOeSphere, 0.25, false, 4)}
                 placeholder="+ / - 0.00"
-                title="Dica: Use a roda do mouse ou setas ↑/↓ para ajustar em passos de ±0.25 D"
                 className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-1 font-mono font-black text-sm text-center focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500 text-slate-900"
               />
             </div>
@@ -512,10 +500,7 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
                   setOeCylinder(e.target.value);
                   emitUpdate(undefined, undefined, undefined, undefined, undefined, e.target.value);
                 }}
-                onWheel={(e) => handleWheelAdjust(e, oeCylinder, setOeCylinder, 0.25, false, 5)}
-                onKeyDown={(e) => handleKeyDownAdjust(e, oeCylinder, setOeCylinder, 0.25, false, 5)}
                 placeholder="- 0.00"
-                title="Dica: Use a roda do mouse ou setas ↑/↓ para ajustar em passos de ±0.25 D"
                 className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-1 font-mono font-black text-sm text-center focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500 text-slate-900"
               />
             </div>
@@ -536,10 +521,7 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
                   setOeAxis(e.target.value);
                   emitUpdate(undefined, undefined, undefined, undefined, undefined, undefined, e.target.value);
                 }}
-                onWheel={(e) => handleWheelAdjust(e, oeAxis, setOeAxis, 5, true, 6)}
-                onKeyDown={(e) => handleKeyDownAdjust(e, oeAxis, setOeAxis, 1, true, 6)}
                 placeholder="180"
-                title="Dica: Use a roda do mouse para saltos de 5° ou setas ↑/↓ para 1°"
                 className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-1 font-mono font-black text-sm text-center focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500 text-slate-900"
               />
             </div>

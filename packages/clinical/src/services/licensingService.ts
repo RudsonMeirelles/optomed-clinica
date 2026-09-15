@@ -5,7 +5,8 @@ import {
   SubscriptionPlan, 
   SubscriptionStatus, 
   PaymentMethod,
-  Appointment
+  Appointment,
+  ReturnReminder
 } from '@optotipo/shared';
 import { offlineDb, generateUUID } from './offlineDb';
 
@@ -363,6 +364,7 @@ export interface CalendarConflict {
   message?: string;
   conflictingAppointment?: Appointment;
   conflictingClinicName?: string;
+  isWarning?: boolean; // Permite prosseguir se for aviso entre clínicas ou horário especial
 }
 
 export class CalendarIntegrationService {
@@ -389,7 +391,7 @@ export class CalendarIntegrationService {
 
   /**
    * Validação de Conflito de Horário:
-   * Bloqueia ou alerta sobreposição de horário tanto na clínica atual quanto em outra clínica onde o profissional atende
+   * Bloqueia sobreposição na mesma clínica e alerta sobreposição entre clínicas diferentes
    */
   public checkAppointmentConflict(
     targetClinicId: string,
@@ -415,16 +417,23 @@ export class CalendarIntegrationService {
 
       if (hasOverlap) {
         if (apt.clinicId !== targetClinicId) {
+          // Se a clínica alvo for a Visual entre 13:00 e 14:00 (onde a escala da Visual atende oficialmente)
+          const isVisualHour = (targetClinicId === 'vision' || targetClinicId === 'visual') && targetStartMinutes >= 780 && targetStartMinutes < 840;
+
           return {
             hasConflict: true,
+            isWarning: true, // Conflito entre clínicas é aviso informativo e permite confirmação pela recepção
             type: 'CROSS_CLINIC_OVERLAP',
-            message: `⚠️ CONFLITO DE AGENDA ENTRE CLÍNICAS: O Dr. Meirelles já possui atendimento agendado na unidade "${apt.clinicName}" para o paciente ${apt.patientName} às ${apt.time}. Evite duplicidade de compromisso!`,
+            message: isVisualHour
+              ? `ℹ️ HORÁRIO DE ATENDIMENTO VISUAL (13h-14h): Existe agendamento na unidade "${apt.clinicName}" para ${apt.patientName} às ${apt.time}. O agendamento na Clínica Visual é permitido e pode ser confirmado normalmente.`
+              : `⚠️ AVISO DE AGENDA ENTRE CLÍNICAS: O Dr. Meirelles possui atendimento agendado na unidade "${apt.clinicName}" para o paciente ${apt.patientName} às ${apt.time}.`,
             conflictingAppointment: apt,
             conflictingClinicName: apt.clinicName
           };
         } else {
           return {
             hasConflict: true,
+            isWarning: false, // Conflito dentro da mesma clínica é bloqueio rígido
             type: 'TIME_OVERLAP',
             message: `⚠️ HORÁRIO OCUPADO: Já existe consulta marcada para o paciente ${apt.patientName} às ${apt.time} nesta clínica.`,
             conflictingAppointment: apt,
@@ -472,6 +481,80 @@ export class CalendarIntegrationService {
     const dates = `${formatGoogleDate(startDate)}/${formatGoogleDate(endDate)}`;
 
     return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dates}&details=${details}&location=${location}&sf=true&output=xml`;
+  }
+
+  /**
+   * Gera texto e link direto do WhatsApp para envio do lembrete/confirmação de agendamento ao paciente
+   */
+  public generateWhatsAppAppointmentUrl(appointment: Appointment, clinic: ClinicConfig): string {
+    const phoneClean = (appointment.patientPhone || '').replace(/\D/g, '');
+    const [y, m, d] = (appointment.date || '').split('-');
+    const dateFormatted = y && m && d ? `${d}/${m}/${y}` : appointment.date;
+
+    const isPy = appointment.patientNationality === 'PY' || clinic.country === 'Paraguai';
+
+    let msg = '';
+    if (isPy) {
+      msg = `Hola *${appointment.patientName}*, le saludamos de *${clinic.name}*.\n\n` +
+            `Le confirmamos su turno para consulta con el *${appointment.examinerName || 'Dr. Rudson Meirelles'}*:\n` +
+            `📅 *Fecha:* ${dateFormatted}\n` +
+            `⏰ *Hora:* ${appointment.time} hs\n` +
+            `📍 *Ubicación:* ${clinic.name} (${clinic.city || 'Consultorio'})\n` +
+            `🎫 *Ticket / Nro:* ${appointment.ticketNumber || 'P-01'}\n\n` +
+            `Por favor, responder este mensaje para confirmar su asistencia. ¡Muchas gracias!`;
+    } else {
+      msg = `Olá *${appointment.patientName}*, tudo bem? Aqui é da recepção da *${clinic.name}*.\n\n` +
+            `Confirmamos o seu agendamento de consulta com o *${appointment.examinerName || 'Dr. Rudson Meirelles'}*:\n` +
+            `📅 *Data:* ${dateFormatted}\n` +
+            `⏰ *Horário:* ${appointment.time}\n` +
+            `📍 *Local:* ${clinic.name} - ${clinic.address || clinic.city || 'Consultório'}\n` +
+            `🎫 *Senha de Atendimento:* ${appointment.ticketNumber || 'P-01'}\n\n` +
+            `Por gentileza, responda esta mensagem para confirmar sua presença. Agradecemos a confiança!`;
+    }
+
+    const encoded = encodeURIComponent(msg);
+    if (phoneClean) {
+      let ddi = '55';
+      if (isPy) ddi = '595';
+      const fullPhone = phoneClean.startsWith('55') || phoneClean.startsWith('595') ? phoneClean : `${ddi}${phoneClean}`;
+      return `https://wa.me/${fullPhone}?text=${encoded}`;
+    }
+    return `https://wa.me/?text=${encoded}`;
+  }
+
+  /**
+   * Gera texto e link direto do WhatsApp para lembrete automático de retorno do paciente
+   */
+  public generateWhatsAppReturnUrl(reminder: ReturnReminder, clinic: ClinicConfig): string {
+    const phoneClean = (reminder.patientPhone || '').replace(/\D/g, '');
+    const [y, m, d] = (reminder.targetDate || '').split('-');
+    const dateFormatted = y && m && d ? `${d}/${m}/${y}` : reminder.targetDate;
+
+    const isPy = reminder.patientNationality === 'PY' || clinic.country === 'Paraguai';
+
+    let msg = '';
+    if (isPy) {
+      msg = `Hola *${reminder.patientName}*, le saludamos de *${clinic.name}*.\n\n` +
+            `Nos comunicamos para recordarle su consulta de *Retorno / Control* recomendada por el *${reminder.examinerName || 'Dr. Rudson Meirelles'}*.\n` +
+            `🎯 *Fecha prevista de retorno:* ${dateFormatted}\n` +
+            `📋 *Indicación médica:* ${reminder.instructions}\n\n` +
+            `¿Podemos coordinar su horario de atención esta semana? Quedamos a su disposición. ¡Muchas gracias!`;
+    } else {
+      msg = `Olá *${reminder.patientName}*, tudo bem? Entramos em contato da clínica *${clinic.name}*.\n\n` +
+            `Estamos passando para lembrar do seu *Retorno Clínico* recomendado pelo *${reminder.examinerName || 'Dr. Rudson Meirelles'}*.\n` +
+            `🎯 *Data prevista para o retorno:* ${dateFormatted}\n` +
+            `📋 *Orientação do examinador:* ${reminder.instructions}\n\n` +
+            `Podemos confirmar o melhor dia e horário para o seu atendimento nesta semana? Ficamos no seu aguardo!`;
+    }
+
+    const encoded = encodeURIComponent(msg);
+    if (phoneClean) {
+      let ddi = '55';
+      if (isPy) ddi = '595';
+      const fullPhone = phoneClean.startsWith('55') || phoneClean.startsWith('595') ? phoneClean : `${ddi}${phoneClean}`;
+      return `https://wa.me/${fullPhone}?text=${encoded}`;
+    }
+    return `https://wa.me/?text=${encoded}`;
   }
 
   /**
@@ -684,16 +767,16 @@ export class CalendarIntegrationService {
         );
       }
 
-      // 6. Vision Clínica de Ojos (Verde)
+      // 6. Visual Clínica dos Olhos (Verde)
       if (dow === 5 && !((m === 9 && (d === 11 || d === 25)) || (m === 10 && d === 9))) {
         pushShift(
-          'Vision Clínica de Ojos',
-          'Av. Dr. Francia / Centro Médico Vision, Pedro Juan Caballero / Ciudad del Este',
+          'Visual Clínica dos Olhos',
+          'Av. Dr. Francia / Centro Médico Visual, Pedro Juan Caballero / Ciudad del Este',
           8, 30, 17, 0,
-          'Atendimentos de Optometria e Lentes Vision Clínica',
+          'Atendimentos de Optometria e Contatologia Especializada - Visual',
           '🟢',
           '#10B981',
-          '🟢 Vision Clínica (08:30 às 17:00)'
+          '🟢 Visual Clínica (08:30 às 17:00)'
         );
       }
     }

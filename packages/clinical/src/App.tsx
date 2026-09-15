@@ -57,6 +57,9 @@ export function App() {
 
   useEffect(() => {
     lanController.connect();
+    if (currentUser?.clinicId && currentUser.clinicId !== 'all') {
+      offlineDb.setActiveClinicId(currentUser.clinicId);
+    }
     setActiveClinic(offlineDb.getActiveClinic());
     if (isTvOnlyMode) {
       setCurrentPage('waiting_room');
@@ -67,6 +70,9 @@ export function App() {
 
   const handleLoginSuccess = (user: UserAccount) => {
     setCurrentUser(user);
+    if (user.clinicId && user.clinicId !== 'all') {
+      offlineDb.setActiveClinicId(user.clinicId);
+    }
     setActiveClinic(offlineDb.getActiveClinic());
     if (user.role === 'superadmin') {
       setCurrentPage('master_admin');
@@ -548,6 +554,7 @@ export function App() {
               <PatientsList
                 onSelectPatient={handleSelectPatientFromList}
                 userRole={currentUser.role}
+                clinicId={currentUser.clinicId !== 'all' ? currentUser.clinicId : activeClinic.id}
               />
             )}
 

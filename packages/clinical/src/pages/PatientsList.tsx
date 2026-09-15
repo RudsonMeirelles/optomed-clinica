@@ -18,7 +18,8 @@ import {
   Glasses,
   History,
   FileCheck2,
-  ChevronDown
+  ChevronDown,
+  Trash2
 } from 'lucide-react';
 import { offlineDb, generateUUID } from '../services/offlineDb';
 import { ClinicalEncounter } from '@optotipo/shared';
@@ -26,9 +27,11 @@ import { ClinicalEncounter } from '@optotipo/shared';
 interface PatientsListProps {
   onSelectPatient: (patient: Patient) => void;
   userRole?: string;
+  clinicId?: string;
 }
 
-export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, userRole }) => {
+export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, userRole, clinicId }) => {
+  const effectiveClinicId = (clinicId && clinicId !== 'all') ? clinicId : offlineDb.getActiveClinicId();
   const [patients, setPatients] = useState<Patient[]>([]);
   const [encounters, setEncounters] = useState<ClinicalEncounter[]>([]);
   const [search, setSearch] = useState<string>('');
@@ -53,8 +56,24 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, use
   const [lgpdConsent, setLgpdConsent] = useState<boolean>(true);
 
   useEffect(() => {
-    setPatients(offlineDb.getPatients());
-    setEncounters(offlineDb.getEncounters());
+    const refreshPatients = () => {
+      setPatients(offlineDb.getPatients(effectiveClinicId));
+      setEncounters(offlineDb.getEncounters(effectiveClinicId));
+    };
+
+    refreshPatients();
+
+    window.addEventListener('optomed_patient_updated', refreshPatients);
+    window.addEventListener('optomed_new_patient_registered', refreshPatients);
+    window.addEventListener('optomed_encounter_updated', refreshPatients);
+    window.addEventListener('storage', refreshPatients);
+
+    return () => {
+      window.removeEventListener('optomed_patient_updated', refreshPatients);
+      window.removeEventListener('optomed_new_patient_registered', refreshPatients);
+      window.removeEventListener('optomed_encounter_updated', refreshPatients);
+      window.removeEventListener('storage', refreshPatients);
+    };
   }, []);
 
   const openNewPatientModal = () => {
@@ -116,6 +135,21 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, use
     }
   };
 
+  const handleDeletePatient = (patient: Patient, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const confirmed = window.confirm(`Deseja realmente excluir o cadastro de "${patient.fullName}" e seus agendamentos?`);
+    if (!confirmed) return;
+
+    offlineDb.deletePatient(patient.id, effectiveClinicId);
+    // Remove também agendamentos deste paciente nesta clínica
+    const apts = offlineDb.getAppointments(effectiveClinicId).filter(a => a.patientId !== patient.id && a.patientName.toLowerCase().trim() !== patient.fullName.toLowerCase().trim());
+    offlineDb.saveAppointments(apts, effectiveClinicId);
+
+    setPatients(offlineDb.getPatients(effectiveClinicId));
+    window.dispatchEvent(new CustomEvent('optomed_patient_updated', { detail: { id: patient.id, deleted: true } }));
+    window.dispatchEvent(new CustomEvent('optomed_appointment_updated', { detail: { patientId: patient.id, deleted: true } }));
+  };
+
   const handleSavePatient = (e: React.FormEvent) => {
     e.preventDefault();
     if (!fullName.trim()) return;
@@ -141,8 +175,8 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, use
         updatedAt: new Date().toISOString()
       };
 
-      offlineDb.savePatient(updatedPatient);
-      setPatients(offlineDb.getPatients());
+      offlineDb.savePatient(updatedPatient, effectiveClinicId);
+      setPatients(offlineDb.getPatients(effectiveClinicId));
       setIsModalOpen(false);
       setEditingPatient(null);
     } else {
@@ -168,14 +202,15 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, use
         updatedAt: new Date().toISOString()
       };
 
-      offlineDb.savePatient(newPatient);
-      setPatients(offlineDb.getPatients());
+      offlineDb.savePatient(newPatient, effectiveClinicId);
+      setPatients(offlineDb.getPatients(effectiveClinicId));
       setIsModalOpen(false);
 
-      // Gera senha e entrada automática na fila de espera do dia
-      const today = new Date().toISOString().split('T')[0];
-      const timeNow = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-      const currentApts = offlineDb.getAppointments();
+      // Gera senha e entrada automática na fila de espera do dia (usando fuso horário local real)
+      const now = new Date();
+      const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+      const timeNow = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+      const currentApts = offlineDb.getAppointments(effectiveClinicId);
       const todayCount = currentApts.filter(a => a.date === today).length;
       const generatedTicket = `P-${String(todayCount + 1).padStart(2, '0')}`;
 
@@ -199,7 +234,7 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, use
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
-      offlineDb.saveAppointment(newApt);
+      offlineDb.saveAppointment(newApt, effectiveClinicId);
 
       // Notifica o examinador imediatamente na tela em tempo real
       window.dispatchEvent(new CustomEvent('optomed_new_patient_registered', {
@@ -432,11 +467,20 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, use
                     <button
                       type="button"
                       onClick={(e) => openEditPatientModal(patient, e)}
-                      className="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs flex items-center gap-1.5 transition-colors border border-slate-200 hover:border-slate-300"
+                      className="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs flex items-center gap-1.5 transition-colors border border-slate-200 hover:border-slate-300 cursor-pointer"
                       title="Editar cadastro deste paciente"
                     >
                       <Edit3 className="w-3.5 h-3.5 text-slate-500" />
                       <span>Editar</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={(e) => handleDeletePatient(patient, e)}
+                      className="p-2 bg-slate-100 hover:bg-rose-50 text-slate-400 hover:text-rose-600 rounded-xl transition-colors border border-slate-200 hover:border-rose-200 cursor-pointer"
+                      title="Excluir paciente"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
                     </button>
 
                     <button 

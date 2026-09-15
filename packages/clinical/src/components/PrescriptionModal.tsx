@@ -119,7 +119,13 @@ export const PrescriptionModal: React.FC<PrescriptionModalProps> = ({
             </button>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
+            <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 border border-slate-700 rounded-xl text-[11px] text-slate-300" title="Impressora Wi-Fi Pareada: Epson L3250 Series (IP: 192.168.0.4 - Rede: IVS_PONTA_PORA)">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="font-bold text-white">Epson L3250 (IVS)</span>
+              <span className="text-slate-400 text-[10px] font-mono">192.168.0.4</span>
+            </div>
+
             <button
               onClick={handlePrint}
               className="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded-xl text-xs flex items-center gap-2 shadow-lg shadow-emerald-600/30 active:scale-95 transition-all cursor-pointer"

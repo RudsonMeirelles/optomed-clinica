@@ -658,7 +658,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ currentUser, onClini
                   {[
                     { color: '#2563EB', label: 'Azul Real (IVS)' },
                     { color: '#7C3AED', label: 'Roxo (Mega Star)' },
-                    { color: '#059669', label: 'Verde Esmeralda (Vision)' },
+                    { color: '#059669', label: 'Verde Esmeralda (Visual)' },
                     { color: '#EA580C', label: 'Âmbar (Consultório 4)' },
                     { color: '#DC2626', label: 'Vermelho' },
                     { color: '#0F172A', label: 'Dark / Slate' }

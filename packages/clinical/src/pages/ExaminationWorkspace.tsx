@@ -42,7 +42,13 @@ import {
   ChevronRight,
   Eye,
   Sliders,
-  Image as ImageIcon
+  Image as ImageIcon,
+  ClipboardList,
+  Info,
+  HelpCircle,
+  FilePlus2,
+  Stethoscope,
+  Plus
 } from 'lucide-react';
 import { RemoteControlPanel } from '../components/RemoteControlPanel';
 import { RefractionDials } from '../components/RefractionDials';
@@ -840,35 +846,169 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
                     </div>
                   </div>
 
+                  {/* DADOS CLÍNICOS GERAIS DO PACIENTE */}
+                  <div className="p-3.5 bg-indigo-50/60 rounded-2xl border border-indigo-200/80 space-y-2.5">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Stethoscope className="w-4 h-4 text-indigo-600" />
+                        <span className="font-extrabold text-indigo-950 text-xs uppercase tracking-wide">
+                          DADOS CLÍNICOS DO PACIENTE / HISTÓRICO GERAL:
+                        </span>
+                      </div>
+                      <span className="text-[10px] text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded-md font-bold">
+                        Avaliação & Antecedentes
+                      </span>
+                    </div>
+
+                    <textarea
+                      rows={2}
+                      value={currentEncounter.anamnesis?.clinicalNotes || ''}
+                      onChange={(e) => setCurrentEncounter({
+                        ...currentEncounter,
+                        anamnesis: { ...currentEncounter.anamnesis!, clinicalNotes: e.target.value }
+                      })}
+                      placeholder="Observações clínicas gerais do paciente: histórico de cefaleia, queixas astenópicas, cirurgias oculares prévias, histórico familiar ou outras condições clínicas relevantes..."
+                      className="w-full bg-white border border-indigo-300/80 rounded-xl p-2 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-xs resize-none"
+                    />
+
+                    {/* Chips Rápidos de Dados Clínicos */}
+                    <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+                      <span className="text-[9px] font-bold text-indigo-800 uppercase flex items-center gap-1">
+                        <Plus className="w-2.5 h-2.5" /> Adicionar:
+                      </span>
+                      {[
+                        'Cefaleia frequente',
+                        'Astenopia ao fim do dia',
+                        'Sensibilidade à luz / Fotofobia',
+                        'Lacrimejamento excessivo',
+                        'Fadiga visual em telas',
+                        'Visão embaçada para perto',
+                        'Cirurgia refrativa prévia',
+                        'Histórico familiar de glaucoma',
+                        'Olho seco crônico',
+                        'Miodesópsias (moscas volantes)'
+                      ].map((chip) => (
+                        <button
+                          key={chip}
+                          type="button"
+                          onClick={() => {
+                            const cur = currentEncounter.anamnesis?.clinicalNotes || '';
+                            const updated = cur.trim() ? `${cur.trim()}, ${chip}` : chip;
+                            setCurrentEncounter({
+                              ...currentEncounter,
+                              anamnesis: { ...currentEncounter.anamnesis!, clinicalNotes: updated }
+                            });
+                          }}
+                          className="px-2 py-0.5 bg-white hover:bg-indigo-100 border border-indigo-200 rounded-lg text-[10px] font-bold text-indigo-800 transition-colors cursor-pointer active:scale-95 shadow-2xs"
+                        >
+                          + {chip}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
                   {/* PARÂMETROS VITAIS & CHECKBOXES SISTÊMICOS */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {/* USO ATUAL */}
-                    <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
-                      <span className="font-bold text-slate-700 block text-[11px] uppercase tracking-wide">USO ATUAL DE CORREÇÃO:</span>
-                      <label className="flex items-center gap-2 font-medium cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={currentEncounter.anamnesis?.currentGlasses || false}
-                          onChange={(e) => setCurrentEncounter({
-                            ...currentEncounter,
-                            anamnesis: { ...currentEncounter.anamnesis!, currentGlasses: e.target.checked }
-                          })}
-                          className="rounded text-blue-600 focus:ring-blue-500"
-                        />
-                        <span>Usa óculos atualmente</span>
-                      </label>
-                      <label className="flex items-center gap-2 font-medium cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={currentEncounter.anamnesis?.contactLenses || false}
-                          onChange={(e) => setCurrentEncounter({
-                            ...currentEncounter,
-                            anamnesis: { ...currentEncounter.anamnesis!, contactLenses: e.target.checked }
-                          })}
-                          className="rounded text-blue-600 focus:ring-blue-500"
-                        />
-                        <span>Usa lentes de contato</span>
-                      </label>
+                    <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 space-y-2.5">
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-slate-700 block text-[11px] uppercase tracking-wide">USO ATUAL DE CORREÇÃO:</span>
+                        <span className="text-[10px] text-blue-600 font-bold flex items-center gap-1">
+                          <Glasses className="w-3.5 h-3.5" />
+                          Óculos & Lentes
+                        </span>
+                      </div>
+
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <label className="flex items-center gap-2 font-medium cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={currentEncounter.anamnesis?.currentGlasses || false}
+                              onChange={(e) => setCurrentEncounter({
+                                ...currentEncounter,
+                                anamnesis: { ...currentEncounter.anamnesis!, currentGlasses: e.target.checked }
+                              })}
+                              className="rounded text-blue-600 focus:ring-blue-500"
+                            />
+                            <span>Usa óculos atualmente</span>
+                          </label>
+
+                          {currentEncounter.anamnesis?.currentGlasses && (
+                            <span className="text-[10px] bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full font-bold flex items-center gap-1">
+                              <Info className="w-3 h-3" />
+                              {currentEncounter.lensometry?.usageTime || 'Dados adicionais ativos'}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Dados adicionais integrados de óculos de uso quando marcado */}
+                        {currentEncounter.anamnesis?.currentGlasses && (
+                          <div className="p-2.5 bg-blue-50/60 rounded-xl border border-blue-200/80 space-y-2 animate-in fade-in duration-200">
+                            <div className="flex items-center justify-between">
+                              <span className="text-[10px] font-extrabold text-blue-900 uppercase flex items-center gap-1">
+                                <Clock className="w-3 h-3 text-blue-600" />
+                                Tempo de Uso do Óculos Atual:
+                              </span>
+                            </div>
+
+                            <div className="flex flex-wrap gap-1">
+                              {['< 6 meses', '1 ano', '2 anos', '3 a 5 anos', '> 5 anos'].map((tempo) => {
+                                const isSel = currentEncounter.lensometry?.usageTime === tempo;
+                                return (
+                                  <button
+                                    key={tempo}
+                                    type="button"
+                                    onClick={() => {
+                                      const curLens = currentEncounter.lensometry || { id: generateUUID(), encounterId: currentEncounter.id, od: {}, oe: {} };
+                                      setCurrentEncounter({
+                                        ...currentEncounter,
+                                        lensometry: { ...curLens, usageTime: isSel ? '' : tempo }
+                                      });
+                                    }}
+                                    className={`px-2 py-0.5 rounded-lg text-[10px] font-bold border transition-all cursor-pointer ${
+                                      isSel 
+                                        ? 'bg-blue-600 text-white border-blue-600 shadow-xs' 
+                                        : 'bg-white text-slate-700 border-blue-200 hover:bg-blue-100/60'
+                                    }`}
+                                  >
+                                    {isSel ? '✓ ' : ''}{tempo}
+                                  </button>
+                                );
+                              })}
+                            </div>
+
+                            <div>
+                              <input
+                                type="text"
+                                placeholder="Observações do óculos atual (ex: riscado, visão ruim para perto, armação frouxa)..."
+                                value={currentEncounter.lensometry?.notes || ''}
+                                onChange={(e) => {
+                                  const curLens = currentEncounter.lensometry || { id: generateUUID(), encounterId: currentEncounter.id, od: {}, oe: {} };
+                                  setCurrentEncounter({
+                                    ...currentEncounter,
+                                    lensometry: { ...curLens, notes: e.target.value }
+                                  });
+                                }}
+                                className="w-full bg-white border border-blue-200 rounded-lg px-2 py-1 text-[11px] text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              />
+                            </div>
+                          </div>
+                        )}
+
+                        <label className="flex items-center gap-2 font-medium cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={currentEncounter.anamnesis?.contactLenses || false}
+                            onChange={(e) => setCurrentEncounter({
+                              ...currentEncounter,
+                              anamnesis: { ...currentEncounter.anamnesis!, contactLenses: e.target.checked }
+                            })}
+                            className="rounded text-blue-600 focus:ring-blue-500"
+                          />
+                          <span>Usa lentes de contato</span>
+                        </label>
+                      </div>
                     </div>
 
                     {/* ANTECEDENTES SISTÊMICOS & PRESSÃO */}
@@ -1352,6 +1492,104 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
                               </button>
                             );
                           })}
+                        </div>
+                      </div>
+
+                      {/* DADOS ADICIONAIS DO ÓCULOS DE USO (TEMPO DE USO & OBSERVAÇÕES) */}
+                      <div className="p-3.5 bg-blue-50/70 border border-blue-200/90 rounded-2xl space-y-2.5">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-1.5">
+                            <Clock className="w-4 h-4 text-blue-600" />
+                            <span className="text-[11px] font-black text-blue-950 uppercase tracking-wide">
+                              DADOS ADICIONAIS DO ÓCULOS DE USO:
+                            </span>
+                          </div>
+                          <span className="text-[10px] font-bold text-blue-700 bg-blue-100/70 px-2 py-0.5 rounded-md flex items-center gap-1">
+                            <FilePlus2 className="w-3 h-3" />
+                            Tempo & Observações
+                          </span>
+                        </div>
+
+                        {/* Tempo de Uso */}
+                        <div>
+                          <label className="text-[10px] font-extrabold text-slate-600 uppercase tracking-wider block mb-1.5">
+                            Tempo aproximado de uso do óculos atual:
+                          </label>
+                          <div className="flex flex-wrap gap-1.5">
+                            {['Menos de 6 meses', '6 meses a 1 ano', '1 a 2 anos', '2 a 3 anos', 'Mais de 3 anos', 'Mais de 5 anos'].map((tempo) => {
+                              const isSel = currentEncounter.lensometry?.usageTime === tempo;
+                              return (
+                                <button
+                                  key={tempo}
+                                  type="button"
+                                  onClick={() => {
+                                    const curLens = currentEncounter.lensometry || { id: generateUUID(), encounterId: currentEncounter.id, od: {}, oe: {} };
+                                    setCurrentEncounter({
+                                      ...currentEncounter,
+                                      lensometry: { ...curLens, usageTime: isSel ? '' : tempo }
+                                    });
+                                  }}
+                                  className={`px-2.5 py-1 rounded-xl text-[11px] font-bold border transition-all cursor-pointer ${
+                                    isSel
+                                      ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                                      : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-100'
+                                  }`}
+                                >
+                                  {isSel ? '✓ ' : '+ '}{tempo}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+
+                        {/* Observações / Queixas do Óculos Atual */}
+                        <div>
+                          <label className="text-[10px] font-extrabold text-slate-600 uppercase tracking-wider block mb-1">
+                            Observações e Estado do Óculos em Uso:
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="Ex: Lentes riscadas, armação desgastada/torta, visão satisfatória para longe porém turva para perto..."
+                            value={currentEncounter.lensometry?.notes || ''}
+                            onChange={(e) => {
+                              const curLens = currentEncounter.lensometry || { id: generateUUID(), encounterId: currentEncounter.id, od: {}, oe: {} };
+                              setCurrentEncounter({
+                                ...currentEncounter,
+                                lensometry: { ...curLens, notes: e.target.value }
+                              });
+                            }}
+                            className="w-full bg-white border border-blue-300 rounded-xl px-3 py-1.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-xs"
+                          />
+                        </div>
+
+                        {/* Chips Rápidos de Observações do Óculos */}
+                        <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+                          <span className="text-[9px] font-bold text-slate-500 uppercase">Sugestões rápidas:</span>
+                          {[
+                            'Lentes muito riscadas',
+                            'Desconforto para leitura',
+                            'Armação torta / frouxa',
+                            'Antirreflexo descascando',
+                            'Perda de foco / visão cansada',
+                            'Óculos reserva apenas'
+                          ].map((sug) => (
+                            <button
+                              key={sug}
+                              type="button"
+                              onClick={() => {
+                                const curLens = currentEncounter.lensometry || { id: generateUUID(), encounterId: currentEncounter.id, od: {}, oe: {} };
+                                const cur = curLens.notes || '';
+                                const updated = cur.trim() ? `${cur.trim()}, ${sug}` : sug;
+                                setCurrentEncounter({
+                                  ...currentEncounter,
+                                  lensometry: { ...curLens, notes: updated }
+                                });
+                              }}
+                              className="px-2 py-0.5 bg-white hover:bg-slate-100 border border-slate-300 rounded-lg text-[10px] font-bold text-slate-700 transition-colors cursor-pointer shadow-2xs"
+                            >
+                              + {sug}
+                            </button>
+                          ))}
                         </div>
                       </div>
                     </div>

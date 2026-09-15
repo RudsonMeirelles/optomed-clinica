@@ -120,8 +120,18 @@ export const ClinicalReportModal: React.FC<ClinicalReportModalProps> = ({
                       {encounter.anamnesis.bloodGlucoseMgDl && <span>| <strong>Glicemia:</strong> {encounter.anamnesis.bloodGlucoseMgDl}</span>}
                     </div>
                   )}
+                  {encounter.anamnesis.clinicalNotes && (
+                    <div><strong>Dados Clínicos do Paciente:</strong> {encounter.anamnesis.clinicalNotes}</div>
+                  )}
                   {encounter.anamnesis.ocularHistory && (
                     <div><strong>Histórico Ocular / Cirurgias:</strong> {encounter.anamnesis.ocularHistory}</div>
+                  )}
+                  {encounter.lensometry && (encounter.lensometry.usageTime || encounter.lensometry.notes) && (
+                    <div>
+                      <strong>Óculos Atual (Uso):</strong>{' '}
+                      {encounter.lensometry.usageTime && <span>Tempo de uso: {encounter.lensometry.usageTime}. </span>}
+                      {encounter.lensometry.notes && <span>Obs: {encounter.lensometry.notes}</span>}
+                    </div>
                   )}
                 </div>
               </div>

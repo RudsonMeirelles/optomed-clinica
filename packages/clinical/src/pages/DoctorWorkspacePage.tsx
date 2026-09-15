@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   Patient, 
   Appointment, 
+  AppointmentStatus,
   AppointmentType,
   ClinicalEncounter, 
   UserAccount, 
@@ -103,10 +104,16 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
     return `${String(newH).padStart(2, '0')}:${String(newM).padStart(2, '0')}`;
   };
 
+  // Clínica do usuário logado (isola estritamente os pacientes da unidade)
+  const effectiveClinicId = (currentUser.clinicId && currentUser.clinicId !== 'all') 
+    ? currentUser.clinicId 
+    : (activeClinic?.id || offlineDb.getActiveClinicId());
+  const effectiveClinicObj = offlineDb.getClinics().find(c => c.id === effectiveClinicId) || activeClinic;
+
   const loadData = () => {
-    const allApts = offlineDb.getAppointments();
-    const allPatients = offlineDb.getPatients();
-    const allEncounters = offlineDb.getEncounters();
+    const allApts = offlineDb.getAppointments(effectiveClinicId);
+    const allPatients = offlineDb.getPatients(effectiveClinicId);
+    const allEncounters = offlineDb.getEncounters(effectiveClinicId);
 
     setAppointments(allApts);
     setPatients(allPatients);
@@ -117,20 +124,24 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
     loadData();
     const interval = setInterval(loadData, 2000);
 
-    // Eventos customizados em tempo real de cadastro, agendamento e chamada
-    const handlePatientRegistered = () => {
+    // Eventos customizados em tempo real de cadastro, agendamento e atendimento
+    const handleRefresh = () => {
       loadData();
     };
 
-    window.addEventListener('optomed_new_patient_registered', handlePatientRegistered);
-    window.addEventListener('optomed_appointment_updated', handlePatientRegistered);
-    window.addEventListener('storage', handlePatientRegistered);
+    window.addEventListener('optomed_new_patient_registered', handleRefresh);
+    window.addEventListener('optomed_appointment_updated', handleRefresh);
+    window.addEventListener('optomed_patient_updated', handleRefresh);
+    window.addEventListener('optomed_encounter_updated', handleRefresh);
+    window.addEventListener('storage', handleRefresh);
 
     return () => {
       clearInterval(interval);
-      window.removeEventListener('optomed_new_patient_registered', handlePatientRegistered);
-      window.removeEventListener('optomed_appointment_updated', handlePatientRegistered);
-      window.removeEventListener('storage', handlePatientRegistered);
+      window.removeEventListener('optomed_new_patient_registered', handleRefresh);
+      window.removeEventListener('optomed_appointment_updated', handleRefresh);
+      window.removeEventListener('optomed_patient_updated', handleRefresh);
+      window.removeEventListener('optomed_encounter_updated', handleRefresh);
+      window.removeEventListener('storage', handleRefresh);
     };
   }, []);
 
@@ -150,26 +161,63 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
     }
   };
 
-  // Consolidação completa em tempo real de:
-  // 1. Agendamentos do dia (appointments)
-  // 2. Prontuários atendidos/iniciados na data (encounters)
-  // 3. Novos pacientes cadastrados na recepção na data (patients)
-  // Consolidação completa em tempo real de:
-  // 1. Agendamentos (appointments)
-  // 2. Prontuários atendidos/iniciados (encounters)
-  // 3. Pacientes cadastrados (patients)
-  // Permite modo 'day' (apenas data selecionada) e modo 'all_history' (todo o histórico clínico da vida da clínica)
+  // Consolidação completa e deduplicação unificada em tempo real no Workspace do Examinador
   const getMergedDayAppointments = (): Appointment[] => {
-    const map = new Map<string, Appointment>();
     const isGlobal = viewScope === 'all_history' || searchName.trim().length > 0;
 
-    // 1. Inclui agendamentos cadastrados (se global, todos; se day, filtra pela data selecionada)
+    const normalizeCleanName = (name?: string): string => {
+      if (!name) return '';
+      return name
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]/g, '')
+        .trim();
+    };
+
+    const map = new Map<string, Appointment>();
+    const patientNameToKey = new Map<string, string>();
+
+    const findExistingKey = (patientId?: string, patientName?: string): string | null => {
+      if (patientId && map.has(patientId)) return patientId;
+      const clean = normalizeCleanName(patientName);
+      if (clean && patientNameToKey.has(clean)) {
+        const mappedKey = patientNameToKey.get(clean)!;
+        if (map.has(mappedKey)) return mappedKey;
+      }
+      return null;
+    };
+
+    const setRecord = (key: string, record: Appointment) => {
+      map.set(key, record);
+      const clean = normalizeCleanName(record.patientName);
+      if (clean) patientNameToKey.set(clean, key);
+      if (record.patientId) patientNameToKey.set(record.patientId, key);
+    };
+
+    const mergeStatus = (currentStatus: AppointmentStatus, newStatus: AppointmentStatus): AppointmentStatus => {
+      if (currentStatus === 'completed' || newStatus === 'completed') return 'completed';
+      if (currentStatus === 'in_consultation' || newStatus === 'in_consultation') return 'in_consultation';
+      if (currentStatus === 'waiting' || newStatus === 'waiting') return 'waiting';
+      return newStatus || currentStatus;
+    };
+
+    // 1. Inclui agendamentos cadastrados
     const aptSource = isGlobal 
       ? appointments 
       : appointments.filter(a => getLocalDateStr(a.date) === selectedDate);
 
     aptSource.forEach(apt => {
-      map.set(apt.patientId || apt.id, { ...apt });
+      const key = apt.patientId || apt.id;
+      const existingKey = findExistingKey(apt.patientId, apt.patientName);
+      if (existingKey) {
+        const existing = map.get(existingKey)!;
+        existing.status = mergeStatus(existing.status, apt.status);
+        if (apt.time && apt.time !== '08:00') existing.time = apt.time;
+        if (apt.notes) existing.notes = apt.notes;
+      } else {
+        setRecord(key, { ...apt });
+      }
     });
 
     // 2. Inclui atendimentos clínicos (encounters)
@@ -179,20 +227,28 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
 
     encSource.forEach(enc => {
       const patientObj = patients.find(p => p.id === enc.patientId);
-      const existing = map.get(enc.patientId);
-      if (existing) {
-        if (enc.status === 'completed') existing.status = 'completed';
-        else if (enc.status === 'in_progress' && existing.status !== 'completed') existing.status = 'in_consultation';
+      const patientName = patientObj?.fullName || 'Paciente em Atendimento';
+      const existingKey = findExistingKey(enc.patientId, patientName);
+      const mappedStatus: AppointmentStatus = enc.status === 'completed' ? 'completed' : 'in_consultation';
+
+      if (existingKey) {
+        const existing = map.get(existingKey)!;
+        existing.status = mergeStatus(existing.status, mappedStatus);
         if (!existing.date) existing.date = getLocalDateStr(enc.date) || selectedDate;
+        if (patientObj) {
+          if (!existing.patientPhone) existing.patientPhone = patientObj.phone;
+          if (!existing.patientDocument) existing.patientDocument = patientObj.documentNumber;
+        }
       } else {
         const timeFromDate = enc.date && enc.date.includes('T')
           ? new Date(enc.date).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
           : '08:00';
 
-        map.set(enc.patientId, {
+        const recordKey = enc.patientId || `enc-${enc.id}`;
+        setRecord(recordKey, {
           id: `apt-enc-${enc.id}`,
           patientId: enc.patientId,
-          patientName: patientObj?.fullName || 'Paciente em Atendimento',
+          patientName: patientName,
           patientNationality: patientObj?.nationality || 'BR',
           patientPhone: patientObj?.phone,
           patientDocument: patientObj?.documentNumber,
@@ -202,7 +258,7 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
           time: timeFromDate,
           durationMinutes: 3,
           type: 'refrativo',
-          status: enc.status === 'completed' ? 'completed' : 'in_consultation',
+          status: mappedStatus,
           ticketNumber: 'P-01',
           notes: enc.anamnesis?.chiefComplaint || 'Atendimento registrado no consultório.',
           room: 'Consultório 1',
@@ -219,9 +275,14 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
       : (selectedDate === todayStr ? patients.filter(p => getLocalDateStr(p.createdAt) === todayStr) : []);
 
     patSource.forEach((p, idx) => {
-      if (!map.has(p.id)) {
+      const existingKey = findExistingKey(p.id, p.fullName);
+      if (existingKey) {
+        const existing = map.get(existingKey)!;
+        if (!existing.patientPhone && p.phone) existing.patientPhone = p.phone;
+        if (!existing.patientDocument && p.documentNumber) existing.patientDocument = p.documentNumber;
+      } else {
         const patDate = getLocalDateStr(p.createdAt) || selectedDate;
-        map.set(p.id, {
+        setRecord(p.id, {
           id: `apt-pat-${p.id}`,
           patientId: p.id,
           patientName: p.fullName,
@@ -405,8 +466,27 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
     const confirmed = window.confirm(`Deseja realmente excluir/cancelar o agendamento de "${apt.patientName}" às ${apt.time}?`);
     if (!confirmed) return;
 
-    offlineDb.deleteAppointment(apt.id, activeClinic.id);
+    const targetClinic = effectiveClinicId || activeClinic.id;
+    offlineDb.deleteAppointment(apt.id, targetClinic);
+
+    // Se for derivado de paciente ou tiver patientId
+    const realPatId = apt.id.startsWith('apt-pat-') 
+      ? apt.id.replace('apt-pat-', '') 
+      : apt.patientId;
+
+    if (realPatId) {
+      offlineDb.deletePatient(realPatId, targetClinic);
+    }
+
+    if (apt.id.startsWith('apt-enc-')) {
+      const encId = apt.id.replace('apt-enc-', '');
+      const currentEncs = offlineDb.getEncounters(targetClinic).filter(enc => enc.id !== encId);
+      offlineDb.saveEncounters(currentEncs, targetClinic);
+    }
+
     loadData();
+    window.dispatchEvent(new CustomEvent('optomed_appointment_updated', { detail: { id: apt.id, clinicId: targetClinic, deleted: true } }));
+    window.dispatchEvent(new CustomEvent('optomed_patient_updated', { detail: { id: realPatId, clinicId: targetClinic, deleted: true } }));
   };
 
   const handleSaveAppointment = (e: React.FormEvent) => {
@@ -470,7 +550,7 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
         };
-        offlineDb.savePatient(newQuickPatient);
+        offlineDb.savePatient(newQuickPatient, effectiveClinicId);
         patientId = newPatientId;
         patientName = newQuickPatient.fullName;
         patientPhone = newQuickPatient.phone || '';
@@ -482,14 +562,14 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
 
     // Verificação de conflito entre clínicas para o examinador (intervalo de 3 min)
     const conflict = calendarIntegrationService.checkAppointmentConflict(
-      activeClinic.id,
+      effectiveClinicId,
       targetDate,
       newTime,
       newDurationMinutes || 3,
       editingAppointmentId || undefined
     );
 
-    if (conflict.hasConflict) {
+    if (conflict.hasConflict && !conflict.isWarning) {
       setConflictWarning(conflict.message || 'Existe um conflito de horário agendado para o examinador.');
       return;
     }
@@ -519,7 +599,7 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
         updatedAt: new Date().toISOString()
       };
 
-      offlineDb.saveAppointment(updatedApt);
+      offlineDb.saveAppointment(updatedApt, effectiveClinicId);
       loadData();
       window.dispatchEvent(new CustomEvent('optomed_appointment_updated', { detail: updatedApt }));
 
@@ -557,7 +637,7 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
       updatedAt: new Date().toISOString()
     };
 
-    offlineDb.saveAppointment(newApt);
+    offlineDb.saveAppointment(newApt, effectiveClinicId);
     loadData();
 
     window.dispatchEvent(new CustomEvent('optomed_new_patient_registered', {
@@ -598,6 +678,9 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
               <span className="px-3 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-black uppercase tracking-wider flex items-center gap-1.5">
                 <Radio className="w-3 h-3 text-emerald-600 animate-pulse" />
                 {currentUser.fullName}
+              </span>
+              <span className="px-3 py-0.5 rounded-full bg-blue-50 text-blue-800 border border-blue-200 text-[10px] font-black tracking-wider flex items-center gap-1.5">
+                🏥 {effectiveClinicObj.name} ({effectiveClinicObj.country === 'Paraguai' ? '🇵🇾' : '🇧🇷'})
               </span>
             </div>
             <p className="text-xs text-slate-500 font-medium mt-0.5">

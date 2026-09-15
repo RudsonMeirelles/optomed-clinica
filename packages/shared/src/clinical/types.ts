@@ -248,6 +248,7 @@ export interface Anamnesis {
   hasPterygium?: boolean; // Pterígio
   hasDryEye?: boolean; // Olho Seco
   otherSystemicConditions?: string;
+  clinicalNotes?: string; // Dados clínicos gerais / antecedentes clínicos do paciente
 }
 
 export interface EyeRefractionValues {
@@ -271,6 +272,7 @@ export interface Lensometry {
   material?: 'resina' | 'policarbonato' | 'trivex' | 'alto_indice' | 'cristal' | string;
   treatments?: string[]; // Ex: ['Antirreflexo', 'Filtro Azul', 'Fotossensível', 'Proteção UV']
   condition?: 'bom' | 'riscado' | 'desgastado' | 'antigo' | string;
+  usageTime?: string; // Tempo de uso do óculos atual (ex: "6 meses", "1 ano", "2 anos", "3+ anos")
   notes?: string;
 }
 

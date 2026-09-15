@@ -44,7 +44,8 @@ export const WaitingRoomPage: React.FC<WaitingRoomPageProps> = ({ activeClinic, 
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
 
   const loadAppointments = () => {
-    const today = new Date().toISOString().split('T')[0];
+    const now = new Date();
+    const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
     const all = offlineDb.getAppointments();
     const todayList = all.filter(a => a.date === today);
     setAppointments(todayList);
@@ -173,7 +174,7 @@ export const WaitingRoomPage: React.FC<WaitingRoomPageProps> = ({ activeClinic, 
     clinicSpace: isEs ? 'Espacio de la Clínica e Informes' : 'Espaço da Clínica & Informes',
     recentCalls: isEs ? 'Últimos Turnos' : 'Últimas Chamadas',
     infoBadge: isEs ? 'Informativo' : 'Informativo',
-    defaultMarquee: isEs ? '🌟 ¡Bienvenidos a Vision Clínica de Ojos! Excelencia en Optometría y Contactología Especializada.' : '🌟 Bem-vindo! Cuide da saúde dos seus olhos. Atendimento oftalmológico de excelência.'
+    defaultMarquee: isEs ? '🌟 ¡Bienvenidos a Visual Clínica dos Olhos! Excelencia en Optometría y Contactología Especializada.' : '🌟 Bem-vindo! Cuide da saúde dos seus olhos. Atendimento oftalmológico de excelência.'
   };
 
   return (

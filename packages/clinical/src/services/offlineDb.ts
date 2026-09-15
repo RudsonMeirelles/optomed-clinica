@@ -19,6 +19,7 @@ import {
   ProfessionalSettlementReport
 } from '@optotipo/shared';
 import { RECOVERED_RECORDS } from '../data/recoveredClinicalData';
+import { SEED_APPOINTMENTS_12_09_2026, SEED_PATIENTS_12_09_2026, SCHEDULE_DATE_12_09_2026 } from '../data/schedule12092026';
 export const DEFAULT_CLINICS: ClinicConfig[] = [
   {
     id: 'ivs',
@@ -48,15 +49,15 @@ export const DEFAULT_CLINICS: ClinicConfig[] = [
   },
   {
     id: 'vision',
-    code: 'VISION',
-    name: 'Vision Clínica de Ojos',
-    tagline: 'Excelencia en Optometría y Contactología Especializada',
+    code: 'VISUAL',
+    name: 'Visual Clínica dos Olhos',
+    tagline: 'Excelência em Optometria e Contatologia Especializada',
     primaryColor: '#059669', // Emerald Green
     city: 'Pedro Juan Caballero / Ciudad del Este',
     country: 'Paraguai',
     defaultLanguage: 'es-PY',
     defaultCurrency: 'PYG',
-    address: 'Av. Dr. Francia / Centro Médico Vision',
+    address: 'Av. Dr. Francia / Centro Médico Visual',
     phone: '+595 981 302850'
   },
   {
@@ -104,6 +105,14 @@ class OfflineDatabaseService {
         this.restoreRecoveredHistoricalData();
         localStorage.setItem(recoveryFlagKey, 'true');
       }
+
+      // Semeador automático da agenda de 12/09/2026 (Exclusivo para a clínica IVS)
+      const scheduleFlagKey = 'optomed_schedule_seed_12092026_v3';
+      if (!localStorage.getItem(scheduleFlagKey)) {
+        this.seedSchedule12092026('ivs');
+        this.cleanupVisionContamination();
+        localStorage.setItem(scheduleFlagKey, 'true');
+      }
     } catch {
       this.activeClinicId = 'ivs';
     }
@@ -121,6 +130,7 @@ class OfflineDatabaseService {
     } catch {}
   }
 
+  // --- MULTI-CLÍNICA / CONFIGURAÇÃO DE CONSULTÓRIOS ---
   public getClinics(): ClinicConfig[] {
     try {
       const raw = localStorage.getItem(DB_CLINICS_KEY);
@@ -129,16 +139,19 @@ class OfflineDatabaseService {
         return DEFAULT_CLINICS;
       }
       const parsed: ClinicConfig[] = JSON.parse(raw);
-      // Garantir integridade da clínica Vision com Espanhol (Paraguay)
+      // Garantir integridade da clínica Visual com nome atualizado e Espanhol (Paraguay)
       let modified = false;
       const updated: ClinicConfig[] = parsed.map(c => {
-        if (c.id === 'vision' || c.code === 'VISION') {
-          if (c.defaultLanguage !== 'es-PY' || c.country !== 'Paraguai') {
+        if (c.id === 'vision' || c.code === 'VISION' || c.code === 'VISUAL') {
+          const currentName = c.name || '';
+          if (currentName.includes('Vision') || !currentName.includes('Visual')) {
             modified = true;
             return {
               ...c,
-              name: c.name && !c.name.includes('IVS') ? c.name : 'Vision Clínica de Ojos',
-              tagline: c.tagline && !c.tagline.includes('Português') ? c.tagline : 'Excelencia en Optometría y Contactología Especializada',
+              code: 'VISUAL',
+              name: 'Visual Clínica dos Olhos',
+              tagline: 'Excelência em Optometria e Contatologia Especializada',
+              address: 'Av. Dr. Francia / Centro Médico Visual',
               country: 'Paraguai' as const,
               defaultLanguage: 'es-PY' as const,
               defaultCurrency: 'PYG' as const,
@@ -202,6 +215,9 @@ class OfflineDatabaseService {
 
   public savePatients(patients: Patient[], clinicId = this.activeClinicId): void {
     localStorage.setItem(this.getKey('patients', clinicId), JSON.stringify(patients));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('optomed_patient_updated', { detail: { clinicId, patients } }));
+    }
   }
 
   public savePatient(patient: Patient, clinicId = this.activeClinicId): void {
@@ -214,12 +230,43 @@ class OfflineDatabaseService {
     }
     this.savePatients(list, clinicId);
     this.logAudit('UPDATE', 'PATIENT', patient.id, `Atualizado cadastro de ${patient.fullName}`, clinicId);
+
+    // Sincronização em tempo real com os agendamentos existentes deste paciente
+    try {
+      const aptList = this.getAppointments(clinicId);
+      let modified = false;
+      const updatedApts = aptList.map(a => {
+        if (a.patientId === patient.id || (patient.fullName && a.patientName.trim().toLowerCase() === patient.fullName.trim().toLowerCase())) {
+          modified = true;
+          return {
+            ...a,
+            patientId: patient.id,
+            patientName: patient.fullName,
+            patientPhone: patient.phone || a.patientPhone,
+            patientNationality: patient.nationality || a.patientNationality,
+            patientDocument: patient.documentNumber || a.patientDocument,
+            updatedAt: new Date().toISOString()
+          };
+        }
+        return a;
+      });
+      if (modified) {
+        this.saveAppointments(updatedApts, clinicId);
+      }
+    } catch {}
+
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('optomed_patient_updated', { detail: { clinicId, patient } }));
+    }
   }
 
   public deletePatient(patientId: string, clinicId = this.activeClinicId): void {
     const list = this.getPatients(clinicId).filter(p => p.id !== patientId);
     this.savePatients(list, clinicId);
     this.logAudit('DELETE', 'PATIENT', patientId, 'Registro de paciente removido', clinicId);
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('optomed_patient_updated', { detail: { clinicId, patientId } }));
+    }
   }
 
   // --- PRONTUÁRIOS / ATENDIMENTOS ---
@@ -235,6 +282,9 @@ class OfflineDatabaseService {
 
   public saveEncounters(encounters: ClinicalEncounter[], clinicId = this.activeClinicId): void {
     localStorage.setItem(this.getKey('encounters', clinicId), JSON.stringify(encounters));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('optomed_encounter_updated', { detail: { clinicId, encounters } }));
+    }
   }
 
   public saveEncounter(encounter: ClinicalEncounter, clinicId = this.activeClinicId): void {
@@ -247,6 +297,39 @@ class OfflineDatabaseService {
     }
     this.saveEncounters(list, clinicId);
     this.logAudit('UPDATE', 'ENCOUNTER', encounter.id, `Prontuário clínico atualizado`, clinicId);
+
+    // Quando o prontuário é atualizado/concluído, sincroniza o status em TODOS os agendamentos correspondentes do paciente
+    try {
+      const apts = this.getAppointments(clinicId);
+      let changed = false;
+      const encDateStr = encounter.date ? encounter.date.split('T')[0] : '';
+      const patient = this.getPatients(clinicId).find(p => p.id === encounter.patientId);
+
+      const nextApts = apts.map(a => {
+        const matchesPatient = a.patientId === encounter.patientId || 
+          (patient && a.patientName.trim().toLowerCase() === patient.fullName.trim().toLowerCase());
+        
+        // Se coincidir paciente e data (ou data vazia)
+        if (matchesPatient && (!encDateStr || a.date === encDateStr || apts.length <= 50)) {
+          if (encounter.status === 'completed' && a.status !== 'completed') {
+            changed = true;
+            return { ...a, status: 'completed' as AppointmentStatus, updatedAt: new Date().toISOString() };
+          } else if (encounter.status === 'in_progress' && a.status === 'waiting') {
+            changed = true;
+            return { ...a, status: 'in_consultation' as AppointmentStatus, updatedAt: new Date().toISOString() };
+          }
+        }
+        return a;
+      });
+
+      if (changed) {
+        this.saveAppointments(nextApts, clinicId);
+      }
+    } catch {}
+
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('optomed_encounter_updated', { detail: { clinicId, encounter } }));
+    }
   }
 
   // --- RECEITAS ÓPTICAS ---
@@ -746,6 +829,55 @@ class OfflineDatabaseService {
     }
   }
 
+  // Semeador oficial da agenda do dia 12/09/2026 (Sábado) para todas as clínicas ou clínica ativa
+  public seedSchedule12092026(clinicId = this.activeClinicId): void {
+    try {
+      // 1. Pacientes do dia 12/09/2026
+      const currentPatients = this.getPatients(clinicId);
+      const patientMap = new Map<string, Patient>();
+      currentPatients.forEach(p => patientMap.set(p.id, p));
+
+      SEED_PATIENTS_12_09_2026.forEach(sp => {
+        // Se o paciente ainda não existe pelo ID ou pelo nome aproximado
+        const existsByName = currentPatients.some(
+          p => p.fullName.trim().toLowerCase() === sp.fullName.trim().toLowerCase()
+        );
+        if (!patientMap.has(sp.id) && !existsByName) {
+          patientMap.set(sp.id, sp);
+        }
+      });
+      this.savePatients(Array.from(patientMap.values()), clinicId);
+
+      // 2. Agendamentos do dia 12/09/2026
+      const currentApts = this.getAppointments(clinicId);
+      const aptMap = new Map<string, Appointment>();
+      currentApts.forEach(a => aptMap.set(a.id, a));
+
+      SEED_APPOINTMENTS_12_09_2026.forEach(sa => {
+        const existsByNameAndTime = currentApts.some(
+          a => a.date === SCHEDULE_DATE_12_09_2026 && a.patientName.trim().toLowerCase() === sa.patientName.trim().toLowerCase()
+        );
+        if (!aptMap.has(sa.id) && !existsByNameAndTime) {
+          aptMap.set(sa.id, sa);
+        }
+      });
+
+      const updatedApts = Array.from(aptMap.values()).sort((a, b) => {
+        if (a.date !== b.date) return (a.date || '').localeCompare(b.date || '');
+        return (a.time || '').localeCompare(b.time || '');
+      });
+      this.saveAppointments(updatedApts, clinicId);
+
+      this.logAudit('UPDATE', 'PATIENT', 'SCHEDULE_SEED_12092026', `Agenda oficial de 12/09/2026 cadastrada com ${SEED_APPOINTMENTS_12_09_2026.length} pacientes`, clinicId);
+
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('optomed_appointment_updated', { detail: { clinicId, appointments: updatedApts } }));
+      }
+    } catch (err) {
+      console.error('Erro ao semear agenda de 12/09/2026:', err);
+    }
+  }
+
   // Remove dados fictícios conhecidos (Maria Helena, Enzo Gabriel, Juan Carlos Benítez) de um consultório
   public removeMockPatients(clinicId = this.activeClinicId): void {
     const mockNames = [
@@ -788,6 +920,40 @@ class OfflineDatabaseService {
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new CustomEvent('optomed_appointment_updated', { detail: { clinicId, appointments: realApts } }));
       window.dispatchEvent(new CustomEvent('optomed_finance_updated', { detail: { clinicId } }));
+    }
+  }
+
+  // Remove contaminação de agendamentos da IVS de 12/09/2026 dentro da clínica Vision e Mega Star
+  public cleanupVisionContamination(): void {
+    try {
+      const ivsApts = this.getAppointments('ivs');
+      const ivsPatientNames = new Set(ivsApts.map(a => a.patientName.trim().toLowerCase()));
+
+      ['vision', 'megastar'].forEach(cid => {
+        const apts = this.getAppointments(cid);
+        // Mantém apenas os que NÃO foram clonados da grade de 12/09 da IVS
+        const filtered = apts.filter(a => {
+          if (a.id.startsWith('apt-12092026-')) return false;
+          if (a.date === '2026-09-12' && ivsPatientNames.has(a.patientName.trim().toLowerCase())) return false;
+          return true;
+        });
+        if (filtered.length !== apts.length) {
+          this.saveAppointments(filtered, cid);
+        }
+
+        // Também limpa pacientes semeados da IVS que não pertencem à Vision
+        const patients = this.getPatients(cid);
+        const filteredPatients = patients.filter(p => {
+          if (p.id.startsWith('p-12092026-')) return false;
+          if (ivsPatientNames.has(p.fullName.trim().toLowerCase())) return false;
+          return true;
+        });
+        if (filteredPatients.length !== patients.length) {
+          this.savePatients(filteredPatients, cid);
+        }
+      });
+    } catch (err) {
+      console.error('Erro na limpeza de contaminação cruzada:', err);
     }
   }
 
@@ -1272,7 +1438,7 @@ class OfflineDatabaseService {
           type: 'pediatrico',
           status: 'scheduled',
           notes: 'Acompanhado pela mãe.',
-          room: 'Consultório Vision',
+          room: 'Consultório Visual',
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
         }

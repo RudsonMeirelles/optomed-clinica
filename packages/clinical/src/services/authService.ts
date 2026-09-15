@@ -71,26 +71,26 @@ export const INITIAL_PRESET_USERS: (UserAccount & { passwordHash: string })[] = 
     clinicName: 'Mega Star Consultório Oftalmológico',
     passwordHash: '123456'
   },
-  // Consultório 3: Vision
+  // Consultório 3: Visual Clínica dos Olhos
   {
     id: 'user-vision-examinador',
-    username: 'dr.vision',
-    email: 'meirelles@vision.med.br',
-    fullName: 'Dr. Rudson Meirelles (Vision)',
+    username: 'dr.visual',
+    email: 'meirelles@visual.med.br',
+    fullName: 'Dr. Rudson Meirelles (Visual)',
     role: 'examiner',
     clinicId: 'vision',
-    clinicName: 'Vision Clínica dos Olhos',
+    clinicName: 'Visual Clínica dos Olhos',
     registryNumber: 'CRM/CROO 123456',
     passwordHash: '123456'
   },
   {
     id: 'user-vision-recepcao',
-    username: 'recepcao.vision',
-    email: 'recepcao@vision.med.br',
-    fullName: 'Recepção Vision',
+    username: 'recepcao.visual',
+    email: 'recepcao@visual.med.br',
+    fullName: 'Recepção Visual',
     role: 'reception',
     clinicId: 'vision',
-    clinicName: 'Vision Clínica dos Olhos',
+    clinicName: 'Visual Clínica dos Olhos',
     passwordHash: '123456'
   },
   // Consultório 4: Outro Consultório
@@ -121,7 +121,26 @@ class AuthService {
         localStorage.setItem(DB_USERS_KEY, JSON.stringify(INITIAL_PRESET_USERS));
         return INITIAL_PRESET_USERS;
       }
-      return JSON.parse(raw);
+      let parsed: (UserAccount & { passwordHash?: string })[] = JSON.parse(raw);
+      // Auto-atualização: garante que usuários da clínica Visual estejam sincronizados com o nome correto
+      let modified = false;
+      parsed = parsed.map(u => {
+        if (u.clinicId === 'vision') {
+          if (u.clinicName && u.clinicName.includes('Vision')) {
+            modified = true;
+            return {
+              ...u,
+              clinicName: 'Visual Clínica dos Olhos',
+              fullName: u.fullName ? u.fullName.replace(/Vision/g, 'Visual') : u.fullName
+            };
+          }
+        }
+        return u;
+      });
+      if (modified) {
+        localStorage.setItem(DB_USERS_KEY, JSON.stringify(parsed));
+      }
+      return parsed;
     } catch {
       return INITIAL_PRESET_USERS;
     }
@@ -302,9 +321,10 @@ class AuthService {
     const users = this.getUsers();
     const cleanInput = emailOrUsername.toLowerCase().trim();
 
-    // Procura por email exato ou nome de usuário
+    // Procura por email exato ou nome de usuário (suportando tanto dr.visual quanto dr.vision como compatibilidade)
+    const normalizedInput = cleanInput === 'dr.vision' ? 'dr.visual' : cleanInput === 'recepcao.vision' ? 'recepcao.visual' : cleanInput;
     const found = users.find(
-      u => (u.username.toLowerCase() === cleanInput || (u.email && u.email.toLowerCase() === cleanInput)) && 
+      u => (u.username.toLowerCase() === cleanInput || u.username.toLowerCase() === normalizedInput || (u.email && u.email.toLowerCase() === cleanInput)) && 
            (u.passwordHash === password || !u.passwordHash)
     );
 
