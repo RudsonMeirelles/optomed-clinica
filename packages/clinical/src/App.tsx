@@ -13,7 +13,8 @@ import {
   LogOut, 
   UserCheck, 
   ChevronDown,
-  Crown
+  Crown,
+  ExternalLink
 } from 'lucide-react';
 import { 
   SyncStatusBadge,
@@ -40,10 +41,11 @@ import { DoctorWorkspacePage } from './pages/DoctorWorkspacePage';
 import { DoctorNotificationToast } from './components/DoctorNotificationToast';
 import { LoginPage } from './pages/LoginPage';
 import { SubscriptionBannerModal } from './components/SubscriptionBannerModal';
+import { App as OptotipoTVApp } from './optotipo-tv/App';
 
 export function App() {
   const [currentUser, setCurrentUser] = useState<UserAccount | null>(authService.getCurrentUser());
-  const [currentPage, setCurrentPage] = useState<'dashboard' | 'schedule' | 'doctor_workspace' | 'waiting_room' | 'patients' | 'finance' | 'reports' | 'examination' | 'pairing' | 'settings' | 'master_admin'>('schedule');
+  const [currentPage, setCurrentPage] = useState<'dashboard' | 'schedule' | 'doctor_workspace' | 'waiting_room' | 'optotipo_tv' | 'patients' | 'finance' | 'reports' | 'examination' | 'pairing' | 'settings' | 'master_admin'>('schedule');
   const [activePatient, setActivePatient] = useState<Patient | null>(null);
   const [activeEncounter, setActiveEncounter] = useState<ClinicalEncounter | undefined>(undefined);
   const [activeClinic, setActiveClinic] = useState<ClinicConfig>(offlineDb.getActiveClinic());
@@ -51,9 +53,10 @@ export function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
 
 
-  // Verifica se a URL foi aberta diretamente para o Painel da TV da Recepção (?tv=1 ou ?tela=espera)
+  // Verifica se a URL foi aberta diretamente para o Painel da TV da Recepção (?tv=1 ou ?tela=espera) ou TV Optotipo (?optotype=1 ou ?tela=optotipo)
   const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
   const isTvOnlyMode = urlParams?.get('tv') === '1' || urlParams?.get('tela') === 'espera';
+  const isOptotypeOnlyMode = urlParams?.get('optotype') === '1' || urlParams?.get('tela') === 'optotipo' || urlParams?.get('direct') === '1';
 
   useEffect(() => {
     lanController.connect();
@@ -112,6 +115,14 @@ export function App() {
     return (
       <div className="w-screen h-screen bg-slate-950 text-slate-100 overflow-hidden font-sans">
         <WaitingRoomPage activeClinic={activeClinic} isStandalone={true} />
+      </div>
+    );
+  }
+
+  if (isOptotypeOnlyMode) {
+    return (
+      <div className="w-screen h-screen bg-slate-50 text-slate-900 overflow-hidden font-sans">
+        <OptotipoTVApp isStandalone={true} />
       </div>
     );
   }
@@ -308,7 +319,7 @@ export function App() {
                     </div>
                   </button>
 
-                  {/* Recepção & Pacientes */}
+                  {/* Recepção, Triagem & Pacientes */}
                   <button
                     onClick={() => setCurrentPage('patients')}
                     className={`w-full px-3 py-2.5 rounded-xl font-semibold text-xs flex items-center gap-2.5 transition-all cursor-pointer ${
@@ -323,8 +334,8 @@ export function App() {
                       <IconPatientProfile className="w-4 h-4" />
                     </div>
                     <div className="text-left flex-1">
-                      <div className="leading-tight">Pacientes & Triagem</div>
-                      <div className="text-[10px] text-slate-400 font-normal">Cadastros e Prontuários</div>
+                      <div className="leading-tight">Recepção & Triagem</div>
+                      <div className="text-[10px] text-slate-400 font-normal">Pacientes, Cadastros & Fila</div>
                     </div>
                   </button>
                 </div>
@@ -337,42 +348,73 @@ export function App() {
                 </div>
                 <div className="space-y-1">
                   {/* TV Sala de Espera */}
-                  <button
-                    onClick={() => setCurrentPage('waiting_room')}
-                    className={`w-full px-3 py-2 rounded-xl font-semibold text-xs flex items-center gap-2.5 transition-all cursor-pointer ${
-                      currentPage === 'waiting_room'
-                        ? 'bg-cyan-50 text-cyan-800 border border-cyan-200 font-bold shadow-xs'
-                        : 'text-slate-600 hover:text-cyan-800 hover:bg-cyan-50/50'
-                    }`}
-                  >
-                    <div className="w-7 h-7 rounded-lg bg-cyan-100/70 text-cyan-700 flex items-center justify-center shrink-0">
-                      📢
-                    </div>
-                    <div className="text-left flex-1">
-                      <div className="leading-tight">TV Sala de Espera</div>
-                      <div className="text-[10px] text-slate-400 font-normal">Chamador & Mídia</div>
-                    </div>
-                  </button>
-
-                  {/* TV Optotipo Exames (:5173) */}
-                  <a
-                    href="http://optomed.app.br:5173"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full px-3 py-2 rounded-xl font-semibold text-xs flex items-center gap-2.5 transition-all cursor-pointer text-slate-600 hover:text-purple-900 hover:bg-purple-50/60 border border-slate-100 group"
-                    title="Abrir a TV Optotipo de Acuidade Visual (Porta 5173)"
-                  >
-                    <div className="w-7 h-7 rounded-lg bg-purple-100/70 text-purple-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                      👁️
-                    </div>
-                    <div className="text-left flex-1">
-                      <div className="leading-tight flex items-center justify-between">
-                        <span>TV Optotipo</span>
-                        <span className="text-[9px] bg-purple-100 text-purple-700 px-1.5 py-0.2 rounded font-mono font-bold">:5173</span>
+                  <div className="relative group">
+                    <button
+                      onClick={() => setCurrentPage('waiting_room')}
+                      className={`w-full px-3 py-2 rounded-xl font-semibold text-xs flex items-center gap-2.5 transition-all cursor-pointer ${
+                        currentPage === 'waiting_room'
+                          ? 'bg-cyan-50 text-cyan-800 border border-cyan-200 font-bold shadow-xs'
+                          : 'text-slate-600 hover:text-cyan-800 hover:bg-cyan-50/50'
+                      }`}
+                    >
+                      <div className="w-7 h-7 rounded-lg bg-cyan-100/70 text-cyan-700 flex items-center justify-center shrink-0">
+                        📢
                       </div>
-                      <div className="text-[10px] text-slate-400 font-normal">17 Módulos de Testes</div>
-                    </div>
-                  </a>
+                      <div className="text-left flex-1">
+                        <div className="leading-tight flex items-center justify-between">
+                          <span>TV Recepção</span>
+                          <span className="text-[9px] bg-cyan-100 text-cyan-800 px-1.5 py-0.2 rounded font-mono font-bold">TV</span>
+                        </div>
+                        <div className="text-[10px] text-slate-400 font-normal">Chamador & Espera</div>
+                      </div>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.open(window.location.origin + '/?tv=1', '_blank');
+                      }}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 p-1.5 rounded-lg bg-white/90 hover:bg-cyan-100 text-slate-500 hover:text-cyan-800 border border-slate-200 shadow-xs transition-all cursor-pointer"
+                      title="Abrir TV Sala de Espera em Nova Aba / Telão da TV"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+
+                  {/* TV Optotipo Exames (Integrado 100% na Nuvem) */}
+                  <div className="relative group">
+                    <button
+                      onClick={() => setCurrentPage('optotipo_tv')}
+                      className={`w-full px-3 py-2 rounded-xl font-semibold text-xs flex items-center gap-2.5 transition-all cursor-pointer ${
+                        currentPage === 'optotipo_tv'
+                          ? 'bg-purple-50 text-purple-900 border border-purple-200 font-bold shadow-xs'
+                          : 'text-slate-600 hover:text-purple-900 hover:bg-purple-50/60 border border-slate-100'
+                      }`}
+                      title="Abrir o Optotipo de Acuidade Visual (17 Módulos de Testes)"
+                    >
+                      <div className="w-7 h-7 rounded-lg bg-purple-100/70 text-purple-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                        👁️
+                      </div>
+                      <div className="text-left flex-1">
+                        <div className="leading-tight flex items-center justify-between">
+                          <span>TV Optotipo</span>
+                          <span className="text-[9px] bg-emerald-100 text-emerald-700 px-1.5 py-0.2 rounded font-mono font-bold">ONLINE</span>
+                        </div>
+                        <div className="text-[10px] text-slate-400 font-normal">17 Módulos de Testes</div>
+                      </div>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.open(window.location.origin + '/?optotype=1', '_blank');
+                      }}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 p-1.5 rounded-lg bg-white/90 hover:bg-purple-100 text-slate-500 hover:text-purple-800 border border-slate-200 shadow-xs transition-all cursor-pointer"
+                      title="Abrir TV Optotipo em Nova Aba / TV do Consultório"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
 
                   {/* Pareamento TV LAN */}
                   {currentUser.role !== 'reception' && (
@@ -540,7 +582,13 @@ export function App() {
             )}
 
             {currentPage === 'waiting_room' && (
-              <WaitingRoomPage activeClinic={activeClinic} />
+              <WaitingRoomPage activeClinic={activeClinic} onBack={() => setCurrentPage('schedule')} isStandalone={false} />
+            )}
+
+            {currentPage === 'optotipo_tv' && (
+              <div className="flex-1 w-full h-full overflow-hidden bg-slate-50 flex flex-col">
+                <OptotipoTVApp onBack={() => setCurrentPage('schedule')} isStandalone={false} />
+              </div>
             )}
 
             {currentPage === 'dashboard' && (

@@ -18,7 +18,8 @@ import {
   ImageIcon,
   Radio,
   ExternalLink,
-  Info
+  Info,
+  ArrowLeft
 } from 'lucide-react';
 import { offlineDb } from '../services/offlineDb';
 import { lanController } from '../services/lanController';
@@ -31,9 +32,10 @@ import {
 interface WaitingRoomPageProps {
   activeClinic: ClinicConfig;
   isStandalone?: boolean;
+  onBack?: () => void;
 }
 
-export const WaitingRoomPage: React.FC<WaitingRoomPageProps> = ({ activeClinic, isStandalone = false }) => {
+export const WaitingRoomPage: React.FC<WaitingRoomPageProps> = ({ activeClinic, isStandalone = false, onBack }) => {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [activeCall, setActiveCall] = useState<any | null>(null);
   const [callHistory, setCallHistory] = useState<any[]>([]);
@@ -203,6 +205,30 @@ export const WaitingRoomPage: React.FC<WaitingRoomPageProps> = ({ activeClinic, 
         </div>
 
         <div className="flex items-center gap-3 self-end md:self-auto">
+          {onBack && (
+            <button
+              type="button"
+              onClick={onBack}
+              className="flex items-center gap-2 px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-2xl border border-slate-700 transition-colors cursor-pointer text-xs font-bold shadow-md"
+              title="Voltar ao Sistema Clínico"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>Voltar</span>
+            </button>
+          )}
+
+          {!isStandalone && (
+            <button
+              type="button"
+              onClick={() => window.open(window.location.origin + '/?tv=1', '_blank')}
+              className="hidden sm:flex items-center gap-2 px-4 py-2.5 bg-cyan-950/80 hover:bg-cyan-900/80 text-cyan-300 rounded-2xl border border-cyan-800/80 transition-colors cursor-pointer text-xs font-bold shadow-md"
+              title="Abrir em aba dedicada / Telão da TV"
+            >
+              <ExternalLink className="w-4 h-4" />
+              <span>Telão TV</span>
+            </button>
+          )}
+
           {/* Relógio Digital Gigante */}
           <div className="bg-slate-950 border border-slate-800 px-5 py-2.5 rounded-2xl font-mono text-2xl sm:text-3xl font-black text-amber-400 shadow-inner flex items-center gap-2.5">
             <Clock className="w-6 h-6 text-amber-500" />
