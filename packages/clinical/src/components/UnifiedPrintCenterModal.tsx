@@ -493,8 +493,8 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 select-none print:p-0 print:m-0 print:bg-white print:static print:block">
-      <div className="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-6xl max-h-[96vh] flex flex-col shadow-2xl overflow-hidden print:bg-white print:border-none print:rounded-none print:shadow-none print:max-h-none print:max-w-none print:overflow-visible print:w-full">
+    <div className="unified-print-modal-backdrop fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 select-none print:p-0 print:m-0 print:bg-white print:static print:block">
+      <div className="unified-print-modal-container bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-6xl max-h-[96vh] flex flex-col shadow-2xl overflow-hidden print:bg-white print:border-none print:rounded-none print:shadow-none print:max-h-none print:max-w-none print:overflow-visible print:w-full">
         
         {/* ========================================================================= */}
         {/* BARRA SUPERIOR: SELEÇÃO DE TIPO (DIOPTRIA / FÁRMACO), FORMATO E IDIOMA */}
@@ -718,7 +718,7 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
         {/* ========================================================================= */}
         {/* ÁREA DE VISUALIZAÇÃO E IMPRESSÃO COM SUPORTE A FILTROS */}
         {/* ========================================================================= */}
-        <div className="flex-1 overflow-y-auto p-4 sm:p-8 bg-slate-200/70 flex justify-center print:overflow-visible print:p-0 print:m-0 print:bg-white print:block">
+        <div className="unified-print-scroll-container flex-1 overflow-y-auto p-4 sm:p-8 bg-slate-200/70 flex justify-center print:overflow-visible print:p-0 print:m-0 print:bg-white print:block">
           
           {/* MODO 1: A4 PAISAGEM DUPLO (2 EM 1 / MEIA PÁGINA) */}
           {layoutMode === 'a4_landscape_dual' && (
@@ -756,7 +756,7 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
 
           {/* MODO 2: A4 RETRATO INDIVIDUAL */}
           {layoutMode === 'a4_portrait' && (
-            <div className="max-w-3xl w-full self-start space-y-4">
+            <div id="unified-print-sheet" className="max-w-3xl w-full self-start space-y-4 print:max-w-none print:w-full print:space-y-6 print:m-0 print:p-0">
               {(filterType === 'all' || filterType === 'dioptria_only') && prescription && (
                 renderOpticalBlock(t.patientCopy)
               )}
@@ -768,7 +768,7 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
 
           {/* MODO 3: CUPOM TÉRMICO 80MM */}
           {layoutMode === 'thermal_80mm' && (
-            <div className="bg-white border-2 border-dashed border-slate-400 p-4 rounded-xl shadow-lg w-[320px] space-y-3 self-start font-mono text-[11px] leading-tight text-slate-900 print:shadow-none print:border-none print:p-2 print:m-0 print:w-full">
+            <div id="unified-print-sheet" className="bg-white border-2 border-dashed border-slate-400 p-4 rounded-xl shadow-lg w-[320px] space-y-3 self-start font-mono text-[11px] leading-tight text-slate-900 print:shadow-none print:border-none print:p-2 print:m-0 print:w-full">
               <div className="text-center pb-2 border-b border-dashed border-slate-400">
                 <h1 className="text-xs font-black uppercase">{activeClinic.name}</h1>
                 <p className="text-[9px] text-slate-500">{activeClinic.tagline || t.rxOpticTitle}</p>
