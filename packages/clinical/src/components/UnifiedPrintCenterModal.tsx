@@ -249,7 +249,7 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
     if (!prescription) return null;
 
     return (
-      <div className="bg-white border-2 border-slate-900 p-5 sm:p-6 rounded-xl flex flex-col justify-between space-y-3.5 h-full text-xs print:p-5 print:rounded-lg print:border-2 print:border-slate-900 print:text-[13px] print:space-y-4 print-card-half">
+      <div className="bg-white border-2 border-slate-900 p-5 sm:p-6 rounded-xl flex flex-col justify-between space-y-3.5 h-full text-xs print:p-2 print:rounded-none print:border-none print:text-[13px] print:space-y-4 print-card-half">
         {/* Topo / Cabeçalho */}
         <div className="border-b-2 border-slate-900 pb-2.5 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -288,46 +288,46 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
           <table className="w-full border-collapse border-2 border-slate-900 text-center font-mono text-xs print:text-sm">
             <thead>
               <tr className="bg-slate-100 border-b-2 border-slate-900 font-sans font-bold text-[10px] print:text-xs">
-                <th className="p-1.5 border-r-2 border-slate-900">{t.eyeHeader}</th>
-                <th className="p-1.5 border-r border-slate-900">{t.sphereHeader}</th>
-                <th className="p-1.5 border-r border-slate-900">{t.cylHeader}</th>
-                <th className="p-1.5 border-r border-slate-900">{t.axisHeader}</th>
-                <th className="p-1.5">{t.addHeader}</th>
+                <th className="p-1.5 print:p-2 border-r-2 border-slate-900">{t.eyeHeader}</th>
+                <th className="p-1.5 print:p-2 border-r border-slate-900">{t.sphereHeader}</th>
+                <th className="p-1.5 print:p-2 border-r border-slate-900">{t.cylHeader}</th>
+                <th className="p-1.5 print:p-2 border-r border-slate-900">{t.axisHeader}</th>
+                <th className="p-1.5 print:p-2">{t.addHeader}</th>
               </tr>
             </thead>
             <tbody>
               <tr className="border-b border-slate-400 font-bold">
-                <td className="p-2 border-r-2 border-slate-900 bg-slate-50 font-sans font-black">{t.odLabel}</td>
-                <td className="p-2 border-r border-slate-900 font-black">
+                <td className="p-2 print:p-3 border-r-2 border-slate-900 bg-slate-50 font-sans font-black">{t.odLabel}</td>
+                <td className="p-2 print:p-3 border-r border-slate-900 font-black">
                   {prescription.od.sphere === undefined || prescription.od.sphere === 0
                     ? t.planeSphere
                     : prescription.od.sphere > 0 ? `+${prescription.od.sphere.toFixed(2)}` : prescription.od.sphere.toFixed(2)}
                 </td>
-                <td className="p-2 border-r border-slate-900 font-black">
+                <td className="p-2 print:p-3 border-r border-slate-900 font-black">
                   {prescription.od.cylinder === undefined || prescription.od.cylinder === 0
                     ? '0.00'
                     : prescription.od.cylinder > 0 ? `+${prescription.od.cylinder.toFixed(2)}` : prescription.od.cylinder.toFixed(2)}
                 </td>
-                <td className="p-2 border-r border-slate-900 font-black">
+                <td className="p-2 print:p-3 border-r border-slate-900 font-black">
                   {prescription.od.axis !== undefined && prescription.od.axis !== null ? `${prescription.od.axis}°` : '-'}
                 </td>
-                <td rowSpan={2} className="p-2 align-middle bg-slate-50/50 font-black text-sm print:text-base border-l border-slate-900">
+                <td rowSpan={2} className="p-2 print:p-3 align-middle bg-slate-50/50 font-black text-sm print:text-base border-l border-slate-900">
                   {prescription.addition ? `+${prescription.addition.toFixed(2)}` : '-'}
                 </td>
               </tr>
               <tr className="font-bold">
-                <td className="p-2 border-r-2 border-slate-900 bg-slate-50 font-sans font-black">{t.oeLabel}</td>
-                <td className="p-2 border-r border-slate-900 font-black">
+                <td className="p-2 print:p-3 border-r-2 border-slate-900 bg-slate-50 font-sans font-black">{t.oeLabel}</td>
+                <td className="p-2 print:p-3 border-r border-slate-900 font-black">
                   {prescription.oe.sphere === undefined || prescription.oe.sphere === 0
                     ? t.planeSphere
                     : prescription.oe.sphere > 0 ? `+${prescription.oe.sphere.toFixed(2)}` : prescription.oe.sphere.toFixed(2)}
                 </td>
-                <td className="p-2 border-r border-slate-900 font-black">
+                <td className="p-2 print:p-3 border-r border-slate-900 font-black">
                   {prescription.oe.cylinder === undefined || prescription.oe.cylinder === 0
                     ? '0.00'
                     : prescription.oe.cylinder > 0 ? `+${prescription.oe.cylinder.toFixed(2)}` : prescription.oe.cylinder.toFixed(2)}
                 </td>
-                <td className="p-2 border-r border-slate-900 font-black">
+                <td className="p-2 print:p-3 border-r border-slate-900 font-black">
                   {prescription.oe.axis !== undefined && prescription.oe.axis !== null ? `${prescription.oe.axis}°` : '-'}
                 </td>
               </tr>
@@ -390,7 +390,7 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
   // RENDERIZADOR DO BLOCO DE RECEITA FARMACOLÓGICA (MÉDICA)
   const renderMedicalBlock = (copyLabel?: string) => {
     return (
-      <div className="bg-white border-2 border-slate-900 p-5 sm:p-6 rounded-xl flex flex-col justify-between space-y-3.5 h-full text-xs print:p-5 print:rounded-lg print:border-2 print:border-slate-900 print:text-[13px] print:space-y-4 print-card-half">
+      <div className="bg-white border-2 border-slate-900 p-5 sm:p-6 rounded-xl flex flex-col justify-between space-y-3.5 h-full text-xs print:p-2 print:rounded-none print:border-none print:text-[13px] print:space-y-4 print-card-half">
         {/* Topo / Cabeçalho */}
         <div className="border-b-2 border-slate-900 pb-2.5 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -706,7 +706,7 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
           
           {/* MODO 1: A4 PAISAGEM DUPLO (2 EM 1 / MEIA PÁGINA) */}
           {layoutMode === 'a4_landscape_dual' && (
-            <div className="bg-white border-2 border-slate-900 p-6 rounded-xl shadow-lg max-w-5xl w-full grid grid-cols-1 md:grid-cols-2 gap-6 relative self-start print-page-landscape print:p-0 print:m-0 print:border-none print:shadow-none">
+            <div id="unified-print-sheet" className="bg-white border-2 border-slate-900 p-6 rounded-xl shadow-lg max-w-5xl w-full grid grid-cols-1 md:grid-cols-2 gap-6 relative self-start print-page-landscape print:p-0 print:m-0 print:border-none print:shadow-none">
               
               {/* Linha Guia Central de Corte (Pontilhada) */}
               <div className="hidden md:flex absolute left-1/2 top-4 bottom-4 w-px border-l-2 border-dashed border-slate-400 items-center justify-center -translate-x-1/2 pointer-events-none print:flex print:top-0 print:bottom-0 print:border-slate-300">
