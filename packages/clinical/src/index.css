@@ -39,3 +39,55 @@
 .animate-marquee:hover {
   animation-play-state: paused;
 }
+
+/* ========================================================================= */
+/* ESTILOS DE IMPRESSÃO PROFISSIONAL (A4 PAISAGEM / MEIA PÁGINA) */
+/* ========================================================================= */
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 8mm 10mm;
+  }
+
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Ocultar elementos desnecessários na impressão */
+  .no-print {
+    display: none !important;
+  }
+
+  /* Seção de impressão A4 paisagem preenchendo a folha */
+  .print-page-landscape {
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: #ffffff !important;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    column-gap: 8mm !important;
+  }
+
+  .print-card-half {
+    height: 100% !important;
+    min-height: 182mm !important;
+    box-sizing: border-box !important;
+    border: 2px solid #0f172a !important;
+    border-radius: 8px !important;
+    padding: 6mm !important;
+  }
+}
+

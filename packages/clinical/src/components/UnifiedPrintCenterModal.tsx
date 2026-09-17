@@ -249,92 +249,94 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
     if (!prescription) return null;
 
     return (
-      <div className="bg-white border-2 border-slate-900 p-5 rounded-xl flex flex-col justify-between space-y-3.5 h-full text-xs">
+      <div className="bg-white border-2 border-slate-900 p-5 sm:p-6 rounded-xl flex flex-col justify-between space-y-3.5 h-full text-xs print:p-5 print:rounded-lg print:border-2 print:border-slate-900 print:text-[13px] print:space-y-4 print-card-half">
         {/* Topo / Cabeçalho */}
-        <div className="border-b-2 border-slate-900 pb-2 flex items-center justify-between">
-          <div className="flex items-center gap-2">
+        <div className="border-b-2 border-slate-900 pb-2.5 flex items-center justify-between">
+          <div className="flex items-center gap-3">
             {activeClinic.logoUrl && (
-              <img src={activeClinic.logoUrl} alt="Logo" className="w-9 h-9 object-contain" />
+              <img src={activeClinic.logoUrl} alt="Logo" className="w-11 h-11 object-contain print:w-12 print:h-12" />
             )}
             <div>
-              <h3 className="font-black text-sm tracking-tight text-slate-900 uppercase">{activeClinic.name}</h3>
-              <p className="text-[10px] text-slate-600">{activeClinic.tagline || t.rxOpticTitle}</p>
+              <h3 className="font-black text-sm tracking-tight text-slate-900 uppercase print:text-base">{activeClinic.name}</h3>
+              <p className="text-[10px] text-slate-600 print:text-[11px] font-medium">{activeClinic.tagline || t.rxOpticTitle}</p>
             </div>
           </div>
-          <div className="text-right text-[10px] font-mono text-slate-600">
-            <div className="font-black text-slate-900 uppercase">{t.rxOpticTitle}</div>
-            <div>{t.dateLabel}: <b>{currentDate}</b></div>
+          <div className="text-right text-[10px] font-mono text-slate-600 print:text-[11px]">
+            <div className="font-black text-slate-900 uppercase print:text-xs">{t.rxOpticTitle}</div>
+            <div>{t.dateLabel}: <b className="text-slate-900">{currentDate}</b></div>
           </div>
         </div>
 
         {/* Paciente */}
-        <div className="bg-slate-50 p-2 rounded-lg border border-slate-300 flex justify-between items-center text-xs">
+        <div className="bg-slate-50 p-2.5 rounded-lg border border-slate-300 flex justify-between items-center text-xs print:bg-slate-50/80 print:p-2.5">
           <div>
-            <div>{t.patientLabel}: <b className="text-slate-900 text-sm">{patient.fullName}</b></div>
-            <div className="text-[10px] text-slate-600 mt-0.5">
+            <div>{t.patientLabel}: <b className="text-slate-900 text-sm print:text-base">{patient.fullName}</b></div>
+            <div className="text-[10px] text-slate-600 mt-0.5 print:text-[11px]">
               {patient.birthDate && <span>{t.birthLabel}: {new Date(patient.birthDate).toLocaleDateString(language === 'es' ? 'es-PY' : 'pt-BR')} &bull; </span>}
               {patient.phone && <span>{t.phoneLabel}: {patient.phone}</span>}
             </div>
           </div>
           {copyLabel && (
-            <span className="text-[10px] font-bold px-2 py-0.5 bg-white border border-slate-300 rounded text-slate-700 uppercase">
+            <span className="text-[10px] font-bold px-2 py-0.5 bg-white border border-slate-300 rounded text-slate-700 uppercase print:text-[10px] print:border-slate-400">
               {copyLabel}
             </span>
           )}
         </div>
 
         {/* Tabela Refrativa */}
-        <table className="w-full border-collapse border-2 border-slate-900 text-center font-mono text-xs">
-          <thead>
-            <tr className="bg-slate-100 border-b-2 border-slate-900 font-sans font-bold text-[10px]">
-              <th className="p-1 border-r-2 border-slate-900">{t.eyeHeader}</th>
-              <th className="p-1 border-r border-slate-900">{t.sphereHeader}</th>
-              <th className="p-1 border-r border-slate-900">{t.cylHeader}</th>
-              <th className="p-1 border-r border-slate-900">{t.axisHeader}</th>
-              <th className="p-1">{t.addHeader}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className="border-b border-slate-400 font-bold">
-              <td className="p-1.5 border-r-2 border-slate-900 bg-slate-50 font-sans font-black">{t.odLabel}</td>
-              <td className="p-1.5 border-r border-slate-900 font-black">
-                {prescription.od.sphere === undefined || prescription.od.sphere === 0
-                  ? t.planeSphere
-                  : prescription.od.sphere > 0 ? `+${prescription.od.sphere.toFixed(2)}` : prescription.od.sphere.toFixed(2)}
-              </td>
-              <td className="p-1.5 border-r border-slate-900 font-black">
-                {prescription.od.cylinder === undefined || prescription.od.cylinder === 0
-                  ? '0.00'
-                  : prescription.od.cylinder > 0 ? `+${prescription.od.cylinder.toFixed(2)}` : prescription.od.cylinder.toFixed(2)}
-              </td>
-              <td className="p-1.5 border-r border-slate-900 font-black">
-                {prescription.od.axis !== undefined && prescription.od.axis !== null ? `${prescription.od.axis}°` : '-'}
-              </td>
-              <td rowSpan={2} className="p-1.5 align-middle bg-slate-50/50 font-black text-sm border-l border-slate-900">
-                {prescription.addition ? `+${prescription.addition.toFixed(2)}` : '-'}
-              </td>
-            </tr>
-            <tr className="font-bold">
-              <td className="p-1.5 border-r-2 border-slate-900 bg-slate-50 font-sans font-black">{t.oeLabel}</td>
-              <td className="p-1.5 border-r border-slate-900 font-black">
-                {prescription.oe.sphere === undefined || prescription.oe.sphere === 0
-                  ? t.planeSphere
-                  : prescription.oe.sphere > 0 ? `+${prescription.oe.sphere.toFixed(2)}` : prescription.oe.sphere.toFixed(2)}
-              </td>
-              <td className="p-1.5 border-r border-slate-900 font-black">
-                {prescription.oe.cylinder === undefined || prescription.oe.cylinder === 0
-                  ? '0.00'
-                  : prescription.oe.cylinder > 0 ? `+${prescription.oe.cylinder.toFixed(2)}` : prescription.oe.cylinder.toFixed(2)}
-              </td>
-              <td className="p-1.5 border-r border-slate-900 font-black">
-                {prescription.oe.axis !== undefined && prescription.oe.axis !== null ? `${prescription.oe.axis}°` : '-'}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div className="my-auto">
+          <table className="w-full border-collapse border-2 border-slate-900 text-center font-mono text-xs print:text-sm">
+            <thead>
+              <tr className="bg-slate-100 border-b-2 border-slate-900 font-sans font-bold text-[10px] print:text-xs">
+                <th className="p-1.5 border-r-2 border-slate-900">{t.eyeHeader}</th>
+                <th className="p-1.5 border-r border-slate-900">{t.sphereHeader}</th>
+                <th className="p-1.5 border-r border-slate-900">{t.cylHeader}</th>
+                <th className="p-1.5 border-r border-slate-900">{t.axisHeader}</th>
+                <th className="p-1.5">{t.addHeader}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-b border-slate-400 font-bold">
+                <td className="p-2 border-r-2 border-slate-900 bg-slate-50 font-sans font-black">{t.odLabel}</td>
+                <td className="p-2 border-r border-slate-900 font-black">
+                  {prescription.od.sphere === undefined || prescription.od.sphere === 0
+                    ? t.planeSphere
+                    : prescription.od.sphere > 0 ? `+${prescription.od.sphere.toFixed(2)}` : prescription.od.sphere.toFixed(2)}
+                </td>
+                <td className="p-2 border-r border-slate-900 font-black">
+                  {prescription.od.cylinder === undefined || prescription.od.cylinder === 0
+                    ? '0.00'
+                    : prescription.od.cylinder > 0 ? `+${prescription.od.cylinder.toFixed(2)}` : prescription.od.cylinder.toFixed(2)}
+                </td>
+                <td className="p-2 border-r border-slate-900 font-black">
+                  {prescription.od.axis !== undefined && prescription.od.axis !== null ? `${prescription.od.axis}°` : '-'}
+                </td>
+                <td rowSpan={2} className="p-2 align-middle bg-slate-50/50 font-black text-sm print:text-base border-l border-slate-900">
+                  {prescription.addition ? `+${prescription.addition.toFixed(2)}` : '-'}
+                </td>
+              </tr>
+              <tr className="font-bold">
+                <td className="p-2 border-r-2 border-slate-900 bg-slate-50 font-sans font-black">{t.oeLabel}</td>
+                <td className="p-2 border-r border-slate-900 font-black">
+                  {prescription.oe.sphere === undefined || prescription.oe.sphere === 0
+                    ? t.planeSphere
+                    : prescription.oe.sphere > 0 ? `+${prescription.oe.sphere.toFixed(2)}` : prescription.oe.sphere.toFixed(2)}
+                </td>
+                <td className="p-2 border-r border-slate-900 font-black">
+                  {prescription.oe.cylinder === undefined || prescription.oe.cylinder === 0
+                    ? '0.00'
+                    : prescription.oe.cylinder > 0 ? `+${prescription.oe.cylinder.toFixed(2)}` : prescription.oe.cylinder.toFixed(2)}
+                </td>
+                <td className="p-2 border-r border-slate-900 font-black">
+                  {prescription.oe.axis !== undefined && prescription.oe.axis !== null ? `${prescription.oe.axis}°` : '-'}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
         {/* Detalhes de Lentes, Material & DNP */}
-        <div className="grid grid-cols-3 gap-2 text-[11px] bg-slate-50 p-2 rounded border border-slate-300">
+        <div className="grid grid-cols-3 gap-2 text-[11px] print:text-xs bg-slate-50 p-2.5 rounded border border-slate-300">
           <div>
             <span className="text-slate-500 font-semibold">{t.lensTypeLabel}:</span>{' '}
             <b className="text-slate-900 block truncate">
@@ -354,7 +356,7 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
         </div>
 
         {/* Tratamentos & Observações / Retorno */}
-        <div className="text-[11px] space-y-1">
+        <div className="text-[11px] print:text-xs space-y-1">
           {prescription.treatments && prescription.treatments.length > 0 && (
             <div>
               <span className="text-slate-500 font-bold">Tratamentos:</span>{' '}
@@ -376,10 +378,10 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
         </div>
 
         {/* Rodapé / Assinatura e Carimbo Manual */}
-        <div className="pt-5 text-center border-t border-slate-200 mt-auto">
-          <div className="w-48 mx-auto border-b border-slate-400 mb-1" />
-          <div className="font-medium text-slate-500 text-[10px] uppercase tracking-wider">{t.signatureLabel}</div>
-          <div className="text-[8px] text-slate-400 font-mono">Assinatura &bull; Carimbo do Profissional</div>
+        <div className="pt-6 text-center border-t border-slate-200 mt-auto">
+          <div className="w-52 mx-auto border-b border-slate-400 mb-1" />
+          <div className="font-medium text-slate-500 text-[10px] print:text-[11px] uppercase tracking-wider">{t.signatureLabel}</div>
+          <div className="text-[8px] print:text-[9px] text-slate-400 font-mono">Assinatura &bull; Carimbo do Profissional</div>
         </div>
       </div>
     );
@@ -388,69 +390,69 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
   // RENDERIZADOR DO BLOCO DE RECEITA FARMACOLÓGICA (MÉDICA)
   const renderMedicalBlock = (copyLabel?: string) => {
     return (
-      <div className="bg-white border-2 border-slate-900 p-5 rounded-xl flex flex-col justify-between space-y-3.5 h-full text-xs">
+      <div className="bg-white border-2 border-slate-900 p-5 sm:p-6 rounded-xl flex flex-col justify-between space-y-3.5 h-full text-xs print:p-5 print:rounded-lg print:border-2 print:border-slate-900 print:text-[13px] print:space-y-4 print-card-half">
         {/* Topo / Cabeçalho */}
-        <div className="border-b-2 border-slate-900 pb-2 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="p-1.5 bg-blue-600 text-white rounded-lg">
-              <Pill className="w-4 h-4" />
+        <div className="border-b-2 border-slate-900 pb-2.5 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="p-1.5 bg-blue-600 text-white rounded-lg print:p-2">
+              <Pill className="w-4 h-4 print:w-5 print:h-5" />
             </div>
             <div>
-              <h2 className="text-sm font-black text-slate-900 uppercase">
+              <h2 className="text-sm font-black text-slate-900 uppercase print:text-base">
                 {activeClinic.name}
               </h2>
-              <p className="text-[10px] text-slate-600 font-medium">
+              <p className="text-[10px] text-slate-600 font-medium print:text-[11px]">
                 {t.rxMedicalTitle}
               </p>
             </div>
           </div>
-          <div className="text-right text-[10px] font-mono text-slate-600">
+          <div className="text-right text-[10px] font-mono text-slate-600 print:text-[11px]">
             {copyLabel && (
-              <span className="inline-block bg-slate-900 text-white font-sans text-[9px] px-2 py-0.5 rounded font-black tracking-wider uppercase mb-1">
+              <span className="inline-block bg-slate-900 text-white font-sans text-[9px] px-2 py-0.5 rounded font-black tracking-wider uppercase mb-1 print:text-[10px]">
                 {copyLabel}
               </span>
             )}
             <div>
-              {t.dateLabel}: <b>{currentDate}</b>
+              {t.dateLabel}: <b className="text-slate-900">{currentDate}</b>
             </div>
           </div>
         </div>
 
         {/* Identificação do Paciente */}
-        <div className="bg-slate-50 p-2.5 rounded-lg border border-slate-300 flex justify-between items-center text-xs">
+        <div className="bg-slate-50 p-2.5 rounded-lg border border-slate-300 flex justify-between items-center text-xs print:bg-slate-50/80 print:p-2.5">
           <div>
             <span className="text-slate-500 font-bold">{t.patientLabel}:</span>{' '}
-            <strong className="text-slate-900 text-sm">{patient.fullName}</strong>
+            <strong className="text-slate-900 text-sm print:text-base">{patient.fullName}</strong>
           </div>
           {patient.birthDate && (
-            <span className="text-[10px] text-slate-500 font-mono">
+            <span className="text-[10px] text-slate-500 font-mono print:text-[11px]">
               {t.birthLabel}: {new Date(patient.birthDate).toLocaleDateString(language === 'es' ? 'es-PY' : 'pt-BR')}
             </span>
           )}
         </div>
 
         {/* Medicamentos Prescritos */}
-        <div className="space-y-3 flex-1">
+        <div className="space-y-3 flex-1 my-auto">
           {medications.map((item, idx) => (
             <div
               key={item.id}
-              className="p-3 bg-slate-50 rounded-xl border border-slate-300 space-y-1 text-slate-800"
+              className="p-3 bg-slate-50 rounded-xl border border-slate-300 space-y-1 text-slate-800 print:p-3 print:rounded-lg"
             >
               <div className="flex justify-between items-center font-bold">
-                <span className="text-slate-900 text-xs">
+                <span className="text-slate-900 text-xs print:text-sm">
                   {idx + 1}. {item.commercialName}{' '}
-                  <span className="text-slate-500 text-[11px] font-normal">
+                  <span className="text-slate-500 text-[11px] print:text-xs font-normal">
                     ({item.activePrinciple})
                   </span>
                 </span>
-                <span className="text-[10px] text-slate-600 font-mono font-bold bg-white px-2 py-0.5 rounded border border-slate-200">
+                <span className="text-[10px] text-slate-600 font-mono font-bold bg-white px-2 py-0.5 rounded border border-slate-200 print:text-[11px]">
                   {t.quantityLabel}: {item.quantity}
                 </span>
               </div>
-              <div className="text-[10px] text-blue-900 font-bold uppercase tracking-wider">
+              <div className="text-[10px] text-blue-900 font-bold uppercase tracking-wider print:text-[11px]">
                 {item.route} &bull; {item.presentation}
               </div>
-              <p className="text-slate-700 text-xs font-medium leading-relaxed bg-white p-2 rounded border border-slate-200">
+              <p className="text-slate-700 text-xs print:text-[13px] font-medium leading-relaxed bg-white p-2 rounded border border-slate-200">
                 {item.dosage}
               </p>
             </div>
@@ -459,24 +461,24 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
 
         {/* Orientações Gerais */}
         {generalInstructions && (
-          <div className="bg-amber-50/70 p-2 rounded border border-amber-200 text-[10px] text-amber-900">
+          <div className="bg-amber-50/70 p-2.5 rounded border border-amber-200 text-[10px] print:text-[11px] text-amber-900">
             <b>{t.guidanceLabel}:</b> {generalInstructions}
           </div>
         )}
 
         {/* Rodapé / Assinatura e Carimbo Manual */}
-        <div className="pt-5 text-center border-t border-slate-200 mt-auto">
-          <div className="w-48 mx-auto border-b border-slate-400 mb-1" />
-          <div className="font-medium text-slate-500 text-[10px] uppercase tracking-wider">{t.signatureLabel}</div>
-          <div className="text-[8px] text-slate-400 font-mono">Assinatura &bull; Carimbo do Profissional</div>
+        <div className="pt-6 text-center border-t border-slate-200 mt-auto">
+          <div className="w-52 mx-auto border-b border-slate-400 mb-1" />
+          <div className="font-medium text-slate-500 text-[10px] print:text-[11px] uppercase tracking-wider">{t.signatureLabel}</div>
+          <div className="text-[8px] print:text-[9px] text-slate-400 font-mono">Assinatura &bull; Carimbo do Profissional</div>
         </div>
       </div>
     );
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 select-none">
-      <div className="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-6xl max-h-[96vh] flex flex-col shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 select-none print:p-0 print:m-0 print:bg-white print:static print:block">
+      <div className="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-6xl max-h-[96vh] flex flex-col shadow-2xl overflow-hidden print:bg-white print:border-none print:rounded-none print:shadow-none print:max-h-none print:max-w-none print:overflow-visible print:w-full">
         
         {/* ========================================================================= */}
         {/* BARRA SUPERIOR: SELEÇÃO DE TIPO (DIOPTRIA / FÁRMACO), FORMATO E IDIOMA */}
@@ -700,21 +702,21 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
         {/* ========================================================================= */}
         {/* ÁREA DE VISUALIZAÇÃO E IMPRESSÃO COM SUPORTE A FILTROS */}
         {/* ========================================================================= */}
-        <div className="flex-1 overflow-y-auto p-4 sm:p-8 bg-slate-200/70 flex justify-center">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-8 bg-slate-200/70 flex justify-center print:overflow-visible print:p-0 print:m-0 print:bg-white print:block">
           
-          {/* MODO 1: A4 PAISAGEM DUPLO (2 EM 1) */}
+          {/* MODO 1: A4 PAISAGEM DUPLO (2 EM 1 / MEIA PÁGINA) */}
           {layoutMode === 'a4_landscape_dual' && (
-            <div className="bg-white border-2 border-slate-900 p-6 rounded-xl shadow-lg max-w-5xl w-full grid grid-cols-1 md:grid-cols-2 gap-6 relative self-start print:shadow-none print:border-none print:p-2 print:m-0 print:max-w-none print:w-full print:grid-cols-2">
+            <div className="bg-white border-2 border-slate-900 p-6 rounded-xl shadow-lg max-w-5xl w-full grid grid-cols-1 md:grid-cols-2 gap-6 relative self-start print-page-landscape print:p-0 print:m-0 print:border-none print:shadow-none">
               
               {/* Linha Guia Central de Corte (Pontilhada) */}
-              <div className="hidden md:flex absolute left-1/2 top-4 bottom-4 w-px border-l-2 border-dashed border-slate-400 items-center justify-center -translate-x-1/2 pointer-events-none">
-                <span className="bg-slate-100 text-slate-500 border border-slate-300 p-1 rounded-full shadow-xs">
+              <div className="hidden md:flex absolute left-1/2 top-4 bottom-4 w-px border-l-2 border-dashed border-slate-400 items-center justify-center -translate-x-1/2 pointer-events-none print:flex print:top-0 print:bottom-0 print:border-slate-300">
+                <span className="bg-slate-100 text-slate-500 border border-slate-300 p-1 rounded-full shadow-xs print:hidden">
                   <Scissors className="w-3.5 h-3.5" />
                 </span>
               </div>
 
-              {/* LADO ESQUERDO DA FOLHA */}
-              <div className="h-full">
+              {/* LADO ESQUERDO DA FOLHA (MEIA PÁGINA 1) */}
+              <div className="h-full flex flex-col">
                 {dualCombination === 'dioptria_and_farmaco' && renderOpticalBlock(t.patientCopy)}
                 {dualCombination === 'dioptria_dual' && renderOpticalBlock(`${t.patientCopy} (1ª Via)`)}
                 {dualCombination === 'dioptria_single' && renderOpticalBlock(t.patientCopy)}
@@ -722,8 +724,8 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
                 {dualCombination === 'farmaco_single' && renderMedicalBlock(t.patientCopy)}
               </div>
 
-              {/* LADO DIREITO DA FOLHA */}
-              <div className="h-full">
+              {/* LADO DIREITO DA FOLHA (MEIA PÁGINA 2) */}
+              <div className="h-full flex flex-col">
                 {dualCombination === 'dioptria_and_farmaco' && renderMedicalBlock(t.patientCopy)}
                 {dualCombination === 'dioptria_dual' && renderOpticalBlock(`${t.patientCopy} (2ª Via)`)}
                 {dualCombination === 'farmaco_dual' && renderMedicalBlock(t.pharmacyCopy)}
