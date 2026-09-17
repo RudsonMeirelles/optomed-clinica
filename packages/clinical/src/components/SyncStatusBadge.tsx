@@ -1,67 +1,80 @@
-import React, { useState, useEffect } from 'react';
-import { Wifi, WifiOff, RefreshCw, CheckCircle2 } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Wifi, WifiOff, RefreshCw, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 import { offlineDb } from '../services/offlineDb';
 
 export const SyncStatusBadge: React.FC = () => {
-  const [isOnline, setIsOnline] = useState<boolean>(navigator.onLine);
+  const [syncStatus, setSyncStatus] = useState<string>(() => offlineDb.getSyncStatus());
   const [pendingCount, setPendingCount] = useState<number>(0);
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
+  const [isOnline, setIsOnline] = useState<boolean>(navigator.onLine);
 
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
-
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
 
-    const updatePending = () => {
-      setPendingCount(offlineDb.getPendingSyncCount());
+    const onSyncChange = (status: string, pending: number) => {
+      setSyncStatus(status);
+      setPendingCount(pending);
+      if (status !== 'syncing') setIsSyncing(false);
     };
-
-    updatePending();
-    const interval = setInterval(updatePending, 5000);
+    offlineDb.addSyncListener(onSyncChange);
 
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
-      clearInterval(interval);
+      offlineDb.removeSyncListener(onSyncChange);
     };
   }, []);
 
-  const handleManualSync = () => {
+  const handleManualSync = useCallback(async () => {
+    if (isSyncing) return;
     setIsSyncing(true);
-    setTimeout(() => {
+    try {
+      await offlineDb.manualSync();
+    } finally {
       setIsSyncing(false);
-      setPendingCount(0);
-    }, 1200);
-  };
+    }
+  }, [isSyncing]);
+
+  const badgeStyle = (() => {
+    if (!isOnline) return 'bg-amber-50 text-amber-700 border border-amber-200 animate-pulse';
+    if (syncStatus === 'synced') return 'bg-emerald-50 text-emerald-700 border border-emerald-200';
+    if (syncStatus === 'syncing') return 'bg-blue-50 text-blue-700 border border-blue-200';
+    if (syncStatus === 'error') return 'bg-red-50 text-red-700 border border-red-200';
+    return 'bg-amber-50 text-amber-700 border border-amber-200';
+  })();
+
+  const label = (() => {
+    if (!isOnline) return 'Offline';
+    if (syncStatus === 'synced') return 'Sincronizado';
+    if (syncStatus === 'syncing') return 'Sincronizando…';
+    if (syncStatus === 'error') return 'Erro de sync';
+    return 'Aguardando sync';
+  })();
+
+  const Icon = (() => {
+    if (!isOnline) return WifiOff;
+    if (syncStatus === 'synced') return CheckCircle2;
+    if (syncStatus === 'syncing') return Loader2;
+    if (syncStatus === 'error') return AlertCircle;
+    return Wifi;
+  })();
 
   return (
     <div className="flex items-center gap-2 text-xs">
-      <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full font-medium ${
-        isOnline 
-          ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' 
-          : 'bg-amber-50 text-amber-700 border border-amber-200 animate-pulse'
-      }`}>
-        {isOnline ? (
-          <>
-            <Wifi className="w-3.5 h-3.5 text-emerald-600" />
-            <span>Sincronizado</span>
-          </>
-        ) : (
-          <>
-            <WifiOff className="w-3.5 h-3.5 text-amber-600" />
-            <span>Modo Offline ({pendingCount} pendente)</span>
-          </>
-        )}
+      <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full font-medium ${badgeStyle}`}>
+        <Icon className={`w-3.5 h-3.5 ${syncStatus === 'syncing' ? 'animate-spin' : ''}`} />
+        <span>{label}</span>
       </div>
 
-      {pendingCount > 0 && (
+      {isOnline && (
         <button
           onClick={handleManualSync}
           disabled={isSyncing}
-          className="p-1 hover:bg-slate-100 rounded text-slate-500 hover:text-slate-800 transition-colors"
-          title="Sincronizar agora"
+          className="p-1 hover:bg-slate-100 rounded text-slate-500 hover:text-slate-800 transition-colors disabled:opacity-40"
+          title="Sincronizar agora com o servidor"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin text-blue-600' : ''}`} />
         </button>

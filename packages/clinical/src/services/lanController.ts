@@ -27,6 +27,26 @@ class LanControllerService {
       this.socket.onopen = () => {
         this.isConnected = true;
       };
+      this.socket.onmessage = (event) => {
+        try {
+          const msg = JSON.parse(event.data);
+          // Processa atualizações de dados enviadas pelo servidor via broadcast
+          if (msg.type === 'server_data_updated' && msg.clinicId && msg.entity && Array.isArray(msg.data)) {
+            const key = `optotipo_${msg.clinicId}_${msg.entity}_v2`;
+            localStorage.setItem(key, JSON.stringify(msg.data));
+            // Dispara evento DOM para componentes React re-renderizarem
+            const eventMap: Record<string, string> = {
+              patients: 'optomed_patient_updated',
+              encounters: 'optomed_encounter_updated',
+              appointments: 'optomed_appointment_updated',
+            };
+            const eventName = eventMap[msg.entity];
+            if (eventName && typeof window !== 'undefined') {
+              window.dispatchEvent(new CustomEvent(eventName, { detail: { clinicId: msg.clinicId } }));
+            }
+          }
+        } catch {}
+      };
       this.socket.onclose = () => {
         this.isConnected = false;
         setTimeout(() => this.connect(targetUrl), 4000);

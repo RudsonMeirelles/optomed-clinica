@@ -20,6 +20,7 @@ import {
 } from '@optotipo/shared';
 import { RECOVERED_RECORDS } from '../data/recoveredClinicalData';
 import { SEED_APPOINTMENTS_12_09_2026, SEED_PATIENTS_12_09_2026, SCHEDULE_DATE_12_09_2026 } from '../data/schedule12092026';
+import { remoteSync } from './remoteSync';
 export const DEFAULT_CLINICS: ClinicConfig[] = [
   {
     id: 'ivs',
@@ -123,10 +124,37 @@ class OfflineDatabaseService {
         this.cleanupVisionContamination();
         localStorage.setItem(scheduleFlagKey, 'true');
       }
+
+      // Sincronização inicial com o servidor — busca dados remotos e mescla
+      this.initRemoteSync();
     } catch {
       this.activeClinicId = 'ivs';
     }
   }
+
+  private initRemoteSync() {
+    // Executa sync assíncrono logo após inicialização (não bloqueia UI)
+    setTimeout(() => {
+      const clinicId = this.activeClinicId;
+      remoteSync.fullSync(
+        clinicId,
+        (entity) => {
+          if (entity === 'patients') return this.getPatients(clinicId);
+          if (entity === 'encounters') return this.getEncounters(clinicId);
+          if (entity === 'appointments') return this.getAppointments(clinicId);
+          if (entity === 'prescriptions') return this.getPrescriptions(clinicId);
+          return [];
+        },
+        (entity, data) => {
+          if (entity === 'patients') { localStorage.setItem(this.getKey('patients', clinicId), JSON.stringify(data)); this.broadcastSync('optomed_patient_updated', { clinicId }); if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('optomed_patient_updated', { detail: { clinicId } })); }
+          if (entity === 'encounters') { localStorage.setItem(this.getKey('encounters', clinicId), JSON.stringify(data)); this.broadcastSync('optomed_encounter_updated', { clinicId }); if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('optomed_encounter_updated', { detail: { clinicId } })); }
+          if (entity === 'appointments') { localStorage.setItem(this.getKey('appointments', clinicId), JSON.stringify(data)); this.broadcastSync('optomed_appointment_updated', { clinicId }); if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('optomed_appointment_updated', { detail: { clinicId } })); }
+          if (entity === 'prescriptions') { localStorage.setItem(this.getKey('prescriptions', clinicId), JSON.stringify(data)); }
+        }
+      );
+    }, 800);
+  }
+
 
   private broadcastSync(type: string, detail: any) {
     if (this.syncChannel) {
@@ -237,6 +265,7 @@ class OfflineDatabaseService {
       window.dispatchEvent(new CustomEvent('optomed_patient_updated', { detail: { clinicId, patients } }));
     }
     this.broadcastSync('optomed_patient_updated', { clinicId, patients });
+    remoteSync.push(clinicId, 'patients', patients);
   }
 
   public savePatient(patient: Patient, clinicId = this.activeClinicId): void {
@@ -305,6 +334,7 @@ class OfflineDatabaseService {
       window.dispatchEvent(new CustomEvent('optomed_encounter_updated', { detail: { clinicId, encounters } }));
     }
     this.broadcastSync('optomed_encounter_updated', { clinicId, encounters });
+    remoteSync.push(clinicId, 'encounters', encounters);
   }
 
   public saveEncounter(encounter: ClinicalEncounter, clinicId = this.activeClinicId): void {
@@ -369,6 +399,7 @@ class OfflineDatabaseService {
     list.unshift(rx);
     localStorage.setItem(this.getKey('prescriptions', clinicId), JSON.stringify(list));
     this.logAudit('CREATE', 'PRESCRIPTION', rx.id, `Receita óptica gerada para ${rx.patientName}`, clinicId);
+    remoteSync.push(clinicId, 'prescriptions', list);
   }
 
   // --- AGENDAMENTOS (AGENDA) ---
@@ -392,6 +423,7 @@ class OfflineDatabaseService {
       window.dispatchEvent(new CustomEvent('optomed_appointment_updated', { detail: { clinicId, appointments } }));
     }
     this.broadcastSync('optomed_appointment_updated', { clinicId, appointments });
+    remoteSync.push(clinicId, 'appointments', appointments);
   }
 
   public saveAppointment(appointment: Appointment, clinicId = this.activeClinicId): void {
@@ -458,8 +490,39 @@ class OfflineDatabaseService {
   }
 
   public getPendingSyncCount(): number {
-    const encounters = this.getEncounters();
-    return encounters.filter(e => e.syncStatus === 'pending_sync').length;
+    return remoteSync.getPending();
+  }
+
+  public getSyncStatus() {
+    return remoteSync.getStatus();
+  }
+
+  public addSyncListener(fn: (status: string, pending: number) => void) {
+    remoteSync.addListener(fn as any);
+  }
+
+  public removeSyncListener(fn: (status: string, pending: number) => void) {
+    remoteSync.removeListener(fn as any);
+  }
+
+  public async manualSync(): Promise<void> {
+    const clinicId = this.activeClinicId;
+    await remoteSync.fullSync(
+      clinicId,
+      (entity) => {
+        if (entity === 'patients') return this.getPatients(clinicId);
+        if (entity === 'encounters') return this.getEncounters(clinicId);
+        if (entity === 'appointments') return this.getAppointments(clinicId);
+        if (entity === 'prescriptions') return this.getPrescriptions(clinicId);
+        return [];
+      },
+      (entity, data) => {
+        if (entity === 'patients') { localStorage.setItem(this.getKey('patients', clinicId), JSON.stringify(data)); if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('optomed_patient_updated', { detail: { clinicId } })); }
+        if (entity === 'encounters') { localStorage.setItem(this.getKey('encounters', clinicId), JSON.stringify(data)); if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('optomed_encounter_updated', { detail: { clinicId } })); }
+        if (entity === 'appointments') { localStorage.setItem(this.getKey('appointments', clinicId), JSON.stringify(data)); if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('optomed_appointment_updated', { detail: { clinicId } })); }
+        if (entity === 'prescriptions') { localStorage.setItem(this.getKey('prescriptions', clinicId), JSON.stringify(data)); }
+      }
+    );
   }
 
   // Dados iniciais específicos por consultório (IVS inicia 100% limpo, apenas dados reais cadastrados pelo usuário)
