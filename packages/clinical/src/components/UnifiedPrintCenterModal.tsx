@@ -34,6 +34,7 @@ interface UnifiedPrintCenterModalProps {
   prescription: Prescription | null;
   patient: Patient | null;
   initialDrugs?: ClinicalProtocolDrug[];
+  therapeuticPlan?: string;
   onClose: () => void;
 }
 
@@ -43,6 +44,7 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
   prescription,
   patient,
   initialDrugs = [],
+  therapeuticPlan,
   onClose
 }) => {
   // Idioma (Padrão: clínica com defaultLanguage es-PY ou paciente PY -> 'es', senão -> 'pt')
@@ -200,6 +202,8 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
       pdLabel: 'Distância Pupilar (DP)',
       treatmentsLabel: 'Tratamentos',
       observationsLabel: 'Observações',
+      opticalNotesLabel: 'INFORMAÇÕES ADICIONAIS & OBSERVAÇÕES ÓPTICAS',
+      therapeuticPlanLabel: 'PLANO TERAPÊUTICO & CONDUTA MÉDICA',
       returnLabel: 'INDICAÇÃO DE RETORNO',
       signatureLabel: 'Assinatura & Carimbo do Profissional',
       patientCopy: 'Via do Paciente',
@@ -231,6 +235,8 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
       pdLabel: 'Distancia Pupilar (DP)',
       treatmentsLabel: 'Tratamientos',
       observationsLabel: 'Observaciones',
+      opticalNotesLabel: 'INFORMACIONES ADICIONALES & OBSERVACIONES ÓPTICAS',
+      therapeuticPlanLabel: 'PLAN TERAPÉUTICO & CONDUCTA MÉDICA',
       returnLabel: 'INDICACIÓN DE CONTROL / RETORNO',
       signatureLabel: 'Firma y Sello Profesional',
       patientCopy: 'Vía del Paciente',
@@ -355,18 +361,20 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
           </div>
         </div>
 
-        {/* Tratamentos & Observações / Retorno */}
+        {/* Tratamentos & Observações Ópticas / Retorno */}
         <div className="text-[11px] print:text-xs space-y-1">
           {prescription.treatments && prescription.treatments.length > 0 && (
             <div>
-              <span className="text-slate-500 font-bold">Tratamentos:</span>{' '}
+              <span className="text-slate-500 font-bold">{t.treatmentsLabel}:</span>{' '}
               <span className="text-slate-900 font-semibold">{prescription.treatments.join(' • ')}</span>
             </div>
           )}
-          {prescription.observations && (
+          {(prescription.additionalOpticalInfo || prescription.observations) && (
             <div>
-              <span className="text-slate-500 font-bold">{t.treatmentsLabel}:</span>{' '}
-              <span className="text-slate-800 font-medium">{prescription.observations}</span>
+              <span className="text-slate-500 font-bold">{t.opticalNotesLabel}:</span>{' '}
+              <span className="text-slate-800 font-medium">
+                {prescription.additionalOpticalInfo || prescription.observations}
+              </span>
             </div>
           )}
           <div>
@@ -458,6 +466,14 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
             </div>
           ))}
         </div>
+
+        {/* 🌟 Plano Terapêutico & Conduta Médica (Exclusivo da Receita de Fármaco) */}
+        {therapeuticPlan && therapeuticPlan.trim() && (
+          <div className="bg-blue-50/80 p-2.5 rounded-lg border border-blue-200 text-[10px] print:text-[11px] text-blue-950 space-y-0.5">
+            <b className="uppercase tracking-wide text-blue-900 block">{t.therapeuticPlanLabel}:</b>
+            <div className="whitespace-pre-line font-medium leading-relaxed">{therapeuticPlan.trim()}</div>
+          </div>
+        )}
 
         {/* Orientações Gerais */}
         {generalInstructions && (

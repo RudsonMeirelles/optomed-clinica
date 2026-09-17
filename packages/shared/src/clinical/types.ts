@@ -315,6 +315,7 @@ export interface SubjectiveRefraction {
   material?: 'resina' | 'policarbonato' | 'trivex' | 'alto_indice' | 'cristal' | string;
   treatments?: string[]; // Ex: ['Antirreflexo Digital', 'Filtro Luz Azul (BlueCut)', 'Fotossensível (Transitions)', 'Proteção UV400']
   specialLenses?: string; // Ex: Prismas especiais, Lentes Esclerais, RGP Ceratocone, Tórica, Filtro Terapêutico
+  additionalOpticalInfo?: string; // Informações adicionais do receituário óptico (exclusivo para dioptria/armação/óculos)
   notes?: string;
 }
 
@@ -370,6 +371,7 @@ export interface Prescription {
   lensType?: 'monofocal' | 'bifocal' | 'multifocal' | 'ocupacional';
   material?: 'resina' | 'policarbonato' | 'trivex' | 'alto_indice' | 'cristal';
   treatments?: string[]; // Anti-reflexo, Filtro Azul, Fotossensível
+  additionalOpticalInfo?: string; // Informações adicionais de dioptria (armação, lentes, etc.)
   observations?: string;
   returnInstructions?: string; // Indicação de retorno aberta definida pelo examinador
   examinerName?: string;

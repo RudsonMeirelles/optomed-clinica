@@ -48,7 +48,7 @@ import { calendarIntegrationService } from '../services/licensingService';
 import { lanController } from '../services/lanController';
 
 interface SchedulePageProps {
-  onStartEncounter: (patient: Patient) => void;
+  onStartEncounter: (patient: Patient, encounter?: ClinicalEncounter) => void;
   currentUser: UserAccount;
 }
 
@@ -420,7 +420,11 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
       };
       offlineDb.savePatient(p);
     }
-    onStartEncounter(p);
+    
+    // Busca o encounter correspondente existente para não criar prontuário em branco
+    const existingEnc = encounters.find(e => e.patientId === p!.id && getLocalDateStr(e.date) === (apt.date || selectedDate)) ||
+                        encounters.find(e => e.patientId === p!.id);
+    onStartEncounter(p, existingEnc);
   };
 
   const openCompleteModal = (apt: Appointment, e?: React.MouseEvent) => {
@@ -2061,7 +2065,10 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                                 };
                                 offlineDb.savePatient(p);
                               }
-                              onStartEncounter(p);
+                              // Localiza o encounter existente com a refração do paciente
+                              const existingEnc = encounters.find(e => e.patientId === p!.id && getLocalDateStr(e.date) === (apt.date || selectedDate)) ||
+                                                  encounters.find(e => e.patientId === p!.id);
+                              onStartEncounter(p, existingEnc);
                             }}
                             className="px-3 py-2 bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all cursor-pointer"
                             title="Visualizar refração e imprimir receituário do paciente"

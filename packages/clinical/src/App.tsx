@@ -573,7 +573,7 @@ export function App() {
 
             {currentPage === 'schedule' && (
               <SchedulePage
-                onStartEncounter={(patient) => handleStartEncounter(patient)}
+                onStartEncounter={(patient, encounter) => handleStartEncounter(patient, encounter)}
                 currentUser={currentUser}
               />
             )}

@@ -91,9 +91,19 @@ export function generateUUID(): string {
 
 class OfflineDatabaseService {
   private activeClinicId: string = 'ivs';
+  private syncChannel: BroadcastChannel | null = null;
 
   constructor() {
     try {
+      if (typeof BroadcastChannel !== 'undefined') {
+        this.syncChannel = new BroadcastChannel('optomed_clinical_offline_db_sync');
+        this.syncChannel.onmessage = (event) => {
+          if (event.data && event.data.type && typeof window !== 'undefined') {
+            window.dispatchEvent(new CustomEvent(event.data.type, { detail: event.data.detail }));
+          }
+        };
+      }
+
       const saved = localStorage.getItem(DB_ACTIVE_CLINIC_ID_KEY);
       if (saved) {
         this.activeClinicId = saved;
@@ -115,6 +125,14 @@ class OfflineDatabaseService {
       }
     } catch {
       this.activeClinicId = 'ivs';
+    }
+  }
+
+  private broadcastSync(type: string, detail: any) {
+    if (this.syncChannel) {
+      try {
+        this.syncChannel.postMessage({ type, detail });
+      } catch {}
     }
   }
 
@@ -218,6 +236,7 @@ class OfflineDatabaseService {
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new CustomEvent('optomed_patient_updated', { detail: { clinicId, patients } }));
     }
+    this.broadcastSync('optomed_patient_updated', { clinicId, patients });
   }
 
   public savePatient(patient: Patient, clinicId = this.activeClinicId): void {
@@ -285,6 +304,7 @@ class OfflineDatabaseService {
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new CustomEvent('optomed_encounter_updated', { detail: { clinicId, encounters } }));
     }
+    this.broadcastSync('optomed_encounter_updated', { clinicId, encounters });
   }
 
   public saveEncounter(encounter: ClinicalEncounter, clinicId = this.activeClinicId): void {
@@ -330,6 +350,7 @@ class OfflineDatabaseService {
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new CustomEvent('optomed_encounter_updated', { detail: { clinicId, encounter } }));
     }
+    this.broadcastSync('optomed_encounter_updated', { clinicId, encounter });
   }
 
   // --- RECEITAS ÓPTICAS ---
@@ -370,6 +391,7 @@ class OfflineDatabaseService {
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new CustomEvent('optomed_appointment_updated', { detail: { clinicId, appointments } }));
     }
+    this.broadcastSync('optomed_appointment_updated', { clinicId, appointments });
   }
 
   public saveAppointment(appointment: Appointment, clinicId = this.activeClinicId): void {

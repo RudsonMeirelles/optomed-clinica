@@ -56,11 +56,26 @@
     color: #000000 !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
+    overflow: visible !important;
   }
 
-  /* Ocultar elementos desnecessários na impressão */
+  /* Isolamento estrito de impressão: oculta tudo na tela por padrão */
+  body * {
+    visibility: hidden !important;
+  }
+
+  /* Ocultar elementos desnecessários */
   .no-print {
     display: none !important;
+    visibility: hidden !important;
+  }
+
+  /* Torna visível estritamente a folha de impressão do receituário e seus filhos */
+  #unified-print-sheet,
+  #unified-print-sheet *,
+  .print-page-landscape,
+  .print-page-landscape * {
+    visibility: visible !important;
   }
 
   /* Seção de impressão A4 paisagem preenchendo a folha inteira sem moldura */
@@ -69,9 +84,9 @@
     position: fixed !important;
     left: 0 !important;
     top: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    max-width: 100% !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: 100vw !important;
     margin: 0 !important;
     padding: 2mm 5mm !important;
     border: none !important;
@@ -82,6 +97,7 @@
     grid-template-columns: 1fr 1fr !important;
     column-gap: 8mm !important;
     box-sizing: border-box !important;
+    z-index: 99999 !important;
   }
 
   .print-card-half {

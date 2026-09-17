@@ -401,11 +401,16 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
   };
 
 
-  // Prepara Objeto de Prescrição Óptica
+  // Prepara Objeto de Prescrição Óptica (Dioptria) - 100% segregada da conduta médica/farmacológica
   const prepareOpticalPrescription = (): Prescription => {
     const ref = currentEncounter.subjectiveRefraction;
     const specialLensesText = ref?.specialLenses?.trim() ? ` [Lentes Especiais: ${ref.specialLenses.trim()}]` : '';
-    const observationsText = `${currentEncounter.conduct || 'Adaptação progressiva.'}${specialLensesText}`;
+    const opticalInfoText = ref?.additionalOpticalInfo?.trim() || '';
+    
+    // As observações da receita óptica contêm exclusivamente informações sobre armação, lentes e adaptação visual
+    const opticalNotes = opticalInfoText
+      ? `${opticalInfoText}${specialLensesText}`
+      : (specialLensesText ? specialLensesText.trim() : 'Adaptação progressiva.');
 
     const newRx: Prescription = {
       id: generateUUID(),
@@ -432,7 +437,8 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
       material: (ref?.material as any) || 'resina',
       treatments: ref?.treatments && ref.treatments.length > 0 ? ref.treatments : ['Antirreflexo Digital', 'Filtro Luz Azul (BlueCut)'],
       returnInstructions: currentEncounter.returnInstructions || (patient.nationality === 'PY' ? 'Control en 1 año para evaluación visual de rutina.' : 'Retorno em 1 ano para controle visual de rotina.'),
-      observations: observationsText
+      additionalOpticalInfo: opticalInfoText || undefined,
+      observations: opticalNotes
     };
     offlineDb.savePrescription(newRx);
     setActivePrescription(newRx);
@@ -1767,10 +1773,50 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
 
               {/* Etapa 5: Refração */}
               {activeTab === 'refraction' && (
-                <div className="space-y-3">
+                <div className="space-y-4">
                   <div className="p-3.5 bg-blue-50 border border-blue-200 rounded-xl text-blue-900 leading-relaxed">
-                    <p className="font-bold text-xs mb-1">Dica de Refração:</p>
-                    <p className="text-xs">Utilize o painel de Dials ao lado para registrar o grau subjetivo do paciente. Digite diretamente com o sinal (+ ou -) para máxima rapidez.</p>
+                    <p className="font-bold text-xs mb-1">Painel de Refração & Dials:</p>
+                    <p className="text-xs">
+                      Utilize o painel de Dials ao lado para registrar o grau subjetivo do paciente. Digite diretamente com o sinal (+ ou -) para máxima agilidade.
+                    </p>
+                  </div>
+
+                  {/* Informações Adicionais da Dioptria na Trilha */}
+                  <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+                    <div className="flex items-center justify-between">
+                      <label className="text-xs font-black text-slate-800 uppercase tracking-wide flex items-center gap-1.5">
+                        <Glasses className="w-4 h-4 text-blue-600" />
+                        INFORMAÇÕES ADICIONAIS DO RECEITUÁRIO ÓPTICO (DIOPTRIA):
+                      </label>
+                      <span className="text-[10px] text-slate-500 font-medium">
+                        Exclusivo do receituário de óculos (não exposto na conduta médica)
+                      </span>
+                    </div>
+
+                    <textarea
+                      rows={3}
+                      disabled={isReadOnly}
+                      readOnly={isReadOnly}
+                      value={currentEncounter.subjectiveRefraction?.additionalOpticalInfo || ''}
+                      onChange={(e) => {
+                        if (isReadOnly) return;
+                        const curRef = currentEncounter.subjectiveRefraction || {
+                          id: generateUUID(),
+                          encounterId: currentEncounter.id,
+                          od: {},
+                          oe: {}
+                        };
+                        setCurrentEncounter({
+                          ...currentEncounter,
+                          subjectiveRefraction: {
+                            ...curRef,
+                            additionalOpticalInfo: e.target.value
+                          }
+                        });
+                      }}
+                      placeholder="Ex: Adaptação progressiva; armação com ponte anatômica recomendada; uso preferencial em tela de computador; fotossensível para ambientes externos..."
+                      className={`w-full bg-white border border-slate-300 rounded-xl p-2.5 text-xs font-medium text-slate-900 focus:outline-none focus:border-blue-500 shadow-xs ${isReadOnly ? 'bg-slate-100 cursor-not-allowed' : ''}`}
+                    />
                   </div>
                 </div>
               )}
@@ -2023,6 +2069,7 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
         prescription={activePrescription}
         patient={patient}
         initialDrugs={pendingPrescriptionDrugs}
+        therapeuticPlan={currentEncounter.conduct}
         onClose={() => setIsUnifiedPrintModalOpen(false)}
       />
 
