@@ -52,21 +52,21 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
     return patient?.nationality === 'PY' ? 'es' : 'pt';
   });
 
-  // Filtro de Conteúdo Selecionado: Dioptria (Óculos), Fármaco (Medicamentos) ou Ambos
+  // Filtro de Conteúdo Selecionado: Padrão Dioptria (Receituário Óptico de Óculos)
   const [filterType, setFilterType] = useState<PrescriptionFilterType>(() => {
-    if (initialMode === 'dioptria') return 'dioptria_only';
     if (initialMode === 'farmaco') return 'farmaco_only';
-    return 'all';
+    if (initialMode === 'dual') return 'all';
+    return 'dioptria_only';
   });
 
-  // Layout de Impressão (Padrão: A4 Paisagem 2 em 1 Meia Folha)
+  // Layout de Impressão (Padrão: A4 Paisagem Meia Folha)
   const [layoutMode, setLayoutMode] = useState<PrintLayoutMode>('a4_landscape_dual');
 
-  // Combinação da Folha Dupla (Padrão: 1 ÚNICA VIA para economizar papel, ou ambas se selecionado)
+  // Combinação da Folha Dupla (Padrão: 1 ÚNICA VIA DO CLIENTE / PACIENTE em meia página para economia de papel)
   const [dualCombination, setDualCombination] = useState<DualSheetCombination>(() => {
-    if (initialMode === 'dioptria') return 'dioptria_single';
     if (initialMode === 'farmaco') return 'farmaco_single';
-    return 'dioptria_and_farmaco';
+    if (initialMode === 'dual') return 'dioptria_and_farmaco';
+    return 'dioptria_single';
   });
 
   // Medicamentos Farmacológicos
@@ -89,9 +89,13 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
     } else if (initialMode === 'farmaco') {
       setFilterType('farmaco_only');
       setDualCombination('farmaco_single');
-    } else {
+    } else if (initialMode === 'dual') {
       setFilterType('all');
       setDualCombination('dioptria_and_farmaco');
+    } else {
+      // Padrão do sistema: 1 Via única de Dioptria (Cliente) em Meia Página A4 Paisagem
+      setFilterType('dioptria_only');
+      setDualCombination('dioptria_single');
     }
   }, [initialMode, isOpen]);
 
@@ -144,9 +148,9 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
   const handleSelectFilter = (type: PrescriptionFilterType) => {
     setFilterType(type);
     if (type === 'dioptria_only') {
-      setDualCombination('dioptria_dual');
+      setDualCombination('dioptria_single');
     } else if (type === 'farmaco_only') {
-      setDualCombination('farmaco_dual');
+      setDualCombination('farmaco_single');
     } else {
       setDualCombination('dioptria_and_farmaco');
     }
@@ -658,7 +662,7 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
                   </button>
                 )}
 
-                {filterType === 'dioptria_only' && (
+                {(filterType === 'all' || filterType === 'dioptria_only') && (
                   <button
                     onClick={() => setDualCombination('dioptria_single')}
                     className={`px-3 py-1 rounded-lg font-bold border transition-all cursor-pointer ${
@@ -666,8 +670,9 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
                         ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
                         : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'
                     }`}
+                    title="Via única do cliente/paciente (Meia folha para economia de papel)"
                   >
-                    👓 1 Via Única de Dioptria (Meia Folha)
+                    👓 1 Via Única (Cliente) Meia Folha
                   </button>
                 )}
 
@@ -723,7 +728,7 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
                 {dualCombination === 'dioptria_dual' && renderOpticalBlock(`${t.patientCopy} (2ª Via)`)}
                 {dualCombination === 'farmaco_dual' && renderMedicalBlock(t.pharmacyCopy)}
                 {(dualCombination === 'dioptria_single' || dualCombination === 'farmaco_single') && (
-                  <div className="h-full border-2 border-dashed border-slate-300 rounded-xl flex items-center justify-center text-slate-400 text-xs italic p-6 text-center">
+                  <div className="h-full border-2 border-dashed border-slate-300 rounded-xl flex items-center justify-center text-slate-400 text-xs italic p-6 text-center print:border-none print:opacity-0 print:invisible">
                     (Espaço em branco para corte e economia de papel)
                   </div>
                 )}

@@ -2040,6 +2040,35 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                               Na Espera
                             </span>
                           )}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              let p = patients.find(pat => pat.id === apt.patientId);
+                              if (!p) {
+                                p = {
+                                  id: apt.patientId || generateUUID(),
+                                  fullName: apt.patientName,
+                                  birthDate: '',
+                                  nationality: apt.patientNationality || 'BR',
+                                  documentType: apt.patientNationality === 'PY' ? 'CI_PY' : 'CPF',
+                                  documentNumber: apt.patientDocument,
+                                  phoneCountryCode: apt.patientNationality === 'PY' ? '+595' : '+55',
+                                  phone: apt.patientPhone,
+                                  notes: apt.notes,
+                                  lgpdConsent: true,
+                                  createdAt: new Date().toISOString(),
+                                  updatedAt: new Date().toISOString()
+                                };
+                                offlineDb.savePatient(p);
+                              }
+                              onStartEncounter(p);
+                            }}
+                            className="px-3 py-2 bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all cursor-pointer"
+                            title="Visualizar refração e imprimir receituário do paciente"
+                          >
+                            <Glasses className="w-3.5 h-3.5 text-blue-600" />
+                            <span>Ver Refração / Receita</span>
+                          </button>
                         </>
                       )}
 

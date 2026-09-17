@@ -70,6 +70,8 @@ interface ExaminationWorkspaceProps {
   encounter?: ClinicalEncounter;
   onBack: () => void;
   onPatientUpdated?: (patient: Patient) => void;
+  isReadOnly?: boolean;
+  userRole?: string;
 }
 
 interface TrailStep {
@@ -92,7 +94,9 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
   patient: initialPatient,
   encounter: initialEncounter,
   onBack,
-  onPatientUpdated
+  onPatientUpdated,
+  isReadOnly = false,
+  userRole
 }) => {
   const [patient, setPatient] = useState<Patient>(initialPatient);
   const [currentStep, setCurrentStep] = useState<number>(1);
@@ -242,9 +246,11 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
     };
   });
 
-  // Salva no banco de dados offline toda vez que o atendimento for alterado
+  // Salva no banco de dados offline toda vez que o atendimento for alterado (apenas se não estiver em modo somente leitura da recepção)
   const isFirstMount = useRef(true);
   useEffect(() => {
+    if (isReadOnly) return;
+
     if (isFirstMount.current) {
       isFirstMount.current = false;
       // Salva o atendimento inicial garantindo persistência imediata
@@ -257,7 +263,7 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
     }, 400);
 
     return () => clearTimeout(timer);
-  }, [currentEncounter]);
+  }, [currentEncounter, isReadOnly]);
 
   // Formatação segura de valores numéricos de dioptria
   const formatDiopterStr = (val: number | undefined): string => {
@@ -580,21 +586,22 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
             )}
           </button>
 
-          {/* Botão: Traçar Plano Terapêutico */}
-          <button
-            onClick={() => setIsTherapeuticPlanModalOpen(true)}
-            className="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 font-bold text-xs rounded-xl flex items-center gap-1.5 shadow-xs active:scale-95 transition-all cursor-pointer"
-            title="Traçar plano terapêutico autônomo baseado no quadro clínico"
-          >
-            <Compass className="w-4 h-4 text-blue-600" />
-            <span>Plano Terapêutico</span>
-          </button>
-
+          {/* Botão: Traçar Plano Terapêutico (Apenas examinador) */}
+          {!isReadOnly && (
+            <button
+              onClick={() => setIsTherapeuticPlanModalOpen(true)}
+              className="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 font-bold text-xs rounded-xl flex items-center gap-1.5 shadow-xs active:scale-95 transition-all cursor-pointer"
+              title="Traçar plano terapêutico autônomo baseado no quadro clínico"
+            >
+              <Compass className="w-4 h-4 text-blue-600" />
+              <span>Plano Terapêutico</span>
+            </button>
+          )}
 
           {/* Relatório Clínico */}
           <button
             onClick={() => {
-              handleSaveEncounter('in_progress');
+              if (!isReadOnly) handleSaveEncounter('in_progress');
               setIsReportModalOpen(true);
             }}
             className="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl flex items-center gap-1 transition-colors cursor-pointer"
@@ -603,16 +610,38 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
             <span className="hidden sm:inline">Relatório</span>
           </button>
 
-          {/* Concluir Atendimento */}
-          <button
-            onClick={() => handleSaveEncounter('completed')}
-            className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl flex items-center gap-1.5 shadow-md shadow-emerald-600/20 active:scale-95 transition-transform cursor-pointer"
-          >
-            <CheckCircle2 className="w-4 h-4" /> 
-            <span>Concluir</span>
-          </button>
+          {/* Concluir Atendimento (Apenas examinador) */}
+          {!isReadOnly && (
+            <button
+              onClick={() => handleSaveEncounter('completed')}
+              className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl flex items-center gap-1.5 shadow-md shadow-emerald-600/20 active:scale-95 transition-transform cursor-pointer"
+            >
+              <CheckCircle2 className="w-4 h-4" /> 
+              <span>Concluir</span>
+            </button>
+          )}
         </div>
       </header>
+
+      {/* Banner Informativo para Perfil Recepção */}
+      {isReadOnly && (
+        <div className="bg-amber-50 border-b border-amber-200 px-6 py-2.5 flex items-center justify-between gap-3 text-amber-900 animate-fadeIn">
+          <div className="flex items-center gap-2 text-xs">
+            <span className="p-1 bg-amber-200 text-amber-900 rounded-lg font-black text-[11px]">RECEPÇÃO</span>
+            <span className="font-bold">
+              Modo Visualização Ativo — Consulta de refração e emissão de receituários liberadas. Alteração de dioptrias e conduta médica restritas ao examinador.
+            </span>
+          </div>
+          <button
+            type="button"
+            onClick={openEditModal}
+            className="px-3 py-1 bg-white hover:bg-amber-100 border border-amber-300 text-amber-900 font-extrabold text-xs rounded-xl transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer shrink-0"
+          >
+            <Edit3 className="w-3.5 h-3.5 text-amber-700" />
+            <span>Editar Cadastro do Paciente</span>
+          </button>
+        </div>
+      )}
 
       {/* 2. Trilha de Exame Clínico Guiada (Stepper) */}
       <div className="bg-slate-900 text-slate-100 px-6 py-2.5 flex items-center justify-between border-b border-slate-800 overflow-x-auto shadow-inner">
@@ -646,30 +675,32 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
         </div>
 
         {/* Alternador de Modo do Controle Remoto */}
-        <div className="hidden md:flex items-center gap-2">
-          {remoteMode === 'sidebar' ? (
-            <button
-              onClick={() => {
-                setRemoteMode('floating');
-                setIsFloatingRemoteOpen(true);
-              }}
-              className="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors border border-slate-700 cursor-pointer"
-              title="Libera espaço na tela transformando o controle em widget flutuante suspenso"
-            >
-              <Minimize2 className="w-3.5 h-3.5 text-blue-400" />
-              <span>Flutuar Controle (Mais Espaço)</span>
-            </button>
-          ) : (
-            <button
-              onClick={() => setRemoteMode('sidebar')}
-              className="px-3 py-1 bg-blue-600/30 hover:bg-blue-600/50 text-blue-300 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors border border-blue-500/40 cursor-pointer"
-              title="Fixa o controle remoto na barra lateral direita"
-            >
-              <Maximize2 className="w-3.5 h-3.5" />
-              <span>Fixar Controle Lateral</span>
-            </button>
-          )}
-        </div>
+        {!isReadOnly && (
+          <div className="hidden md:flex items-center gap-2">
+            {remoteMode === 'sidebar' ? (
+              <button
+                onClick={() => {
+                  setRemoteMode('floating');
+                  setIsFloatingRemoteOpen(true);
+                }}
+                className="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors border border-slate-700 cursor-pointer"
+                title="Libera espaço na tela transformando o controle em widget flutuante suspenso"
+              >
+                <Minimize2 className="w-3.5 h-3.5 text-blue-400" />
+                <span>Flutuar Controle (Mais Espaço)</span>
+              </button>
+            ) : (
+              <button
+                onClick={() => setRemoteMode('sidebar')}
+                className="px-3 py-1 bg-blue-600/30 hover:bg-blue-600/50 text-blue-300 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors border border-blue-500/40 cursor-pointer"
+                title="Fixa o controle remoto na barra lateral direita"
+              >
+                <Maximize2 className="w-3.5 h-3.5" />
+                <span>Fixar Controle Lateral</span>
+              </button>
+            )}
+          </div>
+        )}
       </div>
 
       {/* 3. Área Central do Exame */}
@@ -1900,10 +1931,14 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
               pdDistanceMm: 62
             }}
             patientAge={patientAge}
-            onChange={(updatedRefraction) => setCurrentEncounter({
-              ...currentEncounter,
-              subjectiveRefraction: updatedRefraction
-            })}
+            isReadOnly={isReadOnly}
+            onChange={(updatedRefraction) => {
+              if (isReadOnly) return;
+              setCurrentEncounter({
+                ...currentEncounter,
+                subjectiveRefraction: updatedRefraction
+              });
+            }}
           />
         </div>
 
@@ -1928,8 +1963,8 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
         )}
       </div>
 
-      {/* Widget / Botão Suspenso Móvel Flutuante de Controle Remoto */}
-      {remoteMode === 'floating' && (
+      {/* Widget / Botão Suspenso Móvel Flutuante de Controle Remoto (Apenas examinador) */}
+      {!isReadOnly && remoteMode === 'floating' && (
         <div className="fixed bottom-4 right-4 z-40 flex flex-col items-end gap-2">
           {isFloatingRemoteOpen && (
             <div className="bg-slate-900 border border-slate-700 shadow-2xl rounded-2xl w-84 max-h-[82vh] overflow-y-auto p-2 animate-fadeIn mb-1 ring-1 ring-white/10">

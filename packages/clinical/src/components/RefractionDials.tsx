@@ -6,12 +6,14 @@ interface RefractionDialsProps {
   refraction: SubjectiveRefraction;
   patientAge?: PatientAge | null;
   onChange: (updated: SubjectiveRefraction) => void;
+  isReadOnly?: boolean;
 }
 
 export const RefractionDials: React.FC<RefractionDialsProps> = ({ 
   refraction, 
   patientAge,
-  onChange 
+  onChange,
+  isReadOnly = false
 }) => {
   const numToStr = (val: number | undefined): string => {
     if (val === undefined || val === null || isNaN(val) || val === 0) return '';
@@ -285,12 +287,15 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
             <input
               type="text"
               value={pdDistance}
+              disabled={isReadOnly}
+              readOnly={isReadOnly}
               onChange={(e) => {
+                if (isReadOnly) return;
                 setPdDistance(e.target.value);
                 emitUpdate(undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, e.target.value);
               }}
               placeholder="62"
-              className="w-10 bg-white border border-slate-300 rounded-xl px-1 py-0.5 font-mono text-center font-black text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-xs"
+              className={`w-10 bg-white border border-slate-300 rounded-xl px-1 py-0.5 font-mono text-center font-black text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-xs ${isReadOnly ? 'cursor-not-allowed bg-slate-100 text-slate-500' : ''}`}
             />
             <span className="text-slate-400 font-mono text-[10px]">mm</span>
           </div>
@@ -300,42 +305,47 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
             <input
               type="text"
               value={addition}
+              disabled={isReadOnly}
+              readOnly={isReadOnly}
               onChange={(e) => {
+                if (isReadOnly) return;
                 setAddition(e.target.value);
                 emitUpdate(undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, e.target.value);
               }}
               placeholder="+2.00"
-              className="w-14 bg-white border border-slate-300 rounded-xl px-1 py-0.5 font-mono text-center font-black text-xs text-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-xs"
+              className={`w-14 bg-white border border-slate-300 rounded-xl px-1 py-0.5 font-mono text-center font-black text-xs text-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-xs ${isReadOnly ? 'cursor-not-allowed bg-slate-100 text-slate-500' : ''}`}
             />
             <span className="text-indigo-400 font-mono text-[10px]">D</span>
           </div>
         </div>
       </div>
 
-      {/* Ferramentas de Autonomia Clínica */}
-      <div className="flex flex-wrap items-center justify-between gap-2 p-2.5 bg-slate-50/80 border border-slate-200/80 rounded-2xl">
-        <button
-          type="button"
-          onClick={handleTransposeCylinder}
-          className="px-3 py-1.5 bg-white hover:bg-slate-100 border border-slate-300/80 rounded-xl text-[11px] font-bold text-slate-700 flex items-center gap-1.5 transition-all shadow-xs cursor-pointer active:scale-95"
-          title="Transpõe a refração entre cilindro positivo e negativo"
-        >
-          <RefreshCw className="w-3.5 h-3.5 text-blue-600" />
-          <span>Transpor Cilindro (+ ↔ -)</span>
-        </button>
-
-        {suggestedAdd !== null && (
+      {/* Ferramentas de Autonomia Clínica (Apenas para examinador) */}
+      {!isReadOnly && (
+        <div className="flex flex-wrap items-center justify-between gap-2 p-2.5 bg-slate-50/80 border border-slate-200/80 rounded-2xl">
           <button
             type="button"
-            onClick={handleApplyAgeAddition}
-            className="px-3 py-1.5 bg-gradient-to-r from-indigo-50 to-blue-50 hover:from-indigo-100 hover:to-blue-100 border border-indigo-200 rounded-xl text-[11px] font-bold text-indigo-800 flex items-center gap-1.5 transition-all shadow-xs cursor-pointer active:scale-95"
-            title={`Sugerir adição de +${suggestedAdd.toFixed(2)} D para ${patientAge?.years} anos`}
+            onClick={handleTransposeCylinder}
+            className="px-3 py-1.5 bg-white hover:bg-slate-100 border border-slate-300/80 rounded-xl text-[11px] font-bold text-slate-700 flex items-center gap-1.5 transition-all shadow-xs cursor-pointer active:scale-95"
+            title="Transpõe a refração entre cilindro positivo e negativo"
           >
-            <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
-            <span>Sugerir Adição: <b>+{suggestedAdd.toFixed(2)} D</b> ({patientAge?.years}a)</span>
+            <RefreshCw className="w-3.5 h-3.5 text-blue-600" />
+            <span>Transpor Cilindro (+ ↔ -)</span>
           </button>
-        )}
-      </div>
+
+          {suggestedAdd !== null && (
+            <button
+              type="button"
+              onClick={handleApplyAgeAddition}
+              className="px-3 py-1.5 bg-gradient-to-r from-indigo-50 to-blue-50 hover:from-indigo-100 hover:to-blue-100 border border-indigo-200 rounded-xl text-[11px] font-bold text-indigo-800 flex items-center gap-1.5 transition-all shadow-xs cursor-pointer active:scale-95"
+              title={`Sugerir adição de +${suggestedAdd.toFixed(2)} D para ${patientAge?.years} anos`}
+            >
+              <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+              <span>Sugerir Adição: <b>+{suggestedAdd.toFixed(2)} D</b> ({patientAge?.years}a)</span>
+            </button>
+          )}
+        </div>
+      )}
 
       {/* ================= OLHO DIREITO (OD) ================= */}
       <div className="p-4 bg-emerald-50/50 border border-emerald-200/70 rounded-3xl space-y-3 shadow-xs">
@@ -378,13 +388,16 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
             <div className="relative flex items-center">
               <input
                 type="text"
+                disabled={isReadOnly}
+                readOnly={isReadOnly}
                 value={odSphere}
                 onChange={(e) => {
+                  if (isReadOnly) return;
                   setOdSphere(e.target.value);
                   emitUpdate(e.target.value);
                 }}
                 placeholder="+ / - 0.00"
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-1 font-mono font-black text-sm text-center focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-900"
+                className={`w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-1 font-mono font-black text-sm text-center focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-900 ${isReadOnly ? 'cursor-not-allowed bg-slate-100 text-slate-600' : ''}`}
               />
             </div>
           </div>
@@ -399,13 +412,16 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
             <div className="relative flex items-center">
               <input
                 type="text"
+                disabled={isReadOnly}
+                readOnly={isReadOnly}
                 value={odCylinder}
                 onChange={(e) => {
+                  if (isReadOnly) return;
                   setOdCylinder(e.target.value);
                   emitUpdate(undefined, e.target.value);
                 }}
                 placeholder="- 0.00"
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-1 font-mono font-black text-sm text-center focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-900"
+                className={`w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-1 font-mono font-black text-sm text-center focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-900 ${isReadOnly ? 'cursor-not-allowed bg-slate-100 text-slate-600' : ''}`}
               />
             </div>
           </div>
@@ -420,13 +436,16 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
             <div className="relative flex items-center">
               <input
                 type="text"
+                disabled={isReadOnly}
+                readOnly={isReadOnly}
                 value={odAxis}
                 onChange={(e) => {
+                  if (isReadOnly) return;
                   setOdAxis(e.target.value);
                   emitUpdate(undefined, undefined, e.target.value);
                 }}
                 placeholder="180"
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-1 font-mono font-black text-sm text-center focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-900"
+                className={`w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-1 font-mono font-black text-sm text-center focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-900 ${isReadOnly ? 'cursor-not-allowed bg-slate-100 text-slate-600' : ''}`}
               />
             </div>
           </div>
@@ -447,8 +466,11 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
               <span className="text-[11px] font-mono font-black text-amber-800 select-none">20/</span>
               <input
                 type="text"
+                disabled={isReadOnly}
+                readOnly={isReadOnly}
                 value={oeVA.startsWith('20/') ? oeVA.replace(/^20\//, '') : oeVA}
                 onChange={(e) => {
+                  if (isReadOnly) return;
                   let val = e.target.value.trim();
                   if (val.startsWith('20/')) val = val.replace(/^20\//, '');
                   const formatted = val ? `20/${val}` : '';
@@ -456,7 +478,7 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
                   emitUpdate(undefined, undefined, undefined, undefined, undefined, undefined, undefined, formatted);
                 }}
                 placeholder="20"
-                className="w-8 bg-transparent text-xs font-mono font-black text-amber-950 text-left focus:outline-none"
+                className={`w-8 bg-transparent text-xs font-mono font-black text-amber-950 text-left focus:outline-none ${isReadOnly ? 'cursor-not-allowed text-slate-500' : ''}`}
               />
             </div>
           </div>
@@ -474,13 +496,16 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
             <div className="relative flex items-center">
               <input
                 type="text"
+                disabled={isReadOnly}
+                readOnly={isReadOnly}
                 value={oeSphere}
                 onChange={(e) => {
+                  if (isReadOnly) return;
                   setOeSphere(e.target.value);
                   emitUpdate(undefined, undefined, undefined, undefined, e.target.value);
                 }}
                 placeholder="+ / - 0.00"
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-1 font-mono font-black text-sm text-center focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500 text-slate-900"
+                className={`w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-1 font-mono font-black text-sm text-center focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500 text-slate-900 ${isReadOnly ? 'cursor-not-allowed bg-slate-100 text-slate-600' : ''}`}
               />
             </div>
           </div>
@@ -495,13 +520,16 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
             <div className="relative flex items-center">
               <input
                 type="text"
+                disabled={isReadOnly}
+                readOnly={isReadOnly}
                 value={oeCylinder}
                 onChange={(e) => {
+                  if (isReadOnly) return;
                   setOeCylinder(e.target.value);
                   emitUpdate(undefined, undefined, undefined, undefined, undefined, e.target.value);
                 }}
                 placeholder="- 0.00"
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-1 font-mono font-black text-sm text-center focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500 text-slate-900"
+                className={`w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-1 font-mono font-black text-sm text-center focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500 text-slate-900 ${isReadOnly ? 'cursor-not-allowed bg-slate-100 text-slate-600' : ''}`}
               />
             </div>
           </div>
@@ -516,13 +544,16 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
             <div className="relative flex items-center">
               <input
                 type="text"
+                disabled={isReadOnly}
+                readOnly={isReadOnly}
                 value={oeAxis}
                 onChange={(e) => {
+                  if (isReadOnly) return;
                   setOeAxis(e.target.value);
                   emitUpdate(undefined, undefined, undefined, undefined, undefined, undefined, e.target.value);
                 }}
                 placeholder="180"
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-1 font-mono font-black text-sm text-center focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500 text-slate-900"
+                className={`w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-1 font-mono font-black text-sm text-center focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500 text-slate-900 ${isReadOnly ? 'cursor-not-allowed bg-slate-100 text-slate-600' : ''}`}
               />
             </div>
           </div>
@@ -549,12 +580,14 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
             </label>
             <select
               value={lensType}
+              disabled={isReadOnly}
               onChange={(e) => {
+                if (isReadOnly) return;
                 const val = e.target.value;
                 setLensType(val);
                 emitUpdate(undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, val);
               }}
-              className="w-full bg-white border border-slate-300 rounded-xl px-2.5 py-1.5 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-xs cursor-pointer"
+              className={`w-full bg-white border border-slate-300 rounded-xl px-2.5 py-1.5 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-xs ${isReadOnly ? 'cursor-not-allowed bg-slate-100 text-slate-500' : 'cursor-pointer'}`}
             >
               <option value="multifocal">Multifocal / Progressivo Digital</option>
               <option value="monofocal_longe">Monofocal (Visão de Longe)</option>
@@ -572,12 +605,14 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
             </label>
             <select
               value={material}
+              disabled={isReadOnly}
               onChange={(e) => {
+                if (isReadOnly) return;
                 const val = e.target.value;
                 setMaterial(val);
                 emitUpdate(undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, val);
               }}
-              className="w-full bg-white border border-slate-300 rounded-xl px-2.5 py-1.5 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-xs cursor-pointer"
+              className={`w-full bg-white border border-slate-300 rounded-xl px-2.5 py-1.5 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-xs ${isReadOnly ? 'cursor-not-allowed bg-slate-100 text-slate-500' : 'cursor-pointer'}`}
             >
               <option value="resina">Resina Orgânica CR-39 (1.50)</option>
               <option value="policarbonato">Policarbonato Resistente (1.59)</option>
@@ -596,7 +631,7 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
               Tratamentos e Filtros:
             </label>
-            <span className="text-[9px] text-slate-400">Clique para ativar/desativar</span>
+            {!isReadOnly && <span className="text-[9px] text-slate-400">Clique para ativar/desativar</span>}
           </div>
 
           <div className="flex flex-wrap gap-1.5">
@@ -614,18 +649,20 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
                 <button
                   key={t}
                   type="button"
+                  disabled={isReadOnly}
                   onClick={() => {
+                    if (isReadOnly) return;
                     const updated = isSelected 
                       ? treatments.filter(item => item !== t) 
                       : [...treatments, t];
                     setTreatments(updated);
                     emitUpdate(undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, updated);
                   }}
-                  className={`px-2.5 py-1 rounded-xl text-[11px] font-bold transition-all border cursor-pointer active:scale-95 ${
+                  className={`px-2.5 py-1 rounded-xl text-[11px] font-bold transition-all border ${
                     isSelected
                       ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
                       : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-100'
-                  }`}
+                  } ${isReadOnly ? 'cursor-default opacity-80' : 'cursor-pointer active:scale-95'}`}
                 >
                   {isSelected ? '✓ ' : '+ '}{t}
                 </button>
@@ -649,39 +686,44 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
           <input
             type="text"
             value={specialLenses}
+            disabled={isReadOnly}
+            readOnly={isReadOnly}
             onChange={(e) => {
+              if (isReadOnly) return;
               const val = e.target.value;
               setSpecialLenses(val);
               emitUpdate(undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, val);
             }}
             placeholder="Ex: Prisma de 2.0 Δ Base Inferior em OD, Lente Escleral para Ceratocone grau II, Lente Tórica com Eixo Estabilizado..."
-            className="w-full bg-white border border-indigo-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-xs"
+            className={`w-full bg-white border border-indigo-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-xs ${isReadOnly ? 'cursor-not-allowed bg-slate-100 text-slate-500' : ''}`}
           />
 
-          {/* Chips Rápidos de Lentes Especiais */}
-          <div className="flex flex-wrap gap-1.5 pt-0.5">
-            {[
-              'Prisma Terapêutico (Base Superior/Inferior)',
-              'Lente de Contato Escleral',
-              'Lente RGP Corneana (Ceratocone)',
-              'Lente Tórica Personalizada',
-              'Filtro Terapêutico Amarelo/Âmbar (Baixa Visão)',
-              'Lente Multifocal Ocupacional'
-            ].map((spec) => (
-              <button
-                key={spec}
-                type="button"
-                onClick={() => {
-                  const updated = specialLenses.trim() ? `${specialLenses.trim()} | ${spec}` : spec;
-                  setSpecialLenses(updated);
-                  emitUpdate(undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, updated);
-                }}
-                className="px-2 py-0.5 bg-white hover:bg-indigo-100 border border-indigo-200 rounded-lg text-[10px] font-bold text-indigo-800 transition-colors cursor-pointer"
-              >
-                + {spec}
-              </button>
-            ))}
-          </div>
+          {/* Chips Rápidos de Lentes Especiais (Apenas para examinador) */}
+          {!isReadOnly && (
+            <div className="flex flex-wrap gap-1.5 pt-0.5">
+              {[
+                'Prisma Terapêutico (Base Superior/Inferior)',
+                'Lente de Contato Escleral',
+                'Lente RGP Corneana (Ceratocone)',
+                'Lente Tórica Personalizada',
+                'Filtro Terapêutico Amarelo/Âmbar (Baixa Visão)',
+                'Lente Multifocal Ocupacional'
+              ].map((spec) => (
+                <button
+                  key={spec}
+                  type="button"
+                  onClick={() => {
+                    const updated = specialLenses.trim() ? `${specialLenses.trim()} | ${spec}` : spec;
+                    setSpecialLenses(updated);
+                    emitUpdate(undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, updated);
+                  }}
+                  className="px-2 py-0.5 bg-white hover:bg-indigo-100 border border-indigo-200 rounded-lg text-[10px] font-bold text-indigo-800 transition-colors cursor-pointer"
+                >
+                  + {spec}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

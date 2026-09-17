@@ -98,9 +98,6 @@ export function App() {
   const handleSelectPatientFromList = (patient: Patient) => {
     setActivePatient(patient);
     setActiveEncounter(undefined);
-    if (currentUser?.role === 'reception') {
-      return;
-    }
     setCurrentPage('examination');
   };
 
@@ -622,6 +619,8 @@ export function App() {
               <ExaminationWorkspace
                 patient={activePatient}
                 encounter={activeEncounter}
+                isReadOnly={currentUser?.role === 'reception'}
+                userRole={currentUser?.role}
                 onBack={() => setCurrentPage('schedule')}
                 onPatientUpdated={(updated) => setActivePatient(updated)}
               />
