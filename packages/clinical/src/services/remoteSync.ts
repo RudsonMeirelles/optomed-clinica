@@ -1,4 +1,4 @@
-﻿// RemoteSyncService — sincroniza localStorage com o servidor Express via REST
+﻿// RemoteSyncService — sincronizacao em tempo real com o servidor Express via REST
 
 type SyncStatus = 'synced' | 'syncing' | 'error' | 'offline';
 
@@ -20,6 +20,8 @@ class RemoteSyncService {
   private listeners: Set<SyncStatusListener> = new Set();
   private pendingCount = 0;
   private syncInProgress = false;
+  private periodicTimer: ReturnType<typeof setInterval> | null = null;
+  private apiAvailable: boolean | null = null;
 
   addListener(fn: SyncStatusListener) { this.listeners.add(fn); }
   removeListener(fn: SyncStatusListener) { this.listeners.delete(fn); }
@@ -37,6 +39,18 @@ class RemoteSyncService {
     return 'optomed_sync_ts_' + clinicId + '_' + entity;
   }
 
+  private async checkApiAvailable(): Promise<boolean> {
+    const base = getApiBase();
+    try {
+      const res = await fetch(base + '/health', { cache: 'no-store', signal: AbortSignal.timeout(3000) });
+      this.apiAvailable = res.ok;
+      return res.ok;
+    } catch {
+      this.apiAvailable = false;
+      return false;
+    }
+  }
+
   async push(clinicId: string, entity: SyncEntity, data: any[]): Promise<void> {
     if (typeof navigator === 'undefined' || !navigator.onLine) return;
     const base = getApiBase();
@@ -45,6 +59,7 @@ class RemoteSyncService {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ data }),
+        signal: AbortSignal.timeout(8000),
       });
       if (!res.ok) throw new Error('HTTP ' + res.status);
       localStorage.setItem(this.lastSyncKey(clinicId, entity), new Date().toISOString());
@@ -61,6 +76,7 @@ class RemoteSyncService {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ record }),
+        signal: AbortSignal.timeout(8000),
       });
       if (!res.ok) throw new Error('HTTP ' + res.status);
     } catch (err) {
@@ -72,7 +88,10 @@ class RemoteSyncService {
     if (typeof navigator === 'undefined' || !navigator.onLine) return;
     const base = getApiBase();
     try {
-      await fetch(base + '/api/data/' + clinicId + '/' + entity + '/' + id, { method: 'DELETE' });
+      await fetch(base + '/api/data/' + clinicId + '/' + entity + '/' + id, {
+        method: 'DELETE',
+        signal: AbortSignal.timeout(5000),
+      });
     } catch {}
   }
 
@@ -80,7 +99,10 @@ class RemoteSyncService {
     if (typeof navigator === 'undefined' || !navigator.onLine) return null;
     const base = getApiBase();
     try {
-      const res = await fetch(base + '/api/data/' + clinicId + '/' + entity, { cache: 'no-store' });
+      const res = await fetch(base + '/api/data/' + clinicId + '/' + entity, {
+        cache: 'no-store',
+        signal: AbortSignal.timeout(8000),
+      });
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const json = await res.json();
       return Array.isArray(json.data) ? json.data : null;
@@ -88,6 +110,29 @@ class RemoteSyncService {
       console.warn('[Sync] pull ' + entity + ' falhou:', err);
       return null;
     }
+  }
+
+  // Forca upload de TODOS os dados locais ao servidor (migracao inicial)
+  async forceUploadAll(
+    clinicId: string,
+    getLocal: (entity: SyncEntity) => any[]
+  ): Promise<void> {
+    if (typeof navigator === 'undefined' || !navigator.onLine) return;
+    const available = await this.checkApiAvailable();
+    if (!available) return;
+    this.notify('syncing', 0);
+    for (const entity of SYNC_ENTITIES) {
+      try {
+        const localData = getLocal(entity);
+        if (localData.length > 0) {
+          await this.push(clinicId, entity, localData);
+          console.log('[Sync] forceUpload ' + entity + ': ' + localData.length + ' registros enviados');
+        }
+      } catch (err) {
+        console.warn('[Sync] forceUpload ' + entity + ' erro:', err);
+      }
+    }
+    this.notify('synced', 0);
   }
 
   async fullSync(
@@ -100,14 +145,8 @@ class RemoteSyncService {
     this.notify('syncing', 0);
 
     try {
-      const base = getApiBase();
-      let healthOk = false;
-      try {
-        const healthRes = await fetch(base + '/health', { cache: 'no-store' });
-        healthOk = healthRes.ok;
-      } catch {}
-
-      if (!healthOk) {
+      const available = await this.checkApiAvailable();
+      if (!available) {
         this.notify('error');
         this.syncInProgress = false;
         return;
@@ -119,15 +158,20 @@ class RemoteSyncService {
           const localData = getLocal(entity);
 
           if (serverData === null) {
+            // API falhou — envia local se tiver dados
             if (localData.length > 0) {
               await this.push(clinicId, entity, localData);
             }
           } else if (serverData.length === 0 && localData.length > 0) {
+            // Servidor vazio, local tem dados — envia TUDO para o servidor
             await this.push(clinicId, entity, localData);
+            console.log('[Sync] Upload inicial ' + entity + ': ' + localData.length + ' registros');
           } else if (serverData.length > 0) {
+            // Ambos tem dados — mescla por updatedAt e sincroniza
             const merged = this.mergeData(serverData, localData);
             setLocal(entity, merged);
-            if (merged.length !== serverData.length) {
+            // Se merged tem mais registros que servidor -> tem dados novos locais -> envia
+            if (merged.length > serverData.length) {
               await this.push(clinicId, entity, merged);
             }
           }
@@ -142,6 +186,29 @@ class RemoteSyncService {
       this.notify('error');
     } finally {
       this.syncInProgress = false;
+    }
+  }
+
+  // Inicia sincronizacao periodica automatica a cada 30 segundos
+  startPeriodicSync(
+    clinicId: string,
+    getLocal: (entity: SyncEntity) => any[],
+    setLocal: (entity: SyncEntity, data: any[]) => void
+  ): void {
+    if (this.periodicTimer) return; // ja iniciado
+    // Sync imediato
+    this.fullSync(clinicId, getLocal, setLocal);
+    // Sync a cada 30 segundos
+    this.periodicTimer = setInterval(() => {
+      this.fullSync(clinicId, getLocal, setLocal);
+    }, 30000);
+    console.log('[Sync] Sincronizacao periodica iniciada (30s)');
+  }
+
+  stopPeriodicSync(): void {
+    if (this.periodicTimer) {
+      clearInterval(this.periodicTimer);
+      this.periodicTimer = null;
     }
   }
 

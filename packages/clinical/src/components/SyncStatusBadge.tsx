@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Wifi, WifiOff, RefreshCw, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
+import { Wifi, WifiOff, RefreshCw, CheckCircle2, AlertCircle, Loader2, Upload } from 'lucide-react';
 import { offlineDb } from '../services/offlineDb';
 
 export const SyncStatusBadge: React.FC = () => {
   const [syncStatus, setSyncStatus] = useState<string>(() => offlineDb.getSyncStatus());
-  const [pendingCount, setPendingCount] = useState<number>(0);
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
   const [isOnline, setIsOnline] = useState<boolean>(navigator.onLine);
+  const [uploadDone, setUploadDone] = useState<boolean>(false);
 
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
@@ -14,9 +15,8 @@ export const SyncStatusBadge: React.FC = () => {
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
 
-    const onSyncChange = (status: string, pending: number) => {
+    const onSyncChange = (status: string) => {
       setSyncStatus(status);
-      setPendingCount(pending);
       if (status !== 'syncing') setIsSyncing(false);
     };
     offlineDb.addSyncListener(onSyncChange);
@@ -29,14 +29,26 @@ export const SyncStatusBadge: React.FC = () => {
   }, []);
 
   const handleManualSync = useCallback(async () => {
-    if (isSyncing) return;
+    if (isSyncing || isUploading) return;
     setIsSyncing(true);
     try {
       await offlineDb.manualSync();
     } finally {
       setIsSyncing(false);
     }
-  }, [isSyncing]);
+  }, [isSyncing, isUploading]);
+
+  const handleForceUpload = useCallback(async () => {
+    if (isSyncing || isUploading) return;
+    setIsUploading(true);
+    try {
+      await offlineDb.forceUploadAll();
+      setUploadDone(true);
+      setTimeout(() => setUploadDone(false), 4000);
+    } finally {
+      setIsUploading(false);
+    }
+  }, [isSyncing, isUploading]);
 
   const badgeStyle = (() => {
     if (!isOnline) return 'bg-amber-50 text-amber-700 border border-amber-200 animate-pulse';
@@ -50,7 +62,7 @@ export const SyncStatusBadge: React.FC = () => {
     if (!isOnline) return 'Offline';
     if (syncStatus === 'synced') return 'Sincronizado';
     if (syncStatus === 'syncing') return 'Sincronizando…';
-    if (syncStatus === 'error') return 'Erro de sync';
+    if (syncStatus === 'error') return 'Sem acesso ao servidor';
     return 'Aguardando sync';
   })();
 
@@ -62,6 +74,8 @@ export const SyncStatusBadge: React.FC = () => {
     return Wifi;
   })();
 
+  const busy = isSyncing || isUploading;
+
   return (
     <div className="flex items-center gap-2 text-xs">
       <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full font-medium ${badgeStyle}`}>
@@ -70,14 +84,37 @@ export const SyncStatusBadge: React.FC = () => {
       </div>
 
       {isOnline && (
-        <button
-          onClick={handleManualSync}
-          disabled={isSyncing}
-          className="p-1 hover:bg-slate-100 rounded text-slate-500 hover:text-slate-800 transition-colors disabled:opacity-40"
-          title="Sincronizar agora com o servidor"
-        >
-          <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin text-blue-600' : ''}`} />
-        </button>
+        <>
+          {/* Botão de sync normal */}
+          <button
+            onClick={handleManualSync}
+            disabled={busy}
+            className="p-1 hover:bg-slate-100 rounded text-slate-500 hover:text-slate-800 transition-colors disabled:opacity-40"
+            title="Sincronizar agora com o servidor"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin text-blue-600' : ''}`} />
+          </button>
+
+          {/* Botão de migração forçada — sempre visível para facilitar o envio de dados locais */}
+          <button
+            onClick={handleForceUpload}
+            disabled={busy}
+            className={`flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-semibold transition-all disabled:opacity-50 ${
+              uploadDone
+                ? 'bg-emerald-100 text-emerald-700 border border-emerald-300'
+                : 'bg-orange-100 text-orange-700 border border-orange-300 hover:bg-orange-200'
+            }`}
+            title="Enviar todos os dados locais ao servidor agora"
+          >
+            {isUploading
+              ? <Loader2 className="w-3 h-3 animate-spin" />
+              : uploadDone
+                ? <CheckCircle2 className="w-3 h-3" />
+                : <Upload className="w-3 h-3" />
+            }
+            <span>{isUploading ? 'Enviando…' : uploadDone ? 'Enviado!' : 'Enviar ao servidor'}</span>
+          </button>
+        </>
       )}
     </div>
   );

@@ -133,26 +133,44 @@ class OfflineDatabaseService {
   }
 
   private initRemoteSync() {
-    // Executa sync assíncrono logo após inicialização (não bloqueia UI)
+    // Inicia sync periodico automatico (30s) apos inicializacao da pagina
     setTimeout(() => {
       const clinicId = this.activeClinicId;
-      remoteSync.fullSync(
-        clinicId,
-        (entity) => {
-          if (entity === 'patients') return this.getPatients(clinicId);
-          if (entity === 'encounters') return this.getEncounters(clinicId);
-          if (entity === 'appointments') return this.getAppointments(clinicId);
-          if (entity === 'prescriptions') return this.getPrescriptions(clinicId);
-          return [];
-        },
-        (entity, data) => {
-          if (entity === 'patients') { localStorage.setItem(this.getKey('patients', clinicId), JSON.stringify(data)); this.broadcastSync('optomed_patient_updated', { clinicId }); if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('optomed_patient_updated', { detail: { clinicId } })); }
-          if (entity === 'encounters') { localStorage.setItem(this.getKey('encounters', clinicId), JSON.stringify(data)); this.broadcastSync('optomed_encounter_updated', { clinicId }); if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('optomed_encounter_updated', { detail: { clinicId } })); }
-          if (entity === 'appointments') { localStorage.setItem(this.getKey('appointments', clinicId), JSON.stringify(data)); this.broadcastSync('optomed_appointment_updated', { clinicId }); if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('optomed_appointment_updated', { detail: { clinicId } })); }
-          if (entity === 'prescriptions') { localStorage.setItem(this.getKey('prescriptions', clinicId), JSON.stringify(data)); }
-        }
-      );
-    }, 800);
+      remoteSync.startPeriodicSync(clinicId, this.getSyncGetLocal(clinicId), this.getSyncSetLocal(clinicId));
+    }, 1200);
+  }
+
+  private getSyncGetLocal(clinicId: string) {
+    return (entity: string) => {
+      if (entity === 'patients') return this.getPatients(clinicId);
+      if (entity === 'encounters') return this.getEncounters(clinicId);
+      if (entity === 'appointments') return this.getAppointments(clinicId);
+      if (entity === 'prescriptions') return this.getPrescriptions(clinicId);
+      return [];
+    };
+  }
+
+  private getSyncSetLocal(clinicId: string) {
+    return (entity: string, data: any[]) => {
+      if (entity === 'patients') {
+        localStorage.setItem(this.getKey('patients', clinicId), JSON.stringify(data));
+        this.broadcastSync('optomed_patient_updated', { clinicId });
+        if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('optomed_patient_updated', { detail: { clinicId } }));
+      }
+      if (entity === 'encounters') {
+        localStorage.setItem(this.getKey('encounters', clinicId), JSON.stringify(data));
+        this.broadcastSync('optomed_encounter_updated', { clinicId });
+        if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('optomed_encounter_updated', { detail: { clinicId } }));
+      }
+      if (entity === 'appointments') {
+        localStorage.setItem(this.getKey('appointments', clinicId), JSON.stringify(data));
+        this.broadcastSync('optomed_appointment_updated', { clinicId });
+        if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('optomed_appointment_updated', { detail: { clinicId } }));
+      }
+      if (entity === 'prescriptions') {
+        localStorage.setItem(this.getKey('prescriptions', clinicId), JSON.stringify(data));
+      }
+    };
   }
 
 
@@ -507,22 +525,13 @@ class OfflineDatabaseService {
 
   public async manualSync(): Promise<void> {
     const clinicId = this.activeClinicId;
-    await remoteSync.fullSync(
-      clinicId,
-      (entity) => {
-        if (entity === 'patients') return this.getPatients(clinicId);
-        if (entity === 'encounters') return this.getEncounters(clinicId);
-        if (entity === 'appointments') return this.getAppointments(clinicId);
-        if (entity === 'prescriptions') return this.getPrescriptions(clinicId);
-        return [];
-      },
-      (entity, data) => {
-        if (entity === 'patients') { localStorage.setItem(this.getKey('patients', clinicId), JSON.stringify(data)); if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('optomed_patient_updated', { detail: { clinicId } })); }
-        if (entity === 'encounters') { localStorage.setItem(this.getKey('encounters', clinicId), JSON.stringify(data)); if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('optomed_encounter_updated', { detail: { clinicId } })); }
-        if (entity === 'appointments') { localStorage.setItem(this.getKey('appointments', clinicId), JSON.stringify(data)); if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('optomed_appointment_updated', { detail: { clinicId } })); }
-        if (entity === 'prescriptions') { localStorage.setItem(this.getKey('prescriptions', clinicId), JSON.stringify(data)); }
-      }
-    );
+    await remoteSync.fullSync(clinicId, this.getSyncGetLocal(clinicId) as any, this.getSyncSetLocal(clinicId) as any);
+  }
+
+  // Forca o envio de TODOS os dados locais ao servidor (migracao inicial / recuperacao)
+  public async forceUploadAll(): Promise<void> {
+    const clinicId = this.activeClinicId;
+    await remoteSync.forceUploadAll(clinicId, this.getSyncGetLocal(clinicId) as any);
   }
 
   // Dados iniciais específicos por consultório (IVS inicia 100% limpo, apenas dados reais cadastrados pelo usuário)
