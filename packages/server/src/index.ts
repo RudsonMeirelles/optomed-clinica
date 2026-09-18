@@ -129,7 +129,41 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', version: '2.1.0', connectedDevicesCount: connectedDevices.size });
 });
 
-const PORTAL_HTML = '<h1>OPTOMED CLINICA</h1><p>Plataforma Oftalmologica</p><a href="/clinical">Recepcao</a><a href="/tv">TV</a>';
+const PORTAL_HTML = `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OPTOMED Clinica — Portal</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0f172a;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#f1f5f9}
+    .card{background:#1e293b;border:1px solid #334155;border-radius:24px;padding:48px 40px;text-align:center;max-width:480px;width:90%}
+    h1{font-size:28px;font-weight:900;letter-spacing:-0.5px;color:#fff;margin-bottom:4px}
+    .sub{color:#64748b;font-size:13px;margin-bottom:32px}
+    .badge{display:inline-block;background:#10b981;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;letter-spacing:1px;margin-bottom:24px}
+    .links{display:flex;flex-direction:column;gap:12px}
+    a{display:flex;align-items:center;justify-content:space-between;background:#0f172a;border:1px solid #334155;border-radius:14px;padding:16px 20px;color:#f1f5f9;text-decoration:none;font-weight:600;font-size:15px;transition:border-color 0.2s,background 0.2s}
+    a:hover{background:#1e3a5f;border-color:#3b82f6}
+    .arrow{color:#3b82f6;font-size:18px}
+    .info{margin-top:24px;color:#475569;font-size:12px;border-top:1px solid #1e293b;padding-top:20px}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <span class="badge">ONLINE</span>
+    <h1>OPTOMED Clinica</h1>
+    <p class="sub">Plataforma Oftalmologica • Instituto da Visao e Saude</p>
+    <div class="links">
+      <a href="/clinical/"><span>Recepcao & Consultorio</span><span class="arrow">&#8594;</span></a>
+      <a href="/tv/"><span>TV Optotipo</span><span class="arrow">&#8594;</span></a>
+    </div>
+    <div class="info">
+      Servidor v2.1 • API /api/data • WebSocket ativo
+    </div>
+  </div>
+</body>
+</html>`;
 app.get('/', (req, res) => { res.send(PORTAL_HTML); });
 
 app.get('*', (req, res) => {

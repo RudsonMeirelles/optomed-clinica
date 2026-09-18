@@ -1,35 +1,48 @@
-@echo off
+﻿@echo off
 chcp 65001 > nul
-title OPTOTIPO MEIRELLES v2.0 - Launcher
-
-echo ============================================================
-echo           OPTOTIPO MEIRELLES v2.0 - ESTAÇÃO CLÍNICA
-echo ============================================================
-echo.
-echo [1/3] Iniciando Servidor LAN Local (Porta 8080)...
-start "Optotipo LAN Server" cmd /c "npm --workspace=@optotipo/server run dev"
-
-echo [2/3] Iniciando Sistema A: Optotipo TV Offline (Porta 5173)...
-start "Optotipo TV Station" cmd /c "npm --workspace=@optotipo/offline-tv run dev"
-
-echo [3/3] Iniciando Sistema B: Optotipo Clinical (Porta 5174)...
-start "Optotipo Clinical Platform" cmd /c "npm --workspace=@optotipo/clinical run dev"
-
-echo.
-echo Aguardando inicialização dos servidores locais...
-timeout /t 3 > nul
-
-echo.
-echo Abrindo navegadores...
-start http://localhost:5173
-start http://localhost:5174
+title OPTOMED CLINICA v2.1
 
 echo.
 echo ============================================================
-echo Sistema em execução!
-echo TV / Display:   http://localhost:5173
-echo Clinical / Web: http://localhost:5174
-echo LAN Relay:      http://localhost:8080
+echo    OPTOMED CLINICA v2.1 - Instituto da Visao e Saude
+echo ============================================================
+echo.
+
+where pm2 > nul 2>&1
+if %errorlevel% neq 0 (
+  echo [AVISO] PM2 nao encontrado. Instalando...
+  call npm install -g pm2
+)
+
+echo [1/3] Compilando sistema (aguarde)...
+call npm run build
+if %errorlevel% neq 0 (
+  echo [ERRO] Falha no build. Verifique os erros.
+  pause
+  exit /b 1
+)
+echo [OK] Build concluido!
+
+echo.
+echo [2/3] Iniciando servidor Express + Tunel Cloudflare via PM2...
+call pm2 delete all 2>nul
+call pm2 start ecosystem.config.js
+call pm2 save
+
+echo.
+echo [3/3] Abrindo navegador...
+timeout /t 5 > nul
+start https://app.optomed.app.br/clinical
+
+echo.
+echo ============================================================
+echo  Sistema ONLINE e operacional!
+echo  Online:  https://app.optomed.app.br/clinical
+echo  Local:   http://192.168.1.144:8765/clinical
+echo  TV:      https://tv.optomed.app.br/tv
+echo  Status:  pm2 status
+echo  Logs:    pm2 logs optomed-server
+echo  Parar:   pm2 stop all
 echo ============================================================
 echo.
 pause
