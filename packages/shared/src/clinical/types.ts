@@ -429,6 +429,8 @@ export interface ClinicalEncounter {
   conduct?: string;
   returnInWeeks?: number;
   returnInstructions?: string; // Indicação de retorno em texto livre
+  isReturnEncounter?: boolean; // Indica se este atendimento é uma consulta de retorno
+  returnReferenceEncounterId?: string; // ID da consulta anterior de referência
   
   // Imagens e Desenhos Anatômicos Oculares
   clinicalImages?: OphthalmicImageRecord[];

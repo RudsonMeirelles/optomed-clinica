@@ -18,7 +18,8 @@ class LanControllerService {
     
     let defaultUrl = `ws://${host}:8765/clinical`;
     if (isHttps) {
-      defaultUrl = host.includes('optomed.app.br') ? `wss://ws.optomed.app.br/clinical` : `wss://${host}:8765/clinical`;
+      // Quando em HTTPS pelo túnel Cloudflare, conecta na mesma origem via wss na porta padrão (443/sem porta)
+      defaultUrl = host.includes('optomed.app.br') ? `wss://${host}/clinical` : `wss://${host}:8765/clinical`;
     }
     const targetUrl = serverUrl || defaultUrl;
 

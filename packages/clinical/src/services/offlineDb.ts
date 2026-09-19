@@ -110,8 +110,8 @@ class OfflineDatabaseService {
         this.activeClinicId = saved;
       }
       
-      // Auto-recuperação de todos os pacientes e prontuários históricos desde 25/08/2026
-      const recoveryFlagKey = 'optomed_historical_recovery_2026_v1';
+      // Auto-recuperação de todos os pacientes e prontuários históricos desde 25/08/2026 e 18/09/2026
+      const recoveryFlagKey = 'optomed_historical_recovery_2026_v2';
       if (!localStorage.getItem(recoveryFlagKey)) {
         this.restoreRecoveredHistoricalData();
         localStorage.setItem(recoveryFlagKey, 'true');
@@ -133,11 +133,21 @@ class OfflineDatabaseService {
   }
 
   private initRemoteSync() {
-    // Inicia sync periodico automatico (30s) apos inicializacao da pagina
+    // Inicia sync imediato de todas as clínicas conhecidas para garantir que qualquer aparelho receba tudo do servidor
     setTimeout(() => {
+      const syncAllClinics = () => {
+        const clinics = ['ivs', 'clinica-principal', 'vision', 'central', 'megastar'];
+        clinics.forEach(cid => {
+          remoteSync.fullSync(cid, this.getSyncGetLocal(cid), this.getSyncSetLocal(cid));
+        });
+      };
+      // Executa sync completo inicial
+      syncAllClinics();
+      // Mantém sync periódico da clínica ativa e a cada minuto de todas as clínicas
       const clinicId = this.activeClinicId;
       remoteSync.startPeriodicSync(clinicId, this.getSyncGetLocal(clinicId), this.getSyncSetLocal(clinicId));
-    }, 1200);
+      setInterval(syncAllClinics, 60000);
+    }, 800);
   }
 
   private getSyncGetLocal(clinicId: string) {
@@ -188,9 +198,13 @@ class OfflineDatabaseService {
   }
 
   public setActiveClinicId(clinicId: string): void {
+    if (!clinicId) return;
     this.activeClinicId = clinicId;
     try {
       localStorage.setItem(DB_ACTIVE_CLINIC_ID_KEY, clinicId);
+      remoteSync.stopPeriodicSync();
+      remoteSync.startPeriodicSync(clinicId, this.getSyncGetLocal(clinicId) as any, this.getSyncSetLocal(clinicId) as any);
+      remoteSync.fullSync(clinicId, this.getSyncGetLocal(clinicId) as any, this.getSyncSetLocal(clinicId) as any);
     } catch {}
   }
 

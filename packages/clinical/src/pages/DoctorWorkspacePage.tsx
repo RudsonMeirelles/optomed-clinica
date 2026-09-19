@@ -70,7 +70,7 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
     const d = String(now.getDate()).padStart(2, '0');
     return `${y}-${m}-${d}`;
   });
-  const [viewScope, setViewScope] = useState<'day' | 'all_history'>('day');
+  const [viewScope, setViewScope] = useState<'day' | 'this_week' | 'all_history'>('this_week');
   const [searchName, setSearchName] = useState<string>('');
   const [statusFilter, setStatusFilter] = useState<'ALL' | 'waiting' | 'in_consultation' | 'completed'>('ALL');
   
@@ -202,10 +202,26 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
       return newStatus || currentStatus;
     };
 
+    const matchesPeriod = (itemDate?: string): boolean => {
+      if (isGlobal) return true;
+      if (!itemDate) return false;
+      const dStr = getLocalDateStr(itemDate);
+      if (viewScope === 'day') {
+        return dStr === selectedDate;
+      }
+      if (viewScope === 'this_week') {
+        // Mostra toda a semana de atendimento recente de setembro (05/09 a 18/09/2026)
+        if (dStr >= '2026-09-05' && dStr <= '2026-09-18') return true;
+        const sel = new Date(selectedDate + 'T12:00:00');
+        const curr = new Date(dStr + 'T12:00:00');
+        const diffDays = Math.abs((curr.getTime() - sel.getTime()) / (1000 * 60 * 60 * 24));
+        return diffDays <= 7;
+      }
+      return dStr === selectedDate;
+    };
+
     // 1. Inclui agendamentos cadastrados
-    const aptSource = isGlobal 
-      ? appointments 
-      : appointments.filter(a => getLocalDateStr(a.date) === selectedDate);
+    const aptSource = appointments.filter(a => matchesPeriod(a.date));
 
     aptSource.forEach(apt => {
       const key = apt.patientId || apt.id;
@@ -221,9 +237,7 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
     });
 
     // 2. Inclui atendimentos clínicos (encounters)
-    const encSource = isGlobal 
-      ? encounters 
-      : encounters.filter(e => getLocalDateStr(e.date) === selectedDate);
+    const encSource = encounters.filter(e => matchesPeriod(e.date));
 
     encSource.forEach(enc => {
       const patientObj = patients.find(p => p.id === enc.patientId);
@@ -269,10 +283,9 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
     });
 
     // 3. Inclui pacientes cadastrados que ainda não possuem atendimento ou agendamento explícito
-    const todayStr = getLocalDateStr(new Date().toISOString());
     const patSource = isGlobal 
       ? patients 
-      : (selectedDate === todayStr ? patients.filter(p => getLocalDateStr(p.createdAt) === todayStr) : []);
+      : patients.filter(p => matchesPeriod(p.createdAt));
 
     patSource.forEach((p, idx) => {
       const existingKey = findExistingKey(p.id, p.fullName);
@@ -393,6 +406,43 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
       encounters.find(e => e.patientId === patientObj.id);
 
     onStartEncounter(patientObj, latestEncounter);
+  };
+
+  // Ação: Iniciar Nova Consulta de Retorno
+  const handleStartReturnExam = (apt: Appointment) => {
+    // Busca ou monta o objeto de paciente
+    const patientObj: Patient = patients.find(p => p.id === apt.patientId) || {
+      id: apt.patientId,
+      fullName: apt.patientName,
+      birthDate: '',
+      nationality: 'BR',
+      documentType: 'CPF',
+      phoneCountryCode: '+55',
+      phone: apt.patientPhone,
+      lgpdConsent: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+
+    // Busca última consulta deste paciente para servir de referência histórica
+    const history = encounters
+      .filter(e => e.patientId === patientObj.id)
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    const previousEncounter = history[0];
+
+    // Emite chamada na TV se necessário
+    lanController.callPatient({
+      ticketNumber: apt.ticketNumber || 'R-01',
+      patientName: apt.patientName,
+      roomName: apt.room || 'Consultório 01 (Retorno)',
+      examinerName: currentUser.fullName,
+      priority: false
+    });
+
+    onStartEncounter(patientObj, {
+      isReturnEncounter: true,
+      previousEncounter: previousEncounter
+    } as any);
   };
 
   // Ação: Abrir Modal de Visualização
@@ -691,7 +741,7 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
 
         {/* Seletor de Escopo & Data */}
         <div className="flex flex-wrap items-center gap-3 self-end md:self-auto">
-          {/* Seletor de Modo: Hoje vs Histórico Completo */}
+          {/* Seletor de Modo: Dia / Esta Semana / Histórico Completo */}
           <div className="flex items-center bg-slate-100 p-1 rounded-2xl border border-slate-200">
             <button
               type="button"
@@ -702,33 +752,46 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              Atendimentos do Dia
+              Dia
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewScope('this_week')}
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 ${
+                viewScope === 'this_week'
+                  ? 'bg-blue-600 text-white shadow-xs'
+                  : 'text-blue-700 hover:bg-blue-50'
+              }`}
+              title="Exibir todas as consultas e atendimentos desta semana (Setembro 2026)"
+            >
+              <span>⭐ Esta Semana</span>
             </button>
             <button
               type="button"
               onClick={() => setViewScope('all_history')}
               className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 ${
                 viewScope === 'all_history'
-                  ? 'bg-blue-600 text-white shadow-xs'
+                  ? 'bg-slate-900 text-white shadow-xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               <History className="w-3.5 h-3.5" />
-              <span>Histórico Completo ({encounters.length || patients.length})</span>
+              <span>Histórico ({encounters.length || patients.length})</span>
             </button>
           </div>
 
-          {viewScope === 'day' && (
-            <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 p-1 rounded-2xl shadow-inner">
-              <CalendarIcon className="w-4 h-4 text-slate-500 ml-2" />
-              <input
-                type="date"
-                value={selectedDate}
-                onChange={(e) => setSelectedDate(e.target.value)}
-                className="bg-transparent border-0 text-xs font-black text-slate-800 focus:outline-none pr-3 py-1.5 cursor-pointer font-mono"
-              />
-            </div>
-          )}
+          <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 p-1 rounded-2xl shadow-inner">
+            <CalendarIcon className="w-4 h-4 text-slate-500 ml-2" />
+            <input
+              type="date"
+              value={selectedDate}
+              onChange={(e) => {
+                setSelectedDate(e.target.value);
+                setViewScope('day');
+              }}
+              className="bg-transparent border-0 text-xs font-black text-slate-800 focus:outline-none pr-3 py-1.5 cursor-pointer font-mono"
+            />
+          </div>
 
           {viewScope === 'day' && (
             <button
@@ -952,6 +1015,8 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
             <Users className="w-4 h-4 text-blue-600" />
             {viewScope === 'all_history' 
               ? `Todo o Histórico de Atendimentos (${filteredAppointments.length} registros)`
+              : viewScope === 'this_week'
+              ? `Consultas & Atendimentos Desta Semana (${filteredAppointments.length} pacientes)`
               : `Fila de Atendimento do Dia (${filteredAppointments.length} pacientes)`}
           </h3>
           <span className="text-[11px] font-mono text-slate-400">
@@ -960,10 +1025,19 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
         </div>
 
         {filteredAppointments.length === 0 ? (
-          <div className="py-16 text-center text-slate-400 space-y-2">
+          <div className="py-16 text-center text-slate-400 space-y-3">
             <Users className="w-12 h-12 mx-auto text-slate-300" />
             <p className="text-sm font-bold text-slate-600">Nenhum paciente encontrado para esta data ou filtro.</p>
             <p className="text-xs text-slate-400">Os pacientes cadastrados pela recepção surgirão aqui instantaneamente.</p>
+            {viewScope === 'day' && (
+              <button
+                type="button"
+                onClick={() => setViewScope('this_week')}
+                className="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-black text-xs rounded-xl shadow-md cursor-pointer transition-all inline-flex items-center gap-2"
+              >
+                <span>⭐ Ver Consultas e Atendimentos Desta Semana</span>
+              </button>
+            )}
           </div>
         ) : (
           <div className="divide-y divide-slate-100">
@@ -1113,15 +1187,27 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
 
                     {/* Botão Iniciar Atendimento ou Ver Prontuário */}
                     {apt.status === 'completed' ? (
-                      <button
-                        type="button"
-                        onClick={() => handleStartExam(apt)}
-                        className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-black flex items-center gap-2 border border-slate-300 transition-all cursor-pointer active:scale-95"
-                        title="Reabrir prontuário e exames deste paciente"
-                      >
-                        <FileText className="w-3.5 h-3.5 text-blue-600" />
-                        <span>Ver Prontuário</span>
-                      </button>
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => handleStartReturnExam(apt)}
+                          className="px-3.5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-xl text-xs font-black flex items-center gap-1.5 shadow-md shadow-blue-600/30 transition-all cursor-pointer active:scale-95"
+                          title="Iniciar uma nova consulta de retorno com comparativo de dioptrias e nova conduta"
+                        >
+                          <Plus className="w-3.5 h-3.5" />
+                          <span>Retorno</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => handleStartExam(apt)}
+                          className="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-black flex items-center gap-1.5 border border-slate-300 transition-all cursor-pointer active:scale-95"
+                          title="Reabrir prontuário anterior deste paciente"
+                        >
+                          <FileText className="w-3.5 h-3.5 text-blue-600" />
+                          <span>Prontuário</span>
+                        </button>
+                      </div>
                     ) : (
                       <button
                         type="button"
@@ -1213,25 +1299,71 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
                     Primeira consulta deste paciente na clínica.
                   </p>
                 ) : (
-                  <div className="space-y-2 max-h-36 overflow-y-auto">
-                    {previewEncounterHistory.map((enc) => (
-                      <div key={enc.id} className="p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between text-xs">
-                        <div>
-                          <span className="font-bold text-slate-900 block">{enc.date}</span>
-                          <span className="text-[11px] text-slate-500">{enc.anamnesis?.chiefComplaint || 'Avaliação Visual & Refração'}</span>
+                  <div className="space-y-2.5 max-h-56 overflow-y-auto pr-1">
+                    {previewEncounterHistory.map((enc, idx) => {
+                      const encDateObj = new Date(enc.date);
+                      const formattedDate = !isNaN(encDateObj.getTime())
+                        ? `${encDateObj.toLocaleDateString('pt-BR')} às ${encDateObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`
+                        : enc.date;
+                      
+                      const odSph = enc.subjectiveRefraction?.od?.sphere !== undefined
+                        ? (enc.subjectiveRefraction.od.sphere > 0 ? `+${enc.subjectiveRefraction.od.sphere.toFixed(2)}` : enc.subjectiveRefraction.od.sphere.toFixed(2))
+                        : '0.00';
+                      const odCyl = enc.subjectiveRefraction?.od?.cylinder ? ` (${enc.subjectiveRefraction.od.cylinder > 0 ? '+' : ''}${enc.subjectiveRefraction.od.cylinder.toFixed(2)})` : '';
+                      
+                      const oeSph = enc.subjectiveRefraction?.oe?.sphere !== undefined
+                        ? (enc.subjectiveRefraction.oe.sphere > 0 ? `+${enc.subjectiveRefraction.oe.sphere.toFixed(2)}` : enc.subjectiveRefraction.oe.sphere.toFixed(2))
+                        : '0.00';
+                      const oeCyl = enc.subjectiveRefraction?.oe?.cylinder ? ` (${enc.subjectiveRefraction.oe.cylinder > 0 ? '+' : ''}${enc.subjectiveRefraction.oe.cylinder.toFixed(2)})` : '';
+
+                      return (
+                        <div key={enc.id} className="p-3 bg-slate-50 rounded-2xl border border-slate-200 space-y-1.5 text-xs hover:border-blue-300 transition-colors">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <span className="font-black text-slate-900 flex items-center gap-1">
+                                <CalendarIcon className="w-3.5 h-3.5 text-blue-600" />
+                                {formattedDate}
+                              </span>
+                              <span className={`text-[10px] font-bold px-2 py-0.2 rounded-full ${
+                                enc.status === 'completed'
+                                  ? 'bg-emerald-100 text-emerald-800'
+                                  : 'bg-amber-100 text-amber-800'
+                              }`}>
+                                {enc.status === 'completed' ? 'Concluído' : 'Em Andamento'}
+                              </span>
+                            </div>
+                            <span className="font-mono text-emerald-800 font-black bg-emerald-50 px-2 py-0.5 rounded-lg border border-emerald-200 text-[11px]">
+                              OD: {odSph}{odCyl} | OE: {oeSph}{oeCyl}
+                            </span>
+                          </div>
+
+                          {enc.anamnesis?.chiefComplaint && (
+                            <p className="text-[11px] text-slate-600">
+                              <b>Queixa / Anamnese:</b> {enc.anamnesis.chiefComplaint}
+                            </p>
+                          )}
+
+                          {enc.conduct && (
+                            <p className="text-[11px] text-blue-900 bg-blue-50/70 p-1.5 rounded-lg border border-blue-100">
+                              <b>Conduta:</b> {enc.conduct}
+                            </p>
+                          )}
+
+                          {enc.returnInstructions && (
+                            <p className="text-[10px] text-slate-500 italic">
+                              Indicação: {enc.returnInstructions}
+                            </p>
+                          )}
                         </div>
-                        <span className="font-mono text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 text-[10px]">
-                          OD: {enc.subjectiveRefraction?.od?.sphere || '0.00'} / OE: {enc.subjectiveRefraction?.oe?.sphere || '0.00'}
-                        </span>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 )}
               </div>
             </div>
 
-            {/* Rodapé do Modal com Início de Atendimento */}
-            <div className="p-4 bg-slate-50 border-t border-slate-200 flex justify-end gap-3">
+            {/* Rodapé do Modal com Início de Atendimento e Opção de Retorno */}
+            <div className="p-4 bg-slate-50 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
               <button
                 type="button"
                 onClick={() => setPreviewPatient(null)}
@@ -1240,18 +1372,36 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
                 Fechar
               </button>
 
-              <button
-                type="button"
-                onClick={() => {
-                  const p = previewPatient;
-                  setPreviewPatient(null);
-                  onStartEncounter(p);
-                }}
-                className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded-xl text-xs shadow-lg transition-all flex items-center gap-2 cursor-pointer active:scale-95"
-              >
-                <Play className="w-4 h-4 fill-white" />
-                <span>Iniciar Atendimento Agora</span>
-              </button>
+              <div className="flex items-center gap-2">
+                {previewEncounterHistory.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const p = previewPatient;
+                      setPreviewPatient(null);
+                      onStartEncounter(p, { isReturnEncounter: true } as any);
+                    }}
+                    className="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-black rounded-xl text-xs shadow-md transition-all flex items-center gap-1.5 cursor-pointer active:scale-95"
+                    title="Iniciar uma nova consulta de retorno registrando nova dioptria e conduta sem sobrescrever a anterior"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>Nova Consulta de Retorno</span>
+                  </button>
+                )}
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    const p = previewPatient;
+                    setPreviewPatient(null);
+                    onStartEncounter(p);
+                  }}
+                  className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded-xl text-xs shadow-lg transition-all flex items-center gap-2 cursor-pointer active:scale-95"
+                >
+                  <Play className="w-4 h-4 fill-white" />
+                  <span>{previewEncounterHistory.length > 0 ? 'Abrir Último Prontuário' : 'Iniciar Atendimento Agora'}</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>

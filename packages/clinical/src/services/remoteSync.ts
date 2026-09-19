@@ -1,4 +1,4 @@
-﻿// RemoteSyncService — sincronizacao em tempo real com o servidor Express via REST
+// RemoteSyncService — sincronizacao em tempo real com o servidor Express via REST
 
 type SyncStatus = 'synced' | 'syncing' | 'error' | 'offline';
 
@@ -7,11 +7,42 @@ export type SyncStatusListener = (status: SyncStatus, pending: number) => void;
 const SYNC_ENTITIES = ['patients', 'encounters', 'appointments', 'prescriptions'] as const;
 type SyncEntity = typeof SYNC_ENTITIES[number];
 
+let cachedApiBase: string | null = null;
+
 function getApiBase(): string {
+  if (cachedApiBase !== null) return cachedApiBase;
+
   try {
     const envUrl = (import.meta as any)?.env?.VITE_API_URL;
-    if (envUrl) return String(envUrl).replace(/\/$/, '');
+    if (envUrl) {
+      cachedApiBase = String(envUrl).replace(/\/$/, '');
+      return cachedApiBase;
+    }
   } catch {}
+
+  // Detecção inteligente em ambiente de navegador
+  if (typeof window !== 'undefined' && window.location) {
+    const hostname = window.location.hostname;
+    // Se acessando pelo túnel de qualquer subdomínio da clínica (app, clinica, api) ou local/LAN, usa caminho relativo ''
+    // porque o próprio Cloudflare Tunnel direciona app.optomed.app.br e clinica.optomed.app.br diretamente para o Express na porta 8765!
+    if (
+      hostname.includes('optomed.app.br') ||
+      hostname === 'localhost' ||
+      hostname === '127.0.0.1' ||
+      hostname.startsWith('192.168.') ||
+      hostname.startsWith('10.')
+    ) {
+      cachedApiBase = '';
+      return '';
+    }
+    // Se estiver em ambiente Vercel legado ou domínio externo, direciona para o túnel da clínica
+    if (hostname.includes('vercel.app')) {
+      cachedApiBase = 'https://clinica.optomed.app.br';
+      return cachedApiBase;
+    }
+  }
+
+  cachedApiBase = '';
   return '';
 }
 
@@ -168,11 +199,12 @@ class RemoteSyncService {
             console.log('[Sync] Upload inicial ' + entity + ': ' + localData.length + ' registros');
           } else if (serverData.length > 0) {
             // Ambos tem dados — mescla por updatedAt e sincroniza
-            const merged = this.mergeData(serverData, localData);
+            const { merged, hasLocalChanges } = this.mergeData(serverData, localData);
             setLocal(entity, merged);
-            // Se merged tem mais registros que servidor -> tem dados novos locais -> envia
-            if (merged.length > serverData.length) {
+            // Se houver qualquer dado novo ou mais atual localmente, envia para o servidor
+            if (hasLocalChanges || merged.length > serverData.length) {
               await this.push(clinicId, entity, merged);
+              console.log('[Sync] Atualização enviada ao servidor para ' + entity + ': ' + merged.length + ' registros');
             }
           }
         } catch (err) {
@@ -189,7 +221,7 @@ class RemoteSyncService {
     }
   }
 
-  // Inicia sincronizacao periodica automatica a cada 30 segundos
+  // Inicia sincronizacao periodica automatica a cada 15 segundos com sincronizacao instantanea no foco e reconexao
   startPeriodicSync(
     clinicId: string,
     getLocal: (entity: SyncEntity) => any[],
@@ -198,11 +230,21 @@ class RemoteSyncService {
     if (this.periodicTimer) return; // ja iniciado
     // Sync imediato
     this.fullSync(clinicId, getLocal, setLocal);
-    // Sync a cada 30 segundos
+    // Sync frequente a cada 15 segundos
     this.periodicTimer = setInterval(() => {
       this.fullSync(clinicId, getLocal, setLocal);
-    }, 30000);
-    console.log('[Sync] Sincronizacao periodica iniciada (30s)');
+    }, 15000);
+
+    if (typeof window !== 'undefined') {
+      const handleFocusOrOnline = () => {
+        if (navigator.onLine && !this.syncInProgress) {
+          this.fullSync(clinicId, getLocal, setLocal);
+        }
+      };
+      window.addEventListener('online', handleFocusOrOnline);
+      window.addEventListener('focus', handleFocusOrOnline);
+    }
+    console.log('[Sync] Sincronizacao periodica iniciada (15s)');
   }
 
   stopPeriodicSync(): void {
@@ -212,8 +254,10 @@ class RemoteSyncService {
     }
   }
 
-  private mergeData(serverData: any[], localData: any[]): any[] {
+  private mergeData(serverData: any[], localData: any[]): { merged: any[]; hasLocalChanges: boolean } {
     const map = new Map<string, any>();
+    let hasLocalChanges = false;
+
     for (const item of serverData) {
       if (item && item.id) map.set(item.id, item);
     }
@@ -222,15 +266,17 @@ class RemoteSyncService {
       const existing = map.get(item.id);
       if (!existing) {
         map.set(item.id, item);
+        hasLocalChanges = true;
       } else {
         const existingTs = existing.updatedAt || existing.createdAt || '';
         const localTs = item.updatedAt || item.createdAt || '';
         if (localTs > existingTs) {
           map.set(item.id, item);
+          hasLocalChanges = true;
         }
       }
     }
-    return Array.from(map.values());
+    return { merged: Array.from(map.values()), hasLocalChanges };
   }
 }
 

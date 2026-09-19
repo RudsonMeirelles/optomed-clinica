@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { 
   Patient, 
   ClinicalEncounter, 
@@ -48,7 +48,12 @@ import {
   HelpCircle,
   FilePlus2,
   Stethoscope,
-  Plus
+  Plus,
+  History,
+  RotateCcw,
+  Copy,
+  FileCheck2,
+  CalendarClock
 } from 'lucide-react';
 import { RemoteControlPanel } from '../components/RemoteControlPanel';
 import { RefractionDials } from '../components/RefractionDials';
@@ -59,6 +64,7 @@ import { ClinicalReportModal } from '../components/ClinicalReportModal';
 import { TherapeuticGuideModal } from '../components/TherapeuticGuideModal';
 import { TherapeuticPlanModal } from '../components/TherapeuticPlanModal';
 import { ClinicalGalleryModal } from '../components/gallery/ClinicalGalleryModal';
+import { PatientMedicalRecordModal } from '../components/PatientMedicalRecordModal';
 import { offlineDb, generateUUID } from '../services/offlineDb';
 
 import { OphthalmicDrug } from '../services/ophthalmicDrugsDb';
@@ -182,10 +188,101 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
     setTimeout(() => setSaveMessage(null), 2500);
   };
 
+  // Recupera histórico de consultas anteriores do paciente para referência e comparativo
+  const patientEncounterHistory = useMemo(() => {
+    return offlineDb.getEncounters()
+      .filter(e => e.patientId === patient.id && e.id !== (initialEncounter?.id))
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  }, [patient.id, initialEncounter?.id]);
+
+  const isReturnSession = (initialEncounter as any)?.isReturnEncounter || false;
+  const previousReferenceEncounter = (initialEncounter as any)?.previousEncounter || (patientEncounterHistory.length > 0 ? patientEncounterHistory[0] : null);
+
   // Estado do Atendimento Atual com Auto-recuperação de dados existentes
   const [currentEncounter, setCurrentEncounter] = useState<ClinicalEncounter>(() => {
-    if (initialEncounter) return initialEncounter;
+    if (initialEncounter && !(initialEncounter as any)?.isReturnEncounter) {
+      return initialEncounter;
+    }
     
+    // Se for uma consulta de retorno ou se o examinador solicitou novo retorno:
+    if (isReturnSession && previousReferenceEncounter) {
+      const prevRx = previousReferenceEncounter.subjectiveRefraction;
+      return {
+        id: generateUUID(),
+        patientId: patient.id,
+        date: new Date().toISOString(),
+        status: 'in_progress',
+        examinerId: 'dr-meirelles',
+        examinerName: 'Dr. Rudson Meirelles (CRM/CROO 123456)',
+        syncStatus: 'synced',
+        updatedAt: new Date().toISOString(),
+        anamnesis: {
+          id: generateUUID(),
+          encounterId: '',
+          chiefComplaint: `Retorno clínico para reavaliação visual. Consulta anterior: ${new Date(previousReferenceEncounter.date).toLocaleDateString('pt-BR')}`,
+          currentGlasses: true,
+          contactLenses: false,
+          hasHypertension: previousReferenceEncounter.anamnesis?.hasHypertension || false,
+          hasDiabetes: previousReferenceEncounter.anamnesis?.hasDiabetes || false,
+          medicationsInUse: previousReferenceEncounter.anamnesis?.medicationsInUse || '',
+          pathologicalHistory: previousReferenceEncounter.anamnesis?.pathologicalHistory || '',
+          allergies: previousReferenceEncounter.anamnesis?.allergies || '',
+          ocularHistory: previousReferenceEncounter.anamnesis?.ocularHistory || '',
+          clinicalNotes: `Retorno de paciente. Consulta de referência realizada em ${new Date(previousReferenceEncounter.date).toLocaleDateString('pt-BR')}.`
+        },
+        lensometry: {
+          id: generateUUID(),
+          encounterId: '',
+          od: {
+            sphere: prevRx?.od?.sphere,
+            cylinder: prevRx?.od?.cylinder,
+            axis: prevRx?.od?.axis
+          },
+          oe: {
+            sphere: prevRx?.oe?.sphere,
+            cylinder: prevRx?.oe?.cylinder,
+            axis: prevRx?.oe?.axis
+          },
+          addition: prevRx?.addition || previousReferenceEncounter.lensometry?.addition,
+          pdDistanceMm: prevRx?.pdDistanceMm,
+          lensType: previousReferenceEncounter.lensometry?.lensType || 'multifocal',
+          material: previousReferenceEncounter.lensometry?.material || 'resina',
+          treatments: previousReferenceEncounter.lensometry?.treatments || ['Antirreflexo'],
+          notes: `Dioptria da consulta anterior (${new Date(previousReferenceEncounter.date).toLocaleDateString('pt-BR')}) carregada como óculos atual.`
+        },
+        visualAcuity: {
+          id: generateUUID(),
+          encounterId: '',
+          testedAt: new Date().toISOString(),
+          entries: previousReferenceEncounter.visualAcuity?.entries?.length ? previousReferenceEncounter.visualAcuity.entries : [
+            { eye: 'OD', optotypeType: 'snellen_letters', distanceMeters: 6, uncorrected: '20/' },
+            { eye: 'OE', optotypeType: 'snellen_letters', distanceMeters: 6, uncorrected: '20/' }
+          ]
+        },
+        subjectiveRefraction: {
+          id: generateUUID(),
+          encounterId: '',
+          od: { 
+            sphere: prevRx?.od?.sphere, 
+            cylinder: prevRx?.od?.cylinder, 
+            axis: prevRx?.od?.axis, 
+            visualAcuity: prevRx?.od?.visualAcuity || '20/20' 
+          },
+          oe: { 
+            sphere: prevRx?.oe?.sphere, 
+            cylinder: prevRx?.oe?.cylinder, 
+            axis: prevRx?.oe?.axis, 
+            visualAcuity: prevRx?.oe?.visualAcuity || '20/20' 
+          },
+          addition: prevRx?.addition,
+          pdDistanceMm: prevRx?.pdDistanceMm || 62
+        },
+        conduct: previousReferenceEncounter.conduct ? `Retorno clínico. Conduta anterior mantida/reavaliada: ${previousReferenceEncounter.conduct}` : 'Retorno clínico. Reavaliação de refração e acuidade visual.',
+        returnInstructions: previousReferenceEncounter.returnInstructions || 'Retorno em 1 ano para acompanhamento de rotina.'
+      };
+    }
+
+
     // Procura se o paciente já tem atendimento registrado no banco de dados
     const existingEncounters = offlineDb.getEncounters().filter(e => e.patientId === patient.id);
     if (existingEncounters.length > 0) {
@@ -324,6 +421,119 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
 
   const [pendingPrescriptionDrugs, setPendingPrescriptionDrugs] = useState<ClinicalProtocolDrug[]>([]);
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
+
+  // Histórico completo de todas as consultas do paciente
+  const allPatientEncounters = useMemo(() => {
+    return offlineDb.getEncounters()
+      .filter(e => e.patientId === patient.id)
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  }, [patient.id, currentEncounter.id, saveMessage]);
+
+  // Estados para Gestão de Retorno e Prontuário Completo
+  const [isPatientHistoryModalOpen, setIsPatientHistoryModalOpen] = useState<boolean>(false);
+  const [isConfirmReturnModalOpen, setIsConfirmReturnModalOpen] = useState<boolean>(false);
+  const [isReturnMode, setIsReturnMode] = useState<boolean>(Boolean(isReturnSession || (currentEncounter as any)?.isReturnEncounter));
+
+  // Função para Iniciar Consulta de Retorno Preservando Dados Anteriores
+  const handleStartReturnSession = (refEncounter?: ClinicalEncounter) => {
+    const reference = refEncounter || previousReferenceEncounter || allPatientEncounters.find(e => e.id !== currentEncounter.id) || allPatientEncounters[0];
+    const prevRx = reference?.subjectiveRefraction || reference?.lensometry;
+
+    const newReturn: ClinicalEncounter = {
+      id: generateUUID(),
+      patientId: patient.id,
+      date: new Date().toISOString(),
+      status: 'in_progress',
+      examinerId: currentEncounter.examinerId || 'dr-meirelles',
+      examinerName: currentEncounter.examinerName || 'Dr. Rudson Meirelles (CRM/CROO 123456)',
+      syncStatus: 'synced',
+      updatedAt: new Date().toISOString(),
+      isReturnEncounter: true,
+      returnReferenceEncounterId: reference?.id,
+      anamnesis: {
+        id: generateUUID(),
+        encounterId: '',
+        chiefComplaint: `Retorno clínico para reavaliação visual.${reference ? ` Consulta anterior: ${new Date(reference.date).toLocaleDateString('pt-BR')}` : ''}`,
+        currentGlasses: true,
+        contactLenses: reference?.anamnesis?.contactLenses || false,
+        hasHypertension: reference?.anamnesis?.hasHypertension || false,
+        hasDiabetes: reference?.anamnesis?.hasDiabetes || false,
+        medicationsInUse: reference?.anamnesis?.medicationsInUse || '',
+        pathologicalHistory: reference?.anamnesis?.pathologicalHistory || '',
+        allergies: reference?.anamnesis?.allergies || '',
+        ocularHistory: reference?.anamnesis?.ocularHistory || '',
+        clinicalNotes: `Retorno clínico do paciente. Consulta de referência: ${reference ? new Date(reference.date).toLocaleDateString('pt-BR') : 'Data anterior'}.`
+      },
+      lensometry: {
+        id: generateUUID(),
+        encounterId: '',
+        od: {
+          sphere: prevRx?.od?.sphere,
+          cylinder: prevRx?.od?.cylinder,
+          axis: prevRx?.od?.axis
+        },
+        oe: {
+          sphere: prevRx?.oe?.sphere,
+          cylinder: prevRx?.oe?.cylinder,
+          axis: prevRx?.oe?.axis
+        },
+        addition: prevRx?.addition || reference?.lensometry?.addition,
+        pdDistanceMm: prevRx?.pdDistanceMm || reference?.lensometry?.pdDistanceMm,
+        lensType: reference?.lensometry?.lensType || 'multifocal',
+        material: reference?.lensometry?.material || 'resina',
+        treatments: reference?.lensometry?.treatments || ['Antirreflexo'],
+        notes: reference ? `Dioptria da consulta anterior (${new Date(reference.date).toLocaleDateString('pt-BR')}) carregada como óculos atual.` : ''
+      },
+      visualAcuity: {
+        id: generateUUID(),
+        encounterId: '',
+        testedAt: new Date().toISOString(),
+        entries: [
+          { eye: 'OD', optotypeType: 'snellen_letters', distanceMeters: 6, uncorrected: '20/' },
+          { eye: 'OE', optotypeType: 'snellen_letters', distanceMeters: 6, uncorrected: '20/' }
+        ]
+      },
+      subjectiveRefraction: {
+        id: generateUUID(),
+        encounterId: '',
+        od: {
+          sphere: prevRx?.od?.sphere,
+          cylinder: prevRx?.od?.cylinder,
+          axis: prevRx?.od?.axis,
+          visualAcuity: prevRx?.od?.visualAcuity || '20/20'
+        },
+        oe: {
+          sphere: prevRx?.oe?.sphere,
+          cylinder: prevRx?.oe?.cylinder,
+          axis: prevRx?.oe?.axis,
+          visualAcuity: prevRx?.oe?.visualAcuity || '20/20'
+        },
+        addition: prevRx?.addition,
+        pdDistanceMm: prevRx?.pdDistanceMm || 62
+      },
+      conduct: reference?.conduct ? `Retorno clínico. Reavaliação e nova conduta baseada na consulta anterior (${new Date(reference.date).toLocaleDateString('pt-BR')})` : 'Retorno clínico. Reavaliação de refração e acuidade visual.',
+      returnInstructions: reference?.returnInstructions || (patient.nationality === 'PY' ? 'Control en 1 año para evaluación visual de rutina.' : 'Retorno em 1 ano para controle visual de rotina.')
+    };
+
+    offlineDb.saveEncounter(newReturn);
+    setCurrentEncounter(newReturn);
+    setIsReturnMode(true);
+
+    if (newReturn.lensometry) {
+      setLensOdSph(formatDiopterStr(newReturn.lensometry.od?.sphere));
+      setLensOdCyl(formatDiopterStr(newReturn.lensometry.od?.cylinder));
+      setLensOdAxis(newReturn.lensometry.od?.axis !== undefined ? String(newReturn.lensometry.od.axis) : '');
+      setLensOeSph(formatDiopterStr(newReturn.lensometry.oe?.sphere));
+      setLensOeCyl(formatDiopterStr(newReturn.lensometry.oe?.cylinder));
+      setLensOeAxis(newReturn.lensometry.oe?.axis !== undefined ? String(newReturn.lensometry.oe.axis) : '');
+      setLensAddition(formatDiopterStr(newReturn.lensometry.addition));
+    }
+
+    setIsConfirmReturnModalOpen(false);
+    setIsPatientHistoryModalOpen(false);
+    setSaveMessage('✓ Nova consulta de retorno iniciada! Consulta anterior arquivada com segurança.');
+    setTimeout(() => setSaveMessage(null), 3500);
+  };
 
   const patientAge = calculateAge(patient.birthDate);
 
@@ -497,7 +707,7 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
     <div className="flex flex-col h-screen bg-slate-100 text-slate-800 overflow-hidden font-sans">
       
       {/* 1. Cabeçalho Principal do Atendimento */}
-      <header className="bg-white border-b border-slate-200 px-4 sm:px-6 py-2.5 flex flex-wrap items-center justify-between shadow-sm shrink-0 gap-2">
+      <header className="bg-white border-b border-slate-200 px-4 sm:px-6 py-2.5 flex flex-wrap items-center justify-between shadow-sm shrink-0 gap-2 no-print">
         <div className="flex items-center gap-3">
           <button
             onClick={onBack}
@@ -514,7 +724,7 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
               {patient.fullName.charAt(0).toUpperCase()}
             </div>
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <span className="font-black text-slate-900 text-sm tracking-tight">{patient.fullName}</span>
                 
                 <span className="text-xs px-2 py-0.5 rounded-md bg-slate-100 font-bold text-slate-600 flex items-center gap-1">
@@ -528,6 +738,25 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
                 >
                   <Edit3 className="w-3 h-3" /> Editar
                 </button>
+
+                {/* Data e Hora do Atendimento */}
+                <div className="flex items-center gap-1.5 px-2 py-0.5 bg-slate-100 rounded-md border border-slate-200 text-xs text-slate-700" title="Data do Atendimento Atual">
+                  <CalendarClock className="w-3.5 h-3.5 text-blue-600" />
+                  <span className="font-bold text-slate-800">
+                    {new Date(currentEncounter.date).toLocaleDateString('pt-BR')}
+                  </span>
+                  <span className="text-[10px] font-mono text-slate-500">
+                    {new Date(currentEncounter.date).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                  </span>
+                </div>
+
+                {/* Badge de Retorno Clínico */}
+                {(isReturnMode || (currentEncounter as any)?.isReturnEncounter) && (
+                  <span className="px-2 py-0.5 rounded-md bg-purple-600 text-white font-black text-[11px] flex items-center gap-1 shadow-xs animate-fadeIn">
+                    <RotateCcw className="w-3 h-3" />
+                    <span>RETORNO CLÍNICO</span>
+                  </span>
+                )}
               </div>
               <div className="text-xs text-slate-500 flex items-center gap-3 mt-0.5">
                 {patient.birthDate && (
@@ -546,6 +775,40 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
               {saveMessage}
             </span>
           )}
+
+          {/* Botão Prominente de Consulta de Retorno */}
+          <button
+            type="button"
+            onClick={() => {
+              if (allPatientEncounters.length === 0 && !isReturnMode && !(currentEncounter as any)?.isReturnEncounter) {
+                if (confirm(`Este paciente ainda não possui consultas arquivadas no sistema.\nDeseja iniciar uma Consulta de Retorno avulsa?`)) {
+                  handleStartReturnSession();
+                }
+                return;
+              }
+              setIsConfirmReturnModalOpen(true);
+            }}
+            className={`px-3 py-1.5 rounded-xl font-black text-xs flex items-center gap-1.5 transition-all cursor-pointer shadow-xs active:scale-95 ${
+              isReturnMode || (currentEncounter as any)?.isReturnEncounter
+                ? 'bg-purple-700 text-white ring-2 ring-purple-400 shadow-purple-600/30'
+                : 'bg-purple-50 hover:bg-purple-100 text-purple-800 border border-purple-300 hover:border-purple-400'
+            }`}
+            title="Registrar Consulta de Retorno: Cria um novo atendimento hoje, preservando a consulta anterior intacta e carregando as dioptrias de referência"
+          >
+            <RotateCcw className={`w-3.5 h-3.5 ${isReturnMode || (currentEncounter as any)?.isReturnEncounter ? 'text-purple-200' : 'text-purple-600'}`} />
+            <span>{isReturnMode || (currentEncounter as any)?.isReturnEncounter ? '✓ Consulta de Retorno' : '↩ Consulta de Retorno'}</span>
+          </button>
+
+          {/* Botão de Histórico / Prontuário Completo */}
+          <button
+            type="button"
+            onClick={() => setIsPatientHistoryModalOpen(true)}
+            className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 font-bold text-xs rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs active:scale-95"
+            title="Visualizar prontuário completo com todo o histórico clínico deste paciente"
+          >
+            <History className="w-3.5 h-3.5 text-blue-600" />
+            <span>Prontuário ({allPatientEncounters.length})</span>
+          </button>
 
           {/* Grupo de Botões de Impressão Direta por Ícone */}
           <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200">
@@ -631,7 +894,7 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
 
       {/* Banner Informativo para Perfil Recepção */}
       {isReadOnly && (
-        <div className="bg-amber-50 border-b border-amber-200 px-6 py-2.5 flex items-center justify-between gap-3 text-amber-900 animate-fadeIn">
+        <div className="bg-amber-50 border-b border-amber-200 px-6 py-2.5 flex items-center justify-between gap-3 text-amber-900 animate-fadeIn no-print">
           <div className="flex items-center gap-2 text-xs">
             <span className="p-1 bg-amber-200 text-amber-900 rounded-lg font-black text-[11px]">RECEPÇÃO</span>
             <span className="font-bold">
@@ -650,7 +913,7 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
       )}
 
       {/* 2. Trilha de Exame Clínico Guiada (Stepper) */}
-      <div className="bg-slate-900 text-slate-100 px-6 py-2.5 flex items-center justify-between border-b border-slate-800 overflow-x-auto shadow-inner">
+      <div className="bg-slate-900 text-slate-100 px-6 py-2.5 flex items-center justify-between border-b border-slate-800 overflow-x-auto shadow-inner no-print">
         <div className="flex items-center gap-1">
           <span className="text-[11px] font-black text-blue-400 uppercase tracking-wider mr-2 flex items-center gap-1">
             <Layers className="w-3.5 h-3.5" /> TRILHA DE EXAME:
@@ -710,7 +973,7 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
       </div>
 
       {/* 3. Área Central do Exame */}
-      <div className="flex-1 w-full p-4 grid grid-cols-1 lg:grid-cols-12 gap-4 overflow-y-auto">
+      <div className="flex-1 w-full p-4 grid grid-cols-1 lg:grid-cols-12 gap-4 overflow-y-auto no-print">
         
         {/* Coluna Esquerda: Detalhes Clínicos da Etapa Ativa */}
         <div className={remoteMode === 'sidebar' ? "lg:col-span-5 flex flex-col gap-4" : "lg:col-span-6 flex flex-col gap-4"}>
@@ -722,6 +985,45 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
             </div>
 
             <div className="flex-1 space-y-4 text-xs">
+              {/* Banner de Consulta de Retorno */}
+              {(isReturnSession || previousReferenceEncounter) && (
+                <div className="p-3 bg-gradient-to-r from-blue-900 to-indigo-900 text-white rounded-2xl shadow-sm flex items-center justify-between gap-3 animate-fadeIn">
+                  <div className="flex items-center gap-2.5">
+                    <div className="p-2 bg-blue-500 rounded-xl text-white shadow-xs">
+                      <History className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-black text-xs uppercase tracking-wider text-blue-200">
+                          {isReturnSession ? '⚡ Consulta de Retorno Ativa' : 'Histórico de Retorno Disponível'}
+                        </span>
+                        {previousReferenceEncounter && (
+                          <span className="text-[10px] bg-blue-800/80 px-2 py-0.5 rounded-md font-mono text-blue-100">
+                            Ref: {new Date(previousReferenceEncounter.date).toLocaleDateString('pt-BR')}
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-[11px] text-blue-100">
+                        {previousReferenceEncounter ? (
+                          <>
+                            Grau anterior: <b>OD: {formatDiopterStr(previousReferenceEncounter.subjectiveRefraction?.od?.sphere)} {previousReferenceEncounter.subjectiveRefraction?.od?.cylinder ? `(${formatDiopterStr(previousReferenceEncounter.subjectiveRefraction?.od?.cylinder)})` : ''}</b> &bull; <b>OE: {formatDiopterStr(previousReferenceEncounter.subjectiveRefraction?.oe?.sphere)} {previousReferenceEncounter.subjectiveRefraction?.oe?.cylinder ? `(${formatDiopterStr(previousReferenceEncounter.subjectiveRefraction?.oe?.cylinder)})` : ''}</b>
+                          </>
+                        ) : 'Este paciente possui histórico clínico arquivado.'}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab('conduct')}
+                      className="px-3 py-1.5 bg-white hover:bg-blue-50 text-blue-900 font-black rounded-xl text-[11px] shadow-sm transition-all cursor-pointer"
+                    >
+                      Ver Comparativo
+                    </button>
+                  </div>
+                </div>
+              )}
+
               {/* Etapa 1: Anamnese & Histórico Clínico */}
               {activeTab === 'anamnesis' && (
                 <div className="space-y-4">
@@ -1774,6 +2076,58 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
               {/* Etapa 5: Refração */}
               {activeTab === 'refraction' && (
                 <div className="space-y-4">
+                  {/* Comparativo com Consulta Anterior se for Retorno ou houver histórico */}
+                  {previousReferenceEncounter?.subjectiveRefraction && (
+                    <div className="p-3.5 bg-purple-50/80 border border-purple-200 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-2xs">
+                      <div className="flex items-center gap-2.5">
+                        <div className="p-2 bg-purple-600 rounded-xl text-white shadow-xs">
+                          <RotateCcw className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-black text-purple-950 text-xs uppercase tracking-wide">
+                              Dioptria Prescrita na Consulta Anterior
+                            </span>
+                            <span className="text-[10px] bg-purple-200/80 text-purple-800 font-bold px-2 py-0.5 rounded-md font-mono">
+                              Ref: {new Date(previousReferenceEncounter.date).toLocaleDateString('pt-BR')}
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-purple-900 font-mono mt-0.5">
+                            OD: <b>{formatDiopterStr(previousReferenceEncounter.subjectiveRefraction.od?.sphere)} {previousReferenceEncounter.subjectiveRefraction.od?.cylinder ? `(${formatDiopterStr(previousReferenceEncounter.subjectiveRefraction.od?.cylinder)})` : ''} x {previousReferenceEncounter.subjectiveRefraction.od?.axis || 0}°</b> &bull; 
+                            OE: <b>{formatDiopterStr(previousReferenceEncounter.subjectiveRefraction.oe?.sphere)} {previousReferenceEncounter.subjectiveRefraction.oe?.cylinder ? `(${formatDiopterStr(previousReferenceEncounter.subjectiveRefraction.oe?.cylinder)})` : ''} x {previousReferenceEncounter.subjectiveRefraction.oe?.axis || 0}°</b>
+                            {previousReferenceEncounter.subjectiveRefraction.addition ? ` • Adição: +${previousReferenceEncounter.subjectiveRefraction.addition.toFixed(2)}` : ''}
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (isReadOnly) return;
+                          const prevRx = previousReferenceEncounter.subjectiveRefraction;
+                          if (!prevRx) return;
+                          setCurrentEncounter(prev => ({
+                            ...prev,
+                            subjectiveRefraction: {
+                              id: prev.subjectiveRefraction?.id || generateUUID(),
+                              encounterId: prev.id,
+                              od: { ...prevRx.od },
+                              oe: { ...prevRx.oe },
+                              addition: prevRx.addition,
+                              pdDistanceMm: prevRx.pdDistanceMm || 62
+                            }
+                          }));
+                          setSaveMessage('✓ Dioptria anterior copiada para a nova refração!');
+                          setTimeout(() => setSaveMessage(null), 2500);
+                        }}
+                        className="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl flex items-center gap-1.5 shadow-sm active:scale-95 transition-all whitespace-nowrap cursor-pointer shrink-0"
+                        title="Copiar dioptria da consulta anterior diretamente para a refração desta consulta"
+                      >
+                        <Copy className="w-3.5 h-3.5" />
+                        <span>Copiar Dioptria Anterior</span>
+                      </button>
+                    </div>
+                  )}
+
                   <div className="p-3.5 bg-blue-50 border border-blue-200 rounded-xl text-blue-900 leading-relaxed">
                     <p className="font-bold text-xs mb-1">Painel de Refração & Dials:</p>
                     <p className="text-xs">
@@ -1841,6 +2195,72 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
               {/* Etapa 7: Conduta & Prescrição */}
               {activeTab === 'conduct' && (
                 <div className="space-y-4">
+                  {/* Seção de Evolução de Retorno & Comparativo Refrativo */}
+                  {(isReturnSession || previousReferenceEncounter) && (
+                    <div className="p-4 bg-slate-900 text-white rounded-2xl border border-slate-800 space-y-3 shadow-md animate-fadeIn">
+                      <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
+                        <div className="flex items-center gap-2">
+                          <div className="p-1.5 bg-blue-600 rounded-lg text-white">
+                            <History className="w-4 h-4" />
+                          </div>
+                          <div>
+                            <span className="font-black text-xs uppercase tracking-wide text-blue-300">
+                              EVOLUÇÃO CLÍNICA & COMPARATIVO DE RETORNO
+                            </span>
+                            <span className="text-[10px] text-slate-400 block">
+                              Referência da consulta anterior: {previousReferenceEncounter ? new Date(previousReferenceEncounter.date).toLocaleDateString('pt-BR') : 'Histórico'}
+                            </span>
+                          </div>
+                        </div>
+                        <span className="text-[10px] bg-blue-900/60 text-blue-200 border border-blue-700 px-2 py-0.5 rounded-full font-mono font-bold">
+                          Retorno Não-Destrutivo
+                        </span>
+                      </div>
+
+                      {/* Comparativo Refrativo: Anterior vs Atual */}
+                      {previousReferenceEncounter?.subjectiveRefraction && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+                          <div className="p-2.5 bg-slate-800/80 rounded-xl border border-slate-700/80 space-y-1">
+                            <span className="text-[10px] font-bold text-slate-400 uppercase block">1. Grau Anterior ({new Date(previousReferenceEncounter.date).toLocaleDateString('pt-BR')}):</span>
+                            <div className="font-mono text-emerald-400 font-black text-[11px]">
+                              OD: {formatDiopterStr(previousReferenceEncounter.subjectiveRefraction.od?.sphere)} {previousReferenceEncounter.subjectiveRefraction.od?.cylinder ? `(${formatDiopterStr(previousReferenceEncounter.subjectiveRefraction.od?.cylinder)})` : ''} x {previousReferenceEncounter.subjectiveRefraction.od?.axis || 0}°
+                            </div>
+                            <div className="font-mono text-emerald-400 font-black text-[11px]">
+                              OE: {formatDiopterStr(previousReferenceEncounter.subjectiveRefraction.oe?.sphere)} {previousReferenceEncounter.subjectiveRefraction.oe?.cylinder ? `(${formatDiopterStr(previousReferenceEncounter.subjectiveRefraction.oe?.cylinder)})` : ''} x {previousReferenceEncounter.subjectiveRefraction.oe?.axis || 0}°
+                            </div>
+                            {previousReferenceEncounter.subjectiveRefraction.addition && (
+                              <div className="text-[10px] text-slate-300 font-mono">
+                                Adição: +{previousReferenceEncounter.subjectiveRefraction.addition.toFixed(2)}
+                              </div>
+                            )}
+                          </div>
+
+                          <div className="p-2.5 bg-blue-950/40 rounded-xl border border-blue-700/60 space-y-1">
+                            <span className="text-[10px] font-bold text-blue-300 uppercase block">2. Nova Dioptria Atual (Desta Consulta):</span>
+                            <div className="font-mono text-cyan-300 font-black text-[11px]">
+                              OD: {formatDiopterStr(currentEncounter.subjectiveRefraction?.od?.sphere)} {currentEncounter.subjectiveRefraction?.od?.cylinder ? `(${formatDiopterStr(currentEncounter.subjectiveRefraction?.od?.cylinder)})` : ''} x {currentEncounter.subjectiveRefraction?.od?.axis || 0}°
+                            </div>
+                            <div className="font-mono text-cyan-300 font-black text-[11px]">
+                              OE: {formatDiopterStr(currentEncounter.subjectiveRefraction?.oe?.sphere)} {currentEncounter.subjectiveRefraction?.oe?.cylinder ? `(${formatDiopterStr(currentEncounter.subjectiveRefraction?.oe?.cylinder)})` : ''} x {currentEncounter.subjectiveRefraction?.oe?.axis || 0}°
+                            </div>
+                            {currentEncounter.subjectiveRefraction?.addition && (
+                              <div className="text-[10px] text-cyan-200 font-mono">
+                                Nova Adição: +{currentEncounter.subjectiveRefraction.addition.toFixed(2)}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Conduta Anterior de Referência */}
+                      {previousReferenceEncounter?.conduct && (
+                        <div className="p-2 bg-slate-800/50 rounded-xl border border-slate-700/60 text-[11px] text-slate-300">
+                          <b className="text-slate-400">Conduta anterior:</b> {previousReferenceEncounter.conduct}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
                   {/* Banner de Sugestão Autônoma de Plano Terapêutico */}
                   <div className="p-3.5 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl flex items-center justify-between gap-3">
                     <div className="flex items-center gap-2.5">
@@ -2350,6 +2770,103 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal do Prontuário Clínico Completo com Histórico e Impressão */}
+      <PatientMedicalRecordModal
+        isOpen={isPatientHistoryModalOpen}
+        patient={patient}
+        encounters={allPatientEncounters}
+        onClose={() => setIsPatientHistoryModalOpen(false)}
+        onSelectEncounterForReport={(enc) => {
+          setIsPatientHistoryModalOpen(false);
+          setIsReportModalOpen(true);
+        }}
+        onStartReturn={(pat, prev) => {
+          handleStartReturnSession(prev);
+        }}
+      />
+
+      {/* Modal de Confirmação para Iniciar Consulta de Retorno */}
+      {isConfirmReturnModalOpen && (
+        <div className="fixed inset-0 z-[9999] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn no-print">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-6 text-slate-900 border border-slate-200">
+            <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-4">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2.5 bg-purple-100 text-purple-700 rounded-2xl">
+                  <RotateCcw className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-black text-base text-slate-900">Iniciar Consulta de Retorno</h3>
+                  <p className="text-xs text-slate-500">Preserva o histórico anterior e inicia novo atendimento hoje</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsConfirmReturnModalOpen(false)}
+                className="p-1.5 hover:bg-slate-100 rounded-xl text-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-3 text-xs text-slate-600">
+              <div className="p-3.5 bg-purple-50/80 border border-purple-200 rounded-2xl space-y-2">
+                <div className="flex items-center justify-between text-[11px] font-bold text-purple-900">
+                  <span>Paciente: <b>{patient.fullName}</b></span>
+                  <span>Data Hoje: <b>{new Date().toLocaleDateString('pt-BR')}</b></span>
+                </div>
+                {previousReferenceEncounter ? (
+                  <div className="pt-2 border-t border-purple-200/60 space-y-1">
+                    <span className="text-[10px] uppercase font-bold text-purple-800 block">Consulta Anterior de Referência:</span>
+                    <div className="font-mono text-purple-950 font-bold">
+                      Data: {new Date(previousReferenceEncounter.date).toLocaleDateString('pt-BR')} às {new Date(previousReferenceEncounter.date).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                    </div>
+                    {previousReferenceEncounter.subjectiveRefraction && (
+                      <div className="text-[11px] font-mono text-purple-900 bg-white/80 p-2 rounded-lg border border-purple-200">
+                        OD: {formatDiopterStr(previousReferenceEncounter.subjectiveRefraction.od?.sphere)} {previousReferenceEncounter.subjectiveRefraction.od?.cylinder ? `(${formatDiopterStr(previousReferenceEncounter.subjectiveRefraction.od?.cylinder)})` : ''} x {previousReferenceEncounter.subjectiveRefraction.od?.axis || 0}°<br/>
+                        OE: {formatDiopterStr(previousReferenceEncounter.subjectiveRefraction.oe?.sphere)} {previousReferenceEncounter.subjectiveRefraction.oe?.cylinder ? `(${formatDiopterStr(previousReferenceEncounter.subjectiveRefraction.oe?.cylinder)})` : ''} x {previousReferenceEncounter.subjectiveRefraction.oe?.axis || 0}°
+                        {previousReferenceEncounter.subjectiveRefraction.addition ? ` • Adição: +${previousReferenceEncounter.subjectiveRefraction.addition.toFixed(2)}` : ''}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <p className="text-amber-800 bg-amber-50 p-2 rounded-lg border border-amber-200">
+                    Atenção: Nenhuma consulta anterior encontrada no sistema. O retorno será iniciado como novo atendimento avulso.
+                  </p>
+                )}
+              </div>
+
+              <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl space-y-1.5">
+                <p className="font-bold text-slate-800">Ao confirmar o Retorno:</p>
+                <ul className="list-disc pl-4 space-y-1 text-slate-600">
+                  <li>O atendimento anterior fica <b>100% intacto</b> no prontuário do paciente;</li>
+                  <li>Um novo atendimento com data e hora de <b>hoje</b> é criado;</li>
+                  <li>A dioptria anterior é carregada no <b>Óculos Atual</b> e como base da <b>Refração</b>;</li>
+                  <li>Você poderá alterar dioptrias, condutas e emitir novos receituários sem perder o passado.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-2.5 pt-4 mt-4 border-t border-slate-100">
+              <button
+                type="button"
+                onClick={() => setIsConfirmReturnModalOpen(false)}
+                className="px-4 py-2 font-bold text-slate-600 hover:bg-slate-100 rounded-xl transition-colors cursor-pointer"
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                onClick={() => handleStartReturnSession(previousReferenceEncounter || undefined)}
+                className="px-5 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl shadow-md shadow-purple-600/20 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer"
+              >
+                <RotateCcw className="w-4 h-4" />
+                <span>Confirmar e Iniciar Retorno</span>
+              </button>
+            </div>
           </div>
         </div>
       )}

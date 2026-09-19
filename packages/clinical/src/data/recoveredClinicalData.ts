@@ -8,6 +8,7 @@ export interface RecoveredRecord {
     nationality?: 'BR' | 'PY';
     documentType?: string;
     documentNumber?: string;
+    phoneCountryCode?: string;
     phone?: string;
     city?: string;
     country?: string;
@@ -25,9 +26,12 @@ export interface RecoveredRecord {
     examinerId: string;
     examinerName: string;
     anamnesis?: any;
+    lensometry?: any;
+    visualAcuity?: any;
     subjectiveRefraction?: any;
     conduct?: string;
     returnInWeeks?: number;
+    returnInstructions?: string;
     notes?: string;
   };
   prescription?: {
@@ -862,5 +866,362 @@ export const RECOVERED_RECORDS: RecoveredRecord[] = [
       observations: 'Uso contínuo.',
       returnInstructions: 'Retorno anual.'
     }
+  },
+
+  // 14. Maira Fernandes (18/09/2026)
+  {
+    patient: {
+      id: 'a84131bd-ba44-47ca-8d71-bff029c6be22',
+      fullName: 'Maira Fernandes',
+      birthDate: '1991-02-28',
+      sex: 'F',
+      nationality: 'BR',
+      documentType: 'CPF',
+      phoneCountryCode: '+55',
+      city: 'Ponta Porã',
+      country: 'Brasil',
+      notes: 'usuaria de lentes corretivas, alergica a penicilina, Cefaleia frequente',
+      lgpdConsent: true,
+      createdAt: '2026-09-18T20:25:01.291Z',
+      updatedAt: '2026-09-18T20:47:37.280Z'
+    },
+    encounter: {
+      id: 'ae40c571-aa20-4809-b0b9-d995d37f5d75',
+      patientId: 'a84131bd-ba44-47ca-8d71-bff029c6be22',
+      date: '2026-09-18T20:25:01.507Z',
+      status: 'completed',
+      examinerId: 'dr-meirelles',
+      examinerName: 'Dr. Rudson Meirelles (CRM/CROO 123456)',
+      anamnesis: {
+        id: '3786d295-dfab-444b-8d19-a5dc8bc00888',
+        chiefComplaint: 'Cefaleia frequente e baixa acuidade visual',
+        currentGlasses: true,
+        contactLenses: false,
+        hasHypertension: false,
+        hasDiabetes: false,
+        medicationsInUse: 'Levotiroxina Sódica 25mg.',
+        clinicalNotes: 'usuaria de lentes corretivas, alergica a penicilina, Cefaleia frequente'
+      },
+      lensometry: {
+        id: 'e0f8002c-b653-4627-81b6-409c92dc1296',
+        od: { sphere: -6.50, cylinder: -1.50, axis: 125 },
+        oe: { sphere: -2.50, cylinder: -1.25, axis: 5 },
+        lensType: 'monofocal_longe',
+        material: 'resina',
+        treatments: ['Antirreflexo', 'Filtro Luz Azul (BlueCut)', 'Fotossensível (Transitions)'],
+        usageTime: '1 a 2 anos',
+        notes: 'Lentes muito riscadas, Perda de foco / visão cansada'
+      },
+      visualAcuity: {
+        id: 'f3dec4c4-68f9-423a-b150-66bdff43e8fe',
+        testedAt: '2026-09-18T20:25:01.507Z',
+        entries: [
+          { eye: 'OD', optotypeType: 'snellen_letters', distanceMeters: 6, uncorrected: '20/' },
+          { eye: 'OE', optotypeType: 'snellen_letters', distanceMeters: 6, uncorrected: '20/' }
+        ]
+      },
+      subjectiveRefraction: {
+        id: '54c8d002-f156-4de7-8010-a9f848e438a4',
+        od: { sphere: -3.00, cylinder: 0.00, axis: 0, visualAcuity: '20/60' },
+        oe: { sphere: -3.00, cylinder: 0.00, axis: 0, visualAcuity: '20/60' },
+        lensType: 'multifocal',
+        material: 'resina',
+        treatments: ['Antirreflexo Digital', 'Filtro Luz Azul (BlueCut)'],
+        additionalOpticalInfo: 'paciente sob acompanhamento periodico, buscando melhora na AV'
+      },
+      conduct: 'Paciente sob acompanhamento periódico. Prescrição multifocal em resina com BlueCut e Antirreflexo Digital.',
+      returnInstructions: 'Retorno em 6 meses (Acompanhamento)'
+    },
+    prescription: {
+      id: 'rx-mf-1809',
+      encounterId: 'ae40c571-aa20-4809-b0b9-d995d37f5d75',
+      patientId: 'a84131bd-ba44-47ca-8d71-bff029c6be22',
+      patientName: 'Maira Fernandes',
+      date: '2026-09-18T20:25:01.507Z',
+      expirationDate: '2027-03-18',
+      od: { sphere: -3.00, cylinder: 0.00, axis: 0, visualAcuity: '20/60' },
+      oe: { sphere: -3.00, cylinder: 0.00, axis: 0, visualAcuity: '20/60' },
+      lensType: 'multifocal',
+      material: 'resina',
+      treatments: ['Antirreflexo Digital', 'Filtro Luz Azul (BlueCut)'],
+      observations: 'Paciente sob acompanhamento periódico buscando melhora na AV.',
+      returnInstructions: 'Retorno em 6 meses (Acompanhamento)'
+    }
+  },
+
+  // 15. Elizangela Moura (18/09/2026)
+  {
+    patient: {
+      id: '33f6f16d-add7-4e59-8522-8a5f9b345bfd',
+      fullName: 'Elizangela Moura',
+      birthDate: '1981-08-07',
+      sex: 'F',
+      nationality: 'BR',
+      documentType: 'CPF',
+      phoneCountryCode: '+55',
+      city: 'Ponta Porã',
+      country: 'Brasil',
+      notes: 'rotina - hipertensão gestacional há 21 anos',
+      lgpdConsent: true,
+      createdAt: '2026-09-18T18:48:58.287Z',
+      updatedAt: '2026-09-18T19:25:18.526Z'
+    },
+    encounter: {
+      id: 'd5e5ae8c-c78e-4854-a1ab-2da26b708c96',
+      patientId: '33f6f16d-add7-4e59-8522-8a5f9b345bfd',
+      date: '2026-09-18T18:48:58.316Z',
+      status: 'completed',
+      examinerId: 'dr-meirelles',
+      examinerName: 'Dr. Rudson Meirelles (CRM/CROO 123456)',
+      anamnesis: {
+        id: '7075c1ff-6104-4994-9e03-2288bc7c99f3',
+        chiefComplaint: 'Rotina e troca de óculos',
+        currentGlasses: true,
+        contactLenses: false,
+        hasHypertension: false,
+        hasDiabetes: false,
+        clinicalNotes: 'hipertensão gestacional a 21 anos'
+      },
+      lensometry: {
+        id: 'd964a01f-754f-413d-bb19-018ade97aa21',
+        od: { sphere: 2.75, cylinder: -0.50, axis: 95 },
+        oe: { sphere: 3.00, cylinder: -1.00, axis: 90 },
+        addition: 1.50,
+        lensType: 'multifocal',
+        material: 'resina',
+        treatments: ['Antirreflexo', 'Fotossensível (Transitions)', 'Filtro Luz Azul (BlueCut)'],
+        usageTime: '2 anos',
+        notes: 'Lentes muito riscadas, Desconforto para leitura, Antirreflexo descascando'
+      },
+      visualAcuity: {
+        id: '073a16aa-2042-475b-b80c-76c0e6d91dba',
+        testedAt: '2026-09-18T18:48:58.316Z',
+        entries: [
+          { eye: 'OD', optotypeType: 'snellen_letters', distanceMeters: 6, uncorrected: '20/' },
+          { eye: 'OE', optotypeType: 'snellen_letters', distanceMeters: 6, uncorrected: '20/' }
+        ]
+      },
+      subjectiveRefraction: {
+        id: 'cbd2cd5e-d437-4636-b5b1-08b035919621',
+        od: { sphere: 3.00, cylinder: 0.00, axis: 0, visualAcuity: '20/20' },
+        oe: { sphere: 3.00, cylinder: 0.00, axis: 0, visualAcuity: '20/20' },
+        addition: 1.75,
+        lensType: 'multifocal',
+        material: 'resina',
+        treatments: ['Antirreflexo Digital', 'Filtro Luz Azul (BlueCut)', 'Fotossensível (Transitions)']
+      },
+      conduct: 'Prescrição multifocal digital com adição +1.75, filtro BlueCut e fotossensível.',
+      returnInstructions: 'Retorno em 1 ano para controle visual de rotina.'
+    },
+    prescription: {
+      id: 'rx-em-1809',
+      encounterId: 'd5e5ae8c-c78e-4854-a1ab-2da26b708c96',
+      patientId: '33f6f16d-add7-4e59-8522-8a5f9b345bfd',
+      patientName: 'Elizangela Moura',
+      date: '2026-09-18T18:48:58.316Z',
+      expirationDate: '2027-09-18',
+      od: { sphere: 3.00, cylinder: 0.00, axis: 0, visualAcuity: '20/20' },
+      oe: { sphere: 3.00, cylinder: 0.00, axis: 0, visualAcuity: '20/20' },
+      addition: 1.75,
+      lensType: 'multifocal',
+      material: 'resina',
+      treatments: ['Antirreflexo Digital', 'Filtro Luz Azul (BlueCut)', 'Fotossensível (Transitions)'],
+      observations: 'Uso contínuo para longe e perto.',
+      returnInstructions: 'Retorno em 1 ano para controle visual de rotina.'
+    }
+  },
+
+  // 16. Erika Rodrigues (18/09/2026)
+  {
+    patient: {
+      id: '39e695b2-0a56-4f83-b63a-bcbddaf85392',
+      fullName: 'Erika Rodrigues',
+      birthDate: '1997-12-19',
+      sex: 'F',
+      nationality: 'BR',
+      documentType: 'CPF',
+      phoneCountryCode: '+55',
+      city: 'Ponta Porã',
+      country: 'Brasil',
+      notes: 'usuaria de lentes corretivas, Cefaleia frequente, Sensibilidade à luz / Fotofobia, Fadiga visual em telas',
+      lgpdConsent: true,
+      createdAt: '2026-09-18T18:37:16.045Z',
+      updatedAt: '2026-09-18T18:46:58.131Z'
+    },
+    encounter: {
+      id: 'c5f5dbc7-bdd0-47c4-a3b0-b3da7cb7eb18',
+      patientId: '39e695b2-0a56-4f83-b63a-bcbddaf85392',
+      date: '2026-09-18T18:37:16.141Z',
+      status: 'completed',
+      examinerId: 'dr-meirelles',
+      examinerName: 'Dr. Rudson Meirelles (CRM/CROO 123456)',
+      anamnesis: {
+        id: '1b05604e-9582-4bd8-85c9-71216f76e7f9',
+        chiefComplaint: 'Cefaleia frequente, sensibilidade à luz e fadiga visual em telas',
+        currentGlasses: true,
+        contactLenses: false,
+        hasHypertension: false,
+        hasDiabetes: false,
+        medicationsInUse: 'Nega uso de medicamentos',
+        clinicalNotes: 'usuaria de lentes corretivas, Cefaleia frequente, Sensibilidade à luz / Fotofobia, Fadiga visual em telas, Lacrimejamento excessivo'
+      },
+      lensometry: {
+        id: 'cab4db4f-5cad-40ba-9cef-139539483c10',
+        od: { sphere: 0.50, cylinder: -0.25, axis: 175 },
+        oe: { sphere: 0.50, cylinder: -0.50, axis: 5 },
+        lensType: 'multifocal',
+        material: 'resina',
+        treatments: ['Antirreflexo'],
+        usageTime: '3 a 5 anos'
+      },
+      visualAcuity: {
+        id: '84872403-1c83-4a27-bb71-7f3ba16c36fa',
+        testedAt: '2026-09-18T18:37:16.141Z',
+        entries: [
+          { eye: 'OD', optotypeType: 'snellen_letters', distanceMeters: 6, uncorrected: '20/' },
+          { eye: 'OE', optotypeType: 'snellen_letters', distanceMeters: 6, uncorrected: '20/' }
+        ]
+      },
+      subjectiveRefraction: {
+        id: '219e04c1-4ac9-48e0-b850-6558b46bc71c',
+        od: { sphere: 0.00, cylinder: -0.75, axis: 180, visualAcuity: '20/20' },
+        oe: { sphere: 0.00, cylinder: -0.75, axis: 180, visualAcuity: '20/20' },
+        lensType: 'multifocal',
+        material: 'resina',
+        treatments: ['Antirreflexo Digital', 'Filtro Luz Azul (BlueCut)']
+      },
+      conduct: 'Prescrição com correção de astigmatismo bilateral (-0.75 a 180°), proteção BlueCut para computador.',
+      returnInstructions: 'Retorno em 1 ano para controle visual de rotina.'
+    },
+    prescription: {
+      id: 'rx-er-1809',
+      encounterId: 'c5f5dbc7-bdd0-47c4-a3b0-b3da7cb7eb18',
+      patientId: '39e695b2-0a56-4f83-b63a-bcbddaf85392',
+      patientName: 'Erika Rodrigues',
+      date: '2026-09-18T18:37:16.141Z',
+      expirationDate: '2027-09-18',
+      od: { sphere: 0.00, cylinder: -0.75, axis: 180, visualAcuity: '20/20' },
+      oe: { sphere: 0.00, cylinder: -0.75, axis: 180, visualAcuity: '20/20' },
+      lensType: 'multifocal',
+      material: 'resina',
+      treatments: ['Antirreflexo Digital', 'Filtro Luz Azul (BlueCut)'],
+      observations: 'Uso contínuo para trabalho e telas.',
+      returnInstructions: 'Retorno em 1 ano para controle visual de rotina.'
+    }
+  },
+
+  // 17. Suzana C. dos Santos (18/09/2026 - Manhã 09:24)
+  {
+    patient: {
+      id: 'f3f7d16e-95f6-4d8f-8947-0ee9241c10e1',
+      fullName: 'Suzana C. dos Santos',
+      birthDate: '1985-05-12',
+      sex: 'F',
+      nationality: 'BR',
+      documentType: 'CPF',
+      phoneCountryCode: '+55',
+      city: 'Ponta Porã',
+      country: 'Brasil',
+      notes: 'Consulta Oftalmológica / Refração - Atendimento das 09:24',
+      lgpdConsent: true,
+      createdAt: '2026-09-18T13:24:38.783Z',
+      updatedAt: '2026-09-18T13:36:59.531Z'
+    },
+    encounter: {
+      id: 'a86750af-1a63-4e1b-a9b8-6d7c1f7ad1d5',
+      patientId: 'f3f7d16e-95f6-4d8f-8947-0ee9241c10e1',
+      date: '2026-09-18T13:24:53.136Z',
+      status: 'completed',
+      examinerId: 'dr-meirelles',
+      examinerName: 'Dr. Rudson Meirelles (CRM/CROO 123456)',
+      anamnesis: {
+        id: 'anam-scs-1',
+        chiefComplaint: 'Avaliação refrativa e renovação de óculos',
+        currentGlasses: true,
+        contactLenses: false,
+        hasHypertension: false,
+        hasDiabetes: false
+      },
+      subjectiveRefraction: {
+        id: 'sr-scs-1',
+        od: { sphere: 0.00, cylinder: 0.00, axis: 0, visualAcuity: '20/20' },
+        oe: { sphere: 0.00, cylinder: 0.00, axis: 0, visualAcuity: '20/20' }
+      },
+      conduct: 'Exame de refração concluído com sucesso. Orientação postural e controle visual.',
+      returnInstructions: 'Retorno em 1 ano para controle visual de rotina.'
+    },
+    prescription: {
+      id: 'rx-scs-1809',
+      encounterId: 'a86750af-1a63-4e1b-a9b8-6d7c1f7ad1d5',
+      patientId: 'f3f7d16e-95f6-4d8f-8947-0ee9241c10e1',
+      patientName: 'Suzana C. dos Santos',
+      date: '2026-09-18T13:24:53.136Z',
+      expirationDate: '2027-09-18',
+      od: { sphere: 0.00, cylinder: 0.00, axis: 0, visualAcuity: '20/20' },
+      oe: { sphere: 0.00, cylinder: 0.00, axis: 0, visualAcuity: '20/20' },
+      lensType: 'monofocal',
+      material: 'resina',
+      treatments: ['Antirreflexo'],
+      observations: 'Uso conforme necessidade.',
+      returnInstructions: 'Retorno em 1 ano para controle visual de rotina.'
+    }
+  },
+
+  // 18. Mauricio Dias (18/09/2026 - Manhã 08:19)
+  {
+    patient: {
+      id: 'eb01d056-630d-452f-b6f4-50bb6e0c5ea7',
+      fullName: 'Mauricio Dias',
+      birthDate: '1978-10-22',
+      sex: 'M',
+      nationality: 'BR',
+      documentType: 'CPF',
+      phoneCountryCode: '+55',
+      city: 'Ponta Porã',
+      country: 'Brasil',
+      notes: 'Consulta Oftalmológica / Refração - Atendimento das 08:19',
+      lgpdConsent: true,
+      createdAt: '2026-09-18T12:19:05.210Z',
+      updatedAt: '2026-09-18T12:27:29.919Z'
+    },
+    encounter: {
+      id: '511baaec-43cb-49d5-b09f-ce03da9ddab0',
+      patientId: 'eb01d056-630d-452f-b6f4-50bb6e0c5ea7',
+      date: '2026-09-18T12:27:29.919Z',
+      status: 'completed',
+      examinerId: 'dr-meirelles',
+      examinerName: 'Dr. Rudson Meirelles (CRM/CROO 123456)',
+      anamnesis: {
+        id: 'anam-md-1',
+        chiefComplaint: 'Avaliação visual e refração de rotina',
+        currentGlasses: true,
+        contactLenses: false,
+        hasHypertension: false,
+        hasDiabetes: false
+      },
+      subjectiveRefraction: {
+        id: 'sr-md-1',
+        od: { sphere: 0.00, cylinder: 0.00, axis: 0, visualAcuity: '20/20' },
+        oe: { sphere: 0.00, cylinder: 0.00, axis: 0, visualAcuity: '20/20' }
+      },
+      conduct: 'Exame de refração realizado e finalizado. Orientado quanto ao uso correto das lentes.',
+      returnInstructions: 'Retorno em 1 ano para controle visual de rotina.'
+    },
+    prescription: {
+      id: 'rx-md-1809',
+      encounterId: '511baaec-43cb-49d5-b09f-ce03da9ddab0',
+      patientId: 'eb01d056-630d-452f-b6f4-50bb6e0c5ea7',
+      patientName: 'Mauricio Dias',
+      date: '2026-09-18T12:27:29.919Z',
+      expirationDate: '2027-09-18',
+      od: { sphere: 0.00, cylinder: 0.00, axis: 0, visualAcuity: '20/20' },
+      oe: { sphere: 0.00, cylinder: 0.00, axis: 0, visualAcuity: '20/20' },
+      lensType: 'monofocal',
+      material: 'resina',
+      treatments: ['Antirreflexo'],
+      observations: 'Uso conforme necessidade.',
+      returnInstructions: 'Retorno em 1 ano para controle visual de rotina.'
+    }
   }
 ];
+
