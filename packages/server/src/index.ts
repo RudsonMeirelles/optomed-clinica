@@ -50,9 +50,42 @@ if (fs.existsSync(clinicalDistPath)) {
   app.use('/controle', express.static(clinicalDistPath));
 }
 
+function sendNoCacheHtml(res: express.Response, filePath: string) {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  res.sendFile(filePath);
+}
+
+// Roteamento inteligente baseado no Hostname ou rota:
+// Se o acesso for feito por app.optomed.app.br ou clinica.optomed.app.br, entrega o app clínico direto na raiz!
+app.use((req, res, next) => {
+  const host = req.headers.host || '';
+  if (host.startsWith('app.') || host.startsWith('clinica.')) {
+    // Se for rota de API ou WebSocket ou tv, segue normal
+    if (req.path.startsWith('/api') || req.path.startsWith('/health') || req.path.startsWith('/tv') || req.path.startsWith('/apk')) {
+      return next();
+    }
+    // Tenta servir arquivos estáticos do clinical
+    const staticFile = path.join(clinicalDistPath, req.path);
+    if (req.path !== '/' && fs.existsSync(staticFile) && fs.statSync(staticFile).isFile()) {
+      if (req.path.endsWith('.html')) {
+        return sendNoCacheHtml(res, staticFile);
+      }
+      return res.sendFile(staticFile);
+    }
+    // Caso contrário (SPA router), entrega index.html do clinical sem cache
+    const idx = path.join(clinicalDistPath, 'index.html');
+    if (fs.existsSync(idx)) {
+      return sendNoCacheHtml(res, idx);
+    }
+  }
+  next();
+});
+
 app.get(['/clinical', '/clinical/*'], (req, res) => {
   const idx = path.join(clinicalDistPath, 'index.html');
-  fs.existsSync(idx) ? res.sendFile(idx) : res.redirect('/');
+  fs.existsSync(idx) ? sendNoCacheHtml(res, idx) : res.redirect('/');
 });
 app.get(['/tv', '/tv/*'], (req, res) => {
   const idx = path.join(tvDistPath, 'index.html');

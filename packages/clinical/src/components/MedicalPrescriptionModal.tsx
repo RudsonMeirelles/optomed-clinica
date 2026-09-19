@@ -4,6 +4,7 @@ import { Printer, X, Pill, Plus, Trash2, LayoutTemplate, FileSpreadsheet, Receip
 import { offlineDb } from '../services/offlineDb';
 import { ClinicalProtocolDrug } from '../services/therapeuticProtocolsDb';
 import { OPHTHALMIC_DRUGS_DATABASE, OphthalmicDrug } from '../services/ophthalmicDrugsDb';
+import { printIsolatedElement } from '../services/printService';
 
 export type MedicalPaperFormat = 'a4' | 'a5' | 'thermal_80mm';
 
@@ -99,12 +100,20 @@ export const MedicalPrescriptionModal: React.FC<MedicalPrescriptionModalProps> =
   };
 
   const handlePrint = () => {
-    window.print();
+    const sheetEl = document.getElementById('medical-prescription-sheet');
+    if (sheetEl) {
+      printIsolatedElement(sheetEl, {
+        title: `Receituário Médico - ${patient.fullName}`,
+        orientation: paperFormat === 'a5' ? 'landscape' : 'portrait'
+      });
+    } else {
+      window.print();
+    }
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 overflow-hidden animate-fadeIn">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-5xl w-full max-h-[96vh] text-slate-900 border border-slate-300 flex flex-col overflow-hidden">
+    <div className="unified-print-modal-backdrop fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 overflow-hidden animate-fadeIn print:p-0 print:m-0 print:bg-white print:static print:block">
+      <div className="unified-print-modal-container bg-white rounded-2xl shadow-2xl max-w-5xl w-full max-h-[96vh] text-slate-900 border border-slate-300 flex flex-col overflow-hidden print:border-none print:shadow-none print:max-h-none print:w-full">
         
         {/* Barra Superior com Controles */}
         <div className="px-4 sm:px-6 py-3 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white flex flex-wrap items-center justify-between border-b border-slate-800 shrink-0 no-print gap-3">
@@ -204,7 +213,7 @@ export const MedicalPrescriptionModal: React.FC<MedicalPrescriptionModalProps> =
           {/* FORMATO 1: A4 PADRÃO (RECEITA MÉDICA OFICIAL) */}
           {/* ========================================================================= */}
           {paperFormat === 'a4' && (
-            <div className="bg-white border-2 border-slate-900 p-8 rounded-xl shadow-lg max-w-3xl w-full space-y-6 self-start print:shadow-none print:border-2 print:p-6 print:m-0 print:max-w-none">
+            <div id="medical-prescription-sheet" className="bg-white border-2 border-slate-900 p-8 rounded-xl shadow-lg max-w-3xl w-full space-y-6 self-start print:shadow-none print:border-2 print:p-6 print:m-0 print:max-w-none">
               
               {/* Cabeçalho */}
               <div className="flex items-center justify-between border-b-2 border-slate-900 pb-4">
@@ -345,7 +354,7 @@ export const MedicalPrescriptionModal: React.FC<MedicalPrescriptionModalProps> =
           {/* FORMATO 2: A5 REDUZIDO (MEIA FOLHA) */}
           {/* ========================================================================= */}
           {paperFormat === 'a5' && (
-            <div className="bg-white border-2 border-slate-900 p-5 rounded-xl shadow-lg max-w-xl w-full space-y-4 self-start print:shadow-none print:border-2 print:p-4 print:m-0 print:max-w-none text-xs">
+            <div id="medical-prescription-sheet" className="bg-white border-2 border-slate-900 p-5 rounded-xl shadow-lg max-w-xl w-full space-y-4 self-start print:shadow-none print:border-2 print:p-4 print:m-0 print:max-w-none text-xs">
               {/* Cabeçalho */}
               <div className="flex items-center justify-between border-b-2 border-slate-900 pb-2.5">
                 <div>
@@ -398,7 +407,7 @@ export const MedicalPrescriptionModal: React.FC<MedicalPrescriptionModalProps> =
           {/* FORMATO 3: CUPOM TÉRMICO 80MM */}
           {/* ========================================================================= */}
           {paperFormat === 'thermal_80mm' && (
-            <div className="bg-white border-2 border-dashed border-slate-400 p-4 rounded-xl shadow-lg w-[320px] space-y-3 self-start font-mono text-[11px] leading-tight text-slate-900 print:shadow-none print:border-none print:p-2 print:m-0 print:w-full">
+            <div id="medical-prescription-sheet" className="bg-white border-2 border-dashed border-slate-400 p-4 rounded-xl shadow-lg w-[320px] space-y-3 self-start font-mono text-[11px] leading-tight text-slate-900 print:shadow-none print:border-none print:p-2 print:m-0 print:w-full">
               <div className="text-center pb-2 border-b border-dashed border-slate-400">
                 <h1 className="text-xs font-black uppercase">{activeClinic.name}</h1>
                 <p className="text-[9px] text-slate-500">Receituário Farmacológico</p>

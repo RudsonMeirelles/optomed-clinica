@@ -1,7 +1,9 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { ClinicalEncounter, Patient } from '@optotipo/shared';
 import { Printer, X, ClipboardList, CheckCircle2 } from 'lucide-react';
 import { offlineDb } from '../services/offlineDb';
+import { printIsolatedElement } from '../services/printService';
 
 interface ClinicalReportModalProps {
   isOpen: boolean;
@@ -21,12 +23,21 @@ export const ClinicalReportModal: React.FC<ClinicalReportModalProps> = ({
   const activeClinic = offlineDb.getActiveClinic();
 
   const handlePrint = () => {
-    window.print();
+    const printEl = document.getElementById('clinical-report-sheet');
+    if (printEl) {
+      printIsolatedElement(printEl, {
+        title: `Relatório Clínico - ${patient.fullName}`,
+        orientation: 'portrait',
+        margins: '8mm 8mm'
+      });
+    } else {
+      window.print();
+    }
   };
 
-  return (
-    <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-hidden">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[92vh] text-slate-900 border border-slate-300 flex flex-col overflow-hidden animate-fadeIn">
+  const modalContent = (
+    <div className="unified-print-modal-backdrop fixed inset-0 z-[9999] bg-black/75 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-hidden print:p-0 print:m-0 print:bg-white print:static print:block">
+      <div className="unified-print-modal-container bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[92vh] text-slate-900 border border-slate-300 flex flex-col overflow-hidden animate-fadeIn print:border-none print:shadow-none print:max-h-none print:w-full">
         {/* Barra Superior FIXA */}
         <div className="px-6 py-3.5 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800 shrink-0 no-print">
           <div className="flex items-center gap-3">
@@ -57,9 +68,9 @@ export const ClinicalReportModal: React.FC<ClinicalReportModalProps> = ({
         </div>
 
         {/* Área de Visualização e Rolagem */}
-        <div className="flex-1 overflow-y-auto p-4 sm:p-8 bg-slate-200/70 flex justify-center">
+        <div className="unified-print-scroll-container flex-1 overflow-y-auto p-4 sm:p-8 bg-slate-200/70 flex justify-center">
           {/* RELATÓRIO CLÍNICO FORMATADO */}
-          <div className="bg-white border-2 border-slate-900 p-8 rounded-xl shadow-lg max-w-3xl w-full space-y-6 self-start print:shadow-none print:border-2 print:p-6 print:m-0">
+          <div id="clinical-report-sheet" className="bg-white border-2 border-slate-900 p-8 rounded-xl shadow-lg max-w-3xl w-full space-y-6 self-start print:shadow-none print:border-2 print:p-6 print:m-0">
             {/* Cabeçalho */}
             <div className="flex justify-between items-start border-b-2 border-slate-900 pb-4">
               <div className="flex items-center gap-3">
@@ -79,6 +90,7 @@ export const ClinicalReportModal: React.FC<ClinicalReportModalProps> = ({
 
               <div className="text-right text-xs text-slate-600 font-mono">
                 <div>Data: <strong>{new Date(encounter.date).toLocaleDateString('pt-BR')}</strong></div>
+                <div>Hora: <strong>{new Date(encounter.date).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</strong></div>
                 <div>ID: <strong>{encounter.id.slice(0, 8)}</strong></div>
               </div>
             </div>
@@ -97,6 +109,20 @@ export const ClinicalReportModal: React.FC<ClinicalReportModalProps> = ({
                 <span className="text-slate-500 block">Telefone:</span>
                 <strong className="text-slate-900">{patient.phone || '-'}</strong>
               </div>
+              <div>
+                <span className="text-slate-500 block">Documento:</span>
+                <strong className="text-slate-900">{patient.documentType}: {patient.documentNumber || '-'}</strong>
+              </div>
+              <div>
+                <span className="text-slate-500 block">Examinador:</span>
+                <strong className="text-slate-900">{encounter.examinerName || 'Dr. Rudson Meirelles'}</strong>
+              </div>
+              {patient.city && (
+                <div>
+                  <span className="text-slate-500 block">Cidade:</span>
+                  <strong className="text-slate-900">{patient.city}</strong>
+                </div>
+              )}
             </div>
 
             {/* Anamnese */}
@@ -174,8 +200,20 @@ export const ClinicalReportModal: React.FC<ClinicalReportModalProps> = ({
                       <td className="p-2.5 border border-slate-300">{encounter.subjectiveRefraction.oe.axis ? `${encounter.subjectiveRefraction.oe.axis}°` : '-'}</td>
                       <td className="p-2.5 border border-slate-300 font-black">{encounter.subjectiveRefraction.oe.visualAcuity || '-'}</td>
                     </tr>
+                    {encounter.subjectiveRefraction.addition && (
+                      <tr>
+                        <td colSpan={5} className="p-2 border border-slate-300 text-indigo-800 font-bold bg-indigo-50">
+                          Adição (Add): +{encounter.subjectiveRefraction.addition.toFixed(2)} D
+                        </td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
+                {encounter.subjectiveRefraction.pdDistanceMm && (
+                  <p className="text-[11px] text-slate-600 mt-1 font-mono">
+                    DNP (Distância Naso-Pupilar): <strong>{encounter.subjectiveRefraction.pdDistanceMm} mm</strong>
+                  </p>
+                )}
               </div>
             )}
 
@@ -196,7 +234,8 @@ export const ClinicalReportModal: React.FC<ClinicalReportModalProps> = ({
             <div className="pt-16 flex justify-end items-end border-t border-slate-300 mt-8">
               <div className="text-center">
                 <div className="w-64 border-b-2 border-slate-900 mb-1.5" />
-                <div className="text-xs font-bold text-slate-900">Assinatura & Carimbo do Profissional</div>
+                <div className="text-xs font-bold text-slate-900">{encounter.examinerName || 'Dr. Rudson Meirelles'}</div>
+                <div className="text-[10px] text-slate-500">Assinatura & Carimbo do Profissional</div>
               </div>
             </div>
           </div>
@@ -204,4 +243,7 @@ export const ClinicalReportModal: React.FC<ClinicalReportModalProps> = ({
       </div>
     </div>
   );
+
+  // Usa portal para renderizar fora da hierarquia DOM, garantindo impressão correta
+  return ReactDOM.createPortal(modalContent, document.body);
 };

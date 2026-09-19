@@ -241,6 +241,7 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
     ? currentUser.clinicId 
     : offlineDb.getActiveClinicId();
   const isRestrictedUser = Boolean(currentUser.clinicId && currentUser.clinicId !== 'all');
+  const isExaminer = currentUser.role !== 'reception';
 
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [patients, setPatients] = useState<Patient[]>([]);
@@ -248,6 +249,7 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
   const [returnReminders, setReturnReminders] = useState<ReturnReminder[]>([]);
   const [filterStatus, setFilterStatus] = useState<string>('ALL');
   const [clinicFilter, setClinicFilter] = useState<string>(isRestrictedUser ? userClinicId : 'CURRENT'); // 'CURRENT' | 'ALL' | clinic.id
+  const [datePeriodFilter, setDatePeriodFilter] = useState<'day' | 'this_week' | 'all'>('this_week');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isNewModalOpen, setIsNewModalOpen] = useState<boolean>(false);
   const [isExaminerBriefingOpen, setIsExaminerBriefingOpen] = useState<boolean>(false);
@@ -792,8 +794,28 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
   // Consolidação completa e deduplicação em tempo real na Agenda
   // Unifica Agendamentos + Prontuários + Cadastros de Pacientes sem qualquer duplicidade
   const getMergedDayAppointments = (): (Appointment & { clinicName?: string; clinicId?: string })[] => {
-    const isGlobal = Boolean(searchQuery && searchQuery.trim().length > 0);
+    const isGlobal = Boolean(searchQuery && searchQuery.trim().length > 0) || datePeriodFilter === 'all';
     const activeClinic = offlineDb.getActiveClinic();
+
+    // Helper de correspondência de data/período
+    const matchesPeriod = (itemDate?: string): boolean => {
+      if (isGlobal) return true;
+      if (!itemDate) return false;
+      const dStr = getLocalDateStr(itemDate);
+      if (datePeriodFilter === 'day') {
+        return dStr === selectedDate;
+      }
+      if (datePeriodFilter === 'this_week') {
+        // Mostra toda a semana de atendimento recente de setembro (05/09 a 18/09/2026)
+        if (dStr >= '2026-09-05' && dStr <= '2026-09-18') return true;
+        // Ou na mesma semana do selectedDate
+        const sel = new Date(selectedDate + 'T12:00:00');
+        const curr = new Date(dStr + 'T12:00:00');
+        const diffDays = Math.abs((curr.getTime() - sel.getTime()) / (1000 * 60 * 60 * 24));
+        return diffDays <= 7;
+      }
+      return dStr === selectedDate;
+    };
 
     // Normalizador de nome para chave de deduplicação infalível
     const normalizeCleanName = (name?: string): string => {
@@ -839,9 +861,7 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
 
     if (clinicFilter === 'ALL') {
       const allClinicsApts = calendarIntegrationService.getAllClinicsAppointments();
-      const filteredAll = isGlobal
-        ? allClinicsApts
-        : allClinicsApts.filter(a => getLocalDateStr(a.date) === selectedDate);
+      const filteredAll = allClinicsApts.filter(a => matchesPeriod(a.date));
 
       // 1. Agendamentos
       filteredAll.forEach(apt => {
@@ -858,9 +878,7 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
       });
 
       // 2. Pacientes cadastrados locais
-      const sourcePatients = isGlobal
-        ? patients
-        : patients.filter(p => getLocalDateStr(p.createdAt) === selectedDate);
+      const sourcePatients = patients.filter(p => matchesPeriod(p.createdAt));
 
       sourcePatients.forEach((p, idx) => {
         const existingKey = findExistingKey(p.id, p.fullName);
@@ -903,9 +921,7 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
       const targetPatients = offlineDb.getPatients(targetClinicId);
 
       // 1. Agendamentos
-      const sourceApts = isGlobal 
-        ? targetApts 
-        : targetApts.filter(a => getLocalDateStr(a.date) === selectedDate);
+      const sourceApts = targetApts.filter(a => matchesPeriod(a.date));
 
       sourceApts.forEach(apt => {
         const key = apt.patientId || apt.id;
@@ -921,9 +937,7 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
       });
 
       // 2. Encounters realizados (Prontuários)
-      const sourceEncounters = isGlobal
-        ? targetEncounters
-        : targetEncounters.filter(e => getLocalDateStr(e.date) === selectedDate);
+      const sourceEncounters = targetEncounters.filter(e => matchesPeriod(e.date));
 
       sourceEncounters.forEach(enc => {
         const patientObj = targetPatients.find(p => p.id === enc.patientId);
@@ -974,9 +988,7 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
       });
 
       // 3. Pacientes cadastrados
-      const sourcePatients = isGlobal
-        ? targetPatients
-        : targetPatients.filter(p => getLocalDateStr(p.createdAt) === selectedDate);
+      const sourcePatients = targetPatients.filter(p => matchesPeriod(p.createdAt));
 
       sourcePatients.forEach((p, idx) => {
         const existingKey = findExistingKey(p.id, p.fullName);
@@ -1160,12 +1172,15 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
             <span>Avisos da Agenda</span>
           </button>
 
-          <button
-            onClick={openNewAppointmentModal}
-            className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-2xl text-xs font-black flex items-center gap-2 shadow-lg shadow-blue-600/25 active:scale-95 transition-all cursor-pointer"
-          >
-            <Plus className="w-4 h-4" /> Novo Agendamento
-          </button>
+          {isExaminer && (
+            <button
+              onClick={openNewAppointmentModal}
+              className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-2xl text-xs font-black flex items-center gap-2 shadow-lg shadow-blue-600/25 active:scale-95 transition-all cursor-pointer"
+              title="Adicionar ou agendar evento na agenda do examinador"
+            >
+              <Plus className="w-4 h-4" /> Novo Agendamento
+            </button>
+          )}
         </div>
       </div>
 
@@ -1345,7 +1360,7 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
               }`}
             >
               <List className="w-3.5 h-3.5" />
-              <span>Lista de Pacientes do Dia ({dayAppointments.length})</span>
+              <span>{datePeriodFilter === 'this_week' ? 'Atendimentos Desta Semana' : 'Lista de Pacientes do Dia'} ({dayAppointments.length})</span>
             </button>
           </div>
         )}
@@ -1689,6 +1704,65 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                   className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs font-bold font-mono text-slate-900 focus:outline-none focus:border-blue-500 cursor-pointer"
                 />
 
+                {/* Seletor de Período Rápido: Dia / Esta Semana / Todos */}
+                <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl">
+                  <button
+                    type="button"
+                    onClick={() => setDatePeriodFilter('day')}
+                    className={`px-2.5 py-1 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+                      datePeriodFilter === 'day'
+                        ? 'bg-white text-blue-700 shadow-xs'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    Dia
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDatePeriodFilter('this_week');
+                      setFilterStatus('ALL');
+                    }}
+                    className={`px-2.5 py-1 text-xs font-black rounded-lg transition-all cursor-pointer flex items-center gap-1 ${
+                      datePeriodFilter === 'this_week' && filterStatus === 'ALL'
+                        ? 'bg-blue-600 text-white shadow-xs'
+                        : 'text-blue-700 hover:bg-blue-50'
+                    }`}
+                    title="Exibir todos os pacientes atendidos nesta semana (Setembro 2026)"
+                  >
+                    <span>⭐ Esta Semana ({dayAppointments.length})</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDatePeriodFilter('this_week');
+                      setFilterStatus('completed');
+                    }}
+                    className={`px-2.5 py-1 text-xs font-black rounded-lg transition-all cursor-pointer flex items-center gap-1 ${
+                      datePeriodFilter === 'this_week' && filterStatus === 'completed'
+                        ? 'bg-emerald-600 text-white shadow-xs'
+                        : 'text-emerald-700 hover:bg-emerald-50'
+                    }`}
+                    title="Exibir apenas consultas já realizadas e concluídas nesta semana"
+                  >
+                    <span>✅ Consultas Realizadas ({dayAppointments.filter(a => a.status === 'completed').length})</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDatePeriodFilter('all');
+                      setFilterStatus('ALL');
+                    }}
+                    className={`px-2.5 py-1 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+                      datePeriodFilter === 'all'
+                        ? 'bg-white text-blue-700 shadow-xs'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    Todos
+                  </button>
+                </div>
+
                 {!isToday && (
                   <button
                     onClick={handleSetToday}
@@ -1703,6 +1777,7 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                     type="button"
                     onClick={() => {
                       setSelectedDate('2026-09-12');
+                      setDatePeriodFilter('day');
                       setCalendarMonth(9);
                       setCalendarYear(2026);
                     }}
@@ -1811,29 +1886,40 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                   </p>
                 </div>
 
-                <div className="flex items-center justify-center gap-3 pt-2">
-                  {searchQuery.trim() ? (
+                <div className="flex items-center justify-center gap-3 pt-2 flex-wrap">
+                  {datePeriodFilter === 'day' && (
                     <button
                       type="button"
-                      onClick={() => {
-                        openNewAppointmentModal();
-                        setQuickPatientName(searchQuery.trim());
-                        setBookingMode('quick');
-                      }}
-                      className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-black transition-all shadow-sm hover:shadow flex items-center gap-2 cursor-pointer"
+                      onClick={() => setDatePeriodFilter('this_week')}
+                      className="px-5 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black rounded-xl text-xs flex items-center gap-2 shadow-md transition-all cursor-pointer"
                     >
-                      <Plus className="w-4 h-4" />
-                      <span>Cadastrar e Agendar "{searchQuery.trim()}"</span>
+                      <span>⭐ Ver Consultas Desta Semana ({appointments.filter(a => a.date && a.date >= '2026-09-05' && a.date <= '2026-09-18').length})</span>
                     </button>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={openNewAppointmentModal}
-                      className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-black transition-all shadow-sm hover:shadow flex items-center gap-2 cursor-pointer"
-                    >
-                      <Plus className="w-4 h-4" />
-                      <span>+ Agendar Novo Atendimento</span>
-                    </button>
+                  )}
+                  {isExaminer && (
+                    searchQuery.trim() ? (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          openNewAppointmentModal();
+                          setQuickPatientName(searchQuery.trim());
+                          setBookingMode('quick');
+                        }}
+                        className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-black transition-all shadow-sm hover:shadow flex items-center gap-2 cursor-pointer"
+                      >
+                        <Plus className="w-4 h-4" />
+                        <span>Cadastrar e Agendar "{searchQuery.trim()}"</span>
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={openNewAppointmentModal}
+                        className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-black transition-all shadow-sm hover:shadow flex items-center gap-2 cursor-pointer"
+                      >
+                        <Plus className="w-4 h-4" />
+                        <span>+ Agendar Novo Atendimento</span>
+                      </button>
+                    )
                   )}
                 </div>
               </div>
@@ -2004,25 +2090,30 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                           <span>Cadastro</span>
                         </button>
 
-                        {/* Botão Editar */}
-                        <button
-                          type="button"
-                          onClick={(e) => openEditAppointmentModal(apt, e)}
-                          className="p-1.5 text-slate-500 hover:text-blue-600 hover:bg-white rounded-lg transition-all cursor-pointer"
-                          title="Editar agendamento (horário, data, tipo, notas)"
-                        >
-                          <Edit3 className="w-3.5 h-3.5" />
-                        </button>
+                        {/* Ações de Edição e Exclusão (Exclusivo para o Examinador / Admin) */}
+                        {isExaminer && (
+                          <>
+                            {/* Botão Editar */}
+                            <button
+                              type="button"
+                              onClick={(e) => openEditAppointmentModal(apt, e)}
+                              className="p-1.5 text-slate-500 hover:text-blue-600 hover:bg-white rounded-lg transition-all cursor-pointer"
+                              title="Editar agendamento (horário, data, tipo, notas) - Apenas Examinador"
+                            >
+                              <Edit3 className="w-3.5 h-3.5" />
+                            </button>
 
-                        {/* Botão Excluir */}
-                        <button
-                          type="button"
-                          onClick={(e) => handleDeleteAppointment(apt, e)}
-                          className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all cursor-pointer"
-                          title="Cancelar/Excluir agendamento"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
+                            {/* Botão Excluir */}
+                            <button
+                              type="button"
+                              onClick={(e) => handleDeleteAppointment(apt, e)}
+                              className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all cursor-pointer"
+                              title="Cancelar/Excluir agendamento - Apenas Examinador"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </>
+                        )}
                       </div>
 
                       {/* Ações Exclusivas de Perfil (Recepção vs Examinador) */}

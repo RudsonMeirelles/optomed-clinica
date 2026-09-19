@@ -509,6 +509,9 @@ export function App() {
               <IconDoorLogout className="w-3.5 h-3.5 text-slate-500" />
               <span>Trocar Usuário / Sair</span>
             </button>
+            <div className="text-center text-[10px] font-mono text-slate-400 font-semibold">
+              OptoMed Clínica v2.5.0 • Build 19/09
+            </div>
           </div>
         </aside>
 
@@ -598,6 +601,7 @@ export function App() {
             {currentPage === 'patients' && (
               <PatientsList
                 onSelectPatient={handleSelectPatientFromList}
+                onStartEncounter={handleStartEncounter}
                 userRole={currentUser.role}
                 clinicId={currentUser.clinicId !== 'all' ? currentUser.clinicId : activeClinic.id}
               />

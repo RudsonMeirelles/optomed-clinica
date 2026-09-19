@@ -22,6 +22,7 @@ import { offlineDb } from '../services/offlineDb';
 import { PrescribedMedicationItem } from './MedicalPrescriptionModal';
 import { OPHTHALMIC_DRUGS_DATABASE, OphthalmicDrug } from '../services/ophthalmicDrugsDb';
 import { ClinicalProtocolDrug } from '../services/therapeuticProtocolsDb';
+import { printIsolatedElement } from '../services/printService';
 
 export type PrintLayoutMode = 'a4_landscape_dual' | 'a4_portrait' | 'a5_single' | 'thermal_80mm';
 export type PrescriptionFilterType = 'all' | 'dioptria_only' | 'farmaco_only';
@@ -144,7 +145,15 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
   const currentDate = new Date().toLocaleDateString(language === 'es' ? 'es-PY' : 'pt-BR');
 
   const handlePrint = () => {
-    window.print();
+    const printEl = document.getElementById('unified-print-sheet');
+    if (printEl) {
+      printIsolatedElement(printEl, {
+        title: `Receituário - ${patient.fullName}`,
+        orientation: layoutMode === 'a4_portrait' ? 'portrait' : (layoutMode === 'thermal_80mm' ? 'thermal' : 'landscape')
+      });
+    } else {
+      window.print();
+    }
   };
 
   const handleSelectFilter = (type: PrescriptionFilterType) => {
@@ -610,11 +619,11 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
 
           {/* Botões de Ação & Impressora Pareada */}
           <div className="flex items-center gap-2.5">
-            {/* Status da Impressora Pareada na Rede IVS */}
-            <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-slate-800/90 border border-slate-700 rounded-xl text-[11px] text-slate-300" title="Impressora Wi-Fi Pareada: Epson L3250 Series (IP: 192.168.0.4 - Rede: IVS_PONTA_PORA)">
+            {/* Status da Impressora Pareada / Conectada */}
+            <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-slate-800/90 border border-slate-700 rounded-xl text-[11px] text-slate-300" title="Impressão Direta / Diálogo de Sistema do Navegador">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="font-bold text-white">Epson L3250 (IVS)</span>
-              <span className="text-slate-400 text-[10px] font-mono">192.168.0.4</span>
+              <span className="font-bold text-white">Impressora Pronta</span>
+              <span className="text-slate-400 text-[10px] font-mono">USB / Wi-Fi</span>
             </div>
 
             <button

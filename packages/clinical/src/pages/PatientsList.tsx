@@ -18,19 +18,27 @@ import {
   Glasses,
   History,
   FileCheck2,
+  Printer,
   ChevronDown,
-  Trash2
+  Trash2,
+  RotateCcw,
+  Clock,
+  Eye
 } from 'lucide-react';
 import { offlineDb, generateUUID } from '../services/offlineDb';
-import { ClinicalEncounter } from '@optotipo/shared';
+import { ClinicalEncounter, Prescription } from '@optotipo/shared';
+import { UnifiedPrintCenterModal } from '../components/UnifiedPrintCenterModal';
+import { PatientMedicalRecordModal } from '../components/PatientMedicalRecordModal';
+import { ClinicalReportModal } from '../components/ClinicalReportModal';
 
 interface PatientsListProps {
   onSelectPatient: (patient: Patient) => void;
+  onStartEncounter?: (patient: Patient, encounter?: ClinicalEncounter) => void;
   userRole?: string;
   clinicId?: string;
 }
 
-export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, userRole, clinicId }) => {
+export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, onStartEncounter, userRole, clinicId }) => {
   const effectiveClinicId = (clinicId && clinicId !== 'all') ? clinicId : offlineDb.getActiveClinicId();
   const [patients, setPatients] = useState<Patient[]>([]);
   const [encounters, setEncounters] = useState<ClinicalEncounter[]>([]);
@@ -39,6 +47,126 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, use
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [editingPatient, setEditingPatient] = useState<Patient | null>(null);
   const [expandedPatientId, setExpandedPatientId] = useState<string | null>(null);
+
+  // Estados para impressão direta de receituário
+  const [isPrintModalOpen, setIsPrintModalOpen] = useState<boolean>(false);
+  const [printPatient, setPrintPatient] = useState<Patient | null>(null);
+  const [printPrescription, setPrintPrescription] = useState<Prescription | null>(null);
+  const [printTherapeuticPlan, setPrintTherapeuticPlan] = useState<string | undefined>(undefined);
+
+  // Estados para Modal de Prontuário Completo e Laudo Clínico
+  const [isRecordModalOpen, setIsRecordModalOpen] = useState<boolean>(false);
+  const [recordPatient, setRecordPatient] = useState<Patient | null>(null);
+  const [isReportModalOpen, setIsReportModalOpen] = useState<boolean>(false);
+  const [reportEncounter, setReportEncounter] = useState<ClinicalEncounter | null>(null);
+  const [reportPatient, setReportPatient] = useState<Patient | null>(null);
+
+  const handleOpenRecordModal = (patient: Patient, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    setRecordPatient(patient);
+    setIsRecordModalOpen(true);
+  };
+
+  const handleOpenReportModal = (patient: Patient, encounter: ClinicalEncounter, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    setReportPatient(patient);
+    setReportEncounter(encounter);
+    setIsReportModalOpen(true);
+  };
+
+  const handleRegisterReturn = (patient: Patient, previousEncounter?: ClinicalEncounter, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    
+    // 1. Cria ou enfileira agendamento de retorno para hoje
+    const today = new Date().toISOString().split('T')[0];
+    const nowTime = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    const existingApts = offlineDb.getAppointments(effectiveClinicId);
+    
+    const returnApt: Appointment = {
+      id: generateUUID(),
+      patientId: patient.id,
+      patientName: patient.fullName,
+      patientNationality: patient.nationality || 'BR',
+      patientPhone: patient.phone,
+      patientDocument: patient.documentNumber,
+      examinerId: 'user-examinador',
+      examinerName: 'Dr. Rudson Meirelles',
+      date: today,
+      time: nowTime,
+      durationMinutes: 3,
+      type: 'retorno',
+      status: 'waiting',
+      ticketNumber: `R-${String(existingApts.filter(a => a.date === today).length + 1).padStart(2, '0')}`,
+      notes: `Consulta de Retorno registrada em ${new Date().toLocaleDateString('pt-BR')}. Reavaliação de conduta e dioptria.`,
+      room: 'Consultório 1 (Retorno)',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+
+    offlineDb.saveAppointment(returnApt, effectiveClinicId);
+    window.dispatchEvent(new CustomEvent('optomed_appointment_updated', { detail: returnApt }));
+    window.dispatchEvent(new CustomEvent('optomed_new_patient_registered', { detail: { patientName: patient.fullName, type: 'retorno' } }));
+
+    // 2. Se for examinador, abre diretamente o atendimento de retorno na tela de exame com dados preservados da consulta anterior
+    if (userRole !== 'reception') {
+      if (onStartEncounter) {
+        onStartEncounter(patient, {
+          isReturnEncounter: true,
+          previousEncounter: previousEncounter
+        } as any);
+      } else {
+        onSelectPatient(patient);
+      }
+    } else {
+      alert(`Retorno registrado com sucesso para ${patient.fullName}!\nSenha: ${returnApt.ticketNumber} - Enfileirado na Recepção / Painel do Examinador.`);
+    }
+  };
+
+  const handleQuickPrint = (patient: Patient, encounter?: ClinicalEncounter, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    
+    // 1. Tenta achar prescrição existente salva
+    const prescriptions = offlineDb.getPrescriptions(effectiveClinicId);
+    let rx = prescriptions.find(p => p.patientId === patient.id);
+
+    // 2. Se não houver prescrição salva mas houver encounter com refração, sintetiza a prescrição
+    const enc = encounter || encounters.find(ec => ec.patientId === patient.id && ec.subjectiveRefraction);
+    if (!rx && enc && enc.subjectiveRefraction) {
+      const ref = enc.subjectiveRefraction;
+      rx = {
+        id: generateUUID(),
+        encounterId: enc.id,
+        patientId: patient.id,
+        patientName: patient.fullName,
+        date: enc.date || new Date().toISOString(),
+        expirationDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        od: {
+          sphere: ref?.od?.sphere || 0,
+          cylinder: ref?.od?.cylinder || 0,
+          axis: ref?.od?.axis || 0,
+          visualAcuity: ref?.od?.visualAcuity
+        },
+        oe: {
+          sphere: ref?.oe?.sphere || 0,
+          cylinder: ref?.oe?.cylinder || 0,
+          axis: ref?.oe?.axis || 0,
+          visualAcuity: ref?.oe?.visualAcuity
+        },
+        addition: ref?.addition,
+        pdDistanceMm: ref?.pdDistanceMm || 62,
+        lensType: (ref?.addition ? 'multifocal' : 'monofocal') as any,
+        material: 'resina' as any,
+        treatments: ['Antirreflexo Premium', 'Proteção UV400'],
+        returnInstructions: patient.nationality === 'PY' ? 'Control en 1 año para evaluación visual de rutina.' : 'Retorno em 1 ano para controle visual de rotina.',
+        observations: enc.conduct || 'Receita óptica de rotina.'
+      };
+    }
+
+    setPrintPatient(patient);
+    setPrintPrescription(rx || null);
+    setPrintTherapeuticPlan(enc?.conduct);
+    setIsPrintModalOpen(true);
+  };
 
   // Form state com suporte binacional BR / PY
   const [fullName, setFullName] = useState<string>('');
@@ -57,8 +185,23 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, use
 
   useEffect(() => {
     const refreshPatients = () => {
-      setPatients(offlineDb.getPatients(effectiveClinicId));
-      setEncounters(offlineDb.getEncounters(effectiveClinicId));
+      // 1. Busca pacientes da clínica ativa
+      const primaryPatients = offlineDb.getPatients(effectiveClinicId);
+      const primaryEncounters = offlineDb.getEncounters(effectiveClinicId);
+      
+      // 2. Garante que se houver pacientes em 'ivs' ou 'clinica-principal', nenhum paciente atendido fique oculto
+      const allClinicPatients = ['ivs', 'clinica-principal'].flatMap(cid => offlineDb.getPatients(cid));
+      const mapPatients = new Map<string, Patient>();
+      allClinicPatients.forEach(p => { if (p && p.id) mapPatients.set(p.id, p); });
+      primaryPatients.forEach(p => { if (p && p.id) mapPatients.set(p.id, p); });
+
+      const allClinicEncounters = ['ivs', 'clinica-principal'].flatMap(cid => offlineDb.getEncounters(cid));
+      const mapEncounters = new Map<string, ClinicalEncounter>();
+      allClinicEncounters.forEach(e => { if (e && e.id) mapEncounters.set(e.id, e); });
+      primaryEncounters.forEach(e => { if (e && e.id) mapEncounters.set(e.id, e); });
+
+      setPatients(Array.from(mapPatients.values()));
+      setEncounters(Array.from(mapEncounters.values()));
     };
 
     refreshPatients();
@@ -74,7 +217,7 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, use
       window.removeEventListener('optomed_encounter_updated', refreshPatients);
       window.removeEventListener('storage', refreshPatients);
     };
-  }, []);
+  }, [effectiveClinicId]);
 
   const openNewPatientModal = () => {
     const activeClinic = offlineDb.getActiveClinic();
@@ -275,9 +418,12 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, use
             <span className="text-xs font-bold bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded-full">
               Brasil 🇧🇷 / Paraguai 🇵🇾
             </span>
+            <span className="text-xs font-black bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full border border-emerald-300">
+              {patients.length} Pacientes Cadastrados
+            </span>
           </div>
           <p className="text-xs text-slate-500 mt-0.5">
-            Gestão de cadastro bilíngue com minimização de dados e consentimento LGPD
+            Gestão de cadastro bilíngue com histórico completo, emissão direta de receitas e consentimento LGPD
           </p>
         </div>
 
@@ -378,10 +524,23 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, use
                           {patient.documentType || 'DOC'}: {patient.documentNumber || 'Sem número'}
                         </span>
                         {patientEncounters.length > 0 && (
-                          <span className="text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-full flex items-center gap-1">
-                            <FileCheck2 className="w-3 h-3 text-blue-600" />
-                            {patientEncounters.length} {patientEncounters.length === 1 ? 'Prontuário' : 'Prontuários'}
-                          </span>
+                          <>
+                            <span className="text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-full flex items-center gap-1">
+                              <FileCheck2 className="w-3 h-3 text-blue-600" />
+                              {patientEncounters.length} {patientEncounters.length === 1 ? 'Prontuário' : 'Prontuários'}
+                            </span>
+
+                            {/* Botão Retorno Rápido no Topo */}
+                            <button
+                              type="button"
+                              onClick={(e) => handleRegisterReturn(patient, lastEncounter, e)}
+                              className="text-[11px] font-black bg-indigo-600 hover:bg-indigo-700 text-white px-2.5 py-0.5 rounded-full flex items-center gap-1 shadow-xs cursor-pointer transition-all active:scale-95"
+                              title="Registrar retorno deste paciente (preserva histórico e refração anterior)"
+                            >
+                              <RotateCcw className="w-3 h-3" />
+                              <span>↩ Retorno</span>
+                            </button>
+                          </>
                         )}
                       </div>
 
@@ -398,52 +557,83 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, use
                           </span>
                         )}
                         {patient.phone && (
-                          <span className="flex items-center gap-1 font-mono">
-                            <Phone className="w-3.5 h-3.5 text-slate-400" />
-                            {patient.phone}
+                          <span className="flex items-center gap-1.5 font-medium text-slate-700">
+                            <Phone className="w-3.5 h-3.5 text-emerald-600" />
+                            <span>{patient.phone}</span>
                           </span>
                         )}
                         {patient.city && (
-                          <span className="flex items-center gap-1 text-slate-600">
-                            <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                            {patient.city}
+                          <span className="flex items-center gap-1.5 font-medium text-slate-700">
+                            <MapPin className="w-3.5 h-3.5 text-rose-500" />
+                            <span>{patient.city}</span>
                           </span>
                         )}
                         {patient.guardianName && (
-                          <span className="text-indigo-600 font-medium">
+                          <span className="flex items-center gap-1.5 font-medium text-slate-700">
                             Resp: {patient.guardianName}
                           </span>
                         )}
                       </div>
 
-                      {/* Exibição Rápida da Última Refração / Dioptria Cadastrada */}
+                      {/* Exibição Rápida da Última Refração / Dioptria Cadastrada com Data do Atendimento */}
                       {lastEncounter && hasDioptria && (
-                        <div className="mt-2 bg-slate-50 border border-slate-200/80 rounded-xl p-2 flex flex-wrap items-center gap-3 text-xs">
-                          <span className="text-[10px] font-black uppercase tracking-wider text-slate-500 flex items-center gap-1">
-                            <Glasses className="w-3.5 h-3.5 text-blue-600" /> Último Grau:
-                          </span>
-                          <span className="font-mono text-[11px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                            OD: {formatDioptria(odRef)}
-                          </span>
-                          <span className="font-mono text-[11px] font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
-                            OE: {formatDioptria(oeRef)}
-                          </span>
-                          {lastEncounter.subjectiveRefraction?.addition && (
-                            <span className="font-mono text-[11px] font-bold text-indigo-800 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">
-                              Adição: +{lastEncounter.subjectiveRefraction.addition.toFixed(2)}
+                        <div className="mt-2 bg-slate-50 border border-slate-200/80 rounded-xl p-2.5 flex flex-wrap items-center justify-between gap-2 text-xs">
+                          <div className="flex flex-wrap items-center gap-2">
+                            {/* Data do Atendimento */}
+                            <span className="font-bold text-[11px] text-blue-900 bg-blue-100/70 border border-blue-200 px-2.5 py-0.5 rounded-lg flex items-center gap-1">
+                              <Clock className="w-3 h-3 text-blue-600" />
+                              <span>Atendido em: <strong>{new Date(lastEncounter.date).toLocaleDateString('pt-BR')} às {new Date(lastEncounter.date).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</strong></span>
                             </span>
-                          )}
-                          {lastEncounter.conduct && (
-                            <span className="text-[10px] text-slate-600 truncate max-w-xs" title={lastEncounter.conduct}>
-                              Conduta: {lastEncounter.conduct}
+
+                            <span className="text-[10px] font-black uppercase tracking-wider text-slate-500 flex items-center gap-1">
+                              <Glasses className="w-3.5 h-3.5 text-blue-600" /> Grau:
                             </span>
-                          )}
+                            <span className="font-mono text-[11px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                              OD: {formatDioptria(odRef)}
+                            </span>
+                            <span className="font-mono text-[11px] font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                              OE: {formatDioptria(oeRef)}
+                            </span>
+                            {lastEncounter.subjectiveRefraction?.addition && (
+                              <span className="font-mono text-[11px] font-bold text-indigo-800 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">
+                                Adição: +{lastEncounter.subjectiveRefraction.addition.toFixed(2)}
+                              </span>
+                            )}
+                            {lastEncounter.conduct && (
+                              <span className="text-[10px] text-slate-600 truncate max-w-xs" title={lastEncounter.conduct}>
+                                Conduta: {lastEncounter.conduct}
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Botão de Retorno Direto na barra de Grau */}
+                          <button
+                            type="button"
+                            onClick={(e) => handleRegisterReturn(patient, lastEncounter, e)}
+                            className="px-2.5 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-900 border border-indigo-300 rounded-lg text-xs font-black flex items-center gap-1 cursor-pointer transition-all active:scale-95 shadow-2xs"
+                            title="Nova consulta de retorno baseada nesta refração"
+                          >
+                            <RotateCcw className="w-3.5 h-3.5 text-indigo-600" />
+                            <span>Retorno</span>
+                          </button>
                         </div>
                       )}
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2 self-end sm:self-center shrink-0">
+                  <div className="flex items-center gap-2 self-end sm:self-center shrink-0 flex-wrap justify-end">
+                    {/* Botão de Retorno Principal Destacado */}
+                    <button
+                      type="button"
+                      onClick={(e) => handleRegisterReturn(patient, lastEncounter, e)}
+                      className="px-3.5 py-2 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all cursor-pointer border-2 bg-indigo-600 hover:bg-indigo-700 text-white border-indigo-700 shadow-md active:scale-95"
+                      title="Registrar retorno deste paciente (reavaliação visual preservando dados da consulta anterior)"
+                    >
+                      <RotateCcw className="w-3.5 h-3.5 text-white" />
+                      <span>Retorno</span>
+                    </button>
+
+                    {/* Botão Histórico Inline (dropdown) */}
                     {patientEncounters.length > 0 && (
                       <button
                         type="button"
@@ -451,18 +641,44 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, use
                           e.stopPropagation();
                           setExpandedPatientId(isExpanded ? null : patient.id);
                         }}
-                        className={`px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors border ${
+                        className={`px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors border cursor-pointer ${
                           isExpanded 
-                            ? 'bg-blue-50 text-blue-700 border-blue-200' 
+                            ? 'bg-blue-600 text-white border-blue-600 shadow-xs' 
                             : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200'
                         }`}
-                        title="Ver histórico de prontuários anteriores"
+                        title="Ver histórico de consultas na lista"
                       >
                         <History className="w-3.5 h-3.5" />
                         <span>Histórico ({patientEncounters.length})</span>
                         <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
                       </button>
                     )}
+
+                    {/* Botão Prontuário Completo (Abre modal de prontuário com linha do tempo) */}
+                    <button
+                      type="button"
+                      onClick={(e) => handleOpenRecordModal(patient, e)}
+                      className="px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors border bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300 shadow-2xs cursor-pointer"
+                      title="Abrir prontuário clínico completo com todo o histórico de atendimentos"
+                    >
+                      <FileCheck2 className="w-3.5 h-3.5 text-blue-600" />
+                      <span>Prontuário</span>
+                    </button>
+
+                    {/* Botão de Impressão Direta de Receituário */}
+                    <button
+                      type="button"
+                      onClick={(e) => handleQuickPrint(patient, lastEncounter, e)}
+                      className={`px-3 py-2 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all cursor-pointer border shadow-2xs ${
+                        hasDioptria
+                          ? 'bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border-emerald-300'
+                          : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200'
+                      }`}
+                      title="Imprimir receituário óptico/médico com 1 clique"
+                    >
+                      <Printer className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Receita</span>
+                    </button>
 
                     <button
                       type="button"
@@ -485,14 +701,15 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, use
 
                     <button 
                       type="button"
-                      onClick={() => onSelectPatient(patient)}
-                      className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl text-xs flex items-center gap-1.5 shadow-sm active:scale-95 transition-all"
+                      onClick={(e) => { e.stopPropagation(); onSelectPatient(patient); }}
+                      className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl text-xs flex items-center gap-1.5 shadow-sm active:scale-95 transition-all cursor-pointer"
                     >
                       <span>{userRole === 'reception' ? 'Abrir Ficha' : 'Iniciar Exame'}</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </div>
+
 
                 {/* Gaveta de Histórico de Exames Anteriores Expandida */}
                 {isExpanded && (
@@ -548,13 +765,46 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, use
                             )}
                           </div>
 
-                          <button
-                            type="button"
-                            onClick={() => onSelectPatient(patient)}
-                            className="px-3.5 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-xs rounded-lg transition-colors shrink-0 self-end md:self-auto"
-                          >
-                            Abrir no Prontuário
-                          </button>
+                          <div className="flex items-center gap-2 shrink-0 self-end md:self-auto flex-wrap sm:flex-nowrap">
+                            <button
+                              type="button"
+                              onClick={(e) => handleOpenReportModal(patient, enc, e)}
+                              className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 font-bold text-xs rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer"
+                              title="Visualizar e imprimir laudo clínico deste exame"
+                            >
+                              <FileText className="w-3.5 h-3.5 text-blue-600" />
+                              <span>Laudo Completo</span>
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={(e) => handleQuickPrint(patient, enc, e)}
+                              className="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold text-xs rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer"
+                              title="Imprimir receituário deste exame específico"
+                            >
+                              <Printer className="w-3.5 h-3.5 text-emerald-600" />
+                              <span>Receita</span>
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={(e) => handleRegisterReturn(patient, enc, e)}
+                              className="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-900 border border-indigo-300 font-black text-xs rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer"
+                              title="Iniciar nova consulta de retorno com base nesta consulta e dioptria"
+                            >
+                              <RotateCcw className="w-3.5 h-3.5 text-indigo-600" />
+                              <span>↩ Retorno</span>
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => onSelectPatient(patient)}
+                              className="px-3.5 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-xs rounded-lg transition-colors cursor-pointer"
+                            >
+                              Abrir no Exame
+                            </button>
+                          </div>
+
                         </div>
                       ))}
                     </div>
@@ -788,6 +1038,52 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, use
           </div>
         </div>
       )}
+
+      {/* Modal Unificado de Impressão Direta de Receituários */}
+      <UnifiedPrintCenterModal
+        isOpen={isPrintModalOpen}
+        initialMode="dioptria"
+        prescription={printPrescription}
+        patient={printPatient}
+        therapeuticPlan={printTherapeuticPlan}
+        onClose={() => {
+          setIsPrintModalOpen(false);
+          setPrintPatient(null);
+          setPrintPrescription(null);
+          setPrintTherapeuticPlan(undefined);
+        }}
+      />
+
+      {/* Modal de Prontuário Clínico Completo com Histórico de Atendimentos */}
+      <PatientMedicalRecordModal
+        isOpen={isRecordModalOpen}
+        patient={recordPatient}
+        encounters={encounters.filter(e => e.patientId === recordPatient?.id)}
+        onClose={() => {
+          setIsRecordModalOpen(false);
+          setRecordPatient(null);
+        }}
+        onSelectEncounterForReport={(enc) => {
+          if (recordPatient) {
+            handleOpenReportModal(recordPatient, enc);
+          }
+        }}
+        onStartReturn={(pat, prevEnc) => {
+          handleRegisterReturn(pat, prevEnc);
+        }}
+      />
+
+      {/* Modal de Relatório / Laudo Clínico Formatado para Impressão */}
+      <ClinicalReportModal
+        isOpen={isReportModalOpen}
+        patient={reportPatient}
+        encounter={reportEncounter}
+        onClose={() => {
+          setIsReportModalOpen(false);
+          setReportPatient(null);
+          setReportEncounter(null);
+        }}
+      />
     </div>
   );
 };
