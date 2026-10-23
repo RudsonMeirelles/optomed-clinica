@@ -72,6 +72,38 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
     return 'dioptria_single';
   });
 
+  // Posição na Meia Folha Paisagem: 'left' = 1ª metade (Esquerda) | 'right' = 2ª metade (Direita / Outra Meia Folha)
+  const [halfSheetPosition, setHalfSheetPosition] = useState<'left' | 'right'>(() => {
+    try {
+      const saved = localStorage.getItem('optomed_print_half_sheet_position');
+      if (saved === 'right' || saved === 'left') return saved;
+    } catch {}
+    return 'left';
+  });
+
+  // Posição no modo Retrato: 'top' = metade superior | 'bottom' = metade inferior (outra meia folha) | 'full' = página inteira
+  const [portraitPosition, setPortraitPosition] = useState<'top' | 'bottom' | 'full'>(() => {
+    try {
+      const saved = localStorage.getItem('optomed_print_portrait_position');
+      if (saved === 'top' || saved === 'bottom' || saved === 'full') return saved;
+    } catch {}
+    return 'top';
+  });
+
+  const handleSelectHalfSheetPosition = (pos: 'left' | 'right') => {
+    setHalfSheetPosition(pos);
+    try {
+      localStorage.setItem('optomed_print_half_sheet_position', pos);
+    } catch {}
+  };
+
+  const handleSelectPortraitPosition = (pos: 'top' | 'bottom' | 'full') => {
+    setPortraitPosition(pos);
+    try {
+      localStorage.setItem('optomed_print_portrait_position', pos);
+    } catch {}
+  };
+
   // Medicamentos Farmacológicos
   const [medications, setMedications] = useState<PrescribedMedicationItem[]>([]);
   const [generalInstructions, setGeneralInstructions] = useState<string>('');
@@ -139,22 +171,83 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
     }
   }, [isOpen, initialDrugs, language]);
 
-  if (!isOpen || !patient) return null;
-
-  const activeClinic = offlineDb.getActiveClinic();
-  const currentDate = new Date().toLocaleDateString(language === 'es' ? 'es-PY' : 'pt-BR');
-
   const handlePrint = () => {
+    // FASE 3.9: Rastreabilidade e Imutabilidade de Documentos Emitidos
+    try {
+      const activeClinicId = offlineDb.getActiveClinicId();
+      const docType = filterType === 'farmaco_only' 
+        ? 'medical_prescription' 
+        : (filterType === 'dioptria_only' ? 'optical_prescription' : 'clinical_report');
+      
+      const docRecord = {
+        id: `doc-${Date.now()}`,
+        encounterId: prescription?.encounterId || '',
+        patientId: patient?.id || '',
+        clinicId: activeClinicId,
+        type: docType as any,
+        title: filterType === 'farmaco_only' 
+          ? `Receituário Farmacológico - ${patient?.fullName || ''}`
+          : (filterType === 'dioptria_only' ? `Receita Óptica - ${patient?.fullName || ''}` : `Receituário Unificado (Óptico + Farmacológico) - ${patient?.fullName || ''}`),
+        content: `Documento emitido em formato ${layoutMode} (${language.toUpperCase()}).`,
+        structuredPayload: {
+          prescription,
+          medications: filterType !== 'dioptria_only' ? medications : undefined,
+          layoutMode,
+          language
+        },
+        professionalId: 'dr-meirelles',
+        professionalName: prescription?.examinerName || 'Dr. Rudson Meirelles',
+        professionalRegistry: prescription?.examinerRegistry,
+        issuedAt: new Date().toISOString(),
+        version: 1
+      };
+      offlineDb.saveClinicalDocument(docRecord, activeClinicId);
+
+      // FASE 26: Se houver receita óptica associada e for impressa, marca como isIssued: true
+      if (prescription) {
+        offlineDb.savePrescription({
+          ...prescription,
+          isIssued: true,
+          clinicId: activeClinicId
+        }, activeClinicId);
+      }
+    } catch (e) {
+      console.warn('[UnifiedPrintCenter] Erro ao registrar documento clínico:', e);
+    }
+
     const printEl = document.getElementById('unified-print-sheet');
     if (printEl) {
       printIsolatedElement(printEl, {
-        title: `Receituário - ${patient.fullName}`,
+        title: `Receituário - ${patient?.fullName || ''}`,
         orientation: layoutMode === 'a4_portrait' ? 'portrait' : (layoutMode === 'thermal_80mm' ? 'thermal' : 'landscape')
       });
     } else {
       window.print();
     }
   };
+
+  // FASE 29: Atalhos de teclado no Modal de Impressão (Ctrl+P para imprimir, Esc para fechar)
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        onClose();
+      } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'p') {
+        e.preventDefault();
+        handlePrint();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose, layoutMode, filterType, medications, prescription, patient]);
+
+  if (!isOpen || !patient) return null;
+
+  const activeClinic = offlineDb.getActiveClinic();
+  const currentDate = new Date().toLocaleDateString(language === 'es' ? 'es-PY' : 'pt-BR');
 
   const handleSelectFilter = (type: PrescriptionFilterType) => {
     setFilterType(type);
@@ -205,6 +298,7 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
       axisHeader: 'EIXO',
       addHeader: 'ADIÇÃO',
       prismHeader: 'PRISMA',
+      vaCcHeader: 'AV (c/c)',
       odLabel: 'OD',
       oeLabel: 'OE',
       lensTypeLabel: 'Tipo de Lente Sugerido',
@@ -238,6 +332,7 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
       axisHeader: 'EJE',
       addHeader: 'ADICIÓN',
       prismHeader: 'PRISMA',
+      vaCcHeader: 'AV (c/c)',
       odLabel: 'OD (Derecho)',
       oeLabel: 'OI (Izquierdo)',
       lensTypeLabel: 'Tipo de Lente Sugerido',
@@ -307,7 +402,11 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
                 <th className="p-1.5 print:p-2 border-r border-slate-900">{t.sphereHeader}</th>
                 <th className="p-1.5 print:p-2 border-r border-slate-900">{t.cylHeader}</th>
                 <th className="p-1.5 print:p-2 border-r border-slate-900">{t.axisHeader}</th>
-                <th className="p-1.5 print:p-2">{t.addHeader}</th>
+                {(prescription.od.prism || prescription.oe.prism) && (
+                  <th className="p-1.5 print:p-2 border-r border-slate-900">{t.prismHeader}</th>
+                )}
+                <th className="p-1.5 print:p-2 border-r border-slate-900">{t.addHeader}</th>
+                <th className="p-1.5 print:p-2 bg-blue-50/50">{t.vaCcHeader}</th>
               </tr>
             </thead>
             <tbody>
@@ -326,8 +425,16 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
                 <td className="p-2 print:p-3 border-r border-slate-900 font-black">
                   {prescription.od.axis !== undefined && prescription.od.axis !== null ? `${prescription.od.axis}°` : '-'}
                 </td>
-                <td rowSpan={2} className="p-2 print:p-3 align-middle bg-slate-50/50 font-black text-sm print:text-base border-l border-slate-900">
+                {(prescription.od.prism || prescription.oe.prism) && (
+                  <td className="p-2 print:p-3 border-r border-slate-900 font-black text-indigo-700">
+                    {prescription.od.prism ? `${prescription.od.prism.toFixed(2)}Δ ${prescription.od.prismBase ? `Base ${prescription.od.prismBase.toUpperCase()}` : ''}` : '-'}
+                  </td>
+                )}
+                <td rowSpan={2} className="p-2 print:p-3 align-middle bg-slate-50/50 font-black text-sm print:text-base border-r border-slate-900">
                   {prescription.addition ? `+${prescription.addition.toFixed(2)}` : '-'}
+                </td>
+                <td className="p-2 print:p-3 font-black text-blue-900 bg-blue-50/30">
+                  {prescription.od.visualAcuity || '20/20'}
                 </td>
               </tr>
               <tr className="font-bold">
@@ -344,6 +451,14 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
                 </td>
                 <td className="p-2 print:p-3 border-r border-slate-900 font-black">
                   {prescription.oe.axis !== undefined && prescription.oe.axis !== null ? `${prescription.oe.axis}°` : '-'}
+                </td>
+                {(prescription.od.prism || prescription.oe.prism) && (
+                  <td className="p-2 print:p-3 border-r border-slate-900 font-black text-indigo-700">
+                    {prescription.oe.prism ? `${prescription.oe.prism.toFixed(2)}Δ ${prescription.oe.prismBase ? `Base ${prescription.oe.prismBase.toUpperCase()}` : ''}` : '-'}
+                  </td>
+                )}
+                <td className="p-2 print:p-3 font-black text-blue-900 bg-blue-50/30">
+                  {prescription.oe.visualAcuity || '20/20'}
                 </td>
               </tr>
             </tbody>
@@ -502,7 +617,12 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
   };
 
   return (
-    <div className="unified-print-modal-backdrop fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 select-none print:p-0 print:m-0 print:bg-white print:static print:block">
+    <div 
+      className="unified-print-modal-backdrop fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 select-none print:p-0 print:m-0 print:bg-white print:static print:block"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="print-modal-title"
+    >
       <div className="unified-print-modal-container bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-6xl max-h-[96vh] flex flex-col shadow-2xl overflow-hidden print:bg-white print:border-none print:rounded-none print:shadow-none print:max-h-none print:max-w-none print:overflow-visible print:w-full">
         
         {/* ========================================================================= */}
@@ -515,7 +635,7 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
               <Printer className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="font-black text-sm tracking-wide text-white">CENTRAL DE IMPRESSÃO & RECEITUÁRIOS</h2>
+              <h2 id="print-modal-title" className="font-black text-sm tracking-wide text-white">CENTRAL DE IMPRESSÃO & RECEITUÁRIOS</h2>
               <p className="text-[11px] text-slate-300">Selecione o tipo de receituário, vias e formato de impressão</p>
             </div>
           </div>
@@ -628,12 +748,16 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
 
             <button
               onClick={handlePrint}
+              aria-label="Imprimir documento (Ctrl+P)"
+              title="Imprimir documento (Ctrl+P)"
               className="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded-xl text-xs flex items-center gap-2 shadow-lg shadow-emerald-600/30 active:scale-95 transition-all cursor-pointer"
             >
-              <Printer className="w-4 h-4" /> IMPRIMIR
+              <Printer className="w-4 h-4" /> IMPRIMIR <span className="opacity-70 text-[10px] hidden sm:inline">(Ctrl+P)</span>
             </button>
             <button
               onClick={onClose}
+              aria-label="Fechar janela de impressão (Esc)"
+              title="Fechar (Esc)"
               className="p-2 hover:bg-slate-800 rounded-xl text-slate-400 hover:text-white transition-colors cursor-pointer"
             >
               <X className="w-5 h-5" />
@@ -715,11 +839,96 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
                     💊 1 Via Única de Fármacos (Meia Folha)
                   </button>
                 )}
+
+                {/* Seletor da Meia Folha (Lado Esquerdo vs Direito / Outra Meia Folha) */}
+                {(dualCombination === 'dioptria_single' || dualCombination === 'farmaco_single') && (
+                  <div className="flex items-center gap-1 bg-white border border-slate-300 rounded-lg p-0.5 ml-2 shadow-xs">
+                    <span className="text-[11px] font-bold text-slate-600 px-2 flex items-center gap-1">
+                      📄 Posição no Papel:
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => handleSelectHalfSheetPosition('left')}
+                      className={`px-2.5 py-1 rounded-md font-bold text-xs transition-all cursor-pointer flex items-center gap-1 ${
+                        halfSheetPosition === 'left'
+                          ? 'bg-blue-600 text-white shadow-xs'
+                          : 'text-slate-600 hover:bg-slate-100'
+                      }`}
+                      title="Imprimir na 1ª metade (Lado Esquerdo da folha A4)"
+                    >
+                      <span>1ª Meia Folha (Esquerda)</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleSelectHalfSheetPosition('right')}
+                      className={`px-2.5 py-1 rounded-md font-bold text-xs transition-all cursor-pointer flex items-center gap-1 ${
+                        halfSheetPosition === 'right'
+                          ? 'bg-amber-600 text-white shadow-xs'
+                          : 'text-slate-600 hover:bg-amber-50 hover:text-amber-800'
+                      }`}
+                      title="Imprimir na 2ª metade (Lado Direito / Outra Meia Folha para reaproveitar folha já usada)"
+                    >
+                      <span>2ª Meia Folha (Direita — Outra Meia Folha)</span>
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
 
             <span className="text-[11px] text-slate-500 font-medium">
               Folha dividida ao meio com linha pontilhada de corte central.
+            </span>
+          </div>
+        )}
+
+        {/* Barra de Filtros e Posição para A4 Retrato */}
+        {layoutMode === 'a4_portrait' && (
+          <div className="bg-slate-100 border-b border-slate-300 px-6 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs print:hidden">
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-slate-700 flex items-center gap-1">
+                <Scissors className="w-3.5 h-3.5 text-blue-600" /> Posição da Meia Folha no Papel A4:
+              </span>
+              <div className="flex items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => handleSelectPortraitPosition('top')}
+                  className={`px-3 py-1 rounded-lg font-bold border transition-all cursor-pointer ${
+                    portraitPosition === 'top'
+                      ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                      : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'
+                  }`}
+                  title="Imprimir na metade superior do papel A4"
+                >
+                  📄 Meia Folha Superior (Topo)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleSelectPortraitPosition('bottom')}
+                  className={`px-3 py-1 rounded-lg font-bold border transition-all cursor-pointer ${
+                    portraitPosition === 'bottom'
+                      ? 'bg-amber-600 text-white border-amber-600 shadow-xs'
+                      : 'bg-white text-slate-700 border-slate-300 hover:bg-amber-50'
+                  }`}
+                  title="Imprimir na metade inferior do papel A4 (Outra Meia Folha para reaproveitar folha já usada)"
+                >
+                  📄 Meia Folha Inferior (Outra Meia Folha)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleSelectPortraitPosition('full')}
+                  className={`px-3 py-1 rounded-lg font-bold border transition-all cursor-pointer ${
+                    portraitPosition === 'full'
+                      ? 'bg-slate-700 text-white border-slate-700 shadow-xs'
+                      : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'
+                  }`}
+                  title="Página inteira sem espaçamento"
+                >
+                  Folha Inteira
+                </button>
+              </div>
+            </div>
+            <span className="text-[11px] text-slate-500 font-medium">
+              Permite reutilizar uma folha A4 imprimindo na metade superior ou inferior.
             </span>
           </div>
         )}
@@ -744,9 +953,23 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
               <div className="h-full flex flex-col">
                 {dualCombination === 'dioptria_and_farmaco' && renderOpticalBlock(t.patientCopy)}
                 {dualCombination === 'dioptria_dual' && renderOpticalBlock(`${t.patientCopy} (1ª Via)`)}
-                {dualCombination === 'dioptria_single' && renderOpticalBlock(t.patientCopy)}
+                {dualCombination === 'dioptria_single' && (
+                  halfSheetPosition === 'left' ? renderOpticalBlock(t.patientCopy) : (
+                    <div className="h-full border-2 border-dashed border-amber-300 bg-amber-50/50 rounded-xl flex flex-col items-center justify-center text-amber-800 text-xs italic p-6 text-center print:border-none print:opacity-0 print:invisible">
+                      <p className="font-bold mb-1">📄 1ª Meia Folha Vazia (Já Impressa)</p>
+                      <p className="text-[11px] text-slate-500">(Nada será impresso deste lado para preservar a folha já utilizada)</p>
+                    </div>
+                  )
+                )}
                 {dualCombination === 'farmaco_dual' && renderMedicalBlock(`${t.patientCopy} (1ª Via)`)}
-                {dualCombination === 'farmaco_single' && renderMedicalBlock(t.patientCopy)}
+                {dualCombination === 'farmaco_single' && (
+                  halfSheetPosition === 'left' ? renderMedicalBlock(t.patientCopy) : (
+                    <div className="h-full border-2 border-dashed border-amber-300 bg-amber-50/50 rounded-xl flex flex-col items-center justify-center text-amber-800 text-xs italic p-6 text-center print:border-none print:opacity-0 print:invisible">
+                      <p className="font-bold mb-1">📄 1ª Meia Folha Vazia (Já Impressa)</p>
+                      <p className="text-[11px] text-slate-500">(Nada será impresso deste lado para preservar a folha já utilizada)</p>
+                    </div>
+                  )
+                )}
               </div>
 
               {/* LADO DIREITO DA FOLHA (MEIA PÁGINA 2) */}
@@ -754,10 +977,21 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
                 {dualCombination === 'dioptria_and_farmaco' && renderMedicalBlock(t.patientCopy)}
                 {dualCombination === 'dioptria_dual' && renderOpticalBlock(`${t.patientCopy} (2ª Via)`)}
                 {dualCombination === 'farmaco_dual' && renderMedicalBlock(t.pharmacyCopy)}
-                {(dualCombination === 'dioptria_single' || dualCombination === 'farmaco_single') && (
-                  <div className="h-full border-2 border-dashed border-slate-300 rounded-xl flex items-center justify-center text-slate-400 text-xs italic p-6 text-center print:border-none print:opacity-0 print:invisible">
-                    (Espaço em branco para corte e economia de papel)
-                  </div>
+                {dualCombination === 'dioptria_single' && (
+                  halfSheetPosition === 'right' ? renderOpticalBlock(t.patientCopy) : (
+                    <div className="h-full border-2 border-dashed border-slate-300 rounded-xl flex flex-col items-center justify-center text-slate-400 text-xs italic p-6 text-center print:border-none print:opacity-0 print:invisible">
+                      <p className="font-semibold mb-1">📄 2ª Meia Folha Livre</p>
+                      <p className="text-[10px] text-slate-400">(Espaço em branco para corte e economia de papel)</p>
+                    </div>
+                  )
+                )}
+                {dualCombination === 'farmaco_single' && (
+                  halfSheetPosition === 'right' ? renderMedicalBlock(t.patientCopy) : (
+                    <div className="h-full border-2 border-dashed border-slate-300 rounded-xl flex flex-col items-center justify-center text-slate-400 text-xs italic p-6 text-center print:border-none print:opacity-0 print:invisible">
+                      <p className="font-semibold mb-1">📄 2ª Meia Folha Livre</p>
+                      <p className="text-[10px] text-slate-400">(Espaço em branco para corte e economia de papel)</p>
+                    </div>
+                  )
                 )}
               </div>
             </div>
@@ -765,12 +999,28 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
 
           {/* MODO 2: A4 RETRATO INDIVIDUAL */}
           {layoutMode === 'a4_portrait' && (
-            <div id="unified-print-sheet" className="max-w-3xl w-full self-start space-y-4 print:max-w-none print:w-full print:space-y-6 print:m-0 print:p-0">
-              {(filterType === 'all' || filterType === 'dioptria_only') && prescription && (
-                renderOpticalBlock(t.patientCopy)
+            <div id="unified-print-sheet" className="max-w-3xl w-full self-start space-y-4 print:max-w-none print:w-full print:m-0 print:p-0 flex flex-col justify-between">
+              {portraitPosition === 'bottom' && (
+                <div className="h-[125mm] border-2 border-dashed border-amber-300 bg-amber-50/40 rounded-xl flex flex-col items-center justify-center text-amber-800 text-xs italic p-6 text-center print:border-none print:opacity-0 print:invisible">
+                  <p className="font-bold mb-1">📄 Metade Superior Vazia (Já Impressa)</p>
+                  <p className="text-[11px] text-slate-500">(Nada será impresso na parte superior para preservar a folha já utilizada)</p>
+                </div>
               )}
-              {(filterType === 'all' || filterType === 'farmaco_only') && medications.length > 0 && (
-                renderMedicalBlock(t.patientCopy)
+
+              <div className="space-y-4 print:space-y-4">
+                {(filterType === 'all' || filterType === 'dioptria_only') && prescription && (
+                  renderOpticalBlock(t.patientCopy)
+                )}
+                {(filterType === 'all' || filterType === 'farmaco_only') && medications.length > 0 && (
+                  renderMedicalBlock(t.patientCopy)
+                )}
+              </div>
+
+              {portraitPosition === 'top' && (
+                <div className="h-[125mm] border-2 border-dashed border-slate-300 rounded-xl flex flex-col items-center justify-center text-slate-400 text-xs italic p-6 text-center print:border-none print:opacity-0 print:invisible">
+                  <p className="font-semibold mb-1">📄 Metade Inferior Livre</p>
+                  <p className="text-[10px] text-slate-400">(Espaço em branco para corte e economia de papel)</p>
+                </div>
               )}
             </div>
           )}

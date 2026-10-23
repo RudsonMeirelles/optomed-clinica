@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: optomed-clinica
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm install && npm run build
+    startCommand: npm --workspace=@optotipo/server run start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
