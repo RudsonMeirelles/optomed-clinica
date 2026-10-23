@@ -11,11 +11,13 @@
   },
   "dependencies": {
     "@optotipo/shared": "*",
+    "compression": "^1.8.2",
     "cors": "^2.8.5",
     "express": "^4.21.2",
     "ws": "^8.18.0"
   },
   "devDependencies": {
+    "@types/compression": "^1.8.1",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "@types/node": "^22.10.7",

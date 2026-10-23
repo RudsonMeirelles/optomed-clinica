@@ -91,9 +91,10 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ currentUser, onClini
   // Salva alterações no consultório
   const handleSaveClinic = (e: React.FormEvent) => {
     e.preventDefault();
+    const existing = clinics.find(c => c.id === selectedClinicId);
     const updated: ClinicConfig = {
       id: selectedClinicId,
-      code: clinics.find(c => c.id === selectedClinicId)?.code || selectedClinicId.toUpperCase(),
+      code: existing?.code || selectedClinicId.toUpperCase(),
       name: clinicName,
       tagline: clinicTagline,
       primaryColor: clinicColor,
@@ -103,7 +104,19 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ currentUser, onClini
       logoUrl: clinicLogoUrl,
       defaultLanguage: clinicLanguage,
       country: clinicCountry,
-      defaultCurrency: clinicCurrency
+      defaultCurrency: clinicCurrency,
+      timezone: existing?.timezone || (clinicCountry === 'Paraguai' ? 'America/Asuncion' : 'America/Sao_Paulo'),
+      currency: clinicCurrency,
+      language: clinicLanguage,
+      status: existing?.status || 'active',
+      clinicalSettings: existing?.clinicalSettings || {
+        defaultConsultationDurationMinutes: 30,
+        optotypeDistanceMeters: 6,
+        enableSmartTV: true,
+        enableRemoteControl: true
+      },
+      createdAt: existing?.createdAt || new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     };
 
     offlineDb.saveClinic(updated);
@@ -162,6 +175,8 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ currentUser, onClini
     const encounters = offlineDb.getEncounters();
     const prescriptions = offlineDb.getPrescriptions();
     const appointments = offlineDb.getAppointments();
+    const transactions = offlineDb.getTransactions();
+    const workSessions = offlineDb.getWorkSessions();
 
     const fullExport = {
       exportTimestamp: new Date().toISOString(),
@@ -171,6 +186,8 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ currentUser, onClini
       encounters,
       prescriptions,
       appointments,
+      transactions,
+      workSessions,
       auditLogs: logs
     };
 

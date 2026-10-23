@@ -1,11 +1,14 @@
 import { 
   Patient, 
+  ClinicalEpisode,
+  EpisodeStatus,
   ClinicalEncounter, 
   Prescription, 
   AuditLogEntry,
   Appointment,
   AppointmentStatus,
   ClinicConfig,
+  ClinicUnit,
   UserAccount,
   ReturnReminder,
   ReportStats,
@@ -13,14 +16,42 @@ import {
   calculateAge,
   FinancialTransaction,
   POSItem,
+  CashRegisterSession,
   CashRegisterSummary,
   ProfessionalContractType,
   ProfessionalWorkSession,
-  ProfessionalSettlementReport
+  ProfessionalSettlementReport,
+  ExaminerFixedPeriod,
+  ExaminerSpecialPeriod,
+  ExaminerAvulsoRule,
+  ExaminerRemunerationRecord,
+  ExaminerClosureRecord,
+  RemunerationStatus,
+  ClinicalEvolution,
+  MedicalPrescriptionRecord,
+  ClinicalDocumentRecord,
+  canTransitionAppointmentStatus,
+  mergeAppointmentStatuses,
+  toCents,
+  fromCents,
+  safeSum,
+  safeSub
 } from '@optotipo/shared';
 import { RECOVERED_RECORDS } from '../data/recoveredClinicalData';
 import { SEED_APPOINTMENTS_12_09_2026, SEED_PATIENTS_12_09_2026, SCHEDULE_DATE_12_09_2026 } from '../data/schedule12092026';
-import { remoteSync } from './remoteSync';
+import { remoteSync, type SyncEntity } from './remoteSync';
+import { syncQueue } from './syncQueueService';
+import { 
+  evaluateDuplicateMatch, 
+  DuplicateCandidateMatch, 
+  GlobalPatientIdentity, 
+  PatientLinkAuditLog,
+  normalizeDocumentNumber,
+  normalizePhoneNumber,
+  normalizePersonName
+} from '@optotipo/shared';
+import { indexedDbStorage } from './indexedDbStorage';
+import { examinerRemunerationService } from './examinerRemunerationService';
 export const DEFAULT_CLINICS: ClinicConfig[] = [
   {
     id: 'ivs',
@@ -28,12 +59,24 @@ export const DEFAULT_CLINICS: ClinicConfig[] = [
     name: 'IVS - Instituto da Visão e Saúde',
     tagline: 'Oftalmologia Especializada & Exames Avançados',
     primaryColor: '#2563EB', // Blue
-    city: 'Foz do Iguaçu',
+    city: 'Ponta Porã',
     country: 'Brasil',
+    timezone: 'America/Sao_Paulo',
+    currency: 'BRL',
+    language: 'pt-BR',
     defaultLanguage: 'pt-BR',
     defaultCurrency: 'BRL',
+    status: 'active',
     address: 'Av. Jorge Schimmelpfeng, 500',
-    phone: '+55 (45) 3522-1000'
+    phone: '+55 (45) 3522-1000',
+    clinicalSettings: {
+      defaultConsultationDurationMinutes: 30,
+      optotypeDistanceMeters: 6,
+      enableSmartTV: true,
+      enableRemoteControl: true
+    },
+    createdAt: '2026-01-01T00:00:00.000Z',
+    updatedAt: '2026-09-24T00:00:00.000Z'
   },
   {
     id: 'megastar',
@@ -41,12 +84,24 @@ export const DEFAULT_CLINICS: ClinicConfig[] = [
     name: 'Mega Star Consultório Oftalmológico',
     tagline: 'Centro de Diagnóstico e Refração Visual',
     primaryColor: '#7C3AED', // Purple
-    city: 'Ciudad del Este',
+    city: 'Pedro Juan Caballero',
     country: 'Paraguai',
+    timezone: 'America/Asuncion',
+    currency: 'PYG',
+    language: 'es-PY',
     defaultLanguage: 'es-PY',
     defaultCurrency: 'PYG',
+    status: 'active',
     address: 'Shopping Mega Star, Piso 3',
-    phone: '+595 981 123456'
+    phone: '+595 981 123456',
+    clinicalSettings: {
+      defaultConsultationDurationMinutes: 30,
+      optotypeDistanceMeters: 6,
+      enableSmartTV: true,
+      enableRemoteControl: true
+    },
+    createdAt: '2026-01-01T00:00:00.000Z',
+    updatedAt: '2026-09-24T00:00:00.000Z'
   },
   {
     id: 'vision',
@@ -54,12 +109,49 @@ export const DEFAULT_CLINICS: ClinicConfig[] = [
     name: 'Visual Clínica dos Olhos',
     tagline: 'Excelência em Optometria e Contatologia Especializada',
     primaryColor: '#059669', // Emerald Green
-    city: 'Pedro Juan Caballero / Ciudad del Este',
+    city: 'Pedro Juan Caballero',
     country: 'Paraguai',
+    timezone: 'America/Asuncion',
+    currency: 'PYG',
+    language: 'es-PY',
     defaultLanguage: 'es-PY',
     defaultCurrency: 'PYG',
+    status: 'active',
     address: 'Av. Dr. Francia / Centro Médico Visual',
-    phone: '+595 981 302850'
+    phone: '+595 981 302850',
+    clinicalSettings: {
+      defaultConsultationDurationMinutes: 30,
+      optotypeDistanceMeters: 6,
+      enableSmartTV: true,
+      enableRemoteControl: true
+    },
+    createdAt: '2026-01-01T00:00:00.000Z',
+    updatedAt: '2026-09-24T00:00:00.000Z'
+  },
+  {
+    id: 'stillo-itamarati',
+    code: 'STILLO',
+    name: 'Clínica Stillo Itamarati',
+    tagline: 'Atendimento Oftalmológico Especializado - Distrito de Itamarati',
+    primaryColor: '#D97706', // Amber / Gold
+    city: 'Ponta Porã / Itamarati',
+    country: 'Brasil',
+    timezone: 'America/Sao_Paulo',
+    currency: 'BRL',
+    language: 'pt-BR',
+    defaultLanguage: 'pt-BR',
+    defaultCurrency: 'BRL',
+    status: 'active',
+    address: 'Distrito Nova Itamarati',
+    phone: '+55 (67) 99999-0000',
+    clinicalSettings: {
+      defaultConsultationDurationMinutes: 15,
+      optotypeDistanceMeters: 6,
+      enableSmartTV: true,
+      enableRemoteControl: true
+    },
+    createdAt: '2026-01-01T00:00:00.000Z',
+    updatedAt: '2026-09-26T00:00:00.000Z'
   },
   {
     id: 'outro',
@@ -67,12 +159,24 @@ export const DEFAULT_CLINICS: ClinicConfig[] = [
     name: 'Consultório Dr. Meirelles',
     tagline: 'Atendimento Clínico Personalizado',
     primaryColor: '#EA580C', // Amber/Orange
-    city: 'Foz do Iguaçu',
+    city: 'Ponta Porã',
     country: 'Brasil',
+    timezone: 'America/Sao_Paulo',
+    currency: 'BRL',
+    language: 'pt-BR',
     defaultLanguage: 'pt-BR',
     defaultCurrency: 'BRL',
+    status: 'active',
     address: 'Centro Médico Integrado, Sala 402',
-    phone: '+55 (45) 99999-8888'
+    phone: '+55 (45) 99999-8888',
+    clinicalSettings: {
+      defaultConsultationDurationMinutes: 30,
+      optotypeDistanceMeters: 6,
+      enableSmartTV: true,
+      enableRemoteControl: true
+    },
+    createdAt: '2026-01-01T00:00:00.000Z',
+    updatedAt: '2026-09-24T00:00:00.000Z'
   }
 ];
 
@@ -90,9 +194,123 @@ export function generateUUID(): string {
   });
 }
 
+// Entidades que podem ser evictadas do localStorage para liberar espaço (SOMENTE dados não clínicos — NUNCA apagar prontuários)
+// Ordem de prioridade: menos críticas primeiro
+// AVISO: encounters, episodes, prescriptions, evolutions, clinical_documents NUNCA devem ser evictados
+const EVICTABLE_ENTITIES = ['audit_logs', 'work_sessions', 'pos_items'] as const;
+
+// Chaves do localStorage que NUNCA devem ser evictadas (auth, config, flags)
+const PROTECTED_KEY_PREFIXES = ['optotipo_clinical_auth_', 'optotipo_active_clinic_', 'optotipo_clinics_config', 'optomed_'];
+
 class OfflineDatabaseService {
   private activeClinicId: string = 'ivs';
   private syncChannel: BroadcastChannel | null = null;
+  /** Chaves que foram migradas para IndexedDB-only por falta de espaço no localStorage */
+  private idbOnlyKeys: Set<string> = new Set();
+
+  /**
+   * Wrapper seguro para localStorage.setItem() que captura QuotaExceededError.
+   * Estratégia de fallback em 3 camadas:
+   * 1. Tenta gravar normalmente no localStorage
+   * 2. Se falhar, tenta evictar dados antigos/menos críticos e regravar
+   * 3. Se ainda falhar, marca a chave como IndexedDB-only (dados ficam seguros no IDB)
+   * Nunca lança exceção — garante que o app não trava.
+   */
+  private safeSetItem(key: string, value: string): boolean {
+    try {
+      localStorage.setItem(key, value);
+      this.idbOnlyKeys.delete(key);
+      return true;
+    } catch (e: any) {
+      if (e?.name === 'QuotaExceededError' || e?.code === 22 || e?.code === 1014) {
+        console.warn(`[OfflineDb] QuotaExceededError ao gravar "${key}" (${(value.length / 1024).toFixed(0)}KB). Tentando liberar espaço...`);
+        
+        // Camada 2: tentar evictar dados menos críticos de outras entidades
+        const freed = this.evictLeastCriticalData(key);
+        if (freed) {
+          try {
+            localStorage.setItem(key, value);
+            this.idbOnlyKeys.delete(key);
+            console.info(`[OfflineDb] Espaço liberado com sucesso. "${key}" gravado no localStorage.`);
+            return true;
+          } catch {
+            // Ainda não coube — vai para camada 3
+          }
+        }
+
+        // Camada 3: remover esta chave do localStorage e marcar como IDB-only
+        try { localStorage.removeItem(key); } catch {}
+        this.idbOnlyKeys.add(key);
+        console.warn(`[OfflineDb] "${key}" migrado para IndexedDB-only. Dados seguros no IDB.`);
+        return false;
+      }
+      // Outros erros (ex: localStorage desabilitado em modo privado)
+      console.warn(`[OfflineDb] Erro inesperado ao gravar "${key}":`, e);
+      return false;
+    }
+  }
+
+  /**
+   * Enfileira mutação clínica/financeira no Outbox durável e aciona o despachante autônomo.
+   * Garante idempotência e persistência antes do envio pela rede.
+   */
+  public enqueueOutboxMutation(
+    clinicId: string, 
+    entity: SyncEntity, 
+    action: 'create' | 'update' | 'delete' | 'upsert', 
+    recordId: string, 
+    payload: any
+  ): string {
+    const queueItem = syncQueue.enqueue({
+      clinicId,
+      entity,
+      action,
+      recordId,
+      payload
+    });
+    // Dispara o processamento imediato em background de forma autônoma
+    remoteSync.triggerQueueProcessing(clinicId).catch(() => {});
+    return queueItem.operationId;
+  }
+
+  /**
+   * Tenta liberar espaço no localStorage evictando dados de entidades menos críticas.
+   * Dados evictados são preservados no IndexedDB e no servidor (via sync anterior).
+   * @returns true se algum espaço foi liberado
+   */
+  private evictLeastCriticalData(protectedKey: string): boolean {
+    let freedSomething = false;
+    const clinicIds = ['ivs', 'clinica-principal', 'vision', 'central', 'megastar'];
+    
+    for (const entity of EVICTABLE_ENTITIES) {
+      for (const cid of clinicIds) {
+        const entityKey = `optotipo_${cid}_${entity}_v2`;
+        if (entityKey === protectedKey) continue; // Não evictar a própria chave que estamos tentando gravar
+        
+        try {
+          const existing = localStorage.getItem(entityKey);
+          if (existing && existing.length > 1024) { // Só evicta se for significativo (>1KB)
+            localStorage.removeItem(entityKey);
+            this.idbOnlyKeys.add(entityKey);
+            freedSomething = true;
+            console.info(`[OfflineDb] Evictado "${entityKey}" (${(existing.length / 1024).toFixed(0)}KB) do localStorage → IndexedDB-only`);
+            
+            // Tenta retornar cedo se já liberou espaço suficiente
+            try {
+              // Teste: consegue gravar 100KB?
+              const testKey = '__optomed_quota_test__';
+              localStorage.setItem(testKey, 'x'.repeat(102400));
+              localStorage.removeItem(testKey);
+              return true; // Espaço suficiente liberado
+            } catch {
+              // Precisa evictar mais
+            }
+          }
+        } catch {}
+      }
+    }
+    return freedSomething;
+  }
 
   constructor() {
     try {
@@ -105,80 +323,154 @@ class OfflineDatabaseService {
         };
       }
 
-      const saved = localStorage.getItem(DB_ACTIVE_CLINIC_ID_KEY);
-      if (saved) {
-        this.activeClinicId = saved;
-      }
-      
-      // Auto-recuperação de todos os pacientes e prontuários históricos desde 25/08/2026 e 18/09/2026
-      const recoveryFlagKey = 'optomed_historical_recovery_2026_v2';
-      if (!localStorage.getItem(recoveryFlagKey)) {
-        this.restoreRecoveredHistoricalData();
-        localStorage.setItem(recoveryFlagKey, 'true');
-      }
+      if (typeof localStorage !== 'undefined') {
+        const saved = localStorage.getItem(DB_ACTIVE_CLINIC_ID_KEY);
+        // Migração e espelhamento resiliente assíncrono para IndexedDB
+        indexedDbStorage.migrateFromLocalStorage().catch(e => console.warn('[IndexedDB] Migração inicial:', e));
+        if (saved) {
+          this.activeClinicId = saved;
+        }
+        
+        // Auto-recuperação de todos os pacientes e prontuários históricos desde 25/08/2026 e 18/09/2026
+        const recoveryFlagKey = 'optomed_historical_recovery_2026_v2';
+        if (!localStorage.getItem(recoveryFlagKey)) {
+          this.restoreRecoveredHistoricalData();
+          this.safeSetItem(recoveryFlagKey, 'true');
+        }
 
-      // Semeador automático da agenda de 12/09/2026 (Exclusivo para a clínica IVS)
-      const scheduleFlagKey = 'optomed_schedule_seed_12092026_v3';
-      if (!localStorage.getItem(scheduleFlagKey)) {
-        this.seedSchedule12092026('ivs');
-        this.cleanupVisionContamination();
-        localStorage.setItem(scheduleFlagKey, 'true');
+        // Semeador automático da agenda de 12/09/2026 (Exclusivo para a clínica IVS)
+        const scheduleFlagKey = 'optomed_schedule_seed_12092026_v3';
+        if (!localStorage.getItem(scheduleFlagKey)) {
+          this.seedSchedule12092026('ivs');
+          this.cleanupVisionContamination();
+          this.safeSetItem(scheduleFlagKey, 'true');
+        }
       }
 
       // Sincronização inicial com o servidor — busca dados remotos e mescla
       this.initRemoteSync();
-    } catch {
+
+      // Hidratação assíncrona: recupera dados do IndexedDB que podem ter sido evictados do localStorage
+      this.hydrateFromIndexedDb();
+    } catch (err) {
+      console.warn('[OfflineDb] Aviso na inicialização do storage:', err);
       this.activeClinicId = 'ivs';
     }
   }
 
+  /**
+   * Recupera dados do IndexedDB para o localStorage quando este está vazio para uma entidade.
+   * Funciona como rede de segurança: se o localStorage foi limpo (quota, clear manual, etc.),
+   * os dados salvos no IndexedDB são restaurados automaticamente.
+   */
+  private async hydrateFromIndexedDb(): Promise<void> {
+    const clinicIds = ['ivs', 'clinica-principal', 'vision', 'central', 'megastar'];
+    const entities: Array<{ name: string; store: string; event?: string }> = [
+      { name: 'episodes', store: 'episodes', event: 'optomed_episode_updated' },
+      { name: 'patients', store: 'patients', event: 'optomed_patient_updated' },
+      { name: 'encounters', store: 'encounters', event: 'optomed_encounter_updated' },
+      { name: 'appointments', store: 'appointments', event: 'optomed_appointment_updated' },
+      { name: 'prescriptions', store: 'prescriptions' },
+      { name: 'evolutions', store: 'evolutions', event: 'optomed_evolution_updated' },
+      { name: 'clinical_documents', store: 'clinical_documents', event: 'optomed_document_updated' },
+    ];
+
+    try {
+      const ready = await indexedDbStorage.init();
+      if (!ready) return;
+
+      for (const cid of clinicIds) {
+        for (const { name, store, event } of entities) {
+          try {
+            const lsKey = this.getKey(name, cid);
+            const existing = localStorage.getItem(lsKey);
+            // Se localStorage já tem dados, não precisa hidratar
+            if (existing && existing.length > 2) continue; // "[]" tem length 2
+
+            const idbData = await indexedDbStorage.getAll(store as any, cid);
+            if (idbData && idbData.length > 0) {
+              console.info(`[OfflineDb] Hidratando "${lsKey}" do IndexedDB (${idbData.length} registros)`);
+              // Tenta gravar no localStorage, se não couber, marca como IDB-only
+              this.safeSetItem(lsKey, JSON.stringify(idbData));
+              // Dispara evento para que a UI recarregue os dados
+              if (event && typeof window !== 'undefined') {
+                window.dispatchEvent(new CustomEvent(event, { detail: { clinicId: cid } }));
+              }
+            }
+          } catch {}
+        }
+      }
+    } catch (e) {
+      console.warn('[OfflineDb] Hidratação IndexedDB falhou:', e);
+    }
+  }
+
   private initRemoteSync() {
-    // Inicia sync imediato de todas as clínicas conhecidas para garantir que qualquer aparelho receba tudo do servidor
+    // Inicia sync exclusivamente da clínica ativa/autorizada da sessão
     setTimeout(() => {
-      const syncAllClinics = () => {
-        const clinics = ['ivs', 'clinica-principal', 'vision', 'central', 'megastar'];
-        clinics.forEach(cid => {
-          remoteSync.fullSync(cid, this.getSyncGetLocal(cid), this.getSyncSetLocal(cid));
-        });
-      };
-      // Executa sync completo inicial
-      syncAllClinics();
-      // Mantém sync periódico da clínica ativa e a cada minuto de todas as clínicas
       const clinicId = this.activeClinicId;
       remoteSync.startPeriodicSync(clinicId, this.getSyncGetLocal(clinicId), this.getSyncSetLocal(clinicId));
-      setInterval(syncAllClinics, 60000);
     }, 800);
   }
 
   private getSyncGetLocal(clinicId: string) {
     return (entity: string) => {
       if (entity === 'patients') return this.getPatients(clinicId);
+      if (entity === 'episodes') return this.getEpisodes(clinicId);
       if (entity === 'encounters') return this.getEncounters(clinicId);
       if (entity === 'appointments') return this.getAppointments(clinicId);
       if (entity === 'prescriptions') return this.getPrescriptions(clinicId);
+      if (entity === 'transactions') return this.getTransactions(clinicId);
+      if (entity === 'work_sessions') return this.getWorkSessions(clinicId);
+      if (entity === 'pos_items') return this.getPOSItems(clinicId);
+      if (entity === 'audit_logs') return this.getAuditLogs(clinicId);
+      if (entity === 'evolutions') return this.getEvolutions(clinicId);
+      if (entity === 'clinical_documents') return this.getClinicalDocuments(clinicId);
+      if (entity === 'examiner_fixed_periods') return this.getExaminerFixedPeriods(clinicId);
+      if (entity === 'examiner_special_periods') return this.getExaminerSpecialPeriods(clinicId);
+      if (entity === 'examiner_avulso_rules') return this.getExaminerAvulsoRules(clinicId);
+      if (entity === 'examiner_remunerations') return this.getExaminerRemunerations(clinicId);
+      if (entity === 'examiner_closures') return this.getExaminerClosures(clinicId);
       return [];
     };
   }
 
   private getSyncSetLocal(clinicId: string) {
     return (entity: string, data: any[]) => {
-      if (entity === 'patients') {
-        localStorage.setItem(this.getKey('patients', clinicId), JSON.stringify(data));
-        this.broadcastSync('optomed_patient_updated', { clinicId });
-        if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('optomed_patient_updated', { detail: { clinicId } }));
+      const key = entity === 'transactions' 
+        ? this.getKey('financial_transactions', clinicId)
+        : this.getKey(entity, clinicId);
+      
+      // Gravar no localStorage com proteção contra QuotaExceededError
+      this.safeSetItem(key, JSON.stringify(data));
+      
+      // Gravar simultaneamente no IndexedDB (capacidade ilimitada, fallback seguro)
+      const idbStore = entity as any;
+      if (Array.isArray(data) && data.length > 0 && data[0]?.id) {
+        indexedDbStorage.saveAll(idbStore, clinicId, data).catch(e => 
+          console.warn(`[IndexedDB] sync setLocal ${entity}:`, e)
+        );
       }
-      if (entity === 'encounters') {
-        localStorage.setItem(this.getKey('encounters', clinicId), JSON.stringify(data));
-        this.broadcastSync('optomed_encounter_updated', { clinicId });
-        if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('optomed_encounter_updated', { detail: { clinicId } }));
-      }
-      if (entity === 'appointments') {
-        localStorage.setItem(this.getKey('appointments', clinicId), JSON.stringify(data));
-        this.broadcastSync('optomed_appointment_updated', { clinicId });
-        if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('optomed_appointment_updated', { detail: { clinicId } }));
-      }
-      if (entity === 'prescriptions') {
-        localStorage.setItem(this.getKey('prescriptions', clinicId), JSON.stringify(data));
+
+      // Broadcast de atualização por tipo de entidade
+      const broadcastMap: Record<string, string> = {
+        patients: 'optomed_patient_updated',
+        episodes: 'optomed_episode_updated',
+        encounters: 'optomed_encounter_updated',
+        appointments: 'optomed_appointment_updated',
+        transactions: 'optomed_finance_updated',
+        evolutions: 'optomed_evolution_updated',
+        clinical_documents: 'optomed_document_updated',
+        examiner_fixed_periods: 'optomed_examiner_periods_updated',
+        examiner_special_periods: 'optomed_examiner_periods_updated',
+        examiner_avulso_rules: 'optomed_examiner_periods_updated',
+        examiner_remunerations: 'optomed_examiner_remuneration_updated',
+        examiner_closures: 'optomed_examiner_closures_updated'
+      };
+      const eventName = broadcastMap[entity];
+      if (eventName) {
+        this.broadcastSync(eventName, { clinicId });
+        if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent(eventName, { detail: { clinicId } }));
       }
     };
   }
@@ -201,7 +493,7 @@ class OfflineDatabaseService {
     if (!clinicId) return;
     this.activeClinicId = clinicId;
     try {
-      localStorage.setItem(DB_ACTIVE_CLINIC_ID_KEY, clinicId);
+      this.safeSetItem(DB_ACTIVE_CLINIC_ID_KEY, clinicId);
       remoteSync.stopPeriodicSync();
       remoteSync.startPeriodicSync(clinicId, this.getSyncGetLocal(clinicId) as any, this.getSyncSetLocal(clinicId) as any);
       remoteSync.fullSync(clinicId, this.getSyncGetLocal(clinicId) as any, this.getSyncSetLocal(clinicId) as any);
@@ -217,12 +509,22 @@ class OfflineDatabaseService {
         return DEFAULT_CLINICS;
       }
       const parsed: ClinicConfig[] = JSON.parse(raw);
-      // Garantir integridade da clínica Visual com nome atualizado e Espanhol (Paraguay)
+      // Garantir atualização das cidades das clínicas e integridade de dados
       let modified = false;
       const updated: ClinicConfig[] = parsed.map(c => {
+        let clinicModified = false;
+        let newCity = c.city;
+        if (!newCity || newCity === 'Foz do Iguaçu') {
+          newCity = 'Ponta Porã';
+          clinicModified = true;
+        } else if (newCity === 'Ciudad del Este' || newCity === 'Pedro Juan Caballero / Ciudad del Este') {
+          newCity = 'Pedro Juan Caballero';
+          clinicModified = true;
+        }
+
         if (c.id === 'vision' || c.code === 'VISION' || c.code === 'VISUAL') {
           const currentName = c.name || '';
-          if (currentName.includes('Vision') || !currentName.includes('Visual')) {
+          if (currentName.includes('Vision') || !currentName.includes('Visual') || clinicModified) {
             modified = true;
             return {
               ...c,
@@ -233,12 +535,31 @@ class OfflineDatabaseService {
               country: 'Paraguai' as const,
               defaultLanguage: 'es-PY' as const,
               defaultCurrency: 'PYG' as const,
-              city: c.city || 'Pedro Juan Caballero / Ciudad del Este'
+              city: newCity
             };
           }
         }
+
+        if (clinicModified) {
+          modified = true;
+          return {
+            ...c,
+            city: newCity
+          };
+        }
+
         return c;
       });
+
+      // Garantir presença da Clínica Stillo Itamarati se não constar no cache
+      if (!updated.some(c => c.id === 'stillo-itamarati')) {
+        const stilloClinic = DEFAULT_CLINICS.find(c => c.id === 'stillo-itamarati');
+        if (stilloClinic) {
+          updated.push(stilloClinic);
+          modified = true;
+        }
+      }
+
       if (modified) {
         this.saveClinics(updated);
       }
@@ -250,19 +571,38 @@ class OfflineDatabaseService {
 
   public saveClinics(clinics: ClinicConfig[]): void {
     try {
-      localStorage.setItem(DB_CLINICS_KEY, JSON.stringify(clinics));
+      this.safeSetItem(DB_CLINICS_KEY, JSON.stringify(clinics));
     } catch {}
   }
 
-  public saveClinic(clinic: ClinicConfig): void {
+  public saveClinic(clinic: ClinicConfig | ClinicUnit): ClinicConfig {
     const list = this.getClinics();
     const idx = list.findIndex(c => c.id === clinic.id);
+    const now = new Date().toISOString();
+
+    const prepared: ClinicConfig = {
+      ...clinic,
+      timezone: clinic.timezone || (clinic.country === 'Paraguai' ? 'America/Asuncion' : 'America/Sao_Paulo'),
+      currency: clinic.currency || (clinic.country === 'Paraguai' ? 'PYG' : 'BRL'),
+      language: clinic.language || (clinic.country === 'Paraguai' ? 'es-PY' : 'pt-BR'),
+      defaultLanguage: (clinic as any).defaultLanguage || clinic.language || (clinic.country === 'Paraguai' ? 'es-PY' : 'pt-BR'),
+      defaultCurrency: (clinic as any).defaultCurrency || clinic.currency || (clinic.country === 'Paraguai' ? 'PYG' : 'BRL'),
+      status: clinic.status || 'active',
+      createdAt: clinic.createdAt || now,
+      updatedAt: now
+    };
+
     if (idx >= 0) {
-      list[idx] = clinic;
+      list[idx] = prepared;
     } else {
-      list.push(clinic);
+      list.push(prepared);
     }
     this.saveClinics(list);
+    return prepared;
+  }
+
+  public getClinicById(id: string): ClinicConfig | undefined {
+    return this.getClinics().find(c => c.id === id);
   }
 
   public getActiveClinic(): ClinicConfig {
@@ -280,9 +620,9 @@ class OfflineDatabaseService {
     try {
       const raw = localStorage.getItem(this.getKey('patients', clinicId));
       if (!raw) {
-        // Inicializa se vazio para a clínica
+        // Inicializa se vazio para a clínica no cache local sem sobrescrever o servidor central
         const initial = this.getInitialPatientsForClinic(clinicId);
-        this.savePatients(initial, clinicId);
+        this.safeSetItem(this.getKey('patients', clinicId), JSON.stringify(initial));
         return initial;
       }
       return JSON.parse(raw);
@@ -292,7 +632,9 @@ class OfflineDatabaseService {
   }
 
   public savePatients(patients: Patient[], clinicId = this.activeClinicId): void {
-    localStorage.setItem(this.getKey('patients', clinicId), JSON.stringify(patients));
+    this.safeSetItem(this.getKey('patients', clinicId), JSON.stringify(patients));
+    // Persistência dual resiliente em IndexedDB
+    indexedDbStorage.saveAll('patients', clinicId, patients).catch(e => console.warn('[IndexedDB] savePatients:', e));
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new CustomEvent('optomed_patient_updated', { detail: { clinicId, patients } }));
     }
@@ -301,15 +643,23 @@ class OfflineDatabaseService {
   }
 
   public savePatient(patient: Patient, clinicId = this.activeClinicId): void {
+    // Garante que o paciente possua um patientGlobalId retrocompatível
+    const patientWithGlobalId: Patient = {
+      ...patient,
+      patientGlobalId: patient.patientGlobalId || `gid_${Date.now()}_${generateUUID().substring(0, 8)}`
+    };
+
     const list = this.getPatients(clinicId);
-    const idx = list.findIndex(p => p.id === patient.id);
+    const idx = list.findIndex(p => p.id === patientWithGlobalId.id);
     if (idx >= 0) {
-      list[idx] = { ...patient, updatedAt: new Date().toISOString() };
+      list[idx] = { ...patientWithGlobalId, updatedAt: new Date().toISOString() };
     } else {
-      list.unshift(patient);
+      list.unshift(patientWithGlobalId);
     }
     this.savePatients(list, clinicId);
     this.logAudit('UPDATE', 'PATIENT', patient.id, `Atualizado cadastro de ${patient.fullName}`, clinicId);
+    this.enqueueOutboxMutation(clinicId, 'patients', idx >= 0 ? 'update' : 'create', patientWithGlobalId.id, patientWithGlobalId);
+    remoteSync.upsert(clinicId, 'patients', patientWithGlobalId).catch(e => console.warn('[Sync] upsert patient:', e));
 
     // Sincronização em tempo real com os agendamentos existentes deste paciente
     try {
@@ -343,16 +693,163 @@ class OfflineDatabaseService {
   public deletePatient(patientId: string, clinicId = this.activeClinicId): void {
     const list = this.getPatients(clinicId).filter(p => p.id !== patientId);
     this.savePatients(list, clinicId);
+    // Notifica remoção com tombstone para propagação durável e Outbox
+    this.enqueueOutboxMutation(clinicId, 'patients', 'delete', patientId, { id: patientId, _deleted: true });
+    remoteSync.remove(clinicId, 'patients', patientId).catch(e => console.warn('[Sync] deletePatient remove:', e));
     this.logAudit('DELETE', 'PATIENT', patientId, 'Registro de paciente removido', clinicId);
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new CustomEvent('optomed_patient_updated', { detail: { clinicId, patientId } }));
     }
   }
 
-  // --- PRONTUÁRIOS / ATENDIMENTOS ---
-  public getEncounters(clinicId = this.activeClinicId): ClinicalEncounter[] {
+
+  // --- IDENTIDADE GLOBAL E DETECÇÃO SEGURA DE DUPLICIDADES (FASE 3.2) ---
+
+  /**
+   * Procura candidatos a duplicidade no banco local entre todas as clínicas ou na clínica informada
+   */
+  public findDuplicateCandidates(
+    candidate: {
+      fullName: string;
+      birthDate?: string;
+      documentType?: string;
+      documentNumber?: string;
+      phone?: string;
+      phoneCountryCode?: string;
+    },
+    ignorePatientId?: string,
+    targetClinicId?: string
+  ): DuplicateCandidateMatch[] {
+    const clinicsToSearch = targetClinicId ? [targetClinicId] : this.getClinics().map(c => c.id);
+    const candidates: DuplicateCandidateMatch[] = [];
+
+    for (const cid of clinicsToSearch) {
+      const patients = this.getPatients(cid);
+      for (const p of patients) {
+        if (ignorePatientId && p.id === ignorePatientId) continue;
+        const match = evaluateDuplicateMatch(candidate, {
+          ...p,
+          clinicId: cid
+        });
+        if (match) {
+          candidates.push(match);
+        }
+      }
+    }
+
+    return candidates.sort((a, b) => b.score - a.score);
+  }
+
+  /**
+   * Confirma vínculo manual de dois registros locais sob o mesmo patientGlobalId com auditoria
+   */
+  public linkPatients(
+    sourcePatientId: string,
+    sourceClinicId: string,
+    targetPatientId: string,
+    targetClinicId: string,
+    userId = 'dr-meirelles',
+    userName = 'Dr. Rudson Meirelles',
+    reason = 'Vínculo manual confirmado pelo examinador'
+  ): { success: boolean; sharedGlobalId: string } {
+    const sourceList = this.getPatients(sourceClinicId);
+    const sourcePatient = sourceList.find(p => p.id === sourcePatientId);
+
+    const targetList = this.getPatients(targetClinicId);
+    const targetPatient = targetList.find(p => p.id === targetPatientId);
+
+    if (!sourcePatient || !targetPatient) {
+      return { success: false, sharedGlobalId: '' };
+    }
+
+    // O patientGlobalId compartilhado prevalece (se um já tiver, adota ele)
+    const sharedGlobalId = targetPatient.patientGlobalId || sourcePatient.patientGlobalId || `gid_${Date.now()}_${generateUUID().substring(0, 8)}`;
+
+    sourcePatient.patientGlobalId = sharedGlobalId;
+    sourcePatient.updatedAt = new Date().toISOString();
+    this.savePatients(sourceList, sourceClinicId);
+
+    targetPatient.patientGlobalId = sharedGlobalId;
+    targetPatient.updatedAt = new Date().toISOString();
+    this.savePatients(targetList, targetClinicId);
+
+    // Registra log de auditoria do vínculo
+    this.logLinkAudit({
+      id: generateUUID(),
+      action: 'LINK_CONFIRMED',
+      patientGlobalId: sharedGlobalId,
+      targetPatientId,
+      targetClinicId,
+      userId,
+      userName,
+      timestamp: new Date().toISOString(),
+      reason
+    });
+
+    return { success: true, sharedGlobalId };
+  }
+
+  /**
+   * Desfaz um vínculo manual com atribuição de novo patientGlobalId exclusivo e auditoria
+   */
+  public unlinkPatient(
+    patientId: string,
+    clinicId: string,
+    userId = 'dr-meirelles',
+    userName = 'Dr. Rudson Meirelles',
+    reason = 'Desfeita associação manual incorreta'
+  ): { success: boolean; newGlobalId: string } {
+    const list = this.getPatients(clinicId);
+    const patient = list.find(p => p.id === patientId);
+    if (!patient) return { success: false, newGlobalId: '' };
+
+    const oldGlobalId = patient.patientGlobalId || '';
+    const newGlobalId = `gid_${Date.now()}_${generateUUID().substring(0, 8)}`;
+
+    patient.patientGlobalId = newGlobalId;
+    patient.updatedAt = new Date().toISOString();
+    this.savePatients(list, clinicId);
+
+    this.logLinkAudit({
+      id: generateUUID(),
+      action: 'LINK_UNDONE',
+      patientGlobalId: oldGlobalId,
+      targetPatientId: patientId,
+      targetClinicId: clinicId,
+      userId,
+      userName,
+      timestamp: new Date().toISOString(),
+      reason: `${reason} -> Atribuído novo ID global: ${newGlobalId}`
+    });
+
+    return { success: true, newGlobalId };
+  }
+
+  private logLinkAudit(entry: PatientLinkAuditLog): void {
     try {
-      const raw = localStorage.getItem(this.getKey('encounters', clinicId));
+      const key = 'optomed_patient_link_audit_logs_v2';
+      const raw = localStorage.getItem(key);
+      const list: PatientLinkAuditLog[] = raw ? JSON.parse(raw) : [];
+      list.unshift(entry);
+      this.safeSetItem(key, JSON.stringify(list.slice(0, 500)));
+      this.logAudit('UPDATE', 'PATIENT', entry.targetPatientId, `[${entry.action}] ${entry.reason || ''}`, entry.targetClinicId);
+    } catch {}
+  }
+
+  public getPatientLinkAuditLogs(): PatientLinkAuditLog[] {
+    try {
+      const key = 'optomed_patient_link_audit_logs_v2';
+      const raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : [];
+    } catch {
+      return [];
+    }
+  }
+
+  // --- EPISÓDIOS CLÍNICOS (LONGITUDINAL) ---
+  public getEpisodes(clinicId = this.activeClinicId): ClinicalEpisode[] {
+    try {
+      const raw = localStorage.getItem(this.getKey('episodes', clinicId));
       if (!raw) return [];
       return JSON.parse(raw);
     } catch {
@@ -360,8 +857,238 @@ class OfflineDatabaseService {
     }
   }
 
+  public saveEpisodes(episodes: ClinicalEpisode[], clinicId = this.activeClinicId): void {
+    this.safeSetItem(this.getKey('episodes', clinicId), JSON.stringify(episodes));
+    indexedDbStorage.saveAll('episodes' as any, clinicId, episodes).catch(e => console.warn('[IndexedDB] saveEpisodes:', e));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('optomed_episode_updated', { detail: { clinicId, episodes } }));
+    }
+    this.broadcastSync('optomed_episode_updated', { clinicId, episodes });
+    remoteSync.push(clinicId, 'episodes' as any, episodes);
+  }
+
+  public saveEpisode(episode: ClinicalEpisode, clinicId = this.activeClinicId): ClinicalEpisode {
+    const list = this.getEpisodes(clinicId);
+    const idx = list.findIndex(e => e.id === episode.id);
+    const now = new Date().toISOString();
+    const prepared: ClinicalEpisode = {
+      ...episode,
+      clinicId: episode.clinicId || clinicId,
+      version: (episode.version || 1) + (idx >= 0 ? 1 : 0),
+      updatedAt: now
+    };
+    if (idx >= 0) {
+      list[idx] = prepared;
+    } else {
+      list.unshift(prepared);
+    }
+    this.saveEpisodes(list, clinicId);
+    this.logAudit(idx >= 0 ? 'UPDATE' : 'CREATE', 'EPISODE', episode.id, `Episódio clínico ${prepared.title} (${prepared.status})`, clinicId);
+    return prepared;
+  }
+
+  public getEpisodesByPatient(patientId: string, clinicId = this.activeClinicId): ClinicalEpisode[] {
+    const all = this.getEpisodes(clinicId);
+    const patients = this.getPatients(clinicId);
+    const pat = patients.find(p => p.id === patientId);
+    const globalId = pat?.patientGlobalId;
+
+    return all.filter(ep => {
+      if (ep._deleted) return false;
+      if (ep.patientId === patientId) return true;
+      if (globalId && ep.patientGlobalId === globalId) return true;
+      return false;
+    });
+  }
+
+  public getOrCreateActiveEpisode(patientId: string, title?: string, clinicId = this.activeClinicId): ClinicalEpisode {
+    const existingActive = this.getEpisodesByPatient(patientId, clinicId).find(ep => ep.status === 'ACTIVE');
+    if (existingActive) return existingActive;
+
+    const patients = this.getPatients(clinicId);
+    const pat = patients.find(p => p.id === patientId);
+
+    const newEpisode: ClinicalEpisode = {
+      id: generateUUID(),
+      clinicId,
+      patientId,
+      patientGlobalId: pat?.patientGlobalId,
+      title: title || 'Atendimento Oftalmológico e Refração',
+      status: 'ACTIVE',
+      startDate: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      version: 1
+    };
+    return this.saveEpisode(newEpisode, clinicId);
+  }
+
+  public closeEpisode(episodeId: string, clinicId = this.activeClinicId): void {
+    const list = this.getEpisodes(clinicId);
+    const ep = list.find(e => e.id === episodeId);
+    if (!ep) return;
+    const now = new Date().toISOString();
+    ep.status = 'COMPLETED';
+    ep.closedAt = now;
+    ep.endDate = now;
+    ep.updatedAt = now;
+    ep.version = (ep.version || 1) + 1;
+    this.saveEpisodes(list, clinicId);
+    this.logAudit('UPDATE', 'EPISODE', ep.id, `Episódio clínico concluído`, clinicId);
+  }
+
+  // --- TRAVA DE ATENDIMENTO CONCORRENTE / SIMULTÂNEO ---
+  public hasActiveEncounter(
+    patientId: string, 
+    patientGlobalId?: string, 
+    excludeEncounterId?: string, 
+    clinicId = this.activeClinicId,
+    checkAllClinics = false
+  ): { active: boolean; encounter?: ClinicalEncounter } {
+    const clinicsToScan = checkAllClinics 
+      ? this.getClinics().map(c => c.id)
+      : [clinicId];
+
+    for (const cid of clinicsToScan) {
+      const encounters = this.getEncounters(cid);
+      const active = encounters.find(enc => {
+        if (excludeEncounterId && enc.id === excludeEncounterId) return false;
+        if (enc.status !== 'in_progress') return false;
+
+        const matchesPatientId = enc.patientId === patientId;
+        const matchesGlobalId = Boolean(patientGlobalId && enc.patientGlobalId && enc.patientGlobalId === patientGlobalId);
+        return matchesPatientId || matchesGlobalId;
+      });
+
+      if (active) {
+        return { active: true, encounter: active };
+      }
+    }
+
+    return { active: false };
+  }
+
+  // --- PRONTUÁRIOS / ATENDIMENTOS ---
+  public getEncounters(clinicId = this.activeClinicId): ClinicalEncounter[] {
+    try {
+      const raw = localStorage.getItem(this.getKey('encounters', clinicId));
+      if (!raw) return [];
+      const parsed: ClinicalEncounter[] = JSON.parse(raw);
+      // Garantir retrocompatibilidade de episódios para dados legados
+      return parsed.map(enc => {
+        if (!enc.episodeId) {
+          // Atribuição de episódio virtual/legado sem mutação destrutiva
+          return { ...enc, episodeId: 'LEGACY_EPISODE' };
+        }
+        return enc;
+      });
+    } catch {
+      return [];
+    }
+  }
+
+  /**
+   * Recupera o Histórico Longitudinal Completo de um Paciente entre todas as Unidades Autorizadas (Fase 7.0)
+   * Preserva a clínica de origem de cada atendimento sem mover nem duplicar dados.
+   */
+  public getUnifiedPatientHistory(
+    patientId: string, 
+    patientGlobalId?: string,
+    allowedClinics: string[] | 'all' = [this.activeClinicId]
+  ): {
+    encounters: (ClinicalEncounter & { clinicId: string; clinicName: string; country: string })[];
+    episodes: (ClinicalEpisode & { clinicId: string; clinicName: string })[];
+    prescriptions: (Prescription & { clinicId: string })[];
+    documents: (ClinicalDocumentRecord & { clinicId: string })[];
+  } {
+    const allClinics = this.getClinics();
+    const targetClinics = allowedClinics === 'all'
+      ? allClinics
+      : allClinics.filter(c => Array.isArray(allowedClinics) && allowedClinics.includes(c.id));
+
+    const combinedEncounters: (ClinicalEncounter & { clinicId: string; clinicName: string; country: string })[] = [];
+    const combinedEpisodes: (ClinicalEpisode & { clinicId: string; clinicName: string })[] = [];
+    const combinedPrescriptions: (Prescription & { clinicId: string })[] = [];
+    const combinedDocuments: (ClinicalDocumentRecord & { clinicId: string })[] = [];
+
+    // Se não tiver globalId fornecido, busca no cadastro do paciente na clínica ativa
+    let effectiveGlobalId = patientGlobalId;
+    if (!effectiveGlobalId) {
+      for (const clinic of targetClinics) {
+        const pat = this.getPatients(clinic.id).find(p => p.id === patientId);
+        if (pat?.patientGlobalId) {
+          effectiveGlobalId = pat.patientGlobalId;
+          break;
+        }
+      }
+    }
+
+    for (const clinic of targetClinics) {
+      const cid = clinic.id;
+
+      // 1. Encontros Clínicos
+      const encs = this.getEncounters(cid);
+      encs.forEach(enc => {
+        const matchesLocal = enc.patientId === patientId;
+        const matchesGlobal = Boolean(effectiveGlobalId && enc.patientGlobalId && enc.patientGlobalId === effectiveGlobalId);
+        if (matchesLocal || matchesGlobal) {
+          combinedEncounters.push({
+            ...enc,
+            clinicId: cid,
+            clinicName: clinic.name,
+            country: clinic.country || 'Brasil'
+          });
+        }
+      });
+
+      // 2. Episódios
+      const eps = this.getEpisodes(cid);
+      eps.forEach(ep => {
+        if (ep._deleted) return;
+        const matchesLocal = ep.patientId === patientId;
+        const matchesGlobal = Boolean(effectiveGlobalId && ep.patientGlobalId && ep.patientGlobalId === effectiveGlobalId);
+        if (matchesLocal || matchesGlobal) {
+          combinedEpisodes.push({
+            ...ep,
+            clinicId: cid,
+            clinicName: clinic.name
+          });
+        }
+      });
+
+      // 3. Receitas
+      const rxs = this.getPrescriptions(cid);
+      rxs.forEach(rx => {
+        if (rx.patientId === patientId) {
+          combinedPrescriptions.push({ ...rx, clinicId: cid });
+        }
+      });
+
+      // 4. Documentos Clínicos
+      const docs = this.getClinicalDocuments(cid);
+      docs.forEach(doc => {
+        if (doc.patientId === patientId) {
+          combinedDocuments.push({ ...doc, clinicId: cid });
+        }
+      });
+    }
+
+    // Ordenação cronológica decrescente dos atendimentos
+    combinedEncounters.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    combinedEpisodes.sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime());
+
+    return {
+      encounters: combinedEncounters,
+      episodes: combinedEpisodes,
+      prescriptions: combinedPrescriptions,
+      documents: combinedDocuments
+    };
+  }
+
   public saveEncounters(encounters: ClinicalEncounter[], clinicId = this.activeClinicId): void {
-    localStorage.setItem(this.getKey('encounters', clinicId), JSON.stringify(encounters));
+    this.safeSetItem(this.getKey('encounters', clinicId), JSON.stringify(encounters));
+    // Persistência dual resiliente em IndexedDB
+    indexedDbStorage.saveAll('encounters', clinicId, encounters).catch(e => console.warn('[IndexedDB] saveEncounters:', e));
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new CustomEvent('optomed_encounter_updated', { detail: { clinicId, encounters } }));
     }
@@ -372,13 +1099,39 @@ class OfflineDatabaseService {
   public saveEncounter(encounter: ClinicalEncounter, clinicId = this.activeClinicId): void {
     const list = this.getEncounters(clinicId);
     const idx = list.findIndex(e => e.id === encounter.id);
+    const now = new Date().toISOString();
+
+    // Se já estiver concluído anteriormente e tentarem sobrescrever para em andamento sem versão
+    if (idx >= 0 && list[idx].status === 'completed' && encounter.status === 'in_progress') {
+      console.warn(`[ClinicalEncounter] Bloqueada tentativa de reverter encontro concluído ${encounter.id} sem reabertura explícita`);
+      return;
+    }
+
+    // Vincular ou criar episódio clínico ativo caso não possua
+    let episodeId = encounter.episodeId && encounter.episodeId !== 'LEGACY_EPISODE' ? encounter.episodeId : undefined;
+    if (!episodeId) {
+      const activeEp = this.getOrCreateActiveEpisode(encounter.patientId, undefined, clinicId);
+      episodeId = activeEp.id;
+    }
+
+    const preparedEncounter: ClinicalEncounter = {
+      ...encounter,
+      episodeId,
+      version: (encounter.version || (idx >= 0 ? list[idx].version || 1 : 1)) + (idx >= 0 ? 1 : 0),
+      startedAt: encounter.startedAt || (idx >= 0 ? list[idx].startedAt : now),
+      completedAt: encounter.status === 'completed' ? (encounter.completedAt || now) : encounter.completedAt,
+      updatedAt: now
+    };
+
     if (idx >= 0) {
-      list[idx] = { ...encounter, updatedAt: new Date().toISOString() };
+      list[idx] = preparedEncounter;
     } else {
-      list.unshift(encounter);
+      list.unshift(preparedEncounter);
     }
     this.saveEncounters(list, clinicId);
-    this.logAudit('UPDATE', 'ENCOUNTER', encounter.id, `Prontuário clínico atualizado`, clinicId);
+    this.logAudit('UPDATE', 'ENCOUNTER', encounter.id, `Prontuário clínico atualizado (status: ${preparedEncounter.status}, ep: ${episodeId})`, clinicId);
+    this.enqueueOutboxMutation(clinicId, 'encounters', idx >= 0 ? 'update' : 'create', preparedEncounter.id, preparedEncounter);
+    remoteSync.upsert(clinicId, 'encounters', preparedEncounter).catch(e => console.warn('[Sync] upsert encounter:', e));
 
     // Quando o prontuário é atualizado/concluído, sincroniza o status em TODOS os agendamentos correspondentes do paciente
     try {
@@ -388,17 +1141,20 @@ class OfflineDatabaseService {
       const patient = this.getPatients(clinicId).find(p => p.id === encounter.patientId);
 
       const nextApts = apts.map(a => {
-        const matchesPatient = a.patientId === encounter.patientId || 
+        const matchesPatient = (preparedEncounter.appointmentId && a.id === preparedEncounter.appointmentId) ||
+          a.patientId === encounter.patientId || 
           (patient && a.patientName.trim().toLowerCase() === patient.fullName.trim().toLowerCase());
         
         // Se coincidir paciente e data (ou data vazia)
         if (matchesPatient && (!encDateStr || a.date === encDateStr || apts.length <= 50)) {
           if (encounter.status === 'completed' && a.status !== 'completed') {
             changed = true;
-            return { ...a, status: 'completed' as AppointmentStatus, updatedAt: new Date().toISOString() };
-          } else if (encounter.status === 'in_progress' && a.status === 'waiting') {
+            const now = new Date().toISOString();
+            return { ...a, status: 'completed' as AppointmentStatus, completedAt: a.completedAt || now, updatedAt: now };
+          } else if (encounter.status === 'in_progress' && (a.status === 'waiting' || a.status === 'checked_in' || a.status === 'called')) {
             changed = true;
-            return { ...a, status: 'in_consultation' as AppointmentStatus, updatedAt: new Date().toISOString() };
+            const now = new Date().toISOString();
+            return { ...a, status: 'in_consultation' as AppointmentStatus, startedAt: a.startedAt || now, updatedAt: now };
           }
         }
         return a;
@@ -410,9 +1166,9 @@ class OfflineDatabaseService {
     } catch {}
 
     if (typeof window !== 'undefined') {
-      window.dispatchEvent(new CustomEvent('optomed_encounter_updated', { detail: { clinicId, encounter } }));
+      window.dispatchEvent(new CustomEvent('optomed_encounter_updated', { detail: { clinicId, encounter: preparedEncounter } }));
     }
-    this.broadcastSync('optomed_encounter_updated', { clinicId, encounter });
+    this.broadcastSync('optomed_encounter_updated', { clinicId, encounter: preparedEncounter });
   }
 
   // --- RECEITAS ÓPTICAS ---
@@ -426,21 +1182,244 @@ class OfflineDatabaseService {
     }
   }
 
-  public savePrescription(rx: Prescription, clinicId = this.activeClinicId): void {
-    const list = this.getPrescriptions(clinicId);
-    list.unshift(rx);
-    localStorage.setItem(this.getKey('prescriptions', clinicId), JSON.stringify(list));
-    this.logAudit('CREATE', 'PRESCRIPTION', rx.id, `Receita óptica gerada para ${rx.patientName}`, clinicId);
-    remoteSync.push(clinicId, 'prescriptions', list);
+  public savePrescriptions(rxs: Prescription[], clinicId = this.activeClinicId): void {
+    this.safeSetItem(this.getKey('prescriptions', clinicId), JSON.stringify(rxs));
+    indexedDbStorage.saveAll('prescriptions', clinicId, rxs).catch(e => console.warn('[IndexedDB] savePrescriptions:', e));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('optomed_prescription_updated', { detail: { clinicId, prescriptions: rxs } }));
+    }
+    this.broadcastSync('optomed_prescription_updated', { clinicId, prescriptions: rxs });
+    remoteSync.push(clinicId, 'prescriptions', rxs);
   }
 
-  // --- AGENDAMENTOS (AGENDA) ---
+  public savePrescription(rx: Prescription, clinicId = this.activeClinicId): Prescription {
+    const list = this.getPrescriptions(clinicId);
+    const existingIndex = list.findIndex(p => p.id === rx.id);
+    const now = new Date().toISOString();
+
+    let targetRx: Prescription;
+
+    if (existingIndex >= 0) {
+      const existing = list[existingIndex];
+      // FASE 26: Se a receita já foi formalmente emitida/impressa (isIssued === true),
+      // não sobrescreve silenciosamente: preserva o histórico criando nova versão rastreada!
+      if (existing.isIssued) {
+        targetRx = {
+          ...rx,
+          id: `rx-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+          version: (existing.version || 1) + 1,
+          supersedesId: existing.id,
+          clinicId: rx.clinicId || clinicId,
+          date: now,
+          isIssued: true
+        };
+        list.unshift(targetRx);
+        this.logAudit('CREATE', 'PRESCRIPTION', targetRx.id, `Nova versão emitida de receita óptica v${targetRx.version} (substitui ${existing.id}) para ${targetRx.patientName}`, clinicId);
+      } else {
+        targetRx = {
+          ...rx,
+          clinicId: rx.clinicId || clinicId,
+          version: rx.version || existing.version || 1
+        };
+        list[existingIndex] = targetRx;
+        this.logAudit('UPDATE', 'PRESCRIPTION', targetRx.id, `Receita óptica rascunho atualizada para ${targetRx.patientName}`, clinicId);
+      }
+    } else {
+      targetRx = {
+        ...rx,
+        clinicId: rx.clinicId || clinicId,
+        version: rx.version || 1,
+        date: rx.date || now
+      };
+      list.unshift(targetRx);
+      this.logAudit('CREATE', 'PRESCRIPTION', targetRx.id, `Receita óptica gerada para ${targetRx.patientName}`, clinicId);
+    }
+
+    this.savePrescriptions(list, clinicId);
+    this.enqueueOutboxMutation(clinicId, 'prescriptions', existingIndex >= 0 ? 'update' : 'create', targetRx.id, targetRx);
+    remoteSync.upsert(clinicId, 'prescriptions', targetRx).catch(e => console.warn('[Sync] upsert prescription:', e));
+    return targetRx;
+  }
+
+  public getPrescriptionsByEncounter(encounterId: string, clinicId = this.activeClinicId): Prescription[] {
+    return this.getPrescriptions(clinicId)
+      .filter(p => p.encounterId === encounterId)
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  }
+
+  public getPrescriptionsByPatient(patientId: string, clinicId = this.activeClinicId): Prescription[] {
+    return this.getPrescriptions(clinicId)
+      .filter(p => p.patientId === patientId)
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  }
+
+  // --- EVOLUÇÕES CLÍNICAS LONGITUDINAIS & AMENDMENTS (FASE 3.8) ---
+  public getEvolutions(clinicId = this.activeClinicId): ClinicalEvolution[] {
+    try {
+      const raw = localStorage.getItem(this.getKey('evolutions', clinicId));
+      if (!raw) return [];
+      return JSON.parse(raw);
+    } catch {
+      return [];
+    }
+  }
+
+  public saveEvolutions(evolutions: ClinicalEvolution[], clinicId = this.activeClinicId): void {
+    this.safeSetItem(this.getKey('evolutions', clinicId), JSON.stringify(evolutions));
+    indexedDbStorage.saveAll('evolutions' as any, clinicId, evolutions).catch(e => console.warn('[IndexedDB] saveEvolutions:', e));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('optomed_evolution_updated', { detail: { clinicId, evolutions } }));
+    }
+    this.broadcastSync('optomed_evolution_updated', { clinicId, evolutions });
+    remoteSync.push(clinicId, 'evolutions' as any, evolutions);
+  }
+
+  public saveEvolution(evolution: ClinicalEvolution, clinicId = this.activeClinicId): ClinicalEvolution {
+    const list = this.getEvolutions(clinicId);
+    const existingIndex = list.findIndex(e => e.id === evolution.id);
+    const now = new Date().toISOString();
+
+    const prepared: ClinicalEvolution = {
+      ...evolution,
+      clinicId: evolution.clinicId || clinicId,
+      timestamp: evolution.timestamp || now,
+      createdAt: evolution.createdAt || now
+    };
+
+    if (existingIndex >= 0) {
+      // Regra de Integridade Clínica: Não sobrescrever silenciosamente registros existentes
+      prepared.version = (list[existingIndex].version || 1) + 1;
+      list[existingIndex] = prepared;
+    } else {
+      list.unshift(prepared);
+    }
+
+    this.saveEvolutions(list, clinicId);
+    this.logAudit(existingIndex >= 0 ? 'UPDATE' : 'CREATE', 'ENCOUNTER', prepared.id, `Evolução clínica (${prepared.type}) registrada`, clinicId);
+    this.enqueueOutboxMutation(clinicId, 'evolutions' as any, existingIndex >= 0 ? 'update' : 'create', prepared.id, prepared);
+    remoteSync.upsert(clinicId, 'evolutions' as any, prepared).catch(e => console.warn('[Sync] upsert evolution:', e));
+    return prepared;
+  }
+
+  /**
+   * Registra um Adendo / Amendment auditável retificando um registro anterior sem apagar o original
+   */
+  public createAmendment(params: {
+    originalEvolutionId: string;
+    encounterId: string;
+    patientId: string;
+    newText: string;
+    reason: string;
+    professionalId: string;
+    professionalName: string;
+    clinicId?: string;
+  }): ClinicalEvolution {
+    const cid = params.clinicId || this.activeClinicId;
+    const list = this.getEvolutions(cid);
+    const original = list.find(e => e.id === params.originalEvolutionId);
+
+    const now = new Date().toISOString();
+    const amendment: ClinicalEvolution = {
+      id: generateUUID(),
+      encounterId: params.encounterId,
+      patientId: params.patientId,
+      clinicId: cid,
+      professionalId: params.professionalId,
+      professionalName: params.professionalName,
+      timestamp: now,
+      text: params.newText,
+      type: 'amendment',
+      version: original ? (original.version || 1) + 1 : 1,
+      supersedesId: params.originalEvolutionId,
+      amendmentReason: params.reason,
+      previousContent: original ? original.text : undefined,
+      createdAt: now,
+      createdBy: params.professionalName
+    };
+
+    list.unshift(amendment);
+    this.saveEvolutions(list, cid);
+    this.logAudit('UPDATE', 'ENCOUNTER', amendment.id, `Adendo clínico registrado vinculando #${params.originalEvolutionId}: ${params.reason}`, cid);
+    this.enqueueOutboxMutation(cid, 'evolutions' as any, 'create', amendment.id, amendment);
+    remoteSync.upsert(cid, 'evolutions' as any, amendment).catch(e => console.warn('[Sync] upsert amendment:', e));
+    return amendment;
+  }
+
+  public getEvolutionsByEncounter(encounterId: string, clinicId = this.activeClinicId): ClinicalEvolution[] {
+    return this.getEvolutions(clinicId)
+      .filter(e => e.encounterId === encounterId)
+      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+  }
+
+  public getEvolutionsByPatient(patientId: string, clinicId = this.activeClinicId): ClinicalEvolution[] {
+    return this.getEvolutions(clinicId)
+      .filter(e => e.patientId === patientId)
+      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+  }
+
+  // --- DOCUMENTOS CLÍNICOS EMITIDOS (FASE 3.9) ---
+  public getClinicalDocuments(clinicId = this.activeClinicId): ClinicalDocumentRecord[] {
+    try {
+      const raw = localStorage.getItem(this.getKey('clinical_documents', clinicId));
+      if (!raw) return [];
+      return JSON.parse(raw);
+    } catch {
+      return [];
+    }
+  }
+
+  public saveClinicalDocuments(docs: ClinicalDocumentRecord[], clinicId = this.activeClinicId): void {
+    this.safeSetItem(this.getKey('clinical_documents', clinicId), JSON.stringify(docs));
+    indexedDbStorage.saveAll('clinical_documents' as any, clinicId, docs).catch(e => console.warn('[IndexedDB] saveClinicalDocuments:', e));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('optomed_document_updated', { detail: { clinicId, docs } }));
+    }
+    this.broadcastSync('optomed_document_updated', { clinicId, docs });
+    remoteSync.push(clinicId, 'clinical_documents' as any, docs);
+  }
+
+  public saveClinicalDocument(doc: ClinicalDocumentRecord, clinicId = this.activeClinicId): ClinicalDocumentRecord {
+    const list = this.getClinicalDocuments(clinicId);
+    const existingIndex = list.findIndex(d => d.id === doc.id);
+    const now = new Date().toISOString();
+
+    const prepared: ClinicalDocumentRecord = {
+      ...doc,
+      clinicId: doc.clinicId || clinicId,
+      issuedAt: doc.issuedAt || now,
+      version: doc.version || (existingIndex >= 0 ? (list[existingIndex].version || 1) + 1 : 1)
+    };
+
+    if (existingIndex >= 0) {
+      list[existingIndex] = prepared;
+    } else {
+      list.unshift(prepared);
+    }
+
+    this.saveClinicalDocuments(list, clinicId);
+    this.logAudit(existingIndex >= 0 ? 'UPDATE' : 'CREATE', 'PRESCRIPTION', prepared.id, `Documento clínico emitido: ${prepared.title} (${prepared.type})`, clinicId);
+    this.enqueueOutboxMutation(clinicId, 'clinical_documents' as any, existingIndex >= 0 ? 'update' : 'create', prepared.id, prepared);
+    remoteSync.upsert(clinicId, 'clinical_documents' as any, prepared).catch(e => console.warn('[Sync] upsert clinical document:', e));
+    return prepared;
+  }
+
+  public getClinicalDocumentsByEncounter(encounterId: string, clinicId = this.activeClinicId): ClinicalDocumentRecord[] {
+    return this.getClinicalDocuments(clinicId)
+      .filter(d => d.encounterId === encounterId)
+      .sort((a, b) => new Date(b.issuedAt).getTime() - new Date(a.issuedAt).getTime());
+  }
+
+  public getClinicalDocumentsByPatient(patientId: string, clinicId = this.activeClinicId): ClinicalDocumentRecord[] {
+    return this.getClinicalDocuments(clinicId)
+      .filter(d => d.patientId === patientId)
+      .sort((a, b) => new Date(b.issuedAt).getTime() - new Date(a.issuedAt).getTime());
+  }
   public getAppointments(clinicId = this.activeClinicId): Appointment[] {
     try {
       const raw = localStorage.getItem(this.getKey('appointments', clinicId));
       if (!raw) {
         const initial = this.getInitialAppointmentsForClinic(clinicId);
-        this.saveAppointments(initial, clinicId);
+        this.safeSetItem(this.getKey('appointments', clinicId), JSON.stringify(initial));
         return initial;
       }
       return JSON.parse(raw);
@@ -450,7 +1429,9 @@ class OfflineDatabaseService {
   }
 
   public saveAppointments(appointments: Appointment[], clinicId = this.activeClinicId): void {
-    localStorage.setItem(this.getKey('appointments', clinicId), JSON.stringify(appointments));
+    this.safeSetItem(this.getKey('appointments', clinicId), JSON.stringify(appointments));
+    // Persistência dual resiliente em IndexedDB
+    indexedDbStorage.saveAll('appointments', clinicId, appointments).catch(e => console.warn('[IndexedDB] saveAppointments:', e));
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new CustomEvent('optomed_appointment_updated', { detail: { clinicId, appointments } }));
     }
@@ -469,22 +1450,54 @@ class OfflineDatabaseService {
     list.sort((a, b) => a.time.localeCompare(b.time));
     this.saveAppointments(list, clinicId);
     this.logAudit('UPDATE', 'PATIENT', appointment.patientId, `Agendamento para ${appointment.patientName} às ${appointment.time}`, clinicId);
+    const savedApt = list.find(a => a.id === appointment.id) || appointment;
+    this.enqueueOutboxMutation(clinicId, 'appointments', existingIndex >= 0 ? 'update' : 'create', savedApt.id, savedApt);
+    remoteSync.upsert(clinicId, 'appointments', savedApt).catch(e => console.warn('[Sync] upsert appointment:', e));
   }
 
-  public updateAppointmentStatus(id: string, status: AppointmentStatus, clinicId = this.activeClinicId): void {
+  public updateAppointmentStatus(id: string, status: AppointmentStatus, clinicId = this.activeClinicId, force = false): boolean {
     const list = this.getAppointments(clinicId);
     const apt = list.find(a => a.id === id);
-    if (apt) {
-      apt.status = status;
-      apt.updatedAt = new Date().toISOString();
-      this.saveAppointments(list, clinicId);
-      this.logAudit('UPDATE', 'PATIENT', apt.patientId, `Status de agendamento alterado para ${status}`, clinicId);
+    if (!apt) return false;
+
+    // Validação estrita pela máquina de estados (a menos que forçado por sincronização remota)
+    if (!force && !canTransitionAppointmentStatus(apt.status, status)) {
+      console.warn(`[StateMachine] Transição inválida bloqueada: ${apt.status} -> ${status} para agendamento ${id}`);
+      return false;
     }
+
+    const now = new Date().toISOString();
+    apt.status = status;
+    apt.updatedAt = now;
+
+    if (status === 'checked_in' || status === 'waiting') {
+      if (!apt.checkInAt) apt.checkInAt = now;
+    } else if (status === 'called') {
+      apt.calledAt = now;
+    } else if (status === 'in_consultation') {
+      if (!apt.startedAt) apt.startedAt = now;
+    } else if (status === 'completed') {
+      if (!apt.completedAt) apt.completedAt = now;
+      // MOTOR FINANCEIRO: gera a remuneração automática, auditável e idempotente para o examinador
+      try {
+        examinerRemunerationService.generateRemunerationOnAppointmentCompletion(apt, clinicId);
+      } catch (e) {
+        console.warn('[Remuneration] Falha ao processar remuneração na conclusão da consulta:', e);
+      }
+    }
+
+    this.saveAppointments(list, clinicId);
+    this.logAudit('UPDATE', 'PATIENT', apt.patientId, `Status de agendamento alterado para ${status}`, clinicId);
+    this.enqueueOutboxMutation(clinicId, 'appointments', 'update', apt.id, apt);
+    remoteSync.upsert(clinicId, 'appointments', apt).catch(e => console.warn('[Sync] upsert status appointment:', e));
+    return true;
   }
 
   public deleteAppointment(id: string, clinicId = this.activeClinicId): void {
     const list = this.getAppointments(clinicId).filter(a => a.id !== id);
     this.saveAppointments(list, clinicId);
+    this.enqueueOutboxMutation(clinicId, 'appointments', 'delete', id, { id, _deleted: true });
+    remoteSync.remove(clinicId, 'appointments', id).catch(e => console.warn('[Sync] deleteAppointment remove:', e));
     this.logAudit('DELETE', 'PATIENT', id, 'Agendamento removido da agenda', clinicId);
   }
 
@@ -518,7 +1531,9 @@ class OfflineDatabaseService {
       details: `[${clinicId.toUpperCase()}] ${details}`
     };
     list.unshift(entry);
-    localStorage.setItem(this.getKey('audit_logs', clinicId), JSON.stringify(list.slice(0, 500)));
+    const capped = list.slice(0, 500);
+    this.safeSetItem(this.getKey('audit_logs', clinicId), JSON.stringify(capped));
+    remoteSync.push(clinicId, 'audit_logs', capped);
   }
 
   public getPendingSyncCount(): number {
@@ -564,7 +1579,7 @@ class OfflineDatabaseService {
           documentNumber: '4.892.120',
           phoneCountryCode: '+595',
           phone: '+595 981 456789',
-          city: 'Ciudad del Este',
+          city: 'Pedro Juan Caballero',
           country: 'Paraguai',
           notes: 'Presbiopia progressiva e necessidade de novos óculos multifocais.',
           lgpdConsent: true,
@@ -585,7 +1600,7 @@ class OfflineDatabaseService {
           documentNumber: '12.345.678-9',
           phoneCountryCode: '+55',
           phone: '+55 (45) 97777-8888',
-          city: 'Foz do Iguaçu',
+          city: 'Ponta Porã',
           country: 'Brasil',
           guardianName: 'Juliana Silva (Mãe)',
           notes: 'Triagem visual escolar infantil.',
@@ -808,10 +1823,16 @@ class OfflineDatabaseService {
         this.saveEncounters(jsonData.encounters, clinicId);
       }
       if (jsonData.prescriptions && Array.isArray(jsonData.prescriptions)) {
-        localStorage.setItem(this.getKey('prescriptions', clinicId), JSON.stringify(jsonData.prescriptions));
+        this.savePrescriptions(jsonData.prescriptions, clinicId);
       }
       if (jsonData.appointments && Array.isArray(jsonData.appointments)) {
         this.saveAppointments(jsonData.appointments, clinicId);
+      }
+      if (jsonData.transactions && Array.isArray(jsonData.transactions)) {
+        this.saveTransactions(jsonData.transactions, clinicId);
+      }
+      if (jsonData.workSessions && Array.isArray(jsonData.workSessions)) {
+        this.saveWorkSessions(jsonData.workSessions, clinicId);
       }
       this.logAudit('UPDATE', 'PATIENT', 'DATABASE_RESTORE', 'Restauração de backup do banco de dados realizada com sucesso', clinicId);
       return true;
@@ -886,7 +1907,7 @@ class OfflineDatabaseService {
         }
       });
       const updatedPrescriptions = Array.from(prescriptionMap.values());
-      localStorage.setItem(this.getKey('prescriptions', clinicId), JSON.stringify(updatedPrescriptions));
+      this.safeSetItem(this.getKey('prescriptions', clinicId), JSON.stringify(updatedPrescriptions));
 
       // 4. Agendamentos históricos para a agenda e painel do médico
       const currentApts = this.getAppointments(clinicId);
@@ -1065,7 +2086,6 @@ class OfflineDatabaseService {
     }
   }
 
-  // --- MÓDULO DE GESTÃO FINANCEIRA & PDV (FLUXO DE CAIXA) ---
   public getTransactions(clinicId = this.activeClinicId): FinancialTransaction[] {
     try {
       const raw = localStorage.getItem(this.getKey('financial_transactions', clinicId));
@@ -1081,33 +2101,64 @@ class OfflineDatabaseService {
   }
 
   public saveTransactions(transactions: FinancialTransaction[], clinicId = this.activeClinicId): void {
-    localStorage.setItem(this.getKey('financial_transactions', clinicId), JSON.stringify(transactions));
+    this.safeSetItem(this.getKey('financial_transactions', clinicId), JSON.stringify(transactions));
+    indexedDbStorage.saveAll('transactions' as any, clinicId, transactions).catch(e => console.warn('[IndexedDB] saveTransactions:', e));
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new CustomEvent('optomed_finance_updated', { detail: { clinicId } }));
     }
+    this.broadcastSync('optomed_finance_updated', { clinicId });
+    remoteSync.push(clinicId, 'transactions', transactions);
   }
 
   public saveTransaction(tx: FinancialTransaction, clinicId = this.activeClinicId): void {
     const list = this.getTransactions(clinicId);
     const idx = list.findIndex(t => t.id === tx.id);
+    const now = new Date().toISOString();
+
+    // Tratamento de matemática decimal segura (armazenamento em centavos inteiros)
+    const safeAmountCents = tx.amountCents !== undefined ? tx.amountCents : toCents(tx.amount || 0);
+    const safeAmount = fromCents(safeAmountCents);
+
+    // Se houver caixa aberto para a clínica e a transação não tiver cashRegisterId associado
+    const activeSession = this.getActiveCashRegisterSession(clinicId);
+
+    const prepared: FinancialTransaction = {
+      ...tx,
+      clinicId: tx.clinicId || clinicId,
+      amount: safeAmount,
+      amountCents: safeAmountCents,
+      currency: tx.currency || this.getClinicById(clinicId)?.currency || 'BRL',
+      cashRegisterId: tx.cashRegisterId || (activeSession?.id),
+      updatedAt: now
+    };
+
     if (idx >= 0) {
-      list[idx] = tx;
+      list[idx] = prepared;
     } else {
-      list.unshift(tx);
+      list.unshift(prepared);
     }
     this.saveTransactions(list, clinicId);
     this.logAudit(
-      'CREATE', 
+      idx >= 0 ? 'UPDATE' : 'CREATE', 
       'FINANCE' as any, 
-      tx.id, 
-      `${tx.type === 'income' ? 'Entrada' : 'Saída'} de R$ ${tx.amount.toFixed(2)} - ${tx.description}`, 
+      prepared.id, 
+      `${prepared.type === 'income' ? 'Entrada' : 'Saída'} de ${prepared.currency || 'R$'} ${prepared.amount.toFixed(2)} - ${prepared.description}`, 
       clinicId
     );
+    this.enqueueOutboxMutation(clinicId, 'transactions', idx >= 0 ? 'update' : 'create', prepared.id, prepared);
+    remoteSync.upsert(clinicId, 'transactions', prepared).catch(e => console.warn('[Sync] upsert transaction:', e));
   }
 
   public deleteTransaction(id: string, clinicId = this.activeClinicId): void {
-    const list = this.getTransactions(clinicId).filter(t => t.id !== id);
-    this.saveTransactions(list, clinicId);
+    const list = this.getTransactions(clinicId);
+    const target = list.find(t => t.id === id);
+    if (!target) return;
+
+    // Marca como tombstone para sincronização durável
+    const updated = list.filter(t => t.id !== id);
+    this.saveTransactions(updated, clinicId);
+    this.enqueueOutboxMutation(clinicId, 'transactions', 'delete', id, { id, _deleted: true });
+    remoteSync.remove(clinicId, 'transactions', id).catch(e => console.warn('[Sync] deleteTransaction remove:', e));
     this.logAudit('DELETE', 'FINANCE' as any, id, 'Lançamento financeiro removido', clinicId);
   }
 
@@ -1118,32 +2169,186 @@ class OfflineDatabaseService {
       list[idx] = {
         ...list[idx],
         isSettled,
-        settledAt: isSettled ? new Date().toISOString() : undefined
+        settledAt: isSettled ? new Date().toISOString() : undefined,
+        updatedAt: new Date().toISOString()
       };
+      const settledTx = list[idx];
       this.saveTransactions(list, clinicId);
       this.logAudit('UPDATE', 'FINANCE' as any, id, `Lançamento ${isSettled ? 'liquidado (baixa efetuada)' : 'reaberto'} no financeiro`, clinicId);
+      this.enqueueOutboxMutation(clinicId, 'transactions', 'update', settledTx.id, settledTx);
+      remoteSync.upsert(clinicId, 'transactions', settledTx).catch(e => console.warn('[Sync] upsert settled transaction:', e));
     }
+  }
+
+  /**
+   * Dá baixa em lote em todas as transações com data/competência até a data limite estipulada (ex: 2026-09-30).
+   * Valores liquidados saem do fluxo do dia mantendo consistência no extrato mensal e relatórios.
+   */
+  public settleAllTransactionsUntilDate(maxDateStr: string = '2026-09-30', clinicId = this.activeClinicId): number {
+    const list = this.getTransactions(clinicId);
+    let count = 0;
+    const now = new Date().toISOString();
+    const updated = list.map(tx => {
+      const txDate = tx.date || (tx.createdAt ? tx.createdAt.slice(0, 10) : '2026-09-26');
+      if (txDate <= maxDateStr && !tx.isSettled) {
+        count++;
+        return {
+          ...tx,
+          isSettled: true,
+          settledAt: tx.settledAt || `${maxDateStr}T23:59:59.000Z`,
+          updatedAt: now
+        };
+      }
+      return tx;
+    });
+
+    if (count > 0) {
+      this.saveTransactions(updated, clinicId);
+      this.logAudit('UPDATE', 'FINANCE' as any, `batch_${Date.now()}`, `Baixa em lote de ${count} lançamentos até ${maxDateStr} realizada`, clinicId);
+    }
+    return count;
+  }
+
+  // --- SESSÕES E CICLO DE VIDA DO CAIXA (ABERTURA -> MOVIMENTAÇÕES -> CONFERÊNCIA -> FECHAMENTO) ---
+  public getCashRegisterSessions(clinicId = this.activeClinicId): CashRegisterSession[] {
+    try {
+      const raw = localStorage.getItem(this.getKey('cash_registers', clinicId));
+      if (!raw) return [];
+      return JSON.parse(raw);
+    } catch {
+      return [];
+    }
+  }
+
+  public saveCashRegisterSessions(sessions: CashRegisterSession[], clinicId = this.activeClinicId): void {
+    this.safeSetItem(this.getKey('cash_registers', clinicId), JSON.stringify(sessions));
+    indexedDbStorage.saveAll('cash_registers' as any, clinicId, sessions).catch(e => console.warn('[IndexedDB] saveCashRegisterSessions:', e));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('optomed_cash_register_updated', { detail: { clinicId } }));
+    }
+    this.broadcastSync('optomed_cash_register_updated', { clinicId });
+    remoteSync.push(clinicId, 'cash_registers' as any, sessions);
+  }
+
+  public getActiveCashRegisterSession(clinicId = this.activeClinicId): CashRegisterSession | null {
+    const sessions = this.getCashRegisterSessions(clinicId);
+    return sessions.find(s => s.status === 'open' && !s._deleted) || null;
+  }
+
+  public openCashRegisterSession(
+    operatorId: string, 
+    operatorName: string, 
+    openingBalance: number = 0, 
+    notes?: string,
+    clinicId = this.activeClinicId
+  ): CashRegisterSession {
+    const active = this.getActiveCashRegisterSession(clinicId);
+    if (active) {
+      throw new Error(`Já existe um caixa aberto para esta unidade (Operador: ${active.operatorName}, aberto em ${new Date(active.openedAt).toLocaleTimeString()}).`);
+    }
+
+    const openCents = toCents(openingBalance);
+    const now = new Date().toISOString();
+    const newSession: CashRegisterSession = {
+      id: generateUUID(),
+      clinicId,
+      operatorId,
+      operatorName,
+      openedAt: now,
+      status: 'open',
+      openingBalance: fromCents(openCents),
+      openingBalanceCents: openCents,
+      totalIncome: 0,
+      totalExpense: 0,
+      expectedBalance: fromCents(openCents),
+      notes,
+      createdAt: now,
+      updatedAt: now
+    };
+
+    const list = this.getCashRegisterSessions(clinicId);
+    list.unshift(newSession);
+    this.saveCashRegisterSessions(list, clinicId);
+    this.logAudit('CREATE', 'FINANCE' as any, newSession.id, `Caixa aberto por ${operatorName} com saldo inicial de R$ ${newSession.openingBalance.toFixed(2)}`, clinicId);
+    this.enqueueOutboxMutation(clinicId, 'cash_registers' as any, 'create', newSession.id, newSession);
+    remoteSync.upsert(clinicId, 'cash_registers' as any, newSession).catch(e => console.warn('[Sync] upsert open cash register:', e));
+    return newSession;
+  }
+
+  public closeCashRegisterSession(
+    sessionId: string,
+    declaredBalance: number,
+    notes?: string,
+    clinicId = this.activeClinicId
+  ): CashRegisterSession {
+    const list = this.getCashRegisterSessions(clinicId);
+    const idx = list.findIndex(s => s.id === sessionId);
+    if (idx < 0) {
+      throw new Error('Sessão de caixa não encontrada.');
+    }
+    const session = list[idx];
+    if (session.status === 'closed') {
+      throw new Error('Este caixa já foi fechado e não pode ser reaberto ou alterado.');
+    }
+
+    // Calcula movimentações ocorridas durante a sessão
+    const txs = this.getTransactions(clinicId).filter(t => 
+      t.status === 'completed' && 
+      (t.cashRegisterId === session.id || (!t.cashRegisterId && t.date === session.openedAt.split('T')[0]))
+    );
+
+    const totalIncome = safeSum(...txs.filter(t => t.type === 'income').map(t => t.amount));
+    const totalExpense = safeSum(...txs.filter(t => t.type === 'expense').map(t => t.amount));
+    const expectedBalance = safeSub(safeSum(session.openingBalance, totalIncome), totalExpense);
+    const declaredSafe = fromCents(toCents(declaredBalance));
+    const difference = safeSub(declaredSafe, expectedBalance);
+
+    const now = new Date().toISOString();
+    const closedSession: CashRegisterSession = {
+      ...session,
+      status: 'closed',
+      closedAt: now,
+      totalIncome,
+      totalExpense,
+      expectedBalance,
+      declaredBalance: declaredSafe,
+      difference,
+      notes: notes || session.notes,
+      updatedAt: now
+    };
+
+    list[idx] = closedSession;
+    this.saveCashRegisterSessions(list, clinicId);
+    this.logAudit(
+      'UPDATE', 
+      'FINANCE' as any, 
+      sessionId, 
+      `Caixa fechado. Esperado: R$ ${expectedBalance.toFixed(2)} | Informado: R$ ${declaredSafe.toFixed(2)} | Dif: R$ ${difference.toFixed(2)}`, 
+      clinicId
+    );
+    this.enqueueOutboxMutation(clinicId, 'cash_registers' as any, 'update', closedSession.id, closedSession);
+    remoteSync.upsert(clinicId, 'cash_registers' as any, closedSession).catch(e => console.warn('[Sync] upsert close cash register:', e));
+    return closedSession;
   }
 
   public getCashRegisterSummary(dateStr?: string, clinicId = this.activeClinicId): CashRegisterSummary {
     const today = dateStr || new Date().toISOString().split('T')[0];
-    const txs = this.getTransactions(clinicId).filter(t => t.date === today && t.status === 'completed');
+    const txs = this.getTransactions(clinicId).filter(t => t.date === today && t.status === 'completed' && !t._deleted);
+    const activeSession = this.getActiveCashRegisterSession(clinicId);
 
-    const totalIncome = txs
-      .filter(t => t.type === 'income')
-      .reduce((acc, curr) => acc + curr.amount, 0);
-
-    const totalExpense = txs
-      .filter(t => t.type === 'expense')
-      .reduce((acc, curr) => acc + curr.amount, 0);
+    const totalIncome = safeSum(...txs.filter(t => t.type === 'income').map(t => t.amount));
+    const totalExpense = safeSum(...txs.filter(t => t.type === 'expense').map(t => t.amount));
+    const openingBalance = activeSession ? activeSession.openingBalance : 0;
+    const currentBalance = safeSub(safeSum(openingBalance, totalIncome), totalExpense);
 
     return {
       date: today,
-      openingBalance: 0,
+      openingBalance,
       totalIncome,
       totalExpense,
-      currentBalance: totalIncome - totalExpense,
-      transactionsCount: txs.length
+      currentBalance,
+      transactionsCount: txs.length,
+      activeSession
     };
   }
 
@@ -1163,7 +2368,8 @@ class OfflineDatabaseService {
   }
 
   public savePOSItems(items: POSItem[], clinicId = this.activeClinicId): void {
-    localStorage.setItem(this.getKey('pos_items', clinicId), JSON.stringify(items));
+    this.safeSetItem(this.getKey('pos_items', clinicId), JSON.stringify(items));
+    remoteSync.push(clinicId, 'pos_items', items);
   }
 
   public savePOSItem(item: POSItem, clinicId = this.activeClinicId): void {
@@ -1175,6 +2381,8 @@ class OfflineDatabaseService {
       list.push(item);
     }
     this.savePOSItems(list, clinicId);
+    this.enqueueOutboxMutation(clinicId, 'pos_items', idx >= 0 ? 'update' : 'create', item.id, item);
+    remoteSync.upsert(clinicId, 'pos_items', item).catch(e => console.warn('[Sync] upsert pos_item:', e));
   }
 
   private getDefaultPOSItems(clinicId = this.activeClinicId): POSItem[] {
@@ -1218,7 +2426,8 @@ class OfflineDatabaseService {
   }
 
   public saveWorkSessions(sessions: ProfessionalWorkSession[], clinicId = this.activeClinicId): void {
-    localStorage.setItem(this.getKey('work_sessions', clinicId), JSON.stringify(sessions));
+    this.safeSetItem(this.getKey('work_sessions', clinicId), JSON.stringify(sessions));
+    remoteSync.push(clinicId, 'work_sessions', sessions);
   }
 
   public saveWorkSession(session: ProfessionalWorkSession, clinicId = this.activeClinicId): void {
@@ -1231,15 +2440,309 @@ class OfflineDatabaseService {
     }
     this.saveWorkSessions(list, clinicId);
     this.logAudit('CREATE', 'FINANCE' as any, session.id, `Sessão de trabalho registrada: ${session.contractType} para ${session.examinerName}`, clinicId);
+    this.enqueueOutboxMutation(clinicId, 'work_sessions', idx >= 0 ? 'update' : 'create', session.id, session);
+    remoteSync.upsert(clinicId, 'work_sessions', session).catch(e => console.warn('[Sync] upsert work session:', e));
+  }
+
+  /**
+   * Retorna a regra padrão de cobrança automática por dia da semana:
+   * - IVS: Terça-feira (13h às 18h) -> Fixo R$ 500,00 (Meia Diária / Turno 5h)
+   * - IVS: Quarta-feira (08h às 13h) -> Fixo R$ 500,00 (Meia Diária / Turno 5h)
+   * - Demais dias: R$ 50,00 por atendimento / consulta realizada
+   */
+  public getDefaultContractTypeForDate(dateStr: string, clinicId = this.activeClinicId): {
+    contractType: ProfessionalContractType;
+    baseAmount: number;
+    description: string;
+    isFixedTurn: boolean;
+  } {
+    const isIvs = clinicId === 'ivs';
+    if (!isIvs) {
+      return {
+        contractType: 'per_consultation',
+        baseAmount: 150.00,
+        description: 'Cobrança padrão por consulta',
+        isFixedTurn: false
+      };
+    }
+
+    // Obter o dia da semana considerando UTC/local da string YYYY-MM-DD
+    const parts = dateStr.split('-');
+    const year = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1;
+    const day = parseInt(parts[2], 10);
+    const dateObj = new Date(year, month, day);
+    const dayOfWeek = dateObj.getDay(); // 0 = Domingo, 1 = Segunda, 2 = Terça, 3 = Quarta, 4 = Quinta, 5 = Sexta, 6 = Sábado
+
+    // Caso específico para sábados de atendimento com diária integral (10/10/2026 e 17/10/2026): Período Fechado / Diária Integral de R$ 1.000,00
+    if (dateStr === '2026-10-10' || dateStr === '2026-10-17') {
+      return {
+        contractType: 'period_full_day',
+        baseAmount: 1000.00,
+        description: `Sábado (${dateStr === '2026-10-17' ? '17/10/2026' : '10/10/2026'}) - Período Fechado (Diária Integral) - Fixo R$ 1.000,00`,
+        isFixedTurn: true
+      };
+    }
+
+    if (dayOfWeek === 2) {
+      // Terça-feira (13h às 18h) - Fixo R$ 500,00 (Meia Diária / Turno 5h)
+      return {
+        contractType: 'period_half_day',
+        baseAmount: 500.00,
+        description: 'Terça-feira (13h às 18h) - Fixo R$ 500,00 (Meia Diária / Turno 5h)',
+        isFixedTurn: true
+      };
+    } else if (dayOfWeek === 3) {
+      // Quarta-feira (08h às 12h) - Fixo R$ 500,00 (Meia Diária / Turno 4h)
+      return {
+        contractType: 'period_half_day',
+        baseAmount: 500.00,
+        description: 'Quarta-feira (08h às 12h) - Fixo R$ 500,00 (Meia Diária / Turno 4h)',
+        isFixedTurn: true
+      };
+    } else {
+      // Demais dias: R$ 50,00 por consulta / atendimento
+      return {
+        contractType: 'per_consultation',
+        baseAmount: 50.00,
+        description: 'Cobrança por Atendimento Realizado - R$ 50,00',
+        isFixedTurn: false
+      };
+    }
+  }
+
+  /**
+   * Obtém a sessão de trabalho registrada para o dia específico ou gera a padrão automática.
+   */
+  public getWorkSessionForDate(
+    dateStr: string,
+    examinerName = 'Dr. Rudson Meirelles',
+    clinicId = this.activeClinicId
+  ): ProfessionalWorkSession {
+    const sessions = this.getWorkSessions(clinicId);
+    const existing = sessions.find(s => s.date === dateStr && (!examinerName || s.examinerName === examinerName));
+    if (existing) {
+      return existing;
+    }
+
+    const defaultRule = this.getDefaultContractTypeForDate(dateStr, clinicId);
+    return {
+      id: `sess_${clinicId}_${dateStr.replace(/-/g, '')}`,
+      clinicId,
+      examinerId: 'user-examinador',
+      examinerName,
+      date: dateStr,
+      contractType: defaultRule.contractType,
+      baseAmount: defaultRule.baseAmount,
+      notes: defaultRule.description,
+      status: 'active',
+      createdAt: `${dateStr}T08:00:00.000Z`
+    };
   }
 
   public getProfessionalSettlementReport(examinerName = 'Dr. Rudson Meirelles', clinicId = this.activeClinicId): ProfessionalSettlementReport {
     const summary = this.getCashRegisterSummary(undefined, clinicId);
     const isIvs = clinicId === 'ivs';
 
-    // Para o IVS, compor a somatória detalhada solicitada pelo Dr. Meirelles
+    // --- IVS: Relatório dinâmico com base nas transações reais a partir de 01/10/2026 ---
     if (isIvs) {
-      const previousBalancePending = 550.00; // Saldo da semana passada a pagar
+      const allTransactions = this.getTransactions(clinicId);
+      const allAppointments = this.getAppointments(clinicId);
+
+      // Transações em aberto a partir de 01/10/2026 (excluindo deletadas e já quitadas)
+      // Apenas receitas efetivamente de consultas/atendimentos clínicos que geram repasse
+      const CUTOFF_DATE = '2026-10-01';
+      const openTransactions = allTransactions.filter(t => {
+        const txDate = t.date || (t.createdAt ? t.createdAt.slice(0, 10) : '');
+        const isConsultationCategory = !t.category || t.category === 'consulta' || t.description.toLowerCase().includes('consulta') || t.description.toLowerCase().includes('refração') || t.description.toLowerCase().includes('atendimento');
+        return txDate >= CUTOFF_DATE
+          && !t.isSettled
+          && !t._deleted
+          && t.type === 'income'
+          && t.status === 'completed'
+          && isConsultationCategory;
+      });
+
+      // Se houver transações em outubro em aberto OU se as transações de setembro já foram verificadas
+      const hasOctoberOpen = openTransactions.length > 0;
+
+      // Verifica se houve lançamento de pagamento de repasse ao examinador
+      const isPaidTx = allTransactions.some(
+        t => t.type === 'expense' && (t.category === 'salario' || t.description.toLowerCase().includes('repasse') || t.description.toLowerCase().includes('meirelles'))
+      );
+      const isFlagSettled = typeof localStorage !== 'undefined' && localStorage.getItem('optomed_ivs_repasse_settled_sept2026') === 'true';
+
+      // Se há transações a partir de 01/10/2026 em aberto, calcula dinamicamente o novo período
+      if (hasOctoberOpen) {
+        // Agrupa por data para compor entradas diárias
+        const byDate = new Map<string, typeof openTransactions>();
+        for (const tx of openTransactions) {
+          const d = tx.date || (tx.createdAt ? tx.createdAt.slice(0, 10) : '');
+          if (!byDate.has(d)) byDate.set(d, []);
+          byDate.get(d)!.push(tx);
+        }
+
+        const specialPeriods = this.getExaminerSpecialPeriods(clinicId);
+        const dayNames = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+        const dailyEntries: ProfessionalSettlementReport['dailyEntries'] = [];
+        let totalConsultationsCount = 0;
+
+        for (const [dateStr, txs] of Array.from(byDate.entries()).sort((a, b) => a[0].localeCompare(b[0]))) {
+          const parts = dateStr.split('-');
+          const dateObj = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+          const dayOfWeek = dateObj.getDay();
+          const dayName = dayNames[dayOfWeek];
+          const [year, month, day] = parts;
+          const dayLabel = `${day}/${month}/${year} (${dayName})`;
+
+          const workSession = this.getWorkSessionForDate(dateStr, examinerName, clinicId);
+          const consultCount = txs.length;
+          const isFixedPeriod = workSession.contractType === 'period_half_day' || workSession.contractType === 'period_full_day';
+
+          if (isFixedPeriod) {
+            totalConsultationsCount += consultCount;
+            const isFullDay = workSession.contractType === 'period_full_day';
+
+            // Identificar atendimentos dentro vs fora do período contratado
+            let insideContractCount = 0;
+            let outOfContractCount = 0;
+
+            for (const tx of txs) {
+              const matchedApt = allAppointments.find(a => 
+                (tx.encounterId && a.id === tx.encounterId) ||
+                (a.date === dateStr && a.patientName === tx.patientName)
+              );
+
+              // 1. Override manual expresso
+              if (matchedApt?.isOutOfContractPeriod === true) {
+                outOfContractCount++;
+                continue;
+              }
+
+              // Extrai horário de atendimento do agendamento ou do createdAt da transação
+              let timeStr = matchedApt?.time;
+              if (!timeStr && tx.createdAt) {
+                const dateParsed = new Date(tx.createdAt);
+                if (!isNaN(dateParsed.getTime())) {
+                  timeStr = dateParsed.toLocaleTimeString('pt-BR', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false,
+                    timeZone: 'America/Campo_Grande'
+                  });
+                }
+              }
+
+              let isOut = false;
+              if (timeStr) {
+                const [hStr, mStr] = timeStr.split(':');
+                const tMinutes = (parseInt(hStr, 10) || 0) * 60 + (parseInt(mStr, 10) || 0);
+
+                // 2. Verifica se há Período Extraordinário / Especial Negociado cobrindo esta data e horário
+                const matchedSpecial = specialPeriods.find(p => {
+                  if (p.status !== 'active' || p.date !== dateStr) return false;
+                  const [sh, sm] = (p.startTime || '08:00').split(':').map(Number);
+                  const [eh, em] = (p.endTime || '18:00').split(':').map(Number);
+                  const sMin = (sh || 0) * 60 + (sm || 0);
+                  const eMin = (eh || 0) * 60 + (em || 0);
+                  return tMinutes >= sMin && tMinutes <= eMin;
+                });
+
+                if (matchedSpecial) {
+                  // Coberto por período extraordinário negociado -> NÃO é avulso adicional
+                  isOut = false;
+                } else if (dayOfWeek === 2) {
+                  // Terça-feira: das 13:00 às 18:00 contratado
+                  isOut = tMinutes < 13 * 60 || tMinutes > 18 * 60;
+                } else if (dayOfWeek === 3) {
+                  // Quarta-feira: das 08:00 às 12:00 contratado
+                  isOut = tMinutes < 8 * 60 || tMinutes > 12 * 60;
+                }
+              }
+
+              if (isOut) {
+                outOfContractCount++;
+              } else {
+                insideContractCount++;
+              }
+            }
+
+            const countSuffix = insideContractCount > 0 
+              ? ` • ${insideContractCount} atendimento${insideContractCount !== 1 ? 's' : ''} no período contratado` 
+              : (consultCount > 0 ? ` • ${consultCount} atendimento${consultCount !== 1 ? 's' : ''} realizado${consultCount !== 1 ? 's' : ''}` : '');
+            const descriptionBase = workSession.notes || (isFullDay ? 'Sábado - Período Fechado (Diária Integral) - Fixo R$ 1.000,00' : 'Meia Diária / Turno - Fixo R$ 500,00');
+
+            dailyEntries.push({
+              date: dateStr,
+              dayLabel,
+              type: isFullDay ? 'diaria_completa' : 'meia_diaria',
+              description: `${descriptionBase}${countSuffix}`,
+              quantity: 1,
+              unitPrice: workSession.baseAmount,
+              totalAmount: workSession.baseAmount
+            });
+
+            // Se houver atendimentos fora do período contratado no mesmo dia (ex: tarde de quarta-feira), acrescenta como consultas avulsas
+            if (outOfContractCount > 0) {
+              const avulsoUnitPrice = 50.00;
+              dailyEntries.push({
+                date: dateStr,
+                dayLabel,
+                type: 'consultas',
+                description: `Atendimentos Avulsos fora do período contratado • ${outOfContractCount} consulta${outOfContractCount !== 1 ? 's' : ''} a R$ 50,00`,
+                quantity: outOfContractCount,
+                unitPrice: avulsoUnitPrice,
+                totalAmount: outOfContractCount * avulsoUnitPrice
+              });
+            }
+          } else {
+            totalConsultationsCount += consultCount;
+            dailyEntries.push({
+              date: dateStr,
+              dayLabel,
+              type: 'consultas',
+              description: `${consultCount} Consulta${consultCount !== 1 ? 's' : ''} Clínica${consultCount !== 1 ? 's' : ''} / Refração Realizadas`,
+              quantity: consultCount,
+              unitPrice: workSession.baseAmount,
+              totalAmount: consultCount * workSession.baseAmount
+            });
+          }
+        }
+
+        const totalProductionAmount = dailyEntries.reduce((acc, e) => acc + e.totalAmount, 0);
+
+        let periodDescription = 'A partir de 01/10/2026';
+        if (dailyEntries.length > 0) {
+          const firstDate = dailyEntries[0].date;
+          const lastDate = dailyEntries[dailyEntries.length - 1].date;
+          const fParts = firstDate.split('-');
+          const lParts = lastDate.split('-');
+          const fLabel = `${fParts[2]}/${fParts[1]}/${fParts[0]}`;
+          const lLabel = `${lParts[2]}/${lParts[1]}/${lParts[0]}`;
+          periodDescription = firstDate === lastDate ? `Dia ${fLabel}` : `${fLabel} a ${lLabel}`;
+        }
+
+        return {
+          examinerName,
+          periodDescription,
+          previousBalancePending: 0,
+          dailyEntries,
+          totalConsultationsCount,
+          totalProductionAmount,
+          totalPayableAmount: totalProductionAmount,
+          currentCashBalance: summary.currentBalance,
+          hasCashAvailability: summary.currentBalance >= totalProductionAmount,
+          settlementStatus: 'pending'
+        };
+      }
+
+      // Caso base / histórico (Setembro 2026): Quitado por padrão com base nos atendimentos até 30/09/2026
+      const isSettled = isPaidTx || isFlagSettled || allTransactions.every(t => {
+        const txDate = t.date || (t.createdAt ? t.createdAt.slice(0, 10) : '');
+        return txDate > '2026-09-30' || t.isSettled;
+      });
+
+      const previousBalancePending = 550.00;
       const dailyEntries: ProfessionalSettlementReport['dailyEntries'] = [
         {
           date: '2026-09-03',
@@ -1284,7 +2787,7 @@ class OfflineDatabaseService {
         totalPayableAmount,
         currentCashBalance: summary.currentBalance,
         hasCashAvailability: summary.currentBalance >= totalPayableAmount,
-        settlementStatus: 'pending'
+        settlementStatus: isSettled ? 'settled' : 'pending'
       };
     }
 
@@ -1341,6 +2844,30 @@ class OfflineDatabaseService {
           notes: 'Atendimento por Período de 5h (Meia Diária)',
           status: 'active',
           createdAt: '2026-09-05T08:00:00Z'
+        },
+        {
+          id: 'sess_ivs_1010',
+          clinicId: 'ivs',
+          examinerId: 'user-examinador',
+          examinerName: 'Dr. Rudson Meirelles',
+          date: '2026-10-10',
+          contractType: 'period_full_day',
+          baseAmount: 1000.00,
+          notes: 'Sábado (10/10/2026) - Período Fechado (Diária Integral) - Fixo R$ 1.000,00',
+          status: 'active',
+          createdAt: '2026-10-10T08:00:00Z'
+        },
+        {
+          id: 'sess_ivs_1710',
+          clinicId: 'ivs',
+          examinerId: 'user-examinador',
+          examinerName: 'Dr. Rudson Meirelles',
+          date: '2026-10-17',
+          contractType: 'period_full_day',
+          baseAmount: 1000.00,
+          notes: 'Sábado (17/10/2026) - Atendimento Regime Integral Diária - Fixo R$ 1.000,00',
+          status: 'active',
+          createdAt: '2026-10-17T08:00:00Z'
         }
       ];
     }
@@ -1410,6 +2937,8 @@ class OfflineDatabaseService {
           paymentMethod: 'pix',
           receiptNumber: 'REC-2026-8790',
           status: 'completed',
+          isSettled: true,
+          settledAt: '2026-09-30T23:59:59.000Z',
           createdBy: 'Recepção',
           createdAt: '2026-09-03T18:00:00Z'
         },
@@ -1424,6 +2953,8 @@ class OfflineDatabaseService {
           paymentMethod: 'pix',
           receiptNumber: 'REC-2026-8795',
           status: 'completed',
+          isSettled: true,
+          settledAt: '2026-09-30T23:59:59.000Z',
           createdBy: 'Recepção',
           createdAt: '2026-09-04T18:00:00Z'
         },
@@ -1440,6 +2971,24 @@ class OfflineDatabaseService {
           status: 'completed',
           createdBy: 'Administração',
           createdAt: new Date().toISOString()
+        },
+        {
+          id: `tx_${clinicId}_repasse_quitado_3009`,
+          clinicId,
+          type: 'expense',
+          category: 'salario',
+          description: 'Repasse & Acerto Semanal de Atendimentos: Dr. Rudson Meirelles (Ref: Acerto quitado até 30/09/2026)',
+          amount: 1900.00,
+          amountCents: 190000,
+          currency: 'BRL',
+          date: '2026-09-30',
+          paymentMethod: 'pix',
+          receiptNumber: 'REP-2026-3009',
+          status: 'completed',
+          isSettled: true,
+          settledAt: '2026-09-30T23:59:59.000Z',
+          createdBy: 'Direção Administrativa / Financeiro',
+          createdAt: '2026-09-30T20:00:00.000Z'
         }
       ];
     }
@@ -1549,6 +3098,314 @@ class OfflineDatabaseService {
           room: 'Consultório Visual',
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
+        }
+      ];
+    }
+    return [];
+  }
+
+  // ==========================================================================
+  // MOTOR DE REMUNERAÇÃO DOS EXAMINADORES: PERSISTÊNCIA & REGRAS (OFFLINE-FIRST)
+  // ==========================================================================
+
+  public getExaminerFixedPeriods(clinicId = this.activeClinicId): ExaminerFixedPeriod[] {
+    try {
+      const raw = localStorage.getItem(this.getKey('examiner_fixed_periods', clinicId));
+      if (!raw) {
+        const initial = this.getInitialExaminerFixedPeriods(clinicId);
+        this.saveExaminerFixedPeriods(initial, clinicId);
+        return initial;
+      }
+      return JSON.parse(raw);
+    } catch {
+      return [];
+    }
+  }
+
+  public saveExaminerFixedPeriods(periods: ExaminerFixedPeriod[], clinicId = this.activeClinicId): void {
+    this.safeSetItem(this.getKey('examiner_fixed_periods', clinicId), JSON.stringify(periods));
+    indexedDbStorage.saveAll('examiner_fixed_periods' as any, clinicId, periods).catch(e => console.warn('[IDB] saveFixedPeriods:', e));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('optomed_examiner_periods_updated', { detail: { clinicId } }));
+    }
+    this.broadcastSync('optomed_examiner_periods_updated', { clinicId });
+    remoteSync.push(clinicId, 'examiner_fixed_periods' as any, periods);
+  }
+
+  public saveExaminerFixedPeriod(period: ExaminerFixedPeriod, clinicId = this.activeClinicId): void {
+    const list = this.getExaminerFixedPeriods(clinicId);
+    const idx = list.findIndex(p => p.id === period.id);
+    const now = new Date().toISOString();
+    if (idx >= 0) {
+      list[idx] = { ...period, updatedAt: now };
+    } else {
+      list.push({ ...period, createdAt: period.createdAt || now, updatedAt: now });
+    }
+    this.saveExaminerFixedPeriods(list, clinicId);
+    this.logAudit('CREATE', 'FINANCE' as any, period.id, `Período Fixo ${period.dayOfWeek} (${period.startTime}-${period.endTime}) salvo para ${period.examinerName}`, clinicId);
+    this.enqueueOutboxMutation(clinicId, 'examiner_fixed_periods' as any, idx >= 0 ? 'update' : 'create', period.id, list[idx >= 0 ? idx : list.length - 1]);
+    remoteSync.upsert(clinicId, 'examiner_fixed_periods' as any, list[idx >= 0 ? idx : list.length - 1]).catch(e => console.warn('[Sync] upsert fixed period:', e));
+  }
+
+  public deleteExaminerFixedPeriod(id: string, clinicId = this.activeClinicId): void {
+    const list = this.getExaminerFixedPeriods(clinicId).filter(p => p.id !== id);
+    this.saveExaminerFixedPeriods(list, clinicId);
+    this.logAudit('DELETE', 'FINANCE' as any, id, `Período Fixo removido`, clinicId);
+    this.enqueueOutboxMutation(clinicId, 'examiner_fixed_periods' as any, 'delete', id, { id, _deleted: true });
+    remoteSync.remove(clinicId, 'examiner_fixed_periods' as any, id).catch(e => console.warn('[Sync] remove fixed period:', e));
+  }
+
+  public getExaminerSpecialPeriods(clinicId = this.activeClinicId): ExaminerSpecialPeriod[] {
+    try {
+      const raw = localStorage.getItem(this.getKey('examiner_special_periods', clinicId));
+      if (!raw) {
+        const initial = this.getInitialExaminerSpecialPeriods(clinicId);
+        this.saveExaminerSpecialPeriods(initial, clinicId);
+        return initial;
+      }
+      return JSON.parse(raw);
+    } catch {
+      return [];
+    }
+  }
+
+  public saveExaminerSpecialPeriods(periods: ExaminerSpecialPeriod[], clinicId = this.activeClinicId): void {
+    this.safeSetItem(this.getKey('examiner_special_periods', clinicId), JSON.stringify(periods));
+    indexedDbStorage.saveAll('examiner_special_periods' as any, clinicId, periods).catch(e => console.warn('[IDB] saveSpecialPeriods:', e));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('optomed_examiner_periods_updated', { detail: { clinicId } }));
+    }
+    this.broadcastSync('optomed_examiner_periods_updated', { clinicId });
+    remoteSync.push(clinicId, 'examiner_special_periods' as any, periods);
+  }
+
+  public saveExaminerSpecialPeriod(period: ExaminerSpecialPeriod, clinicId = this.activeClinicId): void {
+    const list = this.getExaminerSpecialPeriods(clinicId);
+    const idx = list.findIndex(p => p.id === period.id);
+    const now = new Date().toISOString();
+    if (idx >= 0) {
+      list[idx] = { ...period, updatedAt: now };
+    } else {
+      list.push({ ...period, createdAt: period.createdAt || now, updatedAt: now });
+    }
+    this.saveExaminerSpecialPeriods(list, clinicId);
+    this.logAudit('CREATE', 'FINANCE' as any, period.id, `Período Extraordinário ${period.date} (${period.startTime}-${period.endTime}) salvo para ${period.examinerName}`, clinicId);
+    this.enqueueOutboxMutation(clinicId, 'examiner_special_periods' as any, idx >= 0 ? 'update' : 'create', period.id, list[idx >= 0 ? idx : list.length - 1]);
+    remoteSync.upsert(clinicId, 'examiner_special_periods' as any, list[idx >= 0 ? idx : list.length - 1]).catch(e => console.warn('[Sync] upsert special period:', e));
+  }
+
+  public deleteExaminerSpecialPeriod(id: string, clinicId = this.activeClinicId): void {
+    const list = this.getExaminerSpecialPeriods(clinicId).filter(p => p.id !== id);
+    this.saveExaminerSpecialPeriods(list, clinicId);
+    this.logAudit('DELETE', 'FINANCE' as any, id, `Período Extraordinário removido`, clinicId);
+    this.enqueueOutboxMutation(clinicId, 'examiner_special_periods' as any, 'delete', id, { id, _deleted: true });
+    remoteSync.remove(clinicId, 'examiner_special_periods' as any, id).catch(e => console.warn('[Sync] remove special period:', e));
+  }
+
+  public getExaminerAvulsoRules(clinicId = this.activeClinicId): ExaminerAvulsoRule[] {
+    try {
+      const raw = localStorage.getItem(this.getKey('examiner_avulso_rules', clinicId));
+      if (!raw) {
+        const initial = this.getInitialExaminerAvulsoRules(clinicId);
+        this.saveExaminerAvulsoRules(initial, clinicId);
+        return initial;
+      }
+      const parsed: ExaminerAvulsoRule[] = JSON.parse(raw);
+      // Migração suave caso a regra inicial anterior do IVS de R$ 100 ainda esteja no cache local
+      if (clinicId === 'ivs') {
+        let changed = false;
+        const updated = parsed.map(r => {
+          if (r.id === 'eav_ivs_meirelles' && r.perAppointmentAmount === 100.00) {
+            changed = true;
+            return {
+              ...r,
+              perAppointmentAmount: 50.00,
+              notes: 'Atendimento Avulso IVS (fora de período fixo/extraordinário): R$ 50,00 por consulta (100% repasse)'
+            };
+          }
+          return r;
+        });
+        if (changed) {
+          this.saveExaminerAvulsoRules(updated, clinicId);
+          return updated;
+        }
+      }
+      return parsed;
+    } catch {
+      return [];
+    }
+  }
+
+  public saveExaminerAvulsoRules(rules: ExaminerAvulsoRule[], clinicId = this.activeClinicId): void {
+    this.safeSetItem(this.getKey('examiner_avulso_rules', clinicId), JSON.stringify(rules));
+    indexedDbStorage.saveAll('examiner_avulso_rules' as any, clinicId, rules).catch(e => console.warn('[IDB] saveAvulsoRules:', e));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('optomed_examiner_periods_updated', { detail: { clinicId } }));
+    }
+    this.broadcastSync('optomed_examiner_periods_updated', { clinicId });
+    remoteSync.push(clinicId, 'examiner_avulso_rules' as any, rules);
+  }
+
+  public saveExaminerAvulsoRule(rule: ExaminerAvulsoRule, clinicId = this.activeClinicId): void {
+    const list = this.getExaminerAvulsoRules(clinicId);
+    const idx = list.findIndex(r => r.id === rule.id);
+    const now = new Date().toISOString();
+    if (idx >= 0) {
+      list[idx] = { ...rule, updatedAt: now };
+    } else {
+      list.push({ ...rule, createdAt: rule.createdAt || now, updatedAt: now });
+    }
+    this.saveExaminerAvulsoRules(list, clinicId);
+    this.logAudit('CREATE', 'FINANCE' as any, rule.id, `Regra Avulsa para ${rule.examinerName}: R$ ${rule.perAppointmentAmount.toFixed(2)}`, clinicId);
+    this.enqueueOutboxMutation(clinicId, 'examiner_avulso_rules' as any, idx >= 0 ? 'update' : 'create', rule.id, list[idx >= 0 ? idx : list.length - 1]);
+    remoteSync.upsert(clinicId, 'examiner_avulso_rules' as any, list[idx >= 0 ? idx : list.length - 1]).catch(e => console.warn('[Sync] upsert avulso rule:', e));
+  }
+
+  public getExaminerRemunerations(clinicId = this.activeClinicId): ExaminerRemunerationRecord[] {
+    try {
+      const raw = localStorage.getItem(this.getKey('examiner_remunerations', clinicId));
+      if (!raw) return [];
+      return JSON.parse(raw);
+    } catch {
+      return [];
+    }
+  }
+
+  public saveExaminerRemunerations(records: ExaminerRemunerationRecord[], clinicId = this.activeClinicId): void {
+    this.safeSetItem(this.getKey('examiner_remunerations', clinicId), JSON.stringify(records));
+    indexedDbStorage.saveAll('examiner_remunerations' as any, clinicId, records).catch(e => console.warn('[IDB] saveRemunerations:', e));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('optomed_examiner_remuneration_updated', { detail: { clinicId } }));
+    }
+    this.broadcastSync('optomed_examiner_remuneration_updated', { clinicId });
+    remoteSync.push(clinicId, 'examiner_remunerations' as any, records);
+  }
+
+  public saveExaminerRemuneration(record: ExaminerRemunerationRecord, clinicId = this.activeClinicId): void {
+    const list = this.getExaminerRemunerations(clinicId);
+    const idx = list.findIndex(r => r.id === record.id);
+    const now = new Date().toISOString();
+    if (idx >= 0) {
+      list[idx] = { ...record, updatedAt: now };
+    } else {
+      list.unshift({ ...record, createdAt: record.createdAt || now, updatedAt: now });
+    }
+    this.saveExaminerRemunerations(list, clinicId);
+    this.enqueueOutboxMutation(clinicId, 'examiner_remunerations' as any, idx >= 0 ? 'update' : 'create', record.id, list[idx >= 0 ? idx : 0]);
+    remoteSync.upsert(clinicId, 'examiner_remunerations' as any, list[idx >= 0 ? idx : 0]).catch(e => console.warn('[Sync] upsert examiner remuneration:', e));
+  }
+
+  public getExaminerClosures(clinicId = this.activeClinicId): ExaminerClosureRecord[] {
+    try {
+      const raw = localStorage.getItem(this.getKey('examiner_closures', clinicId));
+      if (!raw) return [];
+      return JSON.parse(raw);
+    } catch {
+      return [];
+    }
+  }
+
+  public saveExaminerClosures(closures: ExaminerClosureRecord[], clinicId = this.activeClinicId): void {
+    this.safeSetItem(this.getKey('examiner_closures', clinicId), JSON.stringify(closures));
+    indexedDbStorage.saveAll('examiner_closures' as any, clinicId, closures).catch(e => console.warn('[IDB] saveClosures:', e));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('optomed_examiner_closures_updated', { detail: { clinicId } }));
+    }
+    this.broadcastSync('optomed_examiner_closures_updated', { clinicId });
+    remoteSync.push(clinicId, 'examiner_closures' as any, closures);
+  }
+
+  public saveExaminerClosure(closure: ExaminerClosureRecord, clinicId = this.activeClinicId): void {
+    const list = this.getExaminerClosures(clinicId);
+    const idx = list.findIndex(c => c.id === closure.id);
+    if (idx >= 0) {
+      list[idx] = closure;
+    } else {
+      list.unshift(closure);
+    }
+    this.saveExaminerClosures(list, clinicId);
+    this.logAudit('CREATE', 'FINANCE' as any, closure.id, `Fechamento de remuneração de ${closure.startDate} a ${closure.endDate} para ${closure.examinerName}: R$ ${closure.totalGrossAmount.toFixed(2)}`, clinicId);
+    this.enqueueOutboxMutation(clinicId, 'examiner_closures' as any, idx >= 0 ? 'update' : 'create', closure.id, closure);
+    remoteSync.upsert(clinicId, 'examiner_closures' as any, closure).catch(e => console.warn('[Sync] upsert examiner closure:', e));
+  }
+
+  // Sementes iniciais para a clínica IVS (Dr. Rudson Meirelles)
+  private getInitialExaminerFixedPeriods(clinicId: string): ExaminerFixedPeriod[] {
+    if (clinicId === 'ivs') {
+      return [
+        {
+          id: 'efp_ivs_tuesday',
+          clinicId: 'ivs',
+          examinerId: 'user-examinador',
+          examinerName: 'Dr. Rudson Meirelles',
+          dayOfWeek: 2, // Terça-feira
+          startTime: '13:00',
+          endTime: '18:00',
+          validFrom: '2026-10-01',
+          remunerationType: 'fixed_period',
+          fixedAmount: 500.00,
+          active: true,
+          notes: 'Terça-feira (13:00 às 18:00) - Fixo R$ 500,00 por período contratado',
+          createdAt: '2026-10-01T00:00:00.000Z',
+          updatedAt: '2026-10-01T00:00:00.000Z'
+        },
+        {
+          id: 'efp_ivs_wednesday',
+          clinicId: 'ivs',
+          examinerId: 'user-examinador',
+          examinerName: 'Dr. Rudson Meirelles',
+          dayOfWeek: 3, // Quarta-feira
+          startTime: '08:00',
+          endTime: '13:00',
+          validFrom: '2026-10-01',
+          remunerationType: 'fixed_period',
+          fixedAmount: 500.00,
+          active: true,
+          notes: 'Quarta-feira (08:00 às 13:00) - Fixo R$ 500,00 por período contratado',
+          createdAt: '2026-10-01T00:00:00.000Z',
+          updatedAt: '2026-10-01T00:00:00.000Z'
+        }
+      ];
+    }
+    return [];
+  }
+
+  private getInitialExaminerSpecialPeriods(clinicId: string): ExaminerSpecialPeriod[] {
+    if (clinicId === 'ivs') {
+      return [
+        {
+          id: 'esp_ivs_mutirao_1010',
+          clinicId: 'ivs',
+          examinerId: 'user-examinador',
+          examinerName: 'Dr. Rudson Meirelles',
+          date: '2026-10-10',
+          startTime: '08:00',
+          endTime: '12:00',
+          remunerationType: 'fixed_period',
+          fixedAmount: 350.00,
+          status: 'active',
+          notes: 'Mutirão Especial de Sábado - R$ 350,00',
+          createdAt: '2026-10-01T00:00:00.000Z',
+          updatedAt: '2026-10-01T00:00:00.000Z'
+        }
+      ];
+    }
+    return [];
+  }
+
+  private getInitialExaminerAvulsoRules(clinicId: string): ExaminerAvulsoRule[] {
+    if (clinicId === 'ivs') {
+      return [
+        {
+          id: 'eav_ivs_meirelles',
+          clinicId: 'ivs',
+          examinerId: 'user-examinador',
+          examinerName: 'Dr. Rudson Meirelles',
+          perAppointmentAmount: 50.00,
+          active: true,
+          notes: 'Atendimento Avulso IVS (fora de período fixo/extraordinário): R$ 50,00 por consulta (100% repasse)',
+          createdAt: '2026-10-01T00:00:00.000Z',
+          updatedAt: '2026-10-01T00:00:00.000Z'
         }
       ];
     }

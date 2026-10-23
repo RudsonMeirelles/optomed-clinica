@@ -1,0 +1,814 @@
+[
+  {
+    "id": "08f076f0-4990-4361-84e7-40bd5d952ab0",
+    "patientId": "4e88c27c-dbd0-4042-8d1c-9212c4d2e290",
+    "date": "2026-09-09T13:39:03.358Z",
+    "status": "in_progress",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "anamnesis": {
+      "id": "anam-val-1",
+      "encounterId": "08f076f0-4990-4361-84e7-40bd5d952ab0",
+      "chiefComplaint": "Triagem visual escolar - aproximação excessiva da televisão e dificuldade para leitura",
+      "ocularHistory": "Sem histórico de uso de óculos prévios",
+      "currentGlasses": false,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false
+    },
+    "subjectiveRefraction": {
+      "id": "sr-val-1",
+      "encounterId": "08f076f0-4990-4361-84e7-40bd5d952ab0",
+      "od": {
+        "sphere": 3,
+        "cylinder": 0,
+        "axis": 180,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 2.25,
+        "cylinder": -0.5,
+        "axis": 175,
+        "visualAcuity": "20/20"
+      },
+      "pdDistanceMm": 62,
+      "pdNear": 59
+    },
+    "conduct": "Prescrição óptica de lentes monofocais com filtro de luz azul (Blue Cut / UV400)",
+    "returnInWeeks": 52,
+    "updatedAt": "2026-09-18T17:50:04.979Z"
+  },
+  {
+    "id": "d6ce046b-5702-4464-8da8-538ebf40afac",
+    "patientId": "dcbde17f-cf07-4ff6-8460-cc7a16573aa2",
+    "date": "2026-09-09T13:12:08.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "anamnesis": {
+      "id": "anam-mj-1",
+      "encounterId": "d6ce046b-5702-4464-8da8-538ebf40afac",
+      "chiefComplaint": "Visão embaçada para perto e cansaço visual após leitura/costura",
+      "currentGlasses": true,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false
+    },
+    "subjectiveRefraction": {
+      "id": "sr-mj-1",
+      "encounterId": "d6ce046b-5702-4464-8da8-538ebf40afac",
+      "od": {
+        "sphere": 0.75,
+        "cylinder": 0,
+        "axis": 90,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0.5,
+        "cylinder": 0,
+        "axis": 90,
+        "visualAcuity": "20/20"
+      },
+      "addition": 2.25,
+      "pdDistanceMm": 62
+    },
+    "conduct": "Prescrição de lentes bifocais / multifocais com tratamento fotossensível",
+    "returnInWeeks": 52
+  },
+  {
+    "id": "b415f5b6-0696-4006-a117-b00ce9c13ed0",
+    "patientId": "4b5acbb1-e930-4ae0-8d63-aea1582ffb07",
+    "date": "2026-09-08T17:58:17.069Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "anamnesis": {
+      "id": "anam-kc-1",
+      "encounterId": "b415f5b6-0696-4006-a117-b00ce9c13ed0",
+      "chiefComplaint": "Há 01 ano com mesmo RX. Usuária de lamotrigina e puran 25mg. Relata queda e cefaleias episódicas. Acompanhamento com neurologista.",
+      "currentGlasses": true,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false,
+      "medicationsInUse": "Lamotrigina, Puran T4 25mg"
+    },
+    "subjectiveRefraction": {
+      "id": "sr-kc-1",
+      "encounterId": "b415f5b6-0696-4006-a117-b00ce9c13ed0",
+      "od": {
+        "sphere": -2.5,
+        "cylinder": -0.75,
+        "axis": 10,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": -2.25,
+        "cylinder": -0.5,
+        "axis": 170,
+        "visualAcuity": "20/20"
+      },
+      "addition": 1,
+      "pdDistanceMm": 60
+    },
+    "conduct": "Prescrição progressiva com filtro azul Blue Cut. Orientações posturais e controle neurológico.",
+    "returnInWeeks": 52
+  },
+  {
+    "id": "60ab1541-17dc-49e4-9a80-ec52a9c06b94",
+    "patientId": "104b0e68-60aa-454a-aed6-73d49eca088e",
+    "date": "2026-09-08T18:40:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "anamnesis": {
+      "id": "anam-vc-1",
+      "encounterId": "60ab1541-17dc-49e4-9a80-ec52a9c06b94",
+      "chiefComplaint": "Dificuldade para enxergar o quadro na escola (visão turva para longe)",
+      "currentGlasses": false,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false
+    },
+    "subjectiveRefraction": {
+      "id": "sr-vc-1",
+      "encounterId": "60ab1541-17dc-49e4-9a80-ec52a9c06b94",
+      "od": {
+        "sphere": -1.25,
+        "cylinder": -0.5,
+        "axis": 180,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": -1.5,
+        "cylinder": -0.25,
+        "axis": 175,
+        "visualAcuity": "20/20"
+      },
+      "pdDistanceMm": 58
+    },
+    "conduct": "Prescrição óptica para miopia e astigmatismo leve. Filtro antirreflexo.",
+    "returnInWeeks": 52
+  },
+  {
+    "id": "02981472-b51c-4a98-af43-de22df156bb1",
+    "patientId": "223c8cf2-32ba-42bf-8d46-5b6861c77aa2",
+    "date": "2026-09-08T21:20:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "anamnesis": {
+      "id": "anam-jf-1",
+      "encounterId": "02981472-b51c-4a98-af43-de22df156bb1",
+      "chiefComplaint": "Cansaço visual no trabalho e necessidade de atualização de grau",
+      "currentGlasses": true,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false
+    },
+    "subjectiveRefraction": {
+      "id": "sr-jf-1",
+      "encounterId": "02981472-b51c-4a98-af43-de22df156bb1",
+      "od": {
+        "sphere": 0.5,
+        "cylinder": -0.75,
+        "axis": 90,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0.25,
+        "cylinder": -0.5,
+        "axis": 85,
+        "visualAcuity": "20/20"
+      },
+      "addition": 1.75,
+      "pdDistanceMm": 63
+    },
+    "conduct": "Prescrição multifocal digital para perto e longe.",
+    "returnInWeeks": 52
+  },
+  {
+    "id": "enc-lnl-1",
+    "patientId": "3c7f7025-3194-44eb-a96d-6b1cb7d25315",
+    "date": "2026-09-08T18:25:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "anamnesis": {
+      "id": "anam-lnl-1",
+      "encounterId": "enc-lnl-1",
+      "chiefComplaint": "Dificuldade visual progressiva para leitura de perto",
+      "currentGlasses": true,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false
+    },
+    "subjectiveRefraction": {
+      "id": "sr-lnl-1",
+      "encounterId": "enc-lnl-1",
+      "od": {
+        "sphere": 1,
+        "cylinder": -0.25,
+        "axis": 180,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 1.25,
+        "cylinder": -0.5,
+        "axis": 170,
+        "visualAcuity": "20/20"
+      },
+      "addition": 2,
+      "pdDistanceMm": 61
+    },
+    "conduct": "Prescrição multifocal com antirreflexo para conforto de leitura.",
+    "returnInWeeks": 52
+  },
+  {
+    "id": "enc-jlv-1",
+    "patientId": "b788e9cd-8a70-4413-a643-74abead2ed50",
+    "date": "2026-09-05T08:15:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "anamnesis": {
+      "id": "anam-jlv-1",
+      "encounterId": "enc-jlv-1",
+      "chiefComplaint": "Visão borrada para longe ao dirigir à noite",
+      "currentGlasses": false,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false
+    },
+    "subjectiveRefraction": {
+      "id": "sr-jlv-1",
+      "encounterId": "enc-jlv-1",
+      "od": {
+        "sphere": -0.75,
+        "cylinder": -0.5,
+        "axis": 15,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": -0.75,
+        "cylinder": -0.25,
+        "axis": 165,
+        "visualAcuity": "20/20"
+      },
+      "pdDistanceMm": 64
+    },
+    "conduct": "Prescrição monofocal com antirreflexo especial para direção noturna.",
+    "returnInWeeks": 52
+  },
+  {
+    "id": "enc-zsf-1",
+    "patientId": "290c7900-33b0-4f82-b3b1-6bee5b58c8a0",
+    "date": "2026-09-05T09:10:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "anamnesis": {
+      "id": "anam-zsf-1",
+      "encounterId": "enc-zsf-1",
+      "chiefComplaint": "Dificuldade para ler no celular e no computador, dor de cabeça no fim da tarde",
+      "currentGlasses": true,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false
+    },
+    "subjectiveRefraction": {
+      "id": "sr-zsf-1",
+      "encounterId": "enc-zsf-1",
+      "od": {
+        "sphere": 0.5,
+        "cylinder": -0.5,
+        "axis": 90,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0.75,
+        "cylinder": -0.25,
+        "axis": 80,
+        "visualAcuity": "20/20"
+      },
+      "addition": 1.75,
+      "pdDistanceMm": 62
+    },
+    "conduct": "Prescrição de multifocal com filtro de luz azul para trabalho no computador.",
+    "returnInWeeks": 52
+  },
+  {
+    "id": "enc-lma-1",
+    "patientId": "d0a4662c-f285-47ce-b784-850d14a5b2e0",
+    "date": "2026-09-05T09:40:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "anamnesis": {
+      "id": "anam-lma-1",
+      "encounterId": "enc-lma-1",
+      "chiefComplaint": "Visão sombreada das letras e cansaço ao focar no trabalho",
+      "currentGlasses": true,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false
+    },
+    "subjectiveRefraction": {
+      "id": "sr-lma-1",
+      "encounterId": "enc-lma-1",
+      "od": {
+        "sphere": -1,
+        "cylinder": -1.25,
+        "axis": 175,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": -0.75,
+        "cylinder": -1.5,
+        "axis": 5,
+        "visualAcuity": "20/20"
+      },
+      "pdDistanceMm": 60
+    },
+    "conduct": "Prescrição monofocal asférica de alta precisão com antirreflexo.",
+    "returnInWeeks": 52
+  },
+  {
+    "id": "enc-gmb-1",
+    "patientId": "08d90c8b-fcdb-460e-b6d4-99b740042dd0",
+    "date": "2026-09-05T10:30:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "anamnesis": {
+      "id": "anam-gmb-1",
+      "encounterId": "enc-gmb-1",
+      "chiefComplaint": "Dificuldade visual para longe e necessidade de novos óculos",
+      "currentGlasses": true,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false
+    },
+    "subjectiveRefraction": {
+      "id": "sr-gmb-1",
+      "encounterId": "enc-gmb-1",
+      "od": {
+        "sphere": -2,
+        "cylinder": -0.5,
+        "axis": 180,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": -2.25,
+        "cylinder": -0.25,
+        "axis": 170,
+        "visualAcuity": "20/20"
+      },
+      "pdDistanceMm": 63
+    },
+    "conduct": "Prescrição óptica para miopia com filtro Blue UV.",
+    "returnInWeeks": 52
+  },
+  {
+    "id": "enc-zm-1",
+    "patientId": "caf37cb8-0da4-45a5-be3e-68afbc55d900",
+    "date": "2026-09-05T10:25:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "anamnesis": {
+      "id": "anam-zm-1",
+      "encounterId": "enc-zm-1",
+      "chiefComplaint": "Visão cansada para leitura de jornais e textos pequenos",
+      "currentGlasses": true,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false
+    },
+    "subjectiveRefraction": {
+      "id": "sr-zm-1",
+      "encounterId": "enc-zm-1",
+      "od": {
+        "sphere": 1.5,
+        "cylinder": 0,
+        "axis": 90,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 1.5,
+        "cylinder": 0,
+        "axis": 90,
+        "visualAcuity": "20/20"
+      },
+      "addition": 2.5,
+      "pdDistanceMm": 61
+    },
+    "conduct": "Prescrição multifocal para perto e meia distância com antirreflexo.",
+    "returnInWeeks": 52
+  },
+  {
+    "id": "enc-rrb-1",
+    "patientId": "ebeceff-1ea4-4de8-829e-a20c3c760090",
+    "date": "2026-09-05T11:45:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "anamnesis": {
+      "id": "anam-rrb-1",
+      "encounterId": "enc-rrb-1",
+      "chiefComplaint": "Dificuldade para focar de perto e cefaleia ao fim do dia",
+      "currentGlasses": true,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false
+    },
+    "subjectiveRefraction": {
+      "id": "sr-rrb-1",
+      "encounterId": "enc-rrb-1",
+      "od": {
+        "sphere": 0.75,
+        "cylinder": -0.5,
+        "axis": 180,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0.75,
+        "cylinder": -0.25,
+        "axis": 170,
+        "visualAcuity": "20/20"
+      },
+      "addition": 1.75,
+      "pdDistanceMm": 62
+    },
+    "conduct": "Prescrição multifocal digital.",
+    "returnInWeeks": 52
+  },
+  {
+    "id": "enc-kc2-1",
+    "patientId": "a9347272-0529-4b2d-9633-6c6f396e8a40",
+    "date": "2026-09-05T17:25:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "anamnesis": {
+      "id": "anam-kc2-1",
+      "encounterId": "enc-kc2-1",
+      "chiefComplaint": "Visão embaçada para longe e sensibilidade à luz",
+      "currentGlasses": true,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false
+    },
+    "subjectiveRefraction": {
+      "id": "sr-kc2-1",
+      "encounterId": "enc-kc2-1",
+      "od": {
+        "sphere": -1.75,
+        "cylinder": -0.5,
+        "axis": 15,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": -1.5,
+        "cylinder": -0.75,
+        "axis": 165,
+        "visualAcuity": "20/20"
+      },
+      "pdDistanceMm": 61
+    },
+    "conduct": "Prescrição monofocal com proteção antirreflexo e filtro fotossensível.",
+    "returnInWeeks": 52
+  },
+  {
+    "id": "ae40c571-aa20-4809-b0b9-d995d37f5d75",
+    "patientId": "a84131bd-ba44-47ca-8d71-bff029c6be22",
+    "date": "2026-09-18T20:25:01.507Z",
+    "status": "completed",
+    "examinerId": "dr-meirelles",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "updatedAt": "2026-09-18T20:47:37.280Z",
+    "anamnesis": {
+      "id": "3786d295-dfab-444b-8d19-a5dc8bc00888",
+      "encounterId": "",
+      "chiefComplaint": "",
+      "currentGlasses": false,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false,
+      "medicationsInUse": "Levotiroxina Sódica 25mg. ",
+      "pathologicalHistory": "",
+      "allergies": "",
+      "ocularHistory": "",
+      "clinicalNotes": "usuaria de lentes corretivas,  alergica a penicilina,, Cefaleia frequente"
+    },
+    "lensometry": {
+      "id": "e0f8002c-b653-4627-81b6-409c92dc1296",
+      "encounterId": "",
+      "od": {
+        "sphere": -6.5,
+        "cylinder": -1.5,
+        "axis": 125
+      },
+      "oe": {
+        "sphere": -2.5,
+        "cylinder": -1.25,
+        "axis": 5
+      },
+      "lensType": "monofocal_longe",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo",
+        "Filtro Luz Azul (BlueCut)",
+        "Fotossensível (Transitions)"
+      ],
+      "usageTime": "1 a 2 anos",
+      "notes": "Lentes muito riscadas, Perda de foco / visão cansada"
+    },
+    "visualAcuity": {
+      "id": "f3dec4c4-68f9-423a-b150-66bdff43e8fe",
+      "encounterId": "",
+      "testedAt": "2026-09-18T20:25:01.507Z",
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "id": "54c8d002-f156-4de7-8010-a9f848e438a4",
+      "encounterId": "",
+      "od": {
+        "sphere": -3,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/60"
+      },
+      "oe": {
+        "sphere": -3,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/60"
+      },
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo Digital",
+        "Filtro Luz Azul (BlueCut)"
+      ],
+      "specialLenses": "",
+      "additionalOpticalInfo": "paciente sob acompanhamento periodico, buscando melhora na AV, "
+    },
+    "returnInstructions": "Retorno em 6 meses (Acompanhamento)"
+  },
+  {
+    "id": "d5e5ae8c-c78e-4854-a1ab-2da26b708c96",
+    "patientId": "33f6f16d-add7-4e59-8522-8a5f9b345bfd",
+    "date": "2026-09-18T18:48:58.316Z",
+    "status": "completed",
+    "examinerId": "dr-meirelles",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "updatedAt": "2026-09-18T19:25:18.526Z",
+    "anamnesis": {
+      "id": "7075c1ff-6104-4994-9e03-2288bc7c99f3",
+      "encounterId": "",
+      "chiefComplaint": "rotina",
+      "currentGlasses": true,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false,
+      "medicationsInUse": "",
+      "pathologicalHistory": "",
+      "allergies": "",
+      "ocularHistory": "",
+      "clinicalNotes": "hipertensão gestacional a 21 anos, "
+    },
+    "lensometry": {
+      "id": "d964a01f-754f-413d-bb19-018ade97aa21",
+      "encounterId": "",
+      "od": {
+        "sphere": 2.75,
+        "cylinder": -0.5,
+        "axis": 95
+      },
+      "oe": {
+        "sphere": 3,
+        "cylinder": -1,
+        "axis": 90
+      },
+      "addition": 1.5,
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo",
+        "Fotossensível (Transitions)",
+        "Filtro Luz Azul (BlueCut)"
+      ],
+      "usageTime": "2 anos",
+      "notes": "Lentes muito riscadas, Desconforto para leitura, Antirreflexo descascando"
+    },
+    "visualAcuity": {
+      "id": "073a16aa-2042-475b-b80c-76c0e6d91dba",
+      "encounterId": "",
+      "testedAt": "2026-09-18T18:48:58.316Z",
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "id": "cbd2cd5e-d437-4636-b5b1-08b035919621",
+      "encounterId": "",
+      "od": {
+        "sphere": 3,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 3,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 1.75,
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo Digital",
+        "Filtro Luz Azul (BlueCut)",
+        "Fotossensível (Transitions)"
+      ],
+      "specialLenses": "",
+      "additionalOpticalInfo": ""
+    }
+  },
+  {
+    "id": "c5f5dbc7-bdd0-47c4-a3b0-b3da7cb7eb18",
+    "patientId": "39e695b2-0a56-4f83-b63a-bcbddaf85392",
+    "date": "2026-09-18T18:37:16.141Z",
+    "status": "completed",
+    "examinerId": "dr-meirelles",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "updatedAt": "2026-09-18T18:46:58.131Z",
+    "anamnesis": {
+      "id": "1b05604e-9582-4bd8-85c9-71216f76e7f9",
+      "encounterId": "",
+      "chiefComplaint": "",
+      "currentGlasses": true,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false,
+      "medicationsInUse": "Nega uso de medicamentos",
+      "pathologicalHistory": "Nega antecedentes patológicos",
+      "allergies": "",
+      "ocularHistory": "",
+      "clinicalNotes": "usuaria de lentes corretivas,, Cefaleia frequente, Sensibilidade à luz / Fotofobia, Fadiga visual em telas, Lacrimejamento excessivo"
+    },
+    "lensometry": {
+      "id": "cab4db4f-5cad-40ba-9cef-139539483c10",
+      "encounterId": "",
+      "od": {
+        "sphere": 0.5,
+        "cylinder": -0.25,
+        "axis": 175
+      },
+      "oe": {
+        "sphere": 0.5,
+        "cylinder": -0.5,
+        "axis": 5
+      },
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ],
+      "usageTime": "3 a 5 anos"
+    },
+    "visualAcuity": {
+      "id": "84872403-1c83-4a27-bb71-7f3ba16c36fa",
+      "encounterId": "",
+      "testedAt": "2026-09-18T18:37:16.141Z",
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "id": "219e04c1-4ac9-48e0-b850-6558b46bc71c",
+      "encounterId": "",
+      "od": {
+        "sphere": 0,
+        "cylinder": -0.75,
+        "axis": 180,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": -0.75,
+        "axis": 180,
+        "visualAcuity": "20/20"
+      },
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo Digital",
+        "Filtro Luz Azul (BlueCut)"
+      ],
+      "specialLenses": "",
+      "additionalOpticalInfo": ""
+    }
+  },
+  {
+    "id": "a86750af-1a63-4e1b-a9b8-6d7c1f7ad1d5",
+    "patientId": "f3f7d16e-95f6-4d8f-8947-0ee9241c10e1",
+    "date": "2026-09-18T13:24:53.136Z",
+    "status": "completed",
+    "examinerId": "dr-meirelles",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "anamnesis": {
+      "id": "anam-scs-1",
+      "chiefComplaint": "Avaliação refrativa e renovação de óculos",
+      "currentGlasses": true,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "id": "sr-scs-1",
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      }
+    },
+    "conduct": "Exame de refração concluído com sucesso. Orientação postural e controle visual.",
+    "returnInstructions": "Retorno em 1 ano para controle visual de rotina."
+  },
+  {
+    "id": "511baaec-43cb-49d5-b09f-ce03da9ddab0",
+    "patientId": "eb01d056-630d-452f-b6f4-50bb6e0c5ea7",
+    "date": "2026-09-18T12:27:29.919Z",
+    "status": "completed",
+    "examinerId": "dr-meirelles",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "anamnesis": {
+      "id": "anam-md-1",
+      "chiefComplaint": "Avaliação visual e refração de rotina",
+      "currentGlasses": true,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "id": "sr-md-1",
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      }
+    },
+    "conduct": "Exame de refração realizado e finalizado. Orientado quanto ao uso correto das lentes.",
+    "returnInstructions": "Retorno em 1 ano para controle visual de rotina."
+  }
+]

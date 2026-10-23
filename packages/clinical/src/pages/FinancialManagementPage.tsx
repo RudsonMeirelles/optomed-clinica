@@ -30,11 +30,16 @@ import {
   Layers,
   EyeOff,
   Archive,
-  RotateCcw
+  RotateCcw,
+  AlertTriangle,
+  Filter,
+  CalendarCheck,
+  X
 } from 'lucide-react';
 import { 
   FinancialTransaction, 
   POSItem, 
+  CashRegisterSession,
   CashRegisterSummary, 
   TransactionType, 
   TransactionCategory, 
@@ -42,29 +47,79 @@ import {
   UserAccount,
   ClinicConfig,
   ProfessionalContractType,
-  ProfessionalSettlementReport
+  ProfessionalWorkSession,
+  ProfessionalSettlementReport,
+  ExaminerFixedPeriod,
+  ExaminerSpecialPeriod,
+  ExaminerAvulsoRule,
+  ExaminerRemunerationRecord,
+  ExaminerClosureRecord,
+  RemunerationStatus,
+  formatCurrencyValue
 } from '@optotipo/shared';
 import { offlineDb, generateUUID } from '../services/offlineDb';
+import { examinerRemunerationService } from '../services/examinerRemunerationService';
 import { licensingService } from '../services/licensingService';
+import { printIsolatedElement } from '../services/printService';
 
 interface FinancialManagementPageProps {
   currentUser: UserAccount;
   activeClinic: ClinicConfig;
+  clinicId?: string;
   onUpgradePlan?: () => void;
 }
 
 export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = ({
   currentUser,
   activeClinic,
+  clinicId,
   onUpgradePlan
 }) => {
-  const hasModuleAccess = licensingService.hasManagementModuleEnabled(activeClinic.id);
-  const [activeTab, setActiveTab] = useState<'cash_flow' | 'pos' | 'weekly_settlement'>('cash_flow');
+  const effectiveClinicId = clinicId || (currentUser.clinicId !== 'all' ? currentUser.clinicId : activeClinic.id);
+  const hasModuleAccess = licensingService.hasManagementModuleEnabled(effectiveClinicId);
+  const [activeTab, setActiveTab] = useState<'cash_flow' | 'pos' | 'weekly_settlement' | 'examiner_remuneration' | 'examiner_periods'>('cash_flow');
   const [transactions, setTransactions] = useState<FinancialTransaction[]>([]);
   const [posItems, setPosItems] = useState<POSItem[]>([]);
-  const [summary, setSummary] = useState<CashRegisterSummary>(offlineDb.getCashRegisterSummary());
-  const [settlementReport, setSettlementReport] = useState<ProfessionalSettlementReport>(offlineDb.getProfessionalSettlementReport());
+  const [summary, setSummary] = useState<CashRegisterSummary>(offlineDb.getCashRegisterSummary(undefined, effectiveClinicId));
+  const [settlementReport, setSettlementReport] = useState<ProfessionalSettlementReport>(offlineDb.getProfessionalSettlementReport('Dr. Rudson Meirelles', effectiveClinicId));
   const [searchTerm, setSearchTerm] = useState<string>('');
+
+  // Estados do Motor de Remuneração dos Examinadores
+  const [remunerationRecords, setRemunerationRecords] = useState<ExaminerRemunerationRecord[]>([]);
+  const [examinerClosures, setExaminerClosures] = useState<ExaminerClosureRecord[]>([]);
+  const [fixedPeriods, setFixedPeriods] = useState<ExaminerFixedPeriod[]>([]);
+  const [specialPeriods, setSpecialPeriods] = useState<ExaminerSpecialPeriod[]>([]);
+  const [avulsoRules, setAvulsoRules] = useState<ExaminerAvulsoRule[]>([]);
+  
+  // Filtros da Remuneração
+  const [filterExaminer, setFilterExaminer] = useState<string>('all');
+  const [filterPeriodKind, setFilterPeriodKind] = useState<string>('all');
+  const [filterRemStatus, setFilterRemStatus] = useState<string>('all');
+  const [filterDateStart, setFilterDateStart] = useState<string>('2026-10-01');
+  const [filterDateEnd, setFilterDateEnd] = useState<string>('2026-10-31');
+
+  // Modais de Remuneração & Períodos
+  const [selectedRemRecord, setSelectedRemRecord] = useState<ExaminerRemunerationRecord | null>(null);
+  const [showAdjustModal, setShowAdjustModal] = useState<boolean>(false);
+  const [adjustAmountInput, setAdjustAmountInput] = useState<string>('');
+  const [adjustReasonInput, setAdjustReasonInput] = useState<string>('');
+  const [showFixedPeriodModal, setShowFixedPeriodModal] = useState<boolean>(false);
+  const [showSpecialPeriodModal, setShowSpecialPeriodModal] = useState<boolean>(false);
+  const [remunerationFeedback, setRemunerationFeedback] = useState<string | null>(null);
+
+  // Formulário Novo Período Fixo
+  const [fixedDayOfWeek, setFixedDayOfWeek] = useState<number>(2);
+  const [fixedStartTime, setFixedStartTime] = useState<string>('13:00');
+  const [fixedEndTime, setFixedEndTime] = useState<string>('17:30');
+  const [fixedAmount, setFixedAmount] = useState<string>('500.00');
+  const [fixedNotes, setFixedNotes] = useState<string>('Turno Recorrente Meia Diária (5h)');
+
+  // Formulário Novo Período Extraordinário
+  const [specialDate, setSpecialDate] = useState<string>('2026-10-10');
+  const [specialStartTime, setSpecialStartTime] = useState<string>('08:00');
+  const [specialEndTime, setSpecialEndTime] = useState<string>('12:00');
+  const [specialAmount, setSpecialAmount] = useState<string>('350.00');
+  const [specialNotes, setSpecialNotes] = useState<string>('Mutirão Especial de Sábado');
   
   // Modo de visualização do extrato: 'daily' (Dia Atual) ou 'monthly' (Extrato Mensal Completo)
   const [statementMode, setStatementMode] = useState<'daily' | 'monthly'>('daily');
@@ -75,59 +130,136 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
   const [showSettled, setShowSettled] = useState<boolean>(false);
 
   // Modalidade de Contrato Atual Selecionada para o Examinador
-  const [contractType, setContractType] = useState<ProfessionalContractType>('period_half_day');
+  const todayStr = new Date().toISOString().split('T')[0];
+  const initialWorkSession = offlineDb.getWorkSessionForDate(todayStr, 'Dr. Rudson Meirelles', effectiveClinicId);
+  const [contractType, setContractType] = useState<ProfessionalContractType>(initialWorkSession.contractType);
   
   // Modais
   const [showTransactionModal, setShowTransactionModal] = useState<boolean>(false);
   const [showPOSItemModal, setShowPOSItemModal] = useState<boolean>(false);
+  const [showOpenRegisterModal, setShowOpenRegisterModal] = useState<boolean>(false);
+  const [showCloseRegisterModal, setShowCloseRegisterModal] = useState<boolean>(false);
+  const [openBalanceInput, setOpenBalanceInput] = useState<string>('0.00');
+  const [openNotesInput, setOpenNotesInput] = useState<string>('');
+  const [declaredBalanceInput, setDeclaredBalanceInput] = useState<string>('0.00');
+  const [closeNotesInput, setCloseNotesInput] = useState<string>('');
   const [receiptTx, setReceiptTx] = useState<FinancialTransaction | null>(null);
   const [showSettlementPrintModal, setShowSettlementPrintModal] = useState<boolean>(false);
+  const [txToDelete, setTxToDelete] = useState<FinancialTransaction | null>(null);
 
   // Parâmetros de Repasse Semanal ao Examinador (IVS)
   const [examinerRepasseSuccess, setExaminerRepasseSuccess] = useState<string | null>(null);
+
 
   // Formulário Nova Transação
   const [txType, setTxType] = useState<TransactionType>('income');
   const [txCategory, setTxCategory] = useState<TransactionCategory>('consulta');
   const [txDescription, setTxDescription] = useState<string>('');
-  const [txAmount, setTxAmount] = useState<string>(() => activeClinic.id === 'ivs' ? '50.00' : '150.00');
+  const [txAmount, setTxAmount] = useState<string>(() => effectiveClinicId === 'ivs' ? '50.00' : '150.00');
+  const [txDiscount, setTxDiscount] = useState<string>('0.00');
   const [txPaymentMethod, setTxPaymentMethod] = useState<PaymentMethod>('pix');
   const [txPatientName, setTxPatientName] = useState<string>('');
 
   // Formulário Novo Item PDV
   const [posName, setPosName] = useState<string>('');
   const [posCategory, setPosCategory] = useState<'consulta' | 'exame' | 'produto' | 'servico'>('consulta');
-  const [posPrice, setPosPrice] = useState<string>(() => activeClinic.id === 'ivs' ? '50.00' : '150.00');
+  const [posPrice, setPosPrice] = useState<string>(() => effectiveClinicId === 'ivs' ? '50.00' : '150.00');
 
-  const loadData = () => {
-    setTransactions(offlineDb.getTransactions());
-    setPosItems(offlineDb.getPOSItems());
-    setSummary(offlineDb.getCashRegisterSummary());
-    setSettlementReport(offlineDb.getProfessionalSettlementReport());
+  const loadData = (shouldSettleOld = false) => {
+    if (shouldSettleOld) {
+      offlineDb.settleAllTransactionsUntilDate('2026-10-08', effectiveClinicId);
+
+      // Limpeza de contingência: garante que qualquer despesa de repasse acumulado prévio do examinador
+      // pertença ao período encerrado em 2026-10-08 e não conte como saída operacional de hoje (2026-10-09)
+      const curTxs = offlineDb.getTransactions(effectiveClinicId);
+      let changed = false;
+      const sanitized = curTxs.map(t => {
+        if (t.type === 'expense' && t.date === '2026-10-09' && (t.category === 'salario' || (t.description && t.description.toLowerCase().includes('repasse')))) {
+          changed = true;
+          return {
+            ...t,
+            date: '2026-10-08',
+            isSettled: true,
+            settledAt: '2026-10-08T18:00:00.000Z'
+          };
+        }
+        return t;
+      });
+
+      if (changed) {
+        offlineDb.saveTransactions(sanitized, effectiveClinicId);
+      }
+    }
+
+    setTransactions(offlineDb.getTransactions(effectiveClinicId));
+    setPosItems(offlineDb.getPOSItems(effectiveClinicId));
+    setSummary(offlineDb.getCashRegisterSummary(undefined, effectiveClinicId));
+    setSettlementReport(offlineDb.getProfessionalSettlementReport('Dr. Rudson Meirelles', effectiveClinicId));
+    
+    // Dados do motor de remuneração
+    setRemunerationRecords(offlineDb.getExaminerRemunerations(effectiveClinicId));
+    setExaminerClosures(offlineDb.getExaminerClosures(effectiveClinicId));
+    setFixedPeriods(offlineDb.getExaminerFixedPeriods(effectiveClinicId));
+    setSpecialPeriods(offlineDb.getExaminerSpecialPeriods(effectiveClinicId));
+    setAvulsoRules(offlineDb.getExaminerAvulsoRules(effectiveClinicId));
+
+    // Atualiza modalidade do examinador para a data atual
+    const currentSession = offlineDb.getWorkSessionForDate(todayStr, 'Dr. Rudson Meirelles', effectiveClinicId);
+    setContractType(currentSession.contractType);
+  };
+
+  const handleSelectContractType = (type: ProfessionalContractType) => {
+    setContractType(type);
+    let baseAmount = 50.00;
+    let desc = 'Cobrança por Atendimento Realizado - R$ 50,00';
+    if (type === 'period_half_day') {
+      baseAmount = 500.00;
+      desc = 'Atendimento por Período de 5h (Meia Diária) - R$ 500,00';
+    } else if (type === 'period_full_day') {
+      baseAmount = 1000.00;
+      desc = 'Diária Completa de Atendimento - R$ 1.000,00';
+    }
+
+    const session: ProfessionalWorkSession = {
+      id: `sess_${effectiveClinicId}_${todayStr.replace(/-/g, '')}`,
+      clinicId: effectiveClinicId,
+      examinerId: 'user-examinador',
+      examinerName: 'Dr. Rudson Meirelles',
+      date: todayStr,
+      contractType: type,
+      baseAmount,
+      notes: desc,
+      status: 'active',
+      createdAt: new Date().toISOString()
+    };
+    offlineDb.saveWorkSession(session, effectiveClinicId);
+    loadData(false);
   };
 
   useEffect(() => {
-    loadData();
+    // Na inicialização, executa baixa de setembro e carrega dados
+    loadData(true);
 
-    // 1. Escuta eventos locais de lançamentos em tempo real (ex: consulta concluída)
-    const handleFinanceEvent = () => {
-      loadData();
+    // 1. Escuta eventos em tempo real quando ocorrem novos lançamentos
+    const handleFinanceEvent = (ev?: any) => {
+      if (ev?.detail?.clinicId && ev.detail.clinicId !== effectiveClinicId) return;
+      loadData(false);
     };
 
     window.addEventListener('optomed_finance_updated', handleFinanceEvent);
     window.addEventListener('storage', handleFinanceEvent);
 
-    // 2. Polling leve e contínuo a cada 3 segundos para sincronia instantânea entre abas
+    // 2. Polling suave de fallback (8 segundos) evitando sobrecarga no loop de eventos
     const interval = setInterval(() => {
-      loadData();
-    }, 3000);
+      loadData(false);
+    }, 8000);
 
     return () => {
       window.removeEventListener('optomed_finance_updated', handleFinanceEvent);
       window.removeEventListener('storage', handleFinanceEvent);
       clearInterval(interval);
     };
-  }, [activeClinic.id]);
+  }, [effectiveClinicId]);
 
   // Se a clínica não contratou o módulo de gestão financeira (Plano Básico de R$ 59,90)
   if (!hasModuleAccess && currentUser.role !== 'superadmin') {
@@ -175,23 +307,69 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
     );
   }
 
+  // Abertura de Caixa
+  const handleOpenRegister = (e: React.FormEvent) => {
+    e.preventDefault();
+    const balance = parseFloat(openBalanceInput.replace(',', '.')) || 0;
+    try {
+      offlineDb.openCashRegisterSession(
+        currentUser.id,
+        currentUser.fullName,
+        balance,
+        openNotesInput.trim() || undefined,
+        effectiveClinicId
+      );
+      setShowOpenRegisterModal(false);
+      setOpenBalanceInput('0.00');
+      setOpenNotesInput('');
+      loadData();
+    } catch (err: any) {
+      alert(err.message || 'Erro ao abrir caixa.');
+    }
+  };
+
+  // Fechamento de Caixa
+  const handleCloseRegister = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!summary.activeSession) return;
+    const declared = parseFloat(declaredBalanceInput.replace(',', '.')) || 0;
+    try {
+      offlineDb.closeCashRegisterSession(
+        summary.activeSession.id,
+        declared,
+        closeNotesInput.trim() || undefined,
+        effectiveClinicId
+      );
+      setShowCloseRegisterModal(false);
+      setDeclaredBalanceInput('0.00');
+      setCloseNotesInput('');
+      loadData();
+    } catch (err: any) {
+      alert(err.message || 'Erro ao fechar caixa.');
+    }
+  };
+
   // Lançar Nova Transação Manual
   const handleCreateTransaction = (e: React.FormEvent) => {
     e.preventDefault();
-    const amountNum = parseFloat(txAmount.replace(',', '.')) || 0;
-    if (amountNum < 0) {
+    const rawAmount = parseFloat(txAmount.replace(',', '.')) || 0;
+    const discountVal = parseFloat(txDiscount.replace(',', '.')) || 0;
+    if (rawAmount < 0) {
       alert('Por favor, informe um valor válido.');
       return;
     }
 
+    const netAmount = Math.max(0, rawAmount - discountVal);
     const today = new Date().toISOString().split('T')[0];
     const newTx: FinancialTransaction = {
       id: generateUUID(),
-      clinicId: activeClinic.id,
+      clinicId: effectiveClinicId,
       type: txType,
       category: txCategory,
       description: txDescription || `${txType === 'income' ? 'Recebimento' : 'Pagamento'} - ${txCategory}`,
-      amount: amountNum,
+      amount: netAmount,
+      currency: activeClinic.currency || 'BRL',
+      discount: discountVal > 0 ? discountVal : undefined,
       date: today,
       paymentMethod: txPaymentMethod,
       patientName: txPatientName || undefined,
@@ -201,39 +379,48 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
       createdAt: new Date().toISOString()
     };
 
-    offlineDb.saveTransaction(newTx);
+    offlineDb.saveTransaction(newTx, effectiveClinicId);
     setShowTransactionModal(false);
     setTxDescription('');
     setTxPatientName('');
-    setTxAmount(activeClinic.id === 'ivs' ? '50.00' : '150.00');
+    setTxAmount(effectiveClinicId === 'ivs' ? '50.00' : '150.00');
+    setTxDiscount('0.00');
     loadData();
   };
 
-  // Venda Rápida pelo PDV
+  // Venda Rápida pelo PDV (com proteção contra duplo clique)
+  const [isProcessingSale, setIsProcessingSale] = useState(false);
   const handleQuickPOSSale = (item: POSItem) => {
-    const patientNamePrompt = prompt(`Cobrar "${item.name}" (R$ ${item.price.toFixed(2)})?\nInforme o nome do paciente (opcional):`);
+    if (isProcessingSale) return;
+    const patientNamePrompt = prompt(`Cobrar "${item.name}" (${formatCurrencyValue(item.price, activeClinic.currency)})?\nInforme o nome do paciente (opcional):`);
     if (patientNamePrompt === null) return;
 
-    const today = new Date().toISOString().split('T')[0];
-    const newTx: FinancialTransaction = {
-      id: generateUUID(),
-      clinicId: activeClinic.id,
-      type: 'income',
-      category: item.category === 'produto' ? 'venda_oculos' : 'consulta',
-      description: `PDV: ${item.name}`,
-      amount: item.price,
-      date: today,
-      paymentMethod: item.price === 0 ? 'cash' : 'pix',
-      patientName: patientNamePrompt.trim() || undefined,
-      receiptNumber: `REC-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`,
-      status: 'completed',
-      createdBy: currentUser.fullName,
-      createdAt: new Date().toISOString()
-    };
+    setIsProcessingSale(true);
+    try {
+      const today = new Date().toISOString().split('T')[0];
+      const newTx: FinancialTransaction = {
+        id: generateUUID(),
+        clinicId: effectiveClinicId,
+        type: 'income',
+        category: item.category === 'produto' ? 'venda_oculos' : 'consulta',
+        description: `PDV: ${item.name}`,
+        amount: item.price,
+        currency: activeClinic.currency || 'BRL',
+        date: today,
+        paymentMethod: item.price === 0 ? 'cash' : 'pix',
+        patientName: patientNamePrompt.trim() || undefined,
+        receiptNumber: `REC-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`,
+        status: 'completed',
+        createdBy: currentUser.fullName,
+        createdAt: new Date().toISOString()
+      };
 
-    offlineDb.saveTransaction(newTx);
-    loadData();
-    setReceiptTx(newTx);
+      offlineDb.saveTransaction(newTx, effectiveClinicId);
+      loadData();
+      setReceiptTx(newTx);
+    } finally {
+      setTimeout(() => setIsProcessingSale(false), 500);
+    }
   };
 
   // Efetivar Pagamento / Repasse ao Dr. Meirelles
@@ -252,7 +439,7 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
     const today = new Date().toISOString().split('T')[0];
     const newTx: FinancialTransaction = {
       id: generateUUID(),
-      clinicId: activeClinic.id,
+      clinicId: effectiveClinicId,
       type: 'expense',
       category: 'salario',
       description: `Repasse & Acerto Semanal de Atendimentos: ${examinerName} (Ref: Dif. R$ 550 + 17 Consultas + Meia Diária)`,
@@ -265,7 +452,7 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
       createdAt: new Date().toISOString()
     };
 
-    offlineDb.saveTransaction(newTx);
+    offlineDb.saveTransaction(newTx, effectiveClinicId);
     loadData();
     setExaminerRepasseSuccess(`Pagamento de R$ ${amount.toFixed(2)} ao ${examinerName} efetivado com sucesso com emissão de comprovante!`);
     setTimeout(() => setExaminerRepasseSuccess(null), 5000);
@@ -282,27 +469,42 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
       price: priceNum,
       isActive: true
     };
-    offlineDb.savePOSItem(newItem);
+    offlineDb.savePOSItem(newItem, effectiveClinicId);
     setShowPOSItemModal(false);
     setPosName('');
-    setPosPrice(activeClinic.id === 'ivs' ? '50.00' : '150.00');
+    setPosPrice(effectiveClinicId === 'ivs' ? '50.00' : '150.00');
     loadData();
   };
 
-  // Excluir Lançamento
+  // Excluir Lançamento (Apenas perfis administrativos ou financeiro autorizados)
   const handleDeleteTx = (id: string) => {
-    if (confirm('Deseja realmente excluir este lançamento do fluxo de caixa?')) {
-      offlineDb.deleteTransaction(id);
+    if (currentUser.role === 'reception') {
+      alert('Acesso restrito: operadores de recepção não possuem permissão para excluir lançamentos. Solicite ao administrador ou responsável financeiro.');
+      return;
+    }
+    const tx = transactions.find(t => t.id === id);
+    if (tx) {
+      setTxToDelete(tx);
+    } else {
+      offlineDb.deleteTransaction(id, effectiveClinicId);
       loadData();
     }
+  };
+
+  const handleConfirmDeleteTx = () => {
+    if (!txToDelete) return;
+    offlineDb.deleteTransaction(txToDelete.id, effectiveClinicId);
+    setTxToDelete(null);
+    loadData();
   };
 
   // Dar Baixa / Liquidar Lançamento (ou reabrir)
   const handleToggleSettle = (id: string, currentSettled?: boolean) => {
     const nextSettled = !currentSettled;
-    offlineDb.settleTransaction(id, nextSettled);
+    offlineDb.settleTransaction(id, nextSettled, effectiveClinicId);
     loadData();
   };
+
 
   // Filtragem de transações com regra de liquidação:
   // - Valores liquidados (isSettled) são OCULTADOS por padrão
@@ -355,7 +557,29 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex flex-wrap items-center gap-2.5">
+          {summary.activeSession ? (
+            <div className="flex items-center gap-2">
+              <span className="px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-300 text-xs font-bold flex items-center gap-1.5 shadow-2xs">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                Caixa Aberto: {summary.activeSession.operatorName} (Início: {formatCurrencyValue(summary.activeSession.openingBalance, activeClinic.currency)})
+              </span>
+              <button
+                onClick={() => setShowCloseRegisterModal(true)}
+                className="px-3.5 py-2.5 bg-amber-600 hover:bg-amber-500 text-white rounded-2xl text-xs font-black flex items-center gap-1.5 shadow-md shadow-amber-600/20 active:scale-95 transition-all cursor-pointer"
+              >
+                <Lock className="w-3.5 h-3.5" /> Fechar Caixa
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setShowOpenRegisterModal(true)}
+              className="px-4 py-2.5 bg-blue-700 hover:bg-blue-600 text-white rounded-2xl text-xs font-black flex items-center gap-2 shadow-lg shadow-blue-700/25 active:scale-95 transition-all cursor-pointer"
+            >
+              <Wallet className="w-4 h-4" /> Abrir Caixa do Dia
+            </button>
+          )}
+
           <button
             onClick={() => {
               setTxType('income');
@@ -377,6 +601,88 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
           </button>
         </div>
       </div>
+
+      {/* 1.1 CARD DE AÇÃO IMEDIATA: "O QUE PRECISO FAZER AGORA?" (FINANCEIRO & CAIXA) */}
+      {!summary.activeSession ? (
+        <div className="bg-gradient-to-r from-amber-950 via-slate-900 to-amber-900 text-white p-5 rounded-3xl shadow-lg border border-amber-500/40 flex flex-col md:flex-row items-center justify-between gap-4 animate-fadeIn">
+          <div className="flex items-center gap-4 w-full md:w-auto">
+            <div className="w-14 h-14 rounded-2xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-400 shrink-0 shadow-inner">
+              <Lock className="w-7 h-7" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30 text-[10px] font-black uppercase tracking-wider">
+                  O QUE PRECISO FAZER AGORA?
+                </span>
+                <span className="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 font-mono text-xs font-bold">
+                  CAIXA FECHADO
+                </span>
+              </div>
+              <h3 className="text-xl font-black tracking-tight text-white mt-0.5">
+                Iniciar o Turno de Caixa
+              </h3>
+              <p className="text-xs text-slate-300 font-medium">
+                Abra a sessão de caixa com o fundo de troco inicial para registrar recebimentos de consultas, exames e produtos.
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2.5 w-full md:w-auto justify-end shrink-0">
+            <button
+              type="button"
+              onClick={() => setShowOpenRegisterModal(true)}
+              className="px-6 py-3 bg-gradient-to-r from-amber-400 to-yellow-400 hover:from-amber-300 hover:to-yellow-300 text-slate-950 rounded-2xl text-xs font-black flex items-center gap-2 shadow-md transition-all active:scale-95 cursor-pointer"
+            >
+              <Wallet className="w-4 h-4 text-slate-950" />
+              <span>Abrir Caixa do Dia Agora</span>
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="bg-gradient-to-r from-emerald-950 via-slate-900 to-teal-950 text-white p-5 rounded-3xl shadow-lg border border-emerald-500/30 flex flex-col md:flex-row items-center justify-between gap-4 animate-fadeIn">
+          <div className="flex items-center gap-4 w-full md:w-auto">
+            <div className="w-14 h-14 rounded-2xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 shrink-0 shadow-inner">
+              <Receipt className="w-7 h-7" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="px-2.5 py-0.5 rounded-full bg-emerald-400/20 text-emerald-300 border border-emerald-400/30 text-[10px] font-black uppercase tracking-wider">
+                  CAIXA ATIVO EM OPERAÇÃO
+                </span>
+                <span className="px-2 py-0.5 rounded-full bg-white/10 text-white font-mono text-xs font-bold">
+                  Operador: {summary.activeSession.operatorName}
+                </span>
+              </div>
+              <h3 className="text-xl font-black tracking-tight text-white mt-0.5">
+                Pronto para Recebimentos e Vendas
+              </h3>
+              <p className="text-xs text-slate-300 font-medium">
+                Sessão aberta às {new Date(summary.activeSession.openedAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}. Registre pagamentos de consultas ou itens do balcão em 1 clique.
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2.5 w-full md:w-auto justify-end shrink-0">
+            <button
+              type="button"
+              onClick={() => {
+                setTxType('income');
+                setShowTransactionModal(true);
+              }}
+              className="px-5 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white rounded-2xl text-xs font-black flex items-center gap-2 shadow-md transition-all active:scale-95 cursor-pointer"
+            >
+              <Plus className="w-4 h-4 text-white" />
+              <span>Receber Pagamento</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowCloseRegisterModal(true)}
+              className="px-4 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-2xl text-xs font-bold flex items-center gap-1.5 border border-slate-700 transition-all cursor-pointer"
+            >
+              <Lock className="w-3.5 h-3.5" />
+              <span>Fechar</span>
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* 2. Cards de Balanço e Caixa do Dia */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -420,11 +726,21 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
         <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-xs flex items-center justify-between">
           <div>
             <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Total a Pagar ao Examinador</span>
-            <span className="text-2xl font-black text-amber-600 mt-0.5 block">
-              R$ {settlementReport.totalPayableAmount.toFixed(2)}
+            <span className={`text-2xl font-black mt-0.5 block ${
+              settlementReport.settlementStatus === 'settled' || settlementReport.totalPayableAmount <= 0
+                ? 'text-emerald-600'
+                : 'text-amber-600'
+            }`}>
+              {settlementReport.settlementStatus === 'settled' || settlementReport.totalPayableAmount <= 0
+                ? 'R$ 0,00 (Quitado)'
+                : `R$ ${settlementReport.totalPayableAmount.toFixed(2)}`}
             </span>
           </div>
-          <div className="p-3 bg-amber-50 text-amber-600 rounded-xl">
+          <div className={`p-3 rounded-xl ${
+            settlementReport.settlementStatus === 'settled' || settlementReport.totalPayableAmount <= 0
+              ? 'bg-emerald-50 text-emerald-600'
+              : 'bg-amber-50 text-amber-600'
+          }`}>
             <Briefcase className="w-6 h-6" />
           </div>
         </div>
@@ -451,7 +767,27 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
             }`}
           >
             <Scale className="w-4 h-4 text-amber-400" />
-            <span>Informe & Espelho de Pagamento (Dr. Meirelles)</span>
+            <span>Informe & Espelho (Dr. Meirelles)</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('examiner_remuneration')}
+            className={`px-4 py-2 rounded-xl flex items-center gap-2 transition-colors cursor-pointer ${
+              activeTab === 'examiner_remuneration' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-600 hover:bg-slate-200/50'
+            }`}
+          >
+            <Briefcase className="w-4 h-4 text-blue-200" />
+            <span>Remuneração dos Examinadores</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('examiner_periods')}
+            className={`px-4 py-2 rounded-xl flex items-center gap-2 transition-colors cursor-pointer ${
+              activeTab === 'examiner_periods' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 hover:bg-slate-200/50'
+            }`}
+          >
+            <CalendarCheck className="w-4 h-4 text-indigo-200" />
+            <span>Períodos de Atendimento</span>
           </button>
 
           <button
@@ -461,7 +797,7 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
             }`}
           >
             <ShoppingCart className="w-4 h-4 text-blue-600" />
-            <span>PDV / Frente de Caixa</span>
+            <span>PDV</span>
           </button>
         </div>
 
@@ -510,19 +846,21 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
 
             {/* Toggle Ocultar/Exibir Liquidados no Caixa Diário */}
             {statementMode === 'daily' && (
-              <button
-                type="button"
-                onClick={() => setShowSettled(!showSettled)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all flex items-center gap-1.5 cursor-pointer ${
-                  showSettled
-                    ? 'bg-amber-50 border-amber-300 text-amber-900'
-                    : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
-                }`}
-                title={showSettled ? 'Ocultar valores já liquidados da tela' : 'Exibir valores já baixados/liquidados'}
-              >
-                {showSettled ? <EyeOff className="w-3.5 h-3.5 text-amber-600" /> : <Archive className="w-3.5 h-3.5 text-slate-500" />}
-                <span>{showSettled ? 'Ocultar Baixados' : 'Ver Baixados'}</span>
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowSettled(!showSettled)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all flex items-center gap-1.5 cursor-pointer ${
+                    showSettled
+                      ? 'bg-amber-50 border-amber-300 text-amber-900'
+                      : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                  }`}
+                  title={showSettled ? 'Ocultar valores já liquidados da tela' : 'Exibir valores já baixados/liquidados'}
+                >
+                  {showSettled ? <EyeOff className="w-3.5 h-3.5 text-amber-600" /> : <Archive className="w-3.5 h-3.5 text-slate-500" />}
+                  <span>{showSettled ? 'Ocultar Baixados' : 'Ver Baixados'}</span>
+                </button>
+              </div>
             )}
 
             {/* Busca textual */}
@@ -539,6 +877,7 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
           </div>
         )}
       </div>
+
 
       {/* ABA 1: FLUXO DE CAIXA / EXTRATO DO DIA & EXTRATO MENSAL */}
       {activeTab === 'cash_flow' && (
@@ -687,13 +1026,15 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
                             <Printer className="w-4 h-4" />
                           </button>
 
-                          <button
-                            onClick={() => handleDeleteTx(tx.id)}
-                            title="Remover"
-                            className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
+                          {currentUser.role !== 'reception' && (
+                            <button
+                              onClick={() => handleDeleteTx(tx.id)}
+                              title="Remover (Restrito a Administrador / Financeiro)"
+                              className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          )}
                         </div>
                       </td>
 
@@ -744,7 +1085,7 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-5">
               
               <div 
-                onClick={() => setContractType('period_half_day')}
+                onClick={() => handleSelectContractType('period_half_day')}
                 className={`p-4 rounded-2xl border-2 transition-all cursor-pointer ${
                   contractType === 'period_half_day'
                     ? 'bg-amber-500/20 border-amber-400 text-white shadow-lg shadow-amber-500/20'
@@ -752,16 +1093,18 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
                 }`}
               >
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] uppercase font-black tracking-wider text-amber-400">Modalidade de Hoje (05/09)</span>
+                  <span className="text-[10px] uppercase font-black tracking-wider text-amber-400">
+                    {initialWorkSession.contractType === 'period_half_day' ? 'Padrão Automático de Hoje' : 'Meia Diária / Turno'}
+                  </span>
                   {contractType === 'period_half_day' && <Check className="w-4 h-4 text-amber-400" />}
                 </div>
                 <h3 className="text-base font-black text-white">Por Período (5h) / Meia Diária</h3>
-                <p className="text-xs text-indigo-200 mt-1">Acordo fixo por turno de 5 horas de atendimento.</p>
-                <div className="mt-3 text-xl font-black text-amber-300">R$ 500,00 <span className="text-xs font-normal text-indigo-200">/ período</span></div>
+                <p className="text-xs text-indigo-200 mt-1">Terça (13h-18h) ou Quarta (08h-13h) fixo R$ 500,00 ou turno pontual.</p>
+                <div className="mt-3 text-xl font-black text-amber-300">R$ 500,00 <span className="text-xs font-normal text-indigo-200">/ período (5h)</span></div>
               </div>
 
               <div 
-                onClick={() => setContractType('period_full_day')}
+                onClick={() => handleSelectContractType('period_full_day')}
                 className={`p-4 rounded-2xl border-2 transition-all cursor-pointer ${
                   contractType === 'period_full_day'
                     ? 'bg-blue-500/20 border-blue-400 text-white shadow-lg shadow-blue-500/20'
@@ -778,7 +1121,7 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
               </div>
 
               <div 
-                onClick={() => setContractType('per_consultation')}
+                onClick={() => handleSelectContractType('per_consultation')}
                 className={`p-4 rounded-2xl border-2 transition-all cursor-pointer ${
                   contractType === 'per_consultation'
                     ? 'bg-emerald-500/20 border-emerald-400 text-white shadow-lg shadow-emerald-500/20'
@@ -786,11 +1129,13 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
                 }`}
               >
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] uppercase font-black tracking-wider text-emerald-400">Por Produção</span>
+                  <span className="text-[10px] uppercase font-black tracking-wider text-emerald-400">
+                    {initialWorkSession.contractType === 'per_consultation' ? 'Padrão Automático de Hoje' : 'Por Produção'}
+                  </span>
                   {contractType === 'per_consultation' && <Check className="w-4 h-4 text-emerald-400" />}
                 </div>
                 <h3 className="text-base font-black text-white">Por Atendimento Realizado</h3>
-                <p className="text-xs text-indigo-200 mt-1">Valor fixo por consulta oftalmológica concluída.</p>
+                <p className="text-xs text-indigo-200 mt-1">Valor fixo por consulta realizada (demais dias da semana).</p>
                 <div className="mt-3 text-xl font-black text-emerald-300">R$ 50,00 <span className="text-xs font-normal text-indigo-200">/ consulta</span></div>
               </div>
 
@@ -808,10 +1153,16 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
                     <FileSpreadsheet className="w-5 h-5 text-blue-600" />
                     <h3 className="font-bold text-slate-900 text-base">Espelho de Produção da Semana (Dr. Meirelles)</h3>
                   </div>
-                  <p className="text-xs text-slate-500 mt-0.5">Período: 31/08/2026 a 05/09/2026 • IVS Instituto da Visão e Saúde</p>
+                  <p className="text-xs text-slate-500 mt-0.5">Período: {settlementReport.periodDescription} • IVS Instituto da Visão e Saúde</p>
                 </div>
-                <span className="px-3 py-1 bg-amber-50 text-amber-800 border border-amber-200 rounded-xl text-xs font-black">
-                  Total: R$ {settlementReport.totalPayableAmount.toFixed(2)}
+                <span className={`px-3 py-1 rounded-xl text-xs font-black border ${
+                  settlementReport.settlementStatus === 'settled' || settlementReport.totalPayableAmount <= 0
+                    ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                    : 'bg-amber-50 text-amber-800 border-amber-200'
+                }`}>
+                  {settlementReport.settlementStatus === 'settled' || settlementReport.totalPayableAmount <= 0
+                    ? 'Total: R$ 0,00 (Quitado)'
+                    : `Total: R$ ${settlementReport.totalPayableAmount.toFixed(2)}`}
                 </span>
               </div>
 
@@ -828,20 +1179,22 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
                   </thead>
                   <tbody className="divide-y divide-slate-100 font-medium">
                     
-                    {/* Linha 1: Saldo Pendente da Semana Passada */}
-                    <tr className="bg-amber-50/50 hover:bg-amber-50 transition-colors">
-                      <td className="p-3.5 font-bold text-amber-900">Semana Anterior</td>
-                      <td className="p-3.5 font-bold text-amber-900">
-                        Diferença pendente de pagamento da semana passada a ser pago
-                      </td>
-                      <td className="p-3.5 text-center font-mono">1</td>
-                      <td className="p-3.5 text-right font-mono">R$ 550,00</td>
-                      <td className="p-3.5 text-right font-black text-amber-700 font-mono text-sm">
-                        R$ 550,00
-                      </td>
-                    </tr>
+                    {/* Linha 1: Saldo Pendente da Semana Passada (apenas se houver saldo pendente) */}
+                    {settlementReport.previousBalancePending > 0 && (
+                      <tr className="bg-amber-50/50 hover:bg-amber-50 transition-colors">
+                        <td className="p-3.5 font-bold text-amber-900">Semana Anterior</td>
+                        <td className="p-3.5 font-bold text-amber-900">
+                          Diferença pendente de pagamento da semana passada a ser pago
+                        </td>
+                        <td className="p-3.5 text-center font-mono">1</td>
+                        <td className="p-3.5 text-right font-mono">R$ {settlementReport.previousBalancePending.toFixed(2)}</td>
+                        <td className="p-3.5 text-right font-black text-amber-700 font-mono text-sm">
+                          R$ {settlementReport.previousBalancePending.toFixed(2)}
+                        </td>
+                      </tr>
+                    )}
 
-                    {/* Linhas dos dias da semana */}
+                    {/* Linhas dos atendimentos do período */}
                     {settlementReport.dailyEntries.map((entry, idx) => (
                       <tr key={idx} className="hover:bg-slate-50 transition-colors">
                         <td className="p-3.5 font-bold text-slate-900">{entry.dayLabel}</td>
@@ -862,35 +1215,23 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
                   <tfoot className="bg-slate-900 text-white font-black text-xs border-t-2 border-slate-900">
                     <tr>
                       <td colSpan={2} className="p-4 uppercase tracking-wider text-[11px]">
-                        SOMATÓRIA GERAL A REPASSAR (COM SALDO ANTERIOR)
+                        SOMATÓRIA GERAL A REPASSAR {settlementReport.previousBalancePending > 0 ? '(COM SALDO ANTERIOR)' : ''}
                       </td>
                       <td className="p-4 text-center text-amber-400 font-mono">
-                        17 cons. + 1 per.
+                        {settlementReport.totalConsultationsCount} cons.
                       </td>
                       <td className="p-4 text-right text-slate-400 font-normal">
                         Total Líquido:
                       </td>
                       <td className="p-4 text-right text-emerald-400 text-base font-mono">
-                        R$ {settlementReport.totalPayableAmount.toFixed(2)}
+                        {settlementReport.settlementStatus === 'settled' || settlementReport.totalPayableAmount <= 0
+                          ? 'R$ 0,00 (Quitado)'
+                          : `R$ ${settlementReport.totalPayableAmount.toFixed(2)}`}
                       </td>
                     </tr>
                   </tfoot>
 
                 </table>
-              </div>
-
-              <div className="p-4 bg-blue-50/70 rounded-2xl border border-blue-200/80 text-xs text-blue-900 space-y-1">
-                <div className="font-bold flex items-center gap-1.5 text-blue-950">
-                  <CheckCircle2 className="w-4 h-4 text-blue-600" />
-                  <span>Resumo do Acordo de Repasse Dr. Meirelles:</span>
-                </div>
-                <p className="text-[11px] text-blue-800 leading-relaxed">
-                  • Diferença semana anterior: <b>R$ 550,00</b><br />
-                  • 03/09/2026: <b>12 consultas × R$ 50,00 = R$ 600,00</b><br />
-                  • 04/09/2026: <b>5 consultas × R$ 50,00 = R$ 250,00</b><br />
-                  • 05/09/2026: <b>Meia diária / período de 5h = R$ 500,00</b><br />
-                  • <b>Total Calculado: R$ 550 + R$ 600 + R$ 250 + R$ 500 = R$ 1.900,00</b>
-                </p>
               </div>
 
             </div>
@@ -925,19 +1266,25 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
                     </span>
                   </div>
 
-                  <div className="p-3.5 bg-amber-50 rounded-2xl border border-amber-200/60 flex items-center justify-between">
-                    <span className="text-amber-900 font-bold">Saldo Anterior Pendente:</span>
-                    <span className="font-black text-amber-700">
-                      R$ {settlementReport.previousBalancePending.toFixed(2)}
-                    </span>
-                  </div>
+                  {settlementReport.previousBalancePending > 0 && (
+                    <div className="p-3.5 bg-amber-50 rounded-2xl border border-amber-200/60 flex items-center justify-between">
+                      <span className="text-amber-900 font-bold">Saldo Anterior Pendente:</span>
+                      <span className="font-black text-amber-700">
+                        R$ {settlementReport.previousBalancePending.toFixed(2)}
+                      </span>
+                    </div>
+                  )}
 
                   <div className="p-4 bg-gradient-to-br from-slate-900 to-blue-950 text-white rounded-2xl shadow-sm space-y-1">
                     <span className="text-[10px] uppercase font-black text-amber-400 tracking-wider block">
-                      Valor Final a Pagar ao Examinador
+                      {settlementReport.settlementStatus === 'settled' || settlementReport.totalPayableAmount <= 0
+                        ? 'Status do Repasse'
+                        : 'Valor Final a Pagar ao Examinador'}
                     </span>
                     <div className="text-2xl font-black text-emerald-400">
-                      R$ {settlementReport.totalPayableAmount.toFixed(2)}
+                      {settlementReport.settlementStatus === 'settled' || settlementReport.totalPayableAmount <= 0
+                        ? 'R$ 0,00 (Quitado)'
+                        : `R$ ${settlementReport.totalPayableAmount.toFixed(2)}`}
                     </div>
                     <span className="text-[10px] text-slate-300 block">
                       Dr. Rudson Meirelles • IVS
@@ -948,13 +1295,20 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
               </div>
 
               <div className="space-y-2.5 pt-4">
-                <button
-                  onClick={() => handleExecuteRepasse('Dr. Rudson Meirelles', settlementReport.totalPayableAmount)}
-                  className="w-full py-3.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-2xl font-black text-xs flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/25 active:scale-95 transition-all cursor-pointer"
-                >
-                  <DollarSign className="w-4 h-4" />
-                  <span>Efetivar Pagamento (Lançar Saída de Caixa)</span>
-                </button>
+                {settlementReport.settlementStatus === 'settled' || settlementReport.totalPayableAmount <= 0 ? (
+                  <div className="w-full py-3.5 bg-emerald-50 text-emerald-800 border border-emerald-300 rounded-2xl font-black text-xs flex items-center justify-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                    <span>Repasse Quitado e Liquidado</span>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => handleExecuteRepasse('Dr. Rudson Meirelles', settlementReport.totalPayableAmount)}
+                    className="w-full py-3.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-2xl font-black text-xs flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/25 active:scale-95 transition-all cursor-pointer"
+                  >
+                    <DollarSign className="w-4 h-4" />
+                    <span>Efetivar Pagamento (Lançar Saída de Caixa)</span>
+                  </button>
+                )}
 
                 <button
                   onClick={() => setShowSettlementPrintModal(true)}
@@ -967,6 +1321,437 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
 
             </div>
 
+          </div>
+        </div>
+      )}
+
+      {/* ABA 4: MOTOR DE REMUNERAÇÃO DOS EXAMINADORES */}
+      {activeTab === 'examiner_remuneration' && (
+        <div className="space-y-6 animate-fadeIn">
+          {/* Header & Ações */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-5 rounded-3xl border border-slate-200/80 shadow-xs">
+            <div>
+              <div className="flex items-center gap-2">
+                <div className="p-2 bg-blue-50 text-blue-600 rounded-xl">
+                  <Briefcase className="w-5 h-5" />
+                </div>
+                <h2 className="text-lg font-black text-slate-900">Remuneração dos Examinadores (Motor Financeiro)</h2>
+              </div>
+              <p className="text-xs text-slate-500 mt-1">
+                Apuração automática por períodos fixos, extraordinários e consultas avulsas com rastreabilidade completa.
+              </p>
+            </div>
+
+            <div className="flex items-center gap-2.5">
+              {currentUser.role !== 'reception' && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    const res = examinerRemunerationService.closeExaminerPeriod(
+                      effectiveClinicId,
+                      filterExaminer !== 'all' ? filterExaminer : 'user-examinador',
+                      'Dr. Rudson Meirelles',
+                      filterDateStart,
+                      filterDateEnd,
+                      currentUser.fullName
+                    );
+                    if (res.success) {
+                      setRemunerationFeedback(res.message);
+                      loadData();
+                    } else {
+                      alert(res.message);
+                    }
+                  }}
+                  className="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center gap-2 cursor-pointer shadow-xs transition-all active:scale-95"
+                >
+                  <Lock className="w-4 h-4 text-amber-400" />
+                  <span>Fechar Período Selecionado</span>
+                </button>
+              )}
+            </div>
+          </div>
+
+          {remunerationFeedback && (
+            <div className="p-4 bg-emerald-50 border border-emerald-300 text-emerald-900 rounded-2xl flex items-center justify-between text-xs animate-fadeIn">
+              <div className="flex items-center gap-2 font-bold">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                <span>{remunerationFeedback}</span>
+              </div>
+              <button onClick={() => setRemunerationFeedback(null)} className="text-emerald-700 hover:text-emerald-900 font-black cursor-pointer">
+                ✕
+              </button>
+            </div>
+          )}
+
+          {/* Cards de Resumo */}
+          {(() => {
+            const filtered = remunerationRecords.filter(r => {
+              if (filterExaminer !== 'all' && r.examinerId !== filterExaminer) return false;
+              if (filterPeriodKind !== 'all' && r.periodKind !== filterPeriodKind) return false;
+              if (filterRemStatus !== 'all' && r.status !== filterRemStatus) return false;
+              if (r.date < filterDateStart || r.date > filterDateEnd) return false;
+              return true;
+            });
+
+            const totalFixed = filtered.filter(r => r.periodKind === 'fixed').reduce((acc, r) => acc + r.finalAmount, 0);
+            const totalAvulso = filtered.filter(r => r.periodKind === 'avulso').reduce((acc, r) => acc + r.finalAmount, 0);
+            const totalSpecial = filtered.filter(r => r.periodKind === 'extraordinary').reduce((acc, r) => acc + r.finalAmount, 0);
+            const totalPending = filtered.filter(r => r.status === 'pending' || r.status === 'approved' || r.status === 'adjusted').reduce((acc, r) => acc + r.finalAmount, 0);
+            const totalPaid = filtered.filter(r => r.status === 'paid').reduce((acc, r) => acc + r.finalAmount, 0);
+            const totalGross = filtered.reduce((acc, r) => acc + r.finalAmount, 0);
+
+            return (
+              <>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                  <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-2xs">
+                    <span className="text-[10px] font-bold text-slate-500 uppercase block">Total Períodos Fixos</span>
+                    <span className="text-lg font-black text-blue-600 font-mono mt-1 block">R$ {totalFixed.toFixed(2)}</span>
+                  </div>
+                  <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-2xs">
+                    <span className="text-[10px] font-bold text-slate-500 uppercase block">Total Avulsos</span>
+                    <span className="text-lg font-black text-indigo-600 font-mono mt-1 block">R$ {totalAvulso.toFixed(2)}</span>
+                  </div>
+                  <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-2xs">
+                    <span className="text-[10px] font-bold text-slate-500 uppercase block">Total Extraordinários</span>
+                    <span className="text-lg font-black text-purple-600 font-mono mt-1 block">R$ {totalSpecial.toFixed(2)}</span>
+                  </div>
+                  <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-2xs">
+                    <span className="text-[10px] font-bold text-amber-600 uppercase block">Total Pendente</span>
+                    <span className="text-lg font-black text-amber-600 font-mono mt-1 block">R$ {totalPending.toFixed(2)}</span>
+                  </div>
+                  <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-2xs">
+                    <span className="text-[10px] font-bold text-emerald-600 uppercase block">Total Pago</span>
+                    <span className="text-lg font-black text-emerald-600 font-mono mt-1 block">R$ {totalPaid.toFixed(2)}</span>
+                  </div>
+                  <div className="bg-gradient-to-br from-slate-900 to-blue-950 text-white p-4 rounded-2xl shadow-sm border border-slate-800">
+                    <span className="text-[10px] font-black text-amber-400 uppercase block">Total Bruto Devido</span>
+                    <span className="text-lg font-black text-white font-mono mt-1 block">R$ {totalGross.toFixed(2)}</span>
+                  </div>
+                </div>
+
+                {/* Filtros */}
+                <div className="bg-white p-4 rounded-2xl border border-slate-200 flex flex-wrap items-center gap-3 text-xs">
+                  <div className="flex items-center gap-1.5">
+                    <Filter className="w-3.5 h-3.5 text-slate-400" />
+                    <span className="font-bold text-slate-700">Filtros:</span>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <span className="text-slate-500 font-medium">De:</span>
+                    <input
+                      type="date"
+                      value={filterDateStart}
+                      onChange={(e) => setFilterDateStart(e.target.value)}
+                      className="bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1 font-mono text-slate-800 text-xs"
+                    />
+                    <span className="text-slate-500 font-medium">Até:</span>
+                    <input
+                      type="date"
+                      value={filterDateEnd}
+                      onChange={(e) => setFilterDateEnd(e.target.value)}
+                      className="bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1 font-mono text-slate-800 text-xs"
+                    />
+                  </div>
+
+                  <select
+                    value={filterPeriodKind}
+                    onChange={(e) => setFilterPeriodKind(e.target.value)}
+                    className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-1 font-bold text-slate-700 text-xs cursor-pointer"
+                  >
+                    <option value="all">Todos os Tipos</option>
+                    <option value="fixed">Período Fixo</option>
+                    <option value="extraordinary">Período Extraordinário</option>
+                    <option value="avulso">Atendimento Avulso</option>
+                  </select>
+
+                  <select
+                    value={filterRemStatus}
+                    onChange={(e) => setFilterRemStatus(e.target.value)}
+                    className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-1 font-bold text-slate-700 text-xs cursor-pointer"
+                  >
+                    <option value="all">Todos os Status</option>
+                    <option value="pending">Pendente</option>
+                    <option value="approved">Aprovado</option>
+                    <option value="closed">Fechado</option>
+                    <option value="paid">Pago</option>
+                    <option value="adjusted">Ajustado</option>
+                  </select>
+
+                  <span className="text-slate-400 font-mono ml-auto">
+                    {filtered.length} lançamentos encontrados
+                  </span>
+                </div>
+
+                {/* Tabela de Lançamentos */}
+                <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-xs">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left text-xs">
+                      <thead className="bg-slate-50 text-slate-500 font-bold uppercase text-[10px] border-b border-slate-200">
+                        <tr>
+                          <th className="p-3.5">Data / Hora</th>
+                          <th className="p-3.5">Examinador</th>
+                          <th className="p-3.5">Paciente / Consulta</th>
+                          <th className="p-3.5">Tipo de Regra</th>
+                          <th className="p-3.5">Descrição da Regra</th>
+                          <th className="p-3.5 text-right">Valor Calculado</th>
+                          <th className="p-3.5 text-center">Status</th>
+                          <th className="p-3.5 text-center">Ações</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100 font-medium">
+                        {filtered.length === 0 ? (
+                          <tr>
+                            <td colSpan={8} className="p-8 text-center text-slate-400 font-bold">
+                              Nenhuma remuneração registrada para os filtros selecionados.
+                            </td>
+                          </tr>
+                        ) : (
+                          filtered.map((rem) => (
+                            <tr key={rem.id} className="hover:bg-slate-50/70 transition-colors">
+                              <td className="p-3.5 font-mono font-bold text-slate-900">
+                                {rem.date.split('-').reverse().join('/')} às {rem.time}
+                              </td>
+                              <td className="p-3.5 font-bold text-slate-800">
+                                {rem.examinerName}
+                              </td>
+                              <td className="p-3.5">
+                                <span className="font-bold text-slate-900 block">{rem.patientName}</span>
+                                <span className="text-[10px] text-slate-400 block font-mono">ID: {rem.appointmentId}</span>
+                              </td>
+                              <td className="p-3.5">
+                                <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
+                                  rem.periodKind === 'extraordinary'
+                                    ? 'bg-purple-100 text-purple-800 border border-purple-200'
+                                    : rem.periodKind === 'fixed'
+                                    ? 'bg-blue-100 text-blue-800 border border-blue-200'
+                                    : 'bg-indigo-100 text-indigo-800 border border-indigo-200'
+                                }`}>
+                                  {rem.periodKind === 'extraordinary' ? 'Extraordinário' : rem.periodKind === 'fixed' ? 'Fixo' : 'Avulso'}
+                                </span>
+                              </td>
+                              <td className="p-3.5 text-slate-600 max-w-xs truncate" title={rem.ruleDescription}>
+                                {rem.ruleDescription}
+                              </td>
+                              <td className="p-3.5 text-right font-black font-mono text-slate-900 text-sm">
+                                R$ {rem.finalAmount.toFixed(2)}
+                              </td>
+                              <td className="p-3.5 text-center">
+                                <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase ${
+                                  rem.status === 'paid'
+                                    ? 'bg-emerald-100 text-emerald-800'
+                                    : rem.status === 'closed'
+                                    ? 'bg-slate-200 text-slate-800'
+                                    : rem.status === 'adjusted'
+                                    ? 'bg-amber-100 text-amber-800'
+                                    : 'bg-blue-50 text-blue-800'
+                                }`}>
+                                  {rem.status}
+                                </span>
+                              </td>
+                              <td className="p-3.5 text-center">
+                                <button
+                                  type="button"
+                                  onClick={() => setSelectedRemRecord(rem)}
+                                  className="px-2.5 py-1 bg-slate-100 hover:bg-blue-50 hover:text-blue-600 text-slate-700 rounded-lg text-[11px] font-bold cursor-pointer transition-colors"
+                                >
+                                  Ver Detalhes
+                                </button>
+                              </td>
+                            </tr>
+                          ))
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                {/* Lista de Fechamentos Históricos */}
+                {examinerClosures.length > 0 && (
+                  <div className="bg-white p-5 rounded-3xl border border-slate-200 space-y-4 shadow-xs">
+                    <div className="flex items-center gap-2">
+                      <Lock className="w-4 h-4 text-slate-700" />
+                      <h3 className="font-black text-slate-900 text-sm">Histórico de Fechamentos do Examinador</h3>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                      {examinerClosures.map(cl => (
+                        <div key={cl.id} className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 text-xs">
+                          <div className="flex items-center justify-between">
+                            <span className="font-bold text-slate-900">{cl.examinerName}</span>
+                            <span className={`px-2 py-0.5 rounded-md text-[10px] font-black uppercase ${cl.status === 'paid' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}`}>
+                              {cl.status === 'paid' ? 'QUITADO' : 'FECHADO'}
+                            </span>
+                          </div>
+                          <div className="text-[11px] text-slate-500">
+                            Período: {cl.startDate.split('-').reverse().join('/')} a {cl.endDate.split('-').reverse().join('/')}
+                          </div>
+                          <div className="flex items-center justify-between pt-2 border-t border-slate-200/80 font-mono">
+                            <span className="text-slate-500">Valor Bruto:</span>
+                            <span className="font-black text-slate-900 text-sm">R$ {cl.totalGrossAmount.toFixed(2)}</span>
+                          </div>
+                          {cl.status !== 'paid' && currentUser.role !== 'reception' && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const res = examinerRemunerationService.settleClosurePayment(cl.id, currentUser.fullName, 'pix', effectiveClinicId);
+                                if (res.success) {
+                                  setRemunerationFeedback(res.message);
+                                  loadData();
+                                }
+                              }}
+                              className="w-full py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-black text-[11px] cursor-pointer mt-2 shadow-xs transition-all active:scale-95"
+                            >
+                              Liquidar Pagamento no Caixa (PIX)
+                            </button>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </>
+            );
+          })()}
+        </div>
+      )}
+
+      {/* ABA 5: PERÍODOS DE ATENDIMENTO (FIXOS & EXTRAORDINÁRIOS) */}
+      {activeTab === 'examiner_periods' && (
+        <div className="space-y-6 animate-fadeIn">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-5 rounded-3xl border border-slate-200 shadow-xs">
+            <div>
+              <div className="flex items-center gap-2">
+                <div className="p-2 bg-indigo-50 text-indigo-600 rounded-xl">
+                  <CalendarCheck className="w-5 h-5" />
+                </div>
+                <h2 className="text-lg font-black text-slate-900">Configuração de Períodos de Atendimento</h2>
+              </div>
+              <p className="text-xs text-slate-500 mt-1">
+                Cadastre os turnos fixos semanais do examinador e datas extraordinárias (mutirões, campanhas e feriados).
+              </p>
+            </div>
+
+            <div className="flex items-center gap-2.5">
+              <button
+                type="button"
+                onClick={() => setShowFixedPeriodModal(true)}
+                className="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs active:scale-95 transition-all"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Novo Período Fixo</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowSpecialPeriodModal(true)}
+                className="px-4 py-2.5 bg-purple-600 hover:bg-purple-500 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs active:scale-95 transition-all"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Novo Período Extraordinário</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Bloco 1: Períodos Fixos Recorrentes */}
+            <div className="bg-white p-6 rounded-3xl border border-slate-200 space-y-4 shadow-xs">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div className="flex items-center gap-2">
+                  <Calendar className="w-4 h-4 text-blue-600" />
+                  <h3 className="font-black text-slate-900 text-sm">Períodos Fixos Recorrentes (Semanal)</h3>
+                </div>
+                <span className="text-xs text-slate-500 font-mono">{fixedPeriods.length} cadastrados</span>
+              </div>
+
+              <div className="space-y-3">
+                {fixedPeriods.map((p) => {
+                  const dayNames = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+                  return (
+                    <div key={p.id} className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2 text-xs">
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-slate-900 text-sm">{dayNames[p.dayOfWeek]}</span>
+                        <span className="px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 text-[10px] font-black uppercase">
+                          {p.active ? 'ATIVO' : 'INATIVO'}
+                        </span>
+                      </div>
+                      <div className="text-slate-600 flex items-center gap-2 font-medium">
+                        <Clock className="w-3.5 h-3.5 text-slate-400" />
+                        <span>Horário: <b>{p.startTime} às {p.endTime}</b></span>
+                      </div>
+                      <div className="text-slate-600 font-medium">
+                        Regra: <b className="text-blue-700">R$ {(p.fixedAmount || 0).toFixed(2)}</b> ({p.notes || 'Contrato Fixo'})
+                      </div>
+                      <div className="text-[11px] text-slate-400 pt-1 border-t border-slate-200/60 flex items-center justify-between">
+                        <span>Vigência: {p.validFrom} {p.validUntil ? `a ${p.validUntil}` : '(indeterminada)'}</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (window.confirm('Deseja remover este período fixo?')) {
+                              offlineDb.deleteExaminerFixedPeriod(p.id, effectiveClinicId);
+                              loadData();
+                            }
+                          }}
+                          className="text-rose-600 hover:text-rose-800 font-bold cursor-pointer"
+                        >
+                          Excluir
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Bloco 2: Períodos Extraordinários / Excepcionais */}
+            <div className="bg-white p-6 rounded-3xl border border-slate-200 space-y-4 shadow-xs">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div className="flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-purple-600" />
+                  <h3 className="font-black text-slate-900 text-sm">Períodos Extraordinários / Especiais</h3>
+                </div>
+                <span className="text-xs text-slate-500 font-mono">{specialPeriods.length} cadastrados</span>
+              </div>
+
+              <div className="space-y-3">
+                {specialPeriods.length === 0 ? (
+                  <p className="text-center py-8 text-slate-400 font-bold text-xs">
+                    Nenhum período extraordinário cadastrado no momento.
+                  </p>
+                ) : (
+                  specialPeriods.map((p) => (
+                    <div key={p.id} className="p-4 rounded-2xl bg-purple-50/40 border border-purple-200 space-y-2 text-xs">
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-purple-950 text-sm font-mono">
+                          📅 {p.date.split('-').reverse().join('/')}
+                        </span>
+                        <span className={`px-2 py-0.5 rounded-md text-[10px] font-black uppercase ${p.status === 'active' ? 'bg-purple-200 text-purple-900' : 'bg-slate-200 text-slate-700'}`}>
+                          {p.status === 'active' ? 'VIGENTE' : 'CANCELADO'}
+                        </span>
+                      </div>
+                      <div className="text-purple-900 flex items-center gap-2 font-medium">
+                        <Clock className="w-3.5 h-3.5 text-purple-500" />
+                        <span>Horário: <b>{p.startTime} às {p.endTime}</b></span>
+                      </div>
+                      <div className="text-purple-900 font-medium">
+                        Motivo: <b>{p.notes || 'Atendimento Extraordinário'}</b> • Remuneração: <b className="text-emerald-700">R$ {(p.fixedAmount || 0).toFixed(2)}</b>
+                      </div>
+                      <div className="text-[11px] text-purple-600 pt-1 border-t border-purple-200/70 flex items-center justify-end">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (window.confirm('Deseja cancelar este período extraordinário?')) {
+                              offlineDb.deleteExaminerSpecialPeriod(p.id, effectiveClinicId);
+                              loadData();
+                            }
+                          }}
+                          className="text-rose-600 hover:text-rose-800 font-bold cursor-pointer"
+                        >
+                          Excluir
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -1055,16 +1840,28 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
 
             <form onSubmit={handleCreateTransaction} className="space-y-3.5 text-xs">
               
-              <div>
-                <label className="text-slate-700 font-bold block mb-1">Valor (R$) *</label>
-                <input
-                  type="text"
-                  required
-                  value={txAmount}
-                  onChange={(e) => setTxAmount(e.target.value)}
-                  placeholder="50.00"
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-black text-lg focus:outline-none focus:border-blue-500"
-                />
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-slate-700 font-bold block mb-1">Valor Bruto ({activeClinic.currency || 'R$'}) *</label>
+                  <input
+                    type="text"
+                    required
+                    value={txAmount}
+                    onChange={(e) => setTxAmount(e.target.value)}
+                    placeholder="50.00"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-black text-lg focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="text-slate-700 font-bold block mb-1">Desconto ({activeClinic.currency || 'R$'})</label>
+                  <input
+                    type="text"
+                    value={txDiscount}
+                    onChange={(e) => setTxDiscount(e.target.value)}
+                    placeholder="0.00"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-black text-lg focus:outline-none focus:border-blue-500"
+                  />
+                </div>
               </div>
 
               <div>
@@ -1110,7 +1907,8 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
                     <option value="credit_card">Cartão de Crédito</option>
                     <option value="debit_card">Cartão de Débito</option>
                     <option value="cash">Dinheiro</option>
-                    <option value="boleto">Boleto</option>
+                    <option value="transfer">Transferência Bancária</option>
+                    <option value="outro">Outro</option>
                   </select>
                 </div>
               </div>
@@ -1146,6 +1944,162 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
 
             </form>
 
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: ABERTURA DE CAIXA */}
+      {showOpenRegisterModal && (
+        <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                <div className="p-1.5 rounded-lg bg-blue-100 text-blue-700">
+                  <Wallet className="w-4 h-4" />
+                </div>
+                <span>Abertura de Caixa Diário</span>
+              </h3>
+              <button onClick={() => setShowOpenRegisterModal(false)} className="text-slate-400 hover:text-slate-600">✕</button>
+            </div>
+
+            <form onSubmit={handleOpenRegister} className="space-y-3.5 text-xs">
+              <div className="p-3 bg-blue-50/70 border border-blue-200 rounded-2xl text-blue-900">
+                <span className="font-bold block">Operador Responsável:</span>
+                <span className="text-xs">{currentUser.fullName} ({activeClinic.name})</span>
+              </div>
+
+              <div>
+                <label className="text-slate-700 font-bold block mb-1">Fundo de Troco / Saldo Inicial ({activeClinic.currency || 'R$'}) *</label>
+                <input
+                  type="text"
+                  required
+                  value={openBalanceInput}
+                  onChange={(e) => setOpenBalanceInput(e.target.value)}
+                  placeholder="0.00"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-black text-lg focus:outline-none focus:border-blue-500"
+                />
+                <span className="text-[10px] text-slate-400 mt-1 block">Valor em dinheiro presente na gaveta no início do turno.</span>
+              </div>
+
+              <div>
+                <label className="text-slate-700 font-bold block mb-1">Observações de Abertura (Opcional)</label>
+                <input
+                  type="text"
+                  value={openNotesInput}
+                  onChange={(e) => setOpenNotesInput(e.target.value)}
+                  placeholder="Ex: Troco em notas de 5 e 10"
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-blue-500"
+                />
+              </div>
+
+              <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowOpenRegisterModal(false)}
+                  className="px-4 py-2 text-slate-500 hover:text-slate-800"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl shadow-md cursor-pointer"
+                >
+                  Confirmar Abertura
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: FECHAMENTO DE CAIXA */}
+      {showCloseRegisterModal && summary.activeSession && (
+        <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                <div className="p-1.5 rounded-lg bg-amber-100 text-amber-700">
+                  <Lock className="w-4 h-4" />
+                </div>
+                <span>Fechamento e Conferência de Caixa</span>
+              </h3>
+              <button onClick={() => setShowCloseRegisterModal(false)} className="text-slate-400 hover:text-slate-600">✕</button>
+            </div>
+
+            <form onSubmit={handleCloseRegister} className="space-y-3.5 text-xs">
+              <div className="p-3 bg-slate-50 border border-slate-200 rounded-2xl space-y-1">
+                <div className="flex justify-between">
+                  <span className="text-slate-500 font-medium">Saldo Inicial:</span>
+                  <span className="font-bold text-slate-800">{formatCurrencyValue(summary.activeSession.openingBalance, activeClinic.currency)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-500 font-medium">Entradas:</span>
+                  <span className="font-bold text-emerald-600">+{formatCurrencyValue(summary.totalIncome, activeClinic.currency)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-500 font-medium">Saídas:</span>
+                  <span className="font-bold text-rose-600">-{formatCurrencyValue(summary.totalExpense, activeClinic.currency)}</span>
+                </div>
+                <div className="flex justify-between pt-1 border-t border-slate-200 font-black">
+                  <span className="text-slate-900">Saldo Esperado em Caixa:</span>
+                  <span className="text-blue-700">{formatCurrencyValue(summary.currentBalance, activeClinic.currency)}</span>
+                </div>
+              </div>
+
+              <div>
+                <label className="text-slate-700 font-bold block mb-1">Saldo Contado / Declarado em Gaveta ({activeClinic.currency || 'R$'}) *</label>
+                <input
+                  type="text"
+                  required
+                  value={declaredBalanceInput}
+                  onChange={(e) => setDeclaredBalanceInput(e.target.value)}
+                  placeholder="0.00"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-black text-lg focus:outline-none focus:border-blue-500"
+                />
+                {declaredBalanceInput && (
+                  <div className="mt-1 text-xs">
+                    {(() => {
+                      const decl = parseFloat(declaredBalanceInput.replace(',', '.')) || 0;
+                      const diff = decl - summary.currentBalance;
+                      if (Math.abs(diff) < 0.001) {
+                        return <span className="text-emerald-600 font-bold">✓ Caixa balanceado sem divergências</span>;
+                      }
+                      if (diff > 0) {
+                        return <span className="text-emerald-700 font-bold">Sobra de caixa: +{formatCurrencyValue(diff, activeClinic.currency)}</span>;
+                      }
+                      return <span className="text-rose-600 font-bold">Falta de caixa: -{formatCurrencyValue(Math.abs(diff), activeClinic.currency)}</span>;
+                    })()}
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <label className="text-slate-700 font-bold block mb-1">Observações do Fechamento</label>
+                <input
+                  type="text"
+                  value={closeNotesInput}
+                  onChange={(e) => setCloseNotesInput(e.target.value)}
+                  placeholder="Ex: Turno encerrado com comprovantes anexados"
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-blue-500"
+                />
+              </div>
+
+              <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowCloseRegisterModal(false)}
+                  className="px-4 py-2 text-slate-500 hover:text-slate-800"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-xl shadow-md cursor-pointer"
+                >
+                  Confirmar Fechamento
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
@@ -1223,7 +2177,7 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
       {/* MODAL: COMPROVANTE INDIVIDUAL DE PAGAMENTO */}
       {receiptTx && (
         <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl space-y-4 text-center">
+          <div id="financial-receipt-sheet" className="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl space-y-4 text-center">
             
             <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
               <CheckCircle2 className="w-6 h-6" />
@@ -1272,7 +2226,18 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
                 Fechar
               </button>
               <button
-                onClick={() => window.print()}
+                onClick={() => {
+                  const printEl = document.getElementById('financial-receipt-sheet');
+                  if (printEl) {
+                    printIsolatedElement(printEl, {
+                      title: `Recibo_${receiptTx.receiptNumber}`,
+                      orientation: 'thermal',
+                      margins: '4mm 4mm'
+                    });
+                  } else {
+                    window.print();
+                  }
+                }}
                 className="flex-1 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-md shadow-blue-600/20"
               >
                 <Printer className="w-3.5 h-3.5" />
@@ -1287,7 +2252,7 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
       {/* MODAL: IMPRESSÃO DO ESPELHO & INFORME DE PAGAMENTO COMPLETO (A4 / TÉRMICA) */}
       {showSettlementPrintModal && (
         <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-2xl w-full p-8 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto">
+          <div id="settlement-report-sheet" className="bg-white rounded-3xl max-w-2xl w-full p-8 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto">
             
             <div className="flex items-center justify-between border-b border-slate-200 pb-4">
               <div className="flex items-center gap-3">
@@ -1312,7 +2277,7 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
                 </div>
                 <div>
                   <span className="text-slate-400 font-bold uppercase text-[10px] block">Período de Apuração:</span>
-                  <span className="text-slate-900 font-bold text-sm block mt-0.5">31/08/2026 a 05/09/2026</span>
+                  <span className="text-slate-900 font-bold text-sm block mt-0.5">{settlementReport.periodDescription}</span>
                   <span className="text-slate-500 text-[11px]">Fechamento Semanal</span>
                 </div>
               </div>
@@ -1330,40 +2295,36 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100 font-medium">
-                    <tr className="bg-amber-50/70">
-                      <td className="p-3 font-bold text-amber-900">Semana Anterior</td>
-                      <td className="p-3 text-amber-900">Diferença pendente semana passada a ser pago</td>
-                      <td className="p-3 text-center font-mono">1</td>
-                      <td className="p-3 text-right font-mono">R$ 550,00</td>
-                      <td className="p-3 text-right font-black text-amber-800 font-mono">R$ 550,00</td>
-                    </tr>
-                    <tr>
-                      <td className="p-3 font-bold text-slate-900">03/09/2026</td>
-                      <td className="p-3 text-slate-700">12 Consultas Clínicas / Refração (R$ 50 cada)</td>
-                      <td className="p-3 text-center font-mono">12</td>
-                      <td className="p-3 text-right font-mono">R$ 50,00</td>
-                      <td className="p-3 text-right font-black text-slate-900 font-mono">R$ 600,00</td>
-                    </tr>
-                    <tr>
-                      <td className="p-3 font-bold text-slate-900">04/09/2026</td>
-                      <td className="p-3 text-slate-700">5 Consultas Clínicas / Refração (R$ 50 cada)</td>
-                      <td className="p-3 text-center font-mono">5</td>
-                      <td className="p-3 text-right font-mono">R$ 50,00</td>
-                      <td className="p-3 text-right font-black text-slate-900 font-mono">R$ 250,00</td>
-                    </tr>
-                    <tr>
-                      <td className="p-3 font-bold text-slate-900">05/09/2026</td>
-                      <td className="p-3 text-slate-700">Atendimento por Período (5h) / Meia Diária</td>
-                      <td className="p-3 text-center font-mono">1</td>
-                      <td className="p-3 text-right font-mono">R$ 500,00</td>
-                      <td className="p-3 text-right font-black text-slate-900 font-mono">R$ 500,00</td>
-                    </tr>
+                    {settlementReport.previousBalancePending > 0 && (
+                      <tr className="bg-amber-50/70">
+                        <td className="p-3 font-bold text-amber-900">Semana Anterior</td>
+                        <td className="p-3 text-amber-900">Diferença pendente semana passada a ser pago</td>
+                        <td className="p-3 text-center font-mono">1</td>
+                        <td className="p-3 text-right font-mono">R$ {settlementReport.previousBalancePending.toFixed(2)}</td>
+                        <td className="p-3 text-right font-black text-amber-800 font-mono">R$ {settlementReport.previousBalancePending.toFixed(2)}</td>
+                      </tr>
+                    )}
+                    {settlementReport.dailyEntries.map((entry, idx) => (
+                      <tr key={idx}>
+                        <td className="p-3 font-bold text-slate-900">{entry.dayLabel || entry.date}</td>
+                        <td className="p-3 text-slate-700">{entry.description}</td>
+                        <td className="p-3 text-center font-mono">{entry.quantity}</td>
+                        <td className="p-3 text-right font-mono">R$ {entry.unitPrice.toFixed(2)}</td>
+                        <td className="p-3 text-right font-black text-slate-900 font-mono">R$ {entry.totalAmount.toFixed(2)}</td>
+                      </tr>
+                    ))}
                   </tbody>
                   <tfoot className="bg-slate-900 text-white font-black text-sm">
                     <tr>
-                      <td colSpan={3} className="p-3.5 uppercase text-xs">TOTAL GERAL A REPASSAR:</td>
+                      <td colSpan={3} className="p-3.5 uppercase text-xs">
+                        {settlementReport.settlementStatus === 'settled' || settlementReport.totalPayableAmount <= 0
+                          ? 'SITUAÇÃO DO REPASSE:'
+                          : 'TOTAL GERAL A REPASSAR:'}
+                      </td>
                       <td colSpan={2} className="p-3.5 text-right text-emerald-400 text-base font-mono">
-                        R$ 1.900,00
+                        {settlementReport.settlementStatus === 'settled' || settlementReport.totalPayableAmount <= 0
+                          ? 'R$ 1.900,00 (QUITADO)'
+                          : `R$ ${settlementReport.totalPayableAmount.toFixed(2)}`}
                       </td>
                     </tr>
                   </tfoot>
@@ -1392,7 +2353,18 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
                 Fechar
               </button>
               <button
-                onClick={() => window.print()}
+                onClick={() => {
+                  const printEl = document.getElementById('settlement-report-sheet');
+                  if (printEl) {
+                    printIsolatedElement(printEl, {
+                      title: `Demonstrativo_Repasse_${activeClinic.name}`,
+                      orientation: 'portrait',
+                      margins: '8mm 8mm'
+                    });
+                  } else {
+                    window.print();
+                  }
+                }}
                 className="flex-1 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-2xl text-xs flex items-center justify-center gap-2 shadow-lg shadow-blue-600/25 cursor-pointer"
               >
                 <Printer className="w-4 h-4" />
@@ -1400,6 +2372,481 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
               </button>
             </div>
 
+          </div>
+        </div>
+      )}
+
+      {/* FASE 29: Modal de Confirmação Acessível para Exclusão de Lançamento */}
+      {txToDelete && (
+        <div 
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fadeIn"
+          role="alertdialog"
+          aria-modal="true"
+          aria-labelledby="delete-tx-title"
+          aria-describedby="delete-tx-desc"
+        >
+          <div className="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl border border-red-200 space-y-4">
+            <div className="flex items-center gap-3 text-red-600">
+              <div className="p-2.5 bg-red-50 rounded-2xl">
+                <AlertTriangle className="w-6 h-6 text-red-600" />
+              </div>
+              <div>
+                <h3 id="delete-tx-title" className="font-black text-sm text-slate-900 uppercase tracking-tight">
+                  Confirmar Exclusão de Lançamento
+                </h3>
+                <span className="text-[11px] text-slate-500 font-medium">
+                  Ação auditável e irreversível
+                </span>
+              </div>
+            </div>
+
+            <p id="delete-tx-desc" className="text-xs text-slate-600 leading-relaxed">
+              Deseja realmente remover o lançamento <strong>"{txToDelete.description}"</strong> de <strong>{formatCurrencyValue(txToDelete.amount, txToDelete.currency || activeClinic.currency)}</strong>? Esta transação será removida do fluxo de caixa e gerará registro de auditoria.
+            </p>
+
+            <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100">
+              <button
+                type="button"
+                autoFocus
+                onClick={() => setTxToDelete(null)}
+                className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl cursor-pointer transition-colors"
+              >
+                Cancelar (Não excluir)
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmDeleteTx}
+                className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white font-bold text-xs rounded-xl cursor-pointer shadow-md shadow-red-600/25 transition-colors"
+              >
+                Sim, Excluir Lançamento
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+
+      {/* MODAL 1: DETALHAMENTO TRANSPARENTE DA REGRA & AUDITORIA */}
+      {selectedRemRecord && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto animate-fadeIn">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-6 text-slate-900 border border-slate-200 space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2">
+                <div className="p-2 bg-blue-50 text-blue-600 rounded-xl">
+                  <FileSpreadsheet className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-black text-slate-900 text-sm">Origem e Composição do Cálculo</h3>
+                  <span className="text-[11px] text-slate-500">Por que esse atendimento gerou esse valor?</span>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelectedRemRecord(null)}
+                className="text-slate-400 hover:text-slate-600 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-3 text-xs">
+              <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 space-y-1.5">
+                <div className="flex justify-between">
+                  <span className="text-slate-500">Examinador:</span>
+                  <span className="font-bold text-slate-900">{selectedRemRecord.examinerName}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-500">Paciente:</span>
+                  <span className="font-bold text-slate-900">{selectedRemRecord.patientName}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-500">Data e Horário:</span>
+                  <span className="font-bold font-mono text-slate-900">{selectedRemRecord.date.split('-').reverse().join('/')} às {selectedRemRecord.time}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-500">Tipo de Consulta:</span>
+                  <span className="font-bold text-slate-900">{selectedRemRecord.appointmentType}</span>
+                </div>
+              </div>
+
+              <div className="p-4 bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200/80 rounded-2xl space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-blue-900 font-bold uppercase text-[10px] tracking-wider">Regra Aplicada</span>
+                  <span className="px-2 py-0.5 rounded-md bg-blue-600 text-white font-black text-[10px] uppercase">
+                    {selectedRemRecord.periodKind}
+                  </span>
+                </div>
+                <p className="text-xs text-blue-950 font-medium leading-relaxed">
+                  {selectedRemRecord.calculationBasis}
+                </p>
+                <div className="pt-2 border-t border-blue-200/60 flex items-center justify-between">
+                  <span className="font-bold text-blue-900">Remuneração Devida:</span>
+                  <span className="text-lg font-black font-mono text-emerald-600">
+                    R$ {selectedRemRecord.finalAmount.toFixed(2)}
+                  </span>
+                </div>
+              </div>
+
+              {/* Snapshot congelado */}
+              <div className="p-3 bg-slate-50 rounded-2xl border border-slate-100 text-[11px] text-slate-600 space-y-1">
+                <span className="font-bold text-slate-700 block">Snapshot Congelado da Regra:</span>
+                <p>• ID Regra: {selectedRemRecord.ruleSnapshot?.ruleId}</p>
+                <p>• Modalidade: {selectedRemRecord.ruleSnapshot?.remunerationType}</p>
+                <p>• Congelado em: {new Date(selectedRemRecord.ruleSnapshot?.snapshotAt).toLocaleString('pt-BR')}</p>
+                <p className="text-slate-400 italic">Garante que alterações futuras de valor não modifiquem este lançamento retroativamente.</p>
+              </div>
+
+              {/* Trilha de Auditoria */}
+              <div className="space-y-1.5">
+                <span className="font-bold text-slate-700 block">Histórico de Auditoria:</span>
+                <div className="max-h-28 overflow-y-auto space-y-1">
+                  {selectedRemRecord.auditTrail.map((log, idx) => (
+                    <div key={idx} className="p-2 bg-slate-50 border border-slate-100 rounded-xl text-[10px] space-y-0.5">
+                      <div className="flex justify-between font-bold text-slate-700">
+                        <span>{log.action} por {log.author}</span>
+                        <span className="text-slate-400 font-mono">{new Date(log.timestamp).toLocaleTimeString('pt-BR')}</span>
+                      </div>
+                      {log.reason && <p className="text-slate-500">{log.reason}</p>}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between pt-3 border-t border-slate-100">
+              {currentUser.role !== 'reception' && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAdjustAmountInput(selectedRemRecord.finalAmount.toFixed(2));
+                    setAdjustReasonInput('');
+                    setShowAdjustModal(true);
+                  }}
+                  className="px-3 py-1.5 bg-amber-100 hover:bg-amber-200 text-amber-900 rounded-xl text-xs font-bold cursor-pointer"
+                >
+                  Ajuste Retroativo com Justificativa
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => setSelectedRemRecord(null)}
+                className="px-4 py-1.5 bg-slate-900 text-white rounded-xl text-xs font-bold cursor-pointer ml-auto"
+              >
+                Fechar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL 2: AJUSTE RETROATIVO COM JUSTIFICATIVA OBRIGATÓRIA */}
+      {showAdjustModal && selectedRemRecord && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto animate-fadeIn">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 text-slate-900 border border-slate-200 space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 className="font-black text-slate-900 text-sm">Ajuste Retroativo de Remuneração</h3>
+              <button type="button" onClick={() => setShowAdjustModal(false)} className="text-slate-400 hover:text-slate-600 cursor-pointer">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-3 bg-amber-50 border border-amber-200 rounded-2xl text-xs text-amber-900">
+              Ajustes em períodos fechados são restritos e auditados com registro permanente de autor, data, valor anterior e justificativa.
+            </div>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const amt = parseFloat(adjustAmountInput.replace(',', '.')) || 0;
+                const res = examinerRemunerationService.adjustRemuneration(
+                  selectedRemRecord.id,
+                  amt,
+                  adjustReasonInput.trim(),
+                  currentUser.fullName,
+                  effectiveClinicId
+                );
+                if (res.success) {
+                  setShowAdjustModal(false);
+                  setSelectedRemRecord(res.record || null);
+                  loadData();
+                } else {
+                  alert(res.message);
+                }
+              }}
+              className="space-y-3 text-xs"
+            >
+              <div>
+                <label className="font-bold text-slate-700 block mb-1">NOVO VALOR (R$)</label>
+                <input
+                  type="text"
+                  required
+                  value={adjustAmountInput}
+                  onChange={(e) => setAdjustAmountInput(e.target.value)}
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 font-mono font-bold text-slate-900 text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="font-bold text-slate-700 block mb-1">MOTIVO / JUSTIFICATIVA OBRIGATÓRIA *</label>
+                <textarea
+                  required
+                  rows={3}
+                  value={adjustReasonInput}
+                  onChange={(e) => setAdjustReasonInput(e.target.value)}
+                  placeholder="Ex: Correção de turno extraordinário autorizada pela diretoria..."
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-900 text-xs"
+                />
+              </div>
+
+              <div className="flex justify-end gap-2 pt-2 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => setShowAdjustModal(false)}
+                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl cursor-pointer"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-xl cursor-pointer shadow-xs"
+                >
+                  Confirmar e Auditar Ajuste
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL 3: NOVO PERÍODO FIXO */}
+      {showFixedPeriodModal && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto animate-fadeIn">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 text-slate-900 border border-slate-200 space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 className="font-black text-slate-900 text-sm">Cadastrar Período Fixo Recorrente</h3>
+              <button type="button" onClick={() => setShowFixedPeriodModal(false)} className="text-slate-400 hover:text-slate-600 cursor-pointer">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const amt = parseFloat(fixedAmount.replace(',', '.')) || 0;
+                const newFixed: ExaminerFixedPeriod = {
+                  id: `efp_${effectiveClinicId}_${Date.now()}`,
+                  clinicId: effectiveClinicId,
+                  examinerId: 'user-examinador',
+                  examinerName: 'Dr. Rudson Meirelles',
+                  dayOfWeek: fixedDayOfWeek,
+                  startTime: fixedStartTime,
+                  endTime: fixedEndTime,
+                  validFrom: '2026-10-01',
+                  remunerationType: 'fixed_period',
+                  fixedAmount: amt,
+                  active: true,
+                  notes: fixedNotes,
+                  createdAt: new Date().toISOString(),
+                  updatedAt: new Date().toISOString(),
+                  createdBy: currentUser.fullName
+                };
+                offlineDb.saveExaminerFixedPeriod(newFixed, effectiveClinicId);
+                setShowFixedPeriodModal(false);
+                loadData();
+              }}
+              className="space-y-3 text-xs"
+            >
+              <div>
+                <label className="font-bold text-slate-700 block mb-1">DIA DA SEMANA</label>
+                <select
+                  value={fixedDayOfWeek}
+                  onChange={(e) => setFixedDayOfWeek(parseInt(e.target.value, 10))}
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-900 cursor-pointer"
+                >
+                  <option value={1}>Segunda-feira</option>
+                  <option value={2}>Terça-feira</option>
+                  <option value={3}>Quarta-feira</option>
+                  <option value={4}>Quinta-feira</option>
+                  <option value={5}>Sexta-feira</option>
+                  <option value={6}>Sábado</option>
+                  <option value={0}>Domingo</option>
+                </select>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="font-bold text-slate-700 block mb-1">HORÁRIO INICIAL</label>
+                  <input
+                    type="time"
+                    required
+                    value={fixedStartTime}
+                    onChange={(e) => setFixedStartTime(e.target.value)}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 font-mono font-bold text-slate-900"
+                  />
+                </div>
+                <div>
+                  <label className="font-bold text-slate-700 block mb-1">HORÁRIO FINAL</label>
+                  <input
+                    type="time"
+                    required
+                    value={fixedEndTime}
+                    onChange={(e) => setFixedEndTime(e.target.value)}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 font-mono font-bold text-slate-900"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="font-bold text-slate-700 block mb-1">VALOR POR PERÍODO (R$)</label>
+                <input
+                  type="text"
+                  required
+                  value={fixedAmount}
+                  onChange={(e) => setFixedAmount(e.target.value)}
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 font-mono font-bold text-slate-900 text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="font-bold text-slate-700 block mb-1">DESCRIÇÃO / OBSERVAÇÃO</label>
+                <input
+                  type="text"
+                  value={fixedNotes}
+                  onChange={(e) => setFixedNotes(e.target.value)}
+                  placeholder="Ex: Turno Meia Diária de 5h"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-900"
+                />
+              </div>
+
+              <div className="flex justify-end gap-2 pt-2 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => setShowFixedPeriodModal(false)}
+                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl cursor-pointer"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl cursor-pointer shadow-xs"
+                >
+                  Salvar Período Fixo
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL 4: NOVO PERÍODO EXTRAORDINÁRIO */}
+      {showSpecialPeriodModal && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto animate-fadeIn">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 text-slate-900 border border-slate-200 space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 className="font-black text-slate-900 text-sm">Cadastrar Período Extraordinário</h3>
+              <button type="button" onClick={() => setShowSpecialPeriodModal(false)} className="text-slate-400 hover:text-slate-600 cursor-pointer">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const amt = parseFloat(specialAmount.replace(',', '.')) || 0;
+                const newSpecial: ExaminerSpecialPeriod = {
+                  id: `esp_${effectiveClinicId}_${Date.now()}`,
+                  clinicId: effectiveClinicId,
+                  examinerId: 'user-examinador',
+                  examinerName: 'Dr. Rudson Meirelles',
+                  date: specialDate,
+                  startTime: specialStartTime,
+                  endTime: specialEndTime,
+                  remunerationType: 'fixed_period',
+                  fixedAmount: amt,
+                  status: 'active',
+                  notes: specialNotes,
+                  createdAt: new Date().toISOString(),
+                  updatedAt: new Date().toISOString(),
+                  createdBy: currentUser.fullName
+                };
+                offlineDb.saveExaminerSpecialPeriod(newSpecial, effectiveClinicId);
+                setShowSpecialPeriodModal(false);
+                loadData();
+              }}
+              className="space-y-3 text-xs"
+            >
+              <div>
+                <label className="font-bold text-slate-700 block mb-1">DATA ESPECÍFICA</label>
+                <input
+                  type="date"
+                  required
+                  value={specialDate}
+                  onChange={(e) => setSpecialDate(e.target.value)}
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 font-mono font-bold text-slate-900"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="font-bold text-slate-700 block mb-1">HORÁRIO INICIAL</label>
+                  <input
+                    type="time"
+                    required
+                    value={specialStartTime}
+                    onChange={(e) => setSpecialStartTime(e.target.value)}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 font-mono font-bold text-slate-900"
+                  />
+                </div>
+                <div>
+                  <label className="font-bold text-slate-700 block mb-1">HORÁRIO FINAL</label>
+                  <input
+                    type="time"
+                    required
+                    value={specialEndTime}
+                    onChange={(e) => setSpecialEndTime(e.target.value)}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 font-mono font-bold text-slate-900"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="font-bold text-slate-700 block mb-1">VALOR DO PERÍODO EXTRAORDINÁRIO (R$)</label>
+                <input
+                  type="text"
+                  required
+                  value={specialAmount}
+                  onChange={(e) => setSpecialAmount(e.target.value)}
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 font-mono font-bold text-slate-900 text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="font-bold text-slate-700 block mb-1">MOTIVO / DESCRIÇÃO</label>
+                <input
+                  type="text"
+                  value={specialNotes}
+                  onChange={(e) => setSpecialNotes(e.target.value)}
+                  placeholder="Ex: Mutirão Especial, Campanha de Saúde Visual, Feriado"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-900"
+                />
+              </div>
+
+              <div className="flex justify-end gap-2 pt-2 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => setShowSpecialPeriodModal(false)}
+                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl cursor-pointer"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl cursor-pointer shadow-xs"
+                >
+                  Salvar Período Extraordinário
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

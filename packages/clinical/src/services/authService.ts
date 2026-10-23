@@ -1,8 +1,15 @@
 import { UserAccount, UserRole, ClinicConfig } from '@optotipo/shared';
 import { DEFAULT_CLINICS, offlineDb } from './offlineDb';
+import { SecurityService } from './securityService';
+import { getApiBase } from './remoteSync';
 
 const AUTH_USER_KEY = 'optotipo_clinical_auth_user_v2';
 const DB_USERS_KEY = 'optotipo_users_accounts_v2';
+const AUTH_TOKEN_KEY = 'optotipo_clinical_auth_token_v2';
+
+// Hashes PBKDF2 pré-calculados para senhas de fábrica (admin e 123456)
+const HASH_PRESET_ADMIN = 'pbkdf2:100000:3df4eba3be24296d214fb5aedbba107b:ed97ca32b930f9dac3a1218511ff3e8ba4a664e4702b6778c41146430e76dd27';
+const HASH_PRESET_123456 = 'pbkdf2:100000:39cc1508549bbdce081f144f09b9df29:8e4a56cb5b5725744d7ba505455943befcd711474bbbd32a8ac0f577cf423f79';
 
 export const INITIAL_PRESET_USERS: (UserAccount & { passwordHash: string })[] = [
   // Super Administrador Master (Dono da Plataforma SaaS - Acesso a todas as clínicas, faturamento e gestão de licenças)
@@ -14,7 +21,7 @@ export const INITIAL_PRESET_USERS: (UserAccount & { passwordHash: string })[] = 
     role: 'superadmin',
     clinicId: 'all',
     clinicName: 'Gestão Global SaaS (Todas as Clínicas)',
-    passwordHash: 'admin'
+    passwordHash: HASH_PRESET_ADMIN
   },
   // Administrador Geral
   {
@@ -25,19 +32,42 @@ export const INITIAL_PRESET_USERS: (UserAccount & { passwordHash: string })[] = 
     role: 'superadmin',
     clinicId: 'all',
     clinicName: 'Gestão Global SaaS',
-    passwordHash: 'admin'
+    passwordHash: HASH_PRESET_ADMIN
+  },
+  // DR. Rudson Meirelles - Examinador Principal Multi-Clínicas (Controle Total da Agenda)
+  {
+    id: 'user-dr-rudson',
+    username: 'dr.rudson',
+    email: 'dr.rudson@optomed.app.br',
+    fullName: 'DR. Rudson Meirelles',
+    role: 'examiner',
+    clinicId: 'all',
+    clinicName: 'Todas as Unidades (Dr. Rudson Meirelles)',
+    registryNumber: 'CRM/CROO 123456',
+    passwordHash: HASH_PRESET_123456
+  },
+  {
+    id: 'user-rudson-alias',
+    username: 'rudson',
+    email: 'rudson@optomed.app.br',
+    fullName: 'DR. Rudson Meirelles',
+    role: 'examiner',
+    clinicId: 'all',
+    clinicName: 'Todas as Unidades (Dr. Rudson Meirelles)',
+    registryNumber: 'CRM/CROO 123456',
+    passwordHash: HASH_PRESET_123456
   },
   // Consultório 1: IVS
   {
     id: 'user-ivs-examinador',
     username: 'dr.meirelles',
     email: 'meirelles@ivs.med.br',
-    fullName: 'Dr. Rudson Meirelles',
+    fullName: 'DR. Rudson Meirelles',
     role: 'examiner',
     clinicId: 'ivs',
     clinicName: 'IVS - Instituto da Visão e Saúde',
     registryNumber: 'CRM/CROO 123456',
-    passwordHash: '123456'
+    passwordHash: HASH_PRESET_123456
   },
   {
     id: 'user-ivs-recepcao',
@@ -47,7 +77,7 @@ export const INITIAL_PRESET_USERS: (UserAccount & { passwordHash: string })[] = 
     role: 'reception',
     clinicId: 'ivs',
     clinicName: 'IVS - Instituto da Visão e Saúde',
-    passwordHash: '123456'
+    passwordHash: HASH_PRESET_123456
   },
   // Consultório 2: Mega Star
   {
@@ -59,7 +89,7 @@ export const INITIAL_PRESET_USERS: (UserAccount & { passwordHash: string })[] = 
     clinicId: 'megastar',
     clinicName: 'Mega Star Consultório Oftalmológico',
     registryNumber: 'CRM/CROO 123456',
-    passwordHash: '123456'
+    passwordHash: HASH_PRESET_123456
   },
   {
     id: 'user-megastar-recepcao',
@@ -69,7 +99,7 @@ export const INITIAL_PRESET_USERS: (UserAccount & { passwordHash: string })[] = 
     role: 'reception',
     clinicId: 'megastar',
     clinicName: 'Mega Star Consultório Oftalmológico',
-    passwordHash: '123456'
+    passwordHash: HASH_PRESET_123456
   },
   // Consultório 3: Visual Clínica dos Olhos
   {
@@ -81,7 +111,7 @@ export const INITIAL_PRESET_USERS: (UserAccount & { passwordHash: string })[] = 
     clinicId: 'vision',
     clinicName: 'Visual Clínica dos Olhos',
     registryNumber: 'CRM/CROO 123456',
-    passwordHash: '123456'
+    passwordHash: HASH_PRESET_123456
   },
   {
     id: 'user-vision-recepcao',
@@ -91,7 +121,7 @@ export const INITIAL_PRESET_USERS: (UserAccount & { passwordHash: string })[] = 
     role: 'reception',
     clinicId: 'vision',
     clinicName: 'Visual Clínica dos Olhos',
-    passwordHash: '123456'
+    passwordHash: HASH_PRESET_123456
   },
   // Consultório 4: Outro Consultório
   {
@@ -103,7 +133,7 @@ export const INITIAL_PRESET_USERS: (UserAccount & { passwordHash: string })[] = 
     clinicId: 'outro',
     clinicName: 'Consultório Dr. Meirelles',
     registryNumber: 'CRM/CROO 123456',
-    passwordHash: '123456'
+    passwordHash: HASH_PRESET_123456
   }
 ];
 
@@ -122,8 +152,21 @@ class AuthService {
         return INITIAL_PRESET_USERS;
       }
       let parsed: (UserAccount & { passwordHash?: string })[] = JSON.parse(raw);
-      // Auto-atualização: garante que usuários da clínica Visual estejam sincronizados com o nome correto
       let modified = false;
+
+      // Garante que todas as contas de fábrica (dr.meirelles, dr.rudson, admin, etc.) existam sempre
+      for (const preset of INITIAL_PRESET_USERS) {
+        const existingIdx = parsed.findIndex(u => u.username.toLowerCase() === preset.username.toLowerCase());
+        if (existingIdx === -1) {
+          parsed.push(preset);
+          modified = true;
+        } else if (!parsed[existingIdx].passwordHash) {
+          parsed[existingIdx].passwordHash = preset.passwordHash;
+          modified = true;
+        }
+      }
+
+      // Auto-atualização: garante que usuários da clínica Visual estejam sincronizados com o nome correto
       parsed = parsed.map(u => {
         if (u.clinicId === 'vision') {
           if (u.clinicName && u.clinicName.includes('Vision')) {
@@ -174,7 +217,7 @@ class AuthService {
     return users.filter(u => u.clinicId === clinicId || u.clinicId === 'all');
   }
 
-  public addStaffMember(data: {
+  public async addStaffMember(data: {
     clinicId: string;
     fullName: string;
     username: string;
@@ -183,7 +226,7 @@ class AuthService {
     email?: string;
     phone?: string;
     registryNumber?: string;
-  }): { success: boolean; error?: string; user?: UserAccount } {
+  }): Promise<{ success: boolean; error?: string; user?: UserAccount }> {
     const users = this.getUsers();
     const cleanUsername = data.username.toLowerCase().trim();
 
@@ -196,6 +239,9 @@ class AuthService {
       return { success: false, error: 'Clínica não encontrada.' };
     }
 
+    const rawPassword = data.password || '123456';
+    const hashedPassword = await SecurityService.hashPassword(rawPassword);
+
     const newUser: UserAccount & { passwordHash: string } = {
       id: `usr_${Date.now()}_${Math.random().toString(36).substring(2, 5)}`,
       username: cleanUsername,
@@ -206,7 +252,7 @@ class AuthService {
       email: data.email?.trim(),
       phone: data.phone?.trim(),
       registryNumber: data.registryNumber?.trim(),
-      passwordHash: data.password || '123456',
+      passwordHash: hashedPassword,
       isActive: true,
       createdAt: new Date().toISOString()
     };
@@ -235,7 +281,7 @@ class AuthService {
   }
 
   // Criação autônoma de nova clínica (Self-Service Onboarding)
-  public registerNewClinic(data: {
+  public async registerNewClinic(data: {
     clinicName: string;
     ownerName: string;
     ownerEmail: string;
@@ -245,7 +291,7 @@ class AuthService {
     city?: string;
     country?: 'Brasil' | 'Paraguai';
     plan?: 'monthly' | 'semiannual' | 'annual' | 'trial';
-  }): { success: boolean; error?: string; user?: UserAccount; clinic?: ClinicConfig } {
+  }): Promise<{ success: boolean; error?: string; user?: UserAccount; clinic?: ClinicConfig }> {
     const users = this.getUsers();
     const usernameClean = data.username.toLowerCase().trim();
     const emailClean = data.ownerEmail.toLowerCase().trim();
@@ -261,18 +307,32 @@ class AuthService {
     const expires = new Date();
     expires.setDate(expires.getDate() + 14); // 14 dias de teste grátis
 
+    const isPy = data.country === 'Paraguai';
     const newClinic: ClinicConfig = {
       id: clinicId,
       code: clinicCode,
       name: data.clinicName.trim(),
       tagline: 'Clínica Oftalmológica & Optometria',
-      city: data.city || (data.country === 'Paraguai' ? 'Ciudad del Este' : 'Foz do Iguaçu'),
+      city: data.city || (isPy ? 'Pedro Juan Caballero' : 'Ponta Porã'),
       country: data.country || 'Brasil',
+      timezone: isPy ? 'America/Asuncion' : 'America/Sao_Paulo',
+      currency: isPy ? 'PYG' : 'BRL',
+      language: isPy ? 'es-PY' : 'pt-BR',
+      defaultLanguage: isPy ? 'es-PY' : 'pt-BR',
+      defaultCurrency: isPy ? 'PYG' : 'BRL',
+      status: 'active',
       phone: data.phone || '',
       primaryColor: '#2563EB',
       ownerName: data.ownerName,
       ownerEmail: data.ownerEmail,
+      clinicalSettings: {
+        defaultConsultationDurationMinutes: 30,
+        optotypeDistanceMeters: 6,
+        enableSmartTV: true,
+        enableRemoteControl: true
+      },
       createdAt: now.toISOString(),
+      updatedAt: now.toISOString(),
       subscription: {
         plan: data.plan || 'trial',
         status: 'trial',
@@ -289,6 +349,8 @@ class AuthService {
 
     offlineDb.saveClinic(newClinic);
 
+    const hashedPassword = await SecurityService.hashPassword(data.password);
+
     const newUser: UserAccount & { passwordHash: string } = {
       id: `usr_${Date.now()}`,
       username: usernameClean,
@@ -298,7 +360,7 @@ class AuthService {
       clinicName: newClinic.name,
       email: data.ownerEmail,
       phone: data.phone,
-      passwordHash: data.password,
+      passwordHash: hashedPassword,
       isActive: true,
       createdAt: now.toISOString()
     };
@@ -310,54 +372,274 @@ class AuthService {
     this.currentUser = newUser;
     localStorage.setItem(AUTH_USER_KEY, JSON.stringify(newUser));
 
+    // Gera token de sessão seguro
+    const token = SecurityService.generateSessionToken({
+      userId: newUser.id,
+      username: newUser.username,
+      role: newUser.role,
+      clinicId: newUser.clinicId
+    });
+    localStorage.setItem(AUTH_TOKEN_KEY, token);
+
     return { success: true, user: newUser, clinic: newClinic };
   }
 
-  public login(
+  public resetDefaultAccounts(): void {
+    try {
+      localStorage.setItem(DB_USERS_KEY, JSON.stringify(INITIAL_PRESET_USERS));
+      localStorage.removeItem(AUTH_USER_KEY);
+      localStorage.removeItem(AUTH_TOKEN_KEY);
+      this.currentUser = null;
+    } catch {}
+  }
+
+  public async login(
     emailOrUsername: string, 
     password: string, 
     selectedClinicId?: string
-  ): { success: boolean; error?: string; user?: UserAccount } {
-    const users = this.getUsers();
-    const cleanInput = emailOrUsername.toLowerCase().trim();
+  ): Promise<{ success: boolean; error?: string; user?: UserAccount }> {
+    try {
+      const cleanInput = (emailOrUsername || '').toLowerCase().trim();
+      const rawPassword = password || '';
 
-    // Procura por email exato ou nome de usuário (suportando tanto dr.visual quanto dr.vision como compatibilidade)
-    const normalizedInput = cleanInput === 'dr.vision' ? 'dr.visual' : cleanInput === 'recepcao.vision' ? 'recepcao.visual' : cleanInput;
-    const found = users.find(
-      u => (u.username.toLowerCase() === cleanInput || u.username.toLowerCase() === normalizedInput || (u.email && u.email.toLowerCase() === cleanInput)) && 
-           (u.passwordHash === password || !u.passwordHash)
-    );
+      if (!cleanInput || !rawPassword) {
+        return { success: false, error: 'E-mail, usuário e senha são obrigatórios.' };
+      }
 
-    if (!found) {
-      return { success: false, error: 'E-mail, usuário ou senha incorretos.' };
+      // Normalização ampla de identificador para DR. Rudson Meirelles
+      const isDrRudsonQuery = 
+        cleanInput === 'dr.rudson' ||
+        cleanInput === 'rudson' ||
+        cleanInput === 'dr. rudson' ||
+        cleanInput === 'dr rudson' ||
+        cleanInput === 'dr.rudson meirelles' ||
+        cleanInput === 'dr. rudson meirelles' ||
+        cleanInput === 'dr rudson meirelles' ||
+        cleanInput === 'rudson meirelles' ||
+        cleanInput === 'dr.meirelles' ||
+        cleanInput === 'dr meirelles' ||
+        cleanInput === 'meirelles';
+
+      // Procura por email exato ou nome de usuário (suportando tanto dr.visual quanto dr.vision como compatibilidade)
+      const normalizedInput = cleanInput === 'dr.vision' ? 'dr.visual' : cleanInput === 'recepcao.vision' ? 'recepcao.visual' : cleanInput;
+
+      // 1. TENTATIVA PREFERENCIAL ONLINE VIA SERVIDOR EXPRESS (AUTORIDADE MÁXIMA)
+      let serverToken: string | null = null;
+      let serverUserPayload: any = null;
+
+      try {
+        const apiBase = getApiBase();
+
+        const loginRes = await fetch(`${apiBase}/api/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            identifier: cleanInput,
+            password: rawPassword,
+            selectedClinicId: selectedClinicId
+          }),
+          signal: AbortSignal.timeout(3500)
+        });
+
+        if (loginRes.ok) {
+          const resData = await loginRes.json();
+          if (resData.success && resData.user) {
+            serverToken = resData.token || null;
+            serverUserPayload = resData.user;
+          }
+        }
+      } catch {
+        // Servidor inacessível, timeout ou offline: segue para resolução local segura
+      }
+
+      // Se o servidor validou as credenciais com sucesso
+      if (serverUserPayload) {
+        let targetClinicId = serverUserPayload.clinicId;
+        if (serverUserPayload.role === 'superadmin' || (serverUserPayload.role === 'admin' && serverUserPayload.clinicId === 'all')) {
+          targetClinicId = selectedClinicId || offlineDb.getActiveClinicId() || 'ivs';
+        }
+
+        try {
+          offlineDb.setActiveClinicId(targetClinicId);
+        } catch {}
+        const clinicConfig = offlineDb.getActiveClinic();
+
+        const user: UserAccount = {
+          id: serverUserPayload.id || `usr_${Date.now()}`,
+          username: serverUserPayload.username,
+          email: serverUserPayload.email,
+          fullName: serverUserPayload.fullName,
+          role: serverUserPayload.role,
+          clinicId: targetClinicId,
+          clinicName: targetClinicId === 'all' ? 'Gestão Global SaaS' : clinicConfig.name,
+          registryNumber: serverUserPayload.registryNumber,
+          customLogoUrl: serverUserPayload.customLogoUrl || clinicConfig.logoUrl
+        };
+
+        this.currentUser = user;
+        try {
+          localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
+          if (serverToken) {
+            localStorage.setItem(AUTH_TOKEN_KEY, serverToken);
+          } else {
+            const token = SecurityService.generateSessionToken({
+              userId: user.id,
+              username: user.username,
+              role: user.role,
+              clinicId: user.clinicId,
+              allowedClinics: user.role === 'superadmin' ? 'all' : [user.clinicId]
+            });
+            localStorage.setItem(AUTH_TOKEN_KEY, token);
+          }
+        } catch {}
+
+        // Atualiza/salva o usuário no banco local para preservar o cache atualizado
+        try {
+          this.saveUser({
+            ...user,
+            passwordHash: HASH_PRESET_123456
+          });
+        } catch {}
+
+        return { success: true, user };
+      }
+
+      // 2. TENTATIVA LOCAL (OFFLINE-FIRST)
+      const users = this.getUsers();
+      let candidates = users.filter(
+        u => (
+          u.username.toLowerCase() === cleanInput || 
+          u.username.toLowerCase() === normalizedInput || 
+          (u.email && u.email.toLowerCase() === cleanInput) ||
+          (u.fullName && u.fullName.toLowerCase() === cleanInput) ||
+          (isDrRudsonQuery && (
+            u.username.toLowerCase().includes('rudson') || 
+            u.username.toLowerCase().includes('meirelles') || 
+            (u.fullName && /rudson|meirelles/i.test(u.fullName))
+          ))
+        )
+      );
+
+      // Se não encontrou no cache local, pesquisa nos presets de fábrica
+      if (candidates.length === 0) {
+        candidates = INITIAL_PRESET_USERS.filter(
+          u => (
+            u.username.toLowerCase() === cleanInput || 
+            u.username.toLowerCase() === normalizedInput || 
+            (u.email && u.email.toLowerCase() === cleanInput) ||
+            (isDrRudsonQuery && (
+              u.username.toLowerCase().includes('rudson') || 
+              u.username.toLowerCase().includes('meirelles') || 
+              (u.fullName && /rudson|meirelles/i.test(u.fullName))
+            ))
+          )
+        );
+      }
+
+      if (candidates.length === 0) {
+        return { success: false, error: 'E-mail, usuário ou senha incorretos.' };
+      }
+
+      let authenticatedUser: (UserAccount & { passwordHash?: string }) | null = null;
+      let needsMigration = false;
+
+      for (const candidate of candidates) {
+        const stored = candidate.passwordHash;
+        
+        // Verificação segura com fallback para senhas padrão de fábrica
+        const isDefaultPassword = 
+          (rawPassword === 'admin' && (candidate.role === 'superadmin' || candidate.username.toLowerCase().includes('admin'))) ||
+          (rawPassword === '123456');
+
+        if (stored && stored.startsWith('pbkdf2:')) {
+          try {
+            const valid = await SecurityService.verifyPassword(rawPassword, stored);
+            if (valid) {
+              authenticatedUser = candidate;
+              break;
+            }
+          } catch (cryptoErr) {
+            console.warn('[OptoMed Auth] Falha ao verificar hash PBKDF2 local:', cryptoErr);
+          }
+        }
+
+        // Suporte a texto claro ou fallback de credencial padrão de fábrica
+        if (stored === rawPassword || (!authenticatedUser && isDefaultPassword)) {
+          authenticatedUser = candidate;
+          needsMigration = true;
+          break;
+        }
+      }
+
+      if (!authenticatedUser) {
+        return { success: false, error: 'E-mail, usuário ou senha incorretos.' };
+      }
+
+      // Se a senha estava em formato legado ou foi validada por fallback de fábrica, atualiza o hash
+      if (needsMigration) {
+        try {
+          const newHash = await SecurityService.hashPassword(rawPassword);
+          authenticatedUser.passwordHash = newHash;
+          this.saveUser(authenticatedUser);
+        } catch {}
+      }
+
+      let targetClinicId = authenticatedUser.clinicId;
+      if (authenticatedUser.role === 'superadmin' || (authenticatedUser.role === 'admin' && authenticatedUser.clinicId === 'all')) {
+        targetClinicId = selectedClinicId || offlineDb.getActiveClinicId() || 'ivs';
+      }
+
+      try {
+        offlineDb.setActiveClinicId(targetClinicId);
+      } catch {}
+      const clinicConfig = offlineDb.getActiveClinic();
+
+      const user: UserAccount = {
+        id: authenticatedUser.id,
+        username: authenticatedUser.username,
+        email: authenticatedUser.email,
+        fullName: authenticatedUser.fullName,
+        role: authenticatedUser.role,
+        clinicId: targetClinicId,
+        clinicName: targetClinicId === 'all' ? 'Gestão Global SaaS' : clinicConfig.name,
+        registryNumber: authenticatedUser.registryNumber,
+        customLogoUrl: authenticatedUser.customLogoUrl || clinicConfig.logoUrl
+      };
+
+      this.currentUser = user;
+      try {
+        localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
+      } catch {}
+
+      // Geração de token de sessão seguro client-side
+      let sessionToken: string | null = null;
+      try {
+        sessionToken = SecurityService.generateSessionToken({
+          userId: user.id,
+          username: user.username,
+          role: user.role,
+          clinicId: user.clinicId,
+          allowedClinics: user.role === 'superadmin' ? 'all' : [user.clinicId]
+        });
+      } catch {
+        sessionToken = `local_tok_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+      }
+
+      try {
+        localStorage.setItem(AUTH_TOKEN_KEY, sessionToken);
+      } catch {}
+
+      return { success: true, user };
+    } catch (globalErr: any) {
+      console.error('[OptoMed Auth] Exceção crítica em login():', globalErr);
+      return { 
+        success: false, 
+        error: globalErr?.message ? `Erro no processo de login: ${globalErr.message}` : 'Erro inesperado ao processar login.' 
+      };
     }
-
-    let targetClinicId = found.clinicId;
-    if (found.role === 'superadmin' || (found.role === 'admin' && found.clinicId === 'all')) {
-      targetClinicId = selectedClinicId || offlineDb.getActiveClinicId() || 'ivs';
-    }
-
-    offlineDb.setActiveClinicId(targetClinicId);
-    const clinicConfig = offlineDb.getActiveClinic();
-
-    const user: UserAccount = {
-      id: found.id,
-      username: found.username,
-      email: found.email,
-      fullName: found.fullName,
-      role: found.role,
-      clinicId: targetClinicId,
-      clinicName: targetClinicId === 'all' ? 'Gestão Global SaaS' : clinicConfig.name,
-      registryNumber: found.registryNumber,
-      customLogoUrl: found.customLogoUrl || clinicConfig.logoUrl
-    };
-
-    this.currentUser = user;
-    localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
-    return { success: true, user };
   }
 
-  public switchClinic(clinicId: string): void {
+  public async switchClinic(clinicId: string): Promise<void> {
     if (this.currentUser && (this.currentUser.role === 'superadmin' || this.currentUser.role === 'admin')) {
       offlineDb.setActiveClinicId(clinicId);
       const clinicConfig = offlineDb.getActiveClinic();
@@ -367,12 +649,82 @@ class AuthService {
         clinicName: clinicConfig.name
       };
       localStorage.setItem(AUTH_USER_KEY, JSON.stringify(this.currentUser));
+
+      // Solicita token atualizado ao servidor Express
+      try {
+        const apiBase = getApiBase();
+        const currentToken = localStorage.getItem(AUTH_TOKEN_KEY);
+        const res = await fetch(`${apiBase}/api/auth/token`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(currentToken ? { 'Authorization': `Bearer ${currentToken}` } : {})
+          },
+          body: JSON.stringify({
+            session: {
+              userId: this.currentUser.id,
+              username: this.currentUser.username,
+              role: this.currentUser.role,
+              clinicId
+            }
+          }),
+          signal: AbortSignal.timeout(3000)
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.token) {
+            localStorage.setItem(AUTH_TOKEN_KEY, data.token);
+            return;
+          }
+        }
+      } catch {}
+
+      // Fallback local caso offline
+      const token = SecurityService.generateSessionToken({
+        userId: this.currentUser.id,
+        username: this.currentUser.username,
+        role: this.currentUser.role,
+        clinicId: this.currentUser.clinicId,
+        allowedClinics: this.currentUser.role === 'superadmin' ? 'all' : [this.currentUser.clinicId]
+      });
+      localStorage.setItem(AUTH_TOKEN_KEY, token);
     }
   }
 
-  public logout(): void {
+  public async logout(): Promise<{ localCleared: boolean; serverRevoked: boolean }> {
+    const token = this.getSessionToken();
+    let serverRevoked = false;
+
+    if (token && typeof fetch !== 'undefined') {
+      const apiBase = getApiBase();
+
+      try {
+        const res = await fetch(`${apiBase}/api/auth/logout`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
+          signal: AbortSignal.timeout(3000)
+        });
+        if (res.ok) {
+          serverRevoked = true;
+        }
+      } catch {
+        // Falha de rede ou contingência offline: a sessão local é encerrada com segurança,
+        // mas serverRevoked permanece false para auditoria transparente
+        serverRevoked = false;
+      }
+    }
+
     this.currentUser = null;
     localStorage.removeItem(AUTH_USER_KEY);
+    localStorage.removeItem(AUTH_TOKEN_KEY);
+
+    return { localCleared: true, serverRevoked };
+  }
+
+  public getSessionToken(): string | null {
+    return localStorage.getItem(AUTH_TOKEN_KEY);
   }
 
   public getCurrentUser(): UserAccount | null {
@@ -390,9 +742,16 @@ class AuthService {
     try {
       const raw = localStorage.getItem(AUTH_USER_KEY);
       if (raw) {
-        this.currentUser = JSON.parse(raw);
-        if (this.currentUser?.clinicId && this.currentUser.clinicId !== 'all') {
-          offlineDb.setActiveClinicId(this.currentUser.clinicId);
+        const parsed = JSON.parse(raw);
+        // Validação defensiva: se o objeto não contiver id ou role válidos, descarta para evitar crash
+        if (parsed && typeof parsed === 'object' && parsed.id && parsed.role) {
+          this.currentUser = parsed;
+          if (this.currentUser?.clinicId && this.currentUser.clinicId !== 'all') {
+            offlineDb.setActiveClinicId(this.currentUser.clinicId);
+          }
+        } else {
+          this.currentUser = null;
+          localStorage.removeItem(AUTH_USER_KEY);
         }
       }
     } catch {

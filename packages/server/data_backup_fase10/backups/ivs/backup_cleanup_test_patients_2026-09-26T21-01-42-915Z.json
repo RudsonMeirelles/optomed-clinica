@@ -1,0 +1,146 @@
+{
+  "timestamp": "2026-09-26T21:01:42.913Z",
+  "targetClinicId": "ivs",
+  "authorizedCount": 18,
+  "patients": [
+    {
+      "id": "pat_lost_resp_1790191012406",
+      "fullName": "Teste Resposta Perdida",
+      "createdAt": "2026-09-23T19:16:52.406Z"
+    },
+    {
+      "id": "pat_loc_1790191012252",
+      "fullName": "Paciente Teste Local 1",
+      "createdAt": "2026-09-23T19:16:52.252Z"
+    },
+    {
+      "id": "pat-audit-311-001",
+      "clinicId": "ivs",
+      "fullName": "Claudio Roberto Silveira",
+      "patientGlobalId": "glob-audit-311-001",
+      "birthDate": "1978-05-12",
+      "nationality": "BR",
+      "documentType": "CPF",
+      "documentNumber": "123.456.789-00",
+      "createdAt": "2026-09-23T19:16:51.106Z"
+    },
+    {
+      "id": "pat_lost_resp_1790190681543",
+      "fullName": "Teste Resposta Perdida",
+      "createdAt": "2026-09-23T19:11:21.543Z"
+    },
+    {
+      "id": "pat_loc_1790190664606",
+      "fullName": "Paciente Teste Local 1",
+      "createdAt": "2026-09-23T19:11:04.606Z"
+    },
+    {
+      "id": "pat_idempotency_1790189876940",
+      "fullName": "Paciente Teste Idempotência",
+      "birthDate": "1990-01-01",
+      "phone": "45999999999",
+      "createdAt": "2026-09-23T18:57:56.940Z",
+      "updatedAt": "2026-09-23T18:57:56.942Z"
+    },
+    {
+      "id": "pat_loc_1790189860924",
+      "fullName": "Paciente Teste Local 1",
+      "createdAt": "2026-09-23T18:57:40.924Z"
+    },
+    {
+      "id": "pat_loc_1790189746679",
+      "fullName": "Paciente Teste Local 1",
+      "createdAt": "2026-09-23T18:55:46.679Z"
+    },
+    {
+      "id": "pat_idempotency_1790189016232",
+      "fullName": "Paciente Teste Idempotência",
+      "birthDate": "1990-01-01",
+      "phone": "45999999999",
+      "createdAt": "2026-09-23T18:43:36.232Z",
+      "updatedAt": "2026-09-23T18:43:36.234Z"
+    },
+    {
+      "id": "pat_loc_1790188789695",
+      "fullName": "Paciente Teste Local 1",
+      "createdAt": "2026-09-23T18:39:49.695Z"
+    },
+    {
+      "id": "pat_loc_1790170701774",
+      "fullName": "Paciente Teste Local 1",
+      "createdAt": "2026-09-23T13:38:21.774Z"
+    },
+    {
+      "id": "pat_idempotency_1790170354596",
+      "fullName": "Paciente Teste Idempotência",
+      "birthDate": "1990-01-01",
+      "phone": "45999999999",
+      "createdAt": "2026-09-23T13:32:34.596Z",
+      "updatedAt": "2026-09-23T13:32:34.597Z"
+    },
+    {
+      "id": "pat_loc_1790170345089",
+      "fullName": "Paciente Teste Local 1",
+      "createdAt": "2026-09-23T13:32:25.089Z"
+    },
+    {
+      "id": "pat_loc_1790170203444",
+      "fullName": "Paciente Teste Local 1",
+      "createdAt": "2026-09-23T13:30:03.444Z"
+    },
+    {
+      "id": "pat_idempotency_1790169291003",
+      "fullName": "Paciente Teste Idempotência",
+      "birthDate": "1990-01-01",
+      "phone": "45999999999",
+      "createdAt": "2026-09-23T13:14:51.003Z",
+      "updatedAt": "2026-09-23T13:14:51.005Z"
+    },
+    {
+      "id": "pat_conflict_1790169278882",
+      "fullName": "Paciente Conflito V2 (Cliente B)",
+      "phone": "3333",
+      "updatedAt": "2026-09-23T10:10:00.000Z"
+    },
+    {
+      "id": "pat_lost_resp_1790169160576",
+      "fullName": "Teste Resposta Perdida",
+      "createdAt": "2026-09-23T13:12:40.576Z"
+    },
+    {
+      "id": "pat_idempotency_1790168604540",
+      "fullName": "Paciente Teste Idempotência",
+      "birthDate": "1990-01-01",
+      "phone": "45999999999",
+      "createdAt": "2026-09-23T13:03:24.540Z",
+      "updatedAt": "2026-09-23T13:03:24.542Z"
+    }
+  ],
+  "clinicalDocuments": [
+    {
+      "id": "doc-audit-001",
+      "encounterId": "enc-audit-311-001",
+      "patientId": "pat-audit-311-001",
+      "clinicId": "ivs",
+      "type": "optical_prescription",
+      "title": "Receita Óptica - Claudio Roberto Silveira",
+      "content": "Receita emitida com dioptrias multifocais.",
+      "version": 1,
+      "issuedAt": "2026-09-23T19:16:51.107Z"
+    }
+  ],
+  "evolutions": [
+    {
+      "id": "evo-audit-001",
+      "encounterId": "enc-audit-311-001",
+      "patientId": "pat-audit-311-001",
+      "clinicId": "ivs",
+      "professionalId": "dr-meirelles",
+      "professionalName": "Dr. Rudson Meirelles",
+      "timestamp": "2026-09-23T19:16:51.107Z",
+      "text": "Paciente adaptado ao teste subjetivo com ótima acuidade visual de perto e longe.",
+      "type": "evolution",
+      "version": 1
+    }
+  ]
+}

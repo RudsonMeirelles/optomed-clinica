@@ -1,0 +1,31 @@
+[
+  {
+    "id": "1ab19f8a-083d-4f6e-8376-0f1ad752f477",
+    "encounterId": "bab5ae93-ba8a-4aab-bf95-483b5183a35e",
+    "patientId": "eb9bc25c-c436-4b7e-bcb2-19a57d274ace",
+    "patientName": "Gabrieli Vitoria Araujo",
+    "date": "2026-09-26T14:47:18.413Z",
+    "expirationDate": "2027-09-26T14:47:18.413Z",
+    "od": {
+      "sphere": 0,
+      "cylinder": -1.5,
+      "axis": 130,
+      "visualAcuity": "20/20"
+    },
+    "oe": {
+      "sphere": 0,
+      "cylinder": -1.25,
+      "axis": 50,
+      "visualAcuity": "20/20"
+    },
+    "pdDistanceMm": 62,
+    "lensType": "monofocal_longe",
+    "material": "resina",
+    "treatments": [
+      "Antirreflexo Digital",
+      "Filtro Luz Azul (BlueCut)"
+    ],
+    "returnInstructions": "Retorno em 1 ano para controle visual de rotina.",
+    "observations": "Adaptação progressiva."
+  }
+]

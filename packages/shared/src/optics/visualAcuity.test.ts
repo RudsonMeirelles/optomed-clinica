@@ -51,4 +51,38 @@ describe('Cálculos de Acuidade Visual e Óptica Geométrica', () => {
     expect(STANDARD_ACUITY_LEVELS[0].snellen20).toBe('20/400');
     expect(STANDARD_ACUITY_LEVELS.find(l => l.snellen20 === '20/20')?.logMAR).toBe(0.0);
   });
+
+  it('deve calcular corretamente a altura física para diferentes distâncias clínicas (2.0m a 6.0m)', () => {
+    // Para 2.0m: H = 2 * 2000 * tan(5'/2) ~= 2.9089 mm
+    const h2m = calculate2020PhysicalHeightMm(2.0);
+    expect(h2m).toBeCloseTo(2.9089, 3);
+
+    // Para 3.5m (padrão clínica): H = 2 * 3500 * tan(5'/2) ~= 5.0905 mm
+    const h3_5m = calculate2020PhysicalHeightMm(3.5);
+    expect(h3_5m).toBeCloseTo(5.0905, 3);
+
+    // Para 4.0m: H = 2 * 4000 * tan(5'/2) ~= 5.8178 mm
+    const h4m = calculate2020PhysicalHeightMm(4.0);
+    expect(h4m).toBeCloseTo(5.8178, 3);
+
+    // Para 6.0m (padrão ouro): H = 2 * 6000 * tan(5'/2) ~= 8.7266 mm
+    const h6m = calculate2020PhysicalHeightMm(6.0);
+    expect(h6m).toBeCloseTo(8.7266, 3);
+  });
+
+  it('deve calcular pixels precisos para resoluções 1080p (3.78 px/mm) e 1600x900 (3.15 px/mm) a 3.5 metros', () => {
+    const h3_5m = calculate2020PhysicalHeightMm(3.5); // ~5.0905 mm
+
+    // Full HD 1080p (barra de 100mm = 378px -> 3.78 px/mm)
+    const ppm1080p = calculatePixelsPerMm(378, 100, 1.0);
+    expect(ppm1080p).toBe(3.78);
+    const px1080p = mmToPixels(h3_5m, ppm1080p);
+    expect(px1080p).toBeCloseTo(19.24, 1);
+
+    // HD+ 1600x900 (barra de 100mm = 315px -> 3.15 px/mm)
+    const ppm900p = calculatePixelsPerMm(315, 100, 1.0);
+    expect(ppm900p).toBe(3.15);
+    const px900p = mmToPixels(h3_5m, ppm900p);
+    expect(px900p).toBeCloseTo(16.03, 1);
+  });
 });

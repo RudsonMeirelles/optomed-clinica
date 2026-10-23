@@ -1,5 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Appointment, AppointmentStatus, AppointmentType, Patient, UserAccount, ReturnReminder, NationalityType, DocumentType, ClinicalEncounter } from '@optotipo/shared';
+import { 
+  Appointment, 
+  AppointmentStatus, 
+  AppointmentType, 
+  Patient, 
+  UserAccount, 
+  ReturnReminder, 
+  NationalityType, 
+  DocumentType, 
+  ClinicalEncounter,
+  ClinicConfig,
+  ClinicUnit,
+  mergeAppointmentStatuses,
+  isPatientInWaitingQueue
+} from '@optotipo/shared';
 import { 
   Calendar as CalendarIcon, 
   Clock, 
@@ -41,11 +55,21 @@ import {
   CalendarPlus,
   Send,
   Edit3,
-  Trash2
+  Trash2,
+  Bookmark,
+  Flag,
+  Sparkles,
+  Pin,
+  ClockAlert,
+  CalendarOff,
+  CheckSquare
 } from 'lucide-react';
 import { offlineDb, generateUUID } from '../services/offlineDb';
+import { examinerRemunerationService } from '../services/examinerRemunerationService';
 import { calendarIntegrationService } from '../services/licensingService';
 import { lanController } from '../services/lanController';
+import { filterAppointmentsByScope, calculateScopedAgendaCounters, ClinicAgendaScope } from '../services/agendaService';
+import { CheckInModal } from '../components/CheckInModal';
 
 interface SchedulePageProps {
   onStartEncounter: (patient: Patient, encounter?: ClinicalEncounter) => void;
@@ -62,6 +86,8 @@ interface ShiftInfo {
   colorText: string;
   badgeBg: string;
   badgeText: string;
+  iconKey?: string;
+  customColor?: string;
 }
 
 interface DaySchedule {
@@ -72,10 +98,30 @@ interface DaySchedule {
 
 // Mapeamento Oficial dos Locais Conforme o Calendário Trimestral
 const LOCATION_CONFIGS = {
+  INSTITUTO_TERCA: {
+    locationName: 'Instituto da Visão e Saúde (IVS)',
+    shortName: 'Instituto',
+    hours: '13:00 às 18:00 (Br)',
+    colorBg: 'bg-blue-600 hover:bg-blue-700',
+    colorBorder: 'border-blue-700',
+    colorText: 'text-white',
+    badgeBg: 'bg-blue-800/80 text-blue-100',
+    badgeText: 'text-blue-100'
+  },
+  INSTITUTO_QUARTA: {
+    locationName: 'Instituto da Visão e Saúde (IVS)',
+    shortName: 'Instituto',
+    hours: '08:00 às 12:00 (Br)',
+    colorBg: 'bg-blue-600 hover:bg-blue-700',
+    colorBorder: 'border-blue-700',
+    colorText: 'text-white',
+    badgeBg: 'bg-blue-800/80 text-blue-100',
+    badgeText: 'text-blue-100'
+  },
   INSTITUTO: {
     locationName: 'Instituto da Visão e Saúde (IVS)',
     shortName: 'Instituto',
-    hours: '08:00 às 18:00 (Br)',
+    hours: 'Atendimento IVS',
     colorBg: 'bg-blue-600 hover:bg-blue-700',
     colorBorder: 'border-blue-700',
     colorText: 'text-white',
@@ -121,6 +167,16 @@ const LOCATION_CONFIGS = {
     colorText: 'text-white',
     badgeBg: 'bg-emerald-800 text-emerald-100',
     badgeText: 'text-emerald-100'
+  },
+  STILLO_ITAMARATI: {
+    locationName: 'Clínica Stillo Itamarati',
+    shortName: 'Clínica Stillo',
+    hours: '08:00 às 15:00',
+    colorBg: 'bg-amber-600 hover:bg-amber-700',
+    colorBorder: 'border-amber-700',
+    colorText: 'text-white',
+    badgeBg: 'bg-amber-800 text-amber-100',
+    badgeText: 'text-amber-100'
   }
 };
 
@@ -140,19 +196,40 @@ const getDayOfficialSchedule = (dateStr: string): DaySchedule => {
     };
   }
 
-  // --- 1. AGOSTO 2026 (monthStr === 8) ---
+  // Segundas-feiras: Livre conforme determinação da nova escala
+  if (dayOfWeek === 1) {
+    return {
+      shifts: [],
+      description: 'Segunda-feira Livre'
+    };
+  }
+
+  // Regra Permanente: Todo primeiro sábado do mês -> Atendimento na Clínica Stillo Itamarati (08:00 às 15:00, dias 1 a 7)
+  if (dayOfWeek === 6 && day <= 7) {
+    return {
+      shifts: [LOCATION_CONFIGS.STILLO_ITAMARATI],
+      description: '1º Sábado do Mês: Atendimento Stillo Ita (08h às 15h)'
+    };
+  }
+
+  // Terças-feiras: Atendimento IVS das 13:00 às 18:00 (Br)
+  if (dayOfWeek === 2) {
+    return {
+      shifts: [LOCATION_CONFIGS.INSTITUTO_TERCA],
+      description: 'Terça-feira: Atendimento IVS (13:00 às 18:00)'
+    };
+  }
+
+  // Quartas-feiras: Atendimento IVS das 08:00 às 12:00 (Br)
+  if (dayOfWeek === 3) {
+    return {
+      shifts: [LOCATION_CONFIGS.INSTITUTO_QUARTA],
+      description: 'Quarta-feira: Atendimento IVS (08:00 às 12:00)'
+    };
+  }
+
+  // Demais eventos especiais por mês (Santa Rosa e Mega Star)
   if (monthStr === 8) {
-    // Segundas e Terças: Instituto (08:00 às 18:00 Br) -> 03, 04, 10, 11, 17, 18, 24, 25, 31
-    if (dayOfWeek === 1 || dayOfWeek === 2) {
-      return { shifts: [LOCATION_CONFIGS.INSTITUTO] };
-    }
-    // Quartas: Central (13:00 às 15:45) + Visual (16:00 às 17:30) -> 05, 12, 19, 26
-    if (dayOfWeek === 3) {
-      return {
-        shifts: [LOCATION_CONFIGS.CLINICA_CENTRAL, LOCATION_CONFIGS.CLINICA_VISUAL],
-        description: 'Quarta: Turno Duplo PY (Central + Visual)'
-      };
-    }
     // Hospital Santa Rosa PY: 27 (qui) e 28 (sex)
     if (day === 27 || day === 28) {
       return { shifts: [LOCATION_CONFIGS.SANTA_ROSA] };
@@ -163,19 +240,7 @@ const getDayOfficialSchedule = (dateStr: string): DaySchedule => {
     }
   }
 
-  // --- 2. SETEMBRO 2026 (monthStr === 9) ---
   if (monthStr === 9) {
-    // Segundas e Terças: Instituto (08:00 às 18:00 Br) -> 01, 07, 08, 14, 15, 21, 22, 28, 29
-    if (dayOfWeek === 1 || dayOfWeek === 2) {
-      return { shifts: [LOCATION_CONFIGS.INSTITUTO] };
-    }
-    // Quartas: Central (13:00 às 15:45) + Visual (16:00 às 17:30) -> 02, 09, 16, 23, 30
-    if (dayOfWeek === 3) {
-      return {
-        shifts: [LOCATION_CONFIGS.CLINICA_CENTRAL, LOCATION_CONFIGS.CLINICA_VISUAL],
-        description: 'Quarta: Turno Duplo PY (Central + Visual)'
-      };
-    }
     // Hospital Santa Rosa PY: 10 (qui), 11 (sex), 24 (qui), 25 (sex)
     if (day === 10 || day === 11 || day === 24 || day === 25) {
       return { shifts: [LOCATION_CONFIGS.SANTA_ROSA] };
@@ -186,19 +251,7 @@ const getDayOfficialSchedule = (dateStr: string): DaySchedule => {
     }
   }
 
-  // --- 3. OUTUBRO 2026 (monthStr === 10) ---
   if (monthStr === 10) {
-    // Segundas e Terças: Instituto (08:00 às 18:00 Br) -> 05, 06, 12, 13, 19, 20, 26, 27
-    if (dayOfWeek === 1 || dayOfWeek === 2) {
-      return { shifts: [LOCATION_CONFIGS.INSTITUTO] };
-    }
-    // Quartas: Central (13:00 às 15:45) + Visual (16:00 às 17:30) -> 07, 14, 21, 28
-    if (dayOfWeek === 3) {
-      return {
-        shifts: [LOCATION_CONFIGS.CLINICA_CENTRAL, LOCATION_CONFIGS.CLINICA_VISUAL],
-        description: 'Quarta: Turno Duplo PY (Central + Visual)'
-      };
-    }
     // Hospital Santa Rosa PY: 08 (qui) e 09 (sex)
     if (day === 8 || day === 9) {
       return { shifts: [LOCATION_CONFIGS.SANTA_ROSA] };
@@ -214,6 +267,171 @@ const getDayOfficialSchedule = (dateStr: string): DaySchedule => {
     shifts: [],
     description: 'Dia Livre (Sem escala externa)'
   };
+};
+
+/**
+ * Converte horário 'HH:mm' para minutos do dia
+ */
+const timeStringToMinutes = (timeStr?: string): number => {
+  if (!timeStr) return 0;
+  const parts = timeStr.trim().split(':');
+  const h = parseInt(parts[0], 10) || 0;
+  const m = parseInt(parts[1], 10) || 0;
+  return h * 60 + m;
+};
+
+/**
+ * Avalia se uma consulta está dentro ou fora do período contratado da clínica.
+ * Regra da IVS:
+ * - Terça-feira: das 13:00 às 18:00 (Br)
+ * - Quarta-feira: das 08:00 às 12:00 (Br)
+ * - Suporta override manual (apt.isOutOfContractPeriod = true/false)
+ * - Suporta dias negociados por período (ExaminerSpecialPeriod cadastrado ou CustomShiftOverride)
+ */
+export const isAppointmentOutOfContract = (
+  apt: { date?: string; time?: string; isOutOfContractPeriod?: boolean; clinicId?: string },
+  currentClinicId?: string
+): { isOutOfContract: boolean; isNegotiatedPeriod: boolean; reason: string; label: string } => {
+  const targetClinic = apt.clinicId || currentClinicId || 'ivs';
+
+  // 1. Override manual expresso definido pelo examinador ou recepção
+  if (apt.isOutOfContractPeriod === true) {
+    return {
+      isOutOfContract: true,
+      isNegotiatedPeriod: false,
+      reason: 'Marcado manualmente como fora do período contratado',
+      label: 'Fora do Contrato (Avulso)'
+    };
+  }
+
+  // 2. Se a clínica for IVS, aplica a grade contratual oficial
+  if (targetClinic === 'ivs') {
+    if (!apt.date) {
+      return { isOutOfContract: false, isNegotiatedPeriod: false, reason: 'Sem data definida', label: 'Contratado' };
+    }
+
+    // Calcula dia da semana (0=Dom, 1=Seg, 2=Ter, 3=Qua, 4=Qui, 5=Sex, 6=Sáb)
+    const [y, m, d] = apt.date.split('-').map(Number);
+    const dayOfWeek = new Date(y, m - 1, d, 12, 0, 0).getDay();
+    const tMin = timeStringToMinutes(apt.time || '08:00');
+
+    // 2.1 Verifica se há Período Especial / Extraordinário Negociado nesta data exata
+    try {
+      const specialPeriods = offlineDb.getExaminerSpecialPeriods('ivs');
+      const matchedSpecial = specialPeriods.find(p => {
+        if (p.status !== 'active' || p.date !== apt.date) return false;
+        const sMin = timeStringToMinutes(p.startTime);
+        const eMin = timeStringToMinutes(p.endTime);
+        return tMin >= sMin && tMin <= eMin;
+      });
+
+      if (matchedSpecial) {
+        return {
+          isOutOfContract: false,
+          isNegotiatedPeriod: true,
+          reason: `Período Negociado: ${matchedSpecial.notes || 'Atendimento Extraordinário'} (${matchedSpecial.startTime} às ${matchedSpecial.endTime})`,
+          label: 'Período Negociado'
+        };
+      }
+    } catch {
+      // Ignora erro de leitura caso localStorage não esteja disponível
+    }
+
+    // 2.2 Terça-feira contratada: 13:00 às 18:00 (780 a 1080 min)
+    if (dayOfWeek === 2) {
+      if (tMin >= 13 * 60 && tMin <= 18 * 60) {
+        return {
+          isOutOfContract: false,
+          isNegotiatedPeriod: false,
+          reason: 'Período Contratado: Terça-feira (13:00 às 18:00)',
+          label: 'Período Contratado'
+        };
+      } else {
+        return {
+          isOutOfContract: true,
+          isNegotiatedPeriod: false,
+          reason: `Horário fora da grade contratada da Terça-feira (13:00 às 18:00): agendado às ${apt.time}`,
+          label: 'Fora do Horário (Terça)'
+        };
+      }
+    }
+
+    // 2.3 Quarta-feira contratada: 08:00 às 12:00 (480 a 720 min)
+    if (dayOfWeek === 3) {
+      if (tMin >= 8 * 60 && tMin <= 12 * 60) {
+        return {
+          isOutOfContract: false,
+          isNegotiatedPeriod: false,
+          reason: 'Período Contratado: Quarta-feira (08:00 às 12:00)',
+          label: 'Período Contratado'
+        };
+      } else {
+        return {
+          isOutOfContract: true,
+          isNegotiatedPeriod: false,
+          reason: `Horário fora da grade contratada da Quarta-feira (08:00 às 12:00): agendado às ${apt.time}`,
+          label: 'Fora do Horário (Quarta)'
+        };
+      }
+    }
+
+    // 2.4 Qualquer outro dia da semana na IVS (Segunda, Quinta, Sexta, Sábado, Domingo)
+    const dayNames = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+    return {
+      isOutOfContract: true,
+      isNegotiatedPeriod: false,
+      reason: `Dia fora do contrato oficial da IVS (${dayNames[dayOfWeek]}). Contratado: Terça (13h-18h) e Quarta (08h-12h).`,
+      label: 'Fora do Contrato'
+    };
+  }
+
+  // Se não for IVS e não estiver marcado manualmente, considera na grade padrão
+  return {
+    isOutOfContract: false,
+    isNegotiatedPeriod: false,
+    reason: 'Atendimento na unidade regular',
+    label: 'Regular'
+  };
+};
+
+const CUSTOM_SHIFTS_KEY = 'optomed_custom_shifts_schedule_v2';
+
+export interface CustomShiftOverride {
+  date: string; // YYYY-MM-DD
+  isOffDay?: boolean;
+  description?: string;
+  shifts?: ShiftInfo[];
+}
+
+const getCustomShiftOverrides = (): Record<string, CustomShiftOverride> => {
+  try {
+    const raw = localStorage.getItem(CUSTOM_SHIFTS_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+};
+
+const saveCustomShiftOverride = (date: string, override: CustomShiftOverride) => {
+  try {
+    const current = getCustomShiftOverrides();
+    current[date] = override;
+    localStorage.setItem(CUSTOM_SHIFTS_KEY, JSON.stringify(current));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('optomed_custom_shifts_updated', { detail: { date, override } }));
+    }
+  } catch {}
+};
+
+const removeCustomShiftOverride = (date: string) => {
+  try {
+    const current = getCustomShiftOverrides();
+    delete current[date];
+    localStorage.setItem(CUSTOM_SHIFTS_KEY, JSON.stringify(current));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('optomed_custom_shifts_updated', { detail: { date } }));
+    }
+  } catch {}
 };
 
 export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, currentUser }) => {
@@ -237,19 +455,53 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
   const [calendarMonth, setCalendarMonth] = useState<number>(initialDateObj.getMonth() + 1);
 
   const [selectedDate, setSelectedDate] = useState<string>(todayIso);
+
+  // Reconhecimento do usuário DR. Rudson Meirelles e Examinadores com Permissão Total
+  const isDoctorRudson = 
+    Boolean(currentUser.fullName && /rudson|meirelles/i.test(currentUser.fullName)) ||
+    Boolean(currentUser.username && /rudson|meirelles/i.test(currentUser.username)) ||
+    currentUser.role === 'superadmin' ||
+    currentUser.role === 'admin' ||
+    currentUser.role === 'examiner';
+
   const userClinicId = (currentUser.clinicId && currentUser.clinicId !== 'all') 
     ? currentUser.clinicId 
     : offlineDb.getActiveClinicId();
-  const isRestrictedUser = Boolean(currentUser.clinicId && currentUser.clinicId !== 'all');
+
+  const activeClinic = offlineDb.getClinics().find(c => c.id === userClinicId) || offlineDb.getActiveClinic();
+  const isIvs = activeClinic.id === 'ivs';
+  const consultPrice = isIvs ? 50.00 : 150.00;
+
+  // O Dr. Rudson Meirelles tem acesso total multi-unidades irrestrito para gerenciar todas as clínicas
+  const isRestrictedUser = !isDoctorRudson && Boolean(currentUser.clinicId && currentUser.clinicId !== 'all');
   const isExaminer = currentUser.role !== 'reception';
+  // Permissão financeira: visível apenas para usuários do perfil administrativo/financeiro/examinador, ocultando da recepção
+  const canViewFinancials = currentUser.role !== 'reception';
+  // Permissão total para editar, adicionar e excluir eventos e agendamentos
+  const canManageSchedule = isDoctorRudson || isExaminer || currentUser.role !== 'reception';
+
+  const [customShiftsTick, setCustomShiftsTick] = useState(0);
+
+  const getEffectiveDaySchedule = (dateStr: string): DaySchedule => {
+    const overrides = getCustomShiftOverrides();
+    if (overrides[dateStr]) {
+      return {
+        shifts: overrides[dateStr].shifts || [],
+        description: overrides[dateStr].description,
+        isOffDay: overrides[dateStr].isOffDay
+      };
+    }
+    return getDayOfficialSchedule(dateStr);
+  };
 
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [patients, setPatients] = useState<Patient[]>([]);
   const [encounters, setEncounters] = useState<ClinicalEncounter[]>([]);
   const [returnReminders, setReturnReminders] = useState<ReturnReminder[]>([]);
   const [filterStatus, setFilterStatus] = useState<string>('ALL');
+  const [filterOutOfContract, setFilterOutOfContract] = useState<boolean>(false);
   const [clinicFilter, setClinicFilter] = useState<string>(isRestrictedUser ? userClinicId : 'CURRENT'); // 'CURRENT' | 'ALL' | clinic.id
-  const [datePeriodFilter, setDatePeriodFilter] = useState<'day' | 'this_week' | 'all'>('this_week');
+  const [datePeriodFilter, setDatePeriodFilter] = useState<'day' | 'this_week' | 'all'>('day');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isNewModalOpen, setIsNewModalOpen] = useState<boolean>(false);
   const [isExaminerBriefingOpen, setIsExaminerBriefingOpen] = useState<boolean>(false);
@@ -258,13 +510,15 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
   const [briefingPeriod, setBriefingPeriod] = useState<'day' | 'week' | 'month'>('day');
   const [conflictWarning, setConflictWarning] = useState<string | null>(null);
   const [conflictWarningIsWarning, setConflictWarningIsWarning] = useState<boolean>(false);
+  const [isCheckInModalOpen, setIsCheckInModalOpen] = useState<boolean>(false);
+  const [checkInTargetAppointment, setCheckInTargetAppointment] = useState<Appointment | null>(null);
   const [copySuccess, setCopySuccess] = useState<boolean>(false);
 
   // Form de Agendamento (Criação e Edição)
   const [editingAppointmentId, setEditingAppointmentId] = useState<string | null>(null);
   const [targetBookingClinicId, setTargetBookingClinicId] = useState<string>(userClinicId);
   const [appointmentDate, setAppointmentDate] = useState<string>(selectedDate);
-  const [bookingMode, setBookingMode] = useState<'existing' | 'quick'>('quick');
+  const [bookingMode, setBookingMode] = useState<'existing' | 'quick' | 'event'>('quick');
   const [selectedPatientId, setSelectedPatientId] = useState<string>('');
   const [patientFilterQuery, setPatientFilterQuery] = useState<string>('');
   const [quickPatientName, setQuickPatientName] = useState<string>('');
@@ -272,9 +526,29 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
   const [quickPatientNationality, setQuickPatientNationality] = useState<NationalityType>('BR');
   const [newTime, setNewTime] = useState<string>('10:30');
   const [newDurationMinutes, setNewDurationMinutes] = useState<number>(3);
-  const [newType, setNewType] = useState<AppointmentType>('refrativo');
+  const [newType, setNewType] = useState<AppointmentType | 'urgencia'>('refrativo');
   const [newNotes, setNewNotes] = useState<string>('');
+  const [newIsOutOfContractPeriod, setNewIsOutOfContractPeriod] = useState<boolean>(false);
+  const [newContractPeriodNotes, setNewContractPeriodNotes] = useState<string>('');
   const [newExaminerName, setNewExaminerName] = useState<string>('Dr. Rudson Meirelles');
+
+  // Modal de Ajuste de Escala / Eventos Oficiais do Calendário
+  const [isScaleModalOpen, setIsScaleModalOpen] = useState<boolean>(false);
+  const [scaleEditDate, setScaleEditDate] = useState<string>(selectedDate);
+  const [scaleLocationName, setScaleLocationName] = useState<string>('Instituto da Visão e Saúde (IVS)');
+  const [scaleShortName, setScaleShortName] = useState<string>('Instituto');
+  const [scaleHours, setScaleHours] = useState<string>('08:00 às 18:00 (Br)');
+  const [scaleIsOffDay, setScaleIsOffDay] = useState<boolean>(false);
+  const [scaleDescription, setScaleDescription] = useState<string>('');
+
+  // Modal para Cadastrar Nova Clínica / Unidade de Atendimento Diretamente na Agenda
+  const [isNewClinicModalOpen, setIsNewClinicModalOpen] = useState<boolean>(false);
+  const [newClinicName, setNewClinicName] = useState<string>('');
+  const [newClinicCity, setNewClinicCity] = useState<string>('Ponta Porã');
+  const [newClinicCountry, setNewClinicCountry] = useState<'Brasil' | 'Paraguai'>('Brasil');
+  const [newClinicAddress, setNewClinicAddress] = useState<string>('');
+  const [newClinicPhone, setNewClinicPhone] = useState<string>('');
+  const [newClinicColor, setNewClinicColor] = useState<string>('#2563EB');
 
   // Ajusta o horário em saltos de 3 minutos
   const adjustTimeByMinutes = (currentTime: string, deltaMin: number): string => {
@@ -297,11 +571,12 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
   const [completeBirthDate, setCompleteBirthDate] = useState<string>('');
   const [completeDocumentType, setCompleteDocumentType] = useState<DocumentType>('CPF');
   const [completeDocumentNumber, setCompleteDocumentNumber] = useState<string>('');
-  const [completeCity, setCompleteCity] = useState<string>('Foz do Iguaçu');
+  const [completeCity, setCompleteCity] = useState<string>('Ponta Porã');
   const [completeAddress, setCompleteAddress] = useState<string>('');
   const [completeGuardianName, setCompleteGuardianName] = useState<string>('');
   const [completeSex, setCompleteSex] = useState<Patient['sex']>('uninformed');
   const [completeNotes, setCompleteNotes] = useState<string>('');
+  const [aptToDelete, setAptToDelete] = useState<Appointment | null>(null);
 
   const getLocalDateStr = (dStr?: string): string => {
     if (!dStr) return '';
@@ -341,10 +616,10 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
     window.addEventListener('optomed_encounter_updated', handleUpdate);
     window.addEventListener('storage', handleUpdate);
 
-    // Polling ultrarrápido a cada 2.5 segundos para garantir sincronização entre diferentes abas e dispositivos na LAN
+    // Polling de fallback a cada 8 segundos (sincronização instantânea já ocorre via WebSocket e eventos customizados)
     const timer = setInterval(() => {
       loadData();
-    }, 2500);
+    }, 8000);
 
     return () => {
       clearInterval(timer);
@@ -386,8 +661,20 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
   };
 
   const handleStatusChange = (id: string, newStatus: AppointmentStatus) => {
-    offlineDb.updateAppointmentStatus(id, newStatus);
+    // Permite finalizar/concluir diretamente a partir de qualquer estado na interface
+    offlineDb.updateAppointmentStatus(id, newStatus, undefined, newStatus === 'completed');
     loadData();
+  };
+
+  const handleCompleteAllWaiting = () => {
+    const pendingList = dayAppointments.filter(a => a.status === 'waiting' || a.status === 'checked_in' || a.status === 'in_consultation');
+    if (pendingList.length === 0) return;
+    if (window.confirm(`Deseja concluir todas as ${pendingList.length} consultas em andamento/espera de hoje?`)) {
+      pendingList.forEach(apt => {
+        offlineDb.updateAppointmentStatus(apt.id, 'completed', undefined, true);
+      });
+      loadData();
+    }
   };
 
   const handleCallPatient = (apt: Appointment) => {
@@ -441,7 +728,7 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
       documentNumber: apt.patientDocument || '',
       phoneCountryCode: apt.patientNationality === 'PY' ? '+595' : '+55',
       phone: apt.patientPhone || '',
-      city: apt.patientNationality === 'PY' ? 'Ciudad del Este' : 'Foz do Iguaçu',
+      city: apt.patientNationality === 'PY' ? 'Pedro Juan Caballero' : 'Ponta Porã',
       address: '',
       guardianName: '',
       lgpdConsent: true,
@@ -458,7 +745,7 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
     setCompleteSex(p.sex || 'uninformed');
     setCompleteDocumentType(p.documentType || ((p.nationality || apt.patientNationality) === 'PY' ? 'CI_PY' : 'CPF'));
     setCompleteDocumentNumber(p.documentNumber || apt.patientDocument || '');
-    setCompleteCity(p.city || ((p.nationality || apt.patientNationality) === 'PY' ? 'Ciudad del Este' : 'Foz do Iguaçu'));
+    setCompleteCity(p.city || ((p.nationality || apt.patientNationality) === 'PY' ? 'Pedro Juan Caballero' : 'Ponta Porã'));
     setCompleteAddress(p.address || '');
     setCompleteGuardianName(p.guardianName || '');
     setCompleteNotes(p.notes || apt.notes || '');
@@ -509,34 +796,40 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
     setTargetAppointmentToComplete(null);
   };
 
-  const openNewAppointmentModal = () => {
+  const openNewAppointmentModal = (dateToUse?: string) => {
+    const targetDate = dateToUse || selectedDate;
     setEditingAppointmentId(null);
-    setAppointmentDate(selectedDate);
+    setAppointmentDate(targetDate);
     setSelectedPatientId('');
     setQuickPatientName('');
     setQuickPatientPhone('');
     setQuickPatientNationality('BR');
 
     // Sugere o próximo horário disponível na grade de 3 em 3 minutos
-    const dayApts = appointments.filter(a => a.date === selectedDate && a.status !== 'canceled');
+    const dayOfWeek = new Date(targetDate + 'T12:00:00').getDay();
+    const defaultStartTime = dayOfWeek === 2 ? '13:00' : '08:00';
+
+    const dayApts = appointments.filter(a => a.date === targetDate && a.status !== 'canceled');
     if (dayApts.length > 0) {
       const sortedTimes = dayApts
-        .map(a => a.time || '08:00')
+        .map(a => a.time || defaultStartTime)
         .sort((a, b) => a.localeCompare(b));
       const lastTime = sortedTimes[sortedTimes.length - 1];
       const nextTime = adjustTimeByMinutes(lastTime, 3);
       setNewTime(nextTime);
     } else {
-      setNewTime('08:00');
+      setNewTime(defaultStartTime);
     }
 
     setNewDurationMinutes(3);
     setNewType('refrativo');
     setNewNotes('');
+    setNewIsOutOfContractPeriod(false);
+    setNewContractPeriodNotes('');
     setNewExaminerName('Dr. Rudson Meirelles');
     setConflictWarning(null);
     setConflictWarningIsWarning(false);
-    setTargetBookingClinicId(userClinicId);
+    setTargetBookingClinicId(clinicFilter !== 'ALL' && clinicFilter !== 'CURRENT' ? clinicFilter : userClinicId);
     setIsNewModalOpen(true);
   };
 
@@ -552,6 +845,8 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
     setNewDurationMinutes(apt.durationMinutes || 3);
     setNewType(apt.type || 'refrativo');
     setNewNotes(apt.notes || '');
+    setNewIsOutOfContractPeriod(Boolean(apt.isOutOfContractPeriod));
+    setNewContractPeriodNotes(apt.contractPeriodNotes || '');
     setNewExaminerName(apt.examinerName || 'Dr. Rudson Meirelles');
     setBookingMode(apt.patientId && patients.some(p => p.id === apt.patientId) ? 'existing' : 'quick');
     setConflictWarning(null);
@@ -562,9 +857,12 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
 
   const handleDeleteAppointment = (apt: Appointment, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
-    const confirmed = window.confirm(`Deseja realmente excluir/cancelar o agendamento de "${apt.patientName}" às ${apt.time}?`);
-    if (!confirmed) return;
+    setAptToDelete(apt);
+  };
 
+  const handleConfirmDeleteAppointment = () => {
+    if (!aptToDelete) return;
+    const apt = aptToDelete;
     const clinicToDelete = (apt as any).clinicId || userClinicId || activeClinic.id;
     
     // 1. Remove o agendamento específico da clínica
@@ -572,29 +870,37 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
     if (activeClinic.id !== clinicToDelete) {
       offlineDb.deleteAppointment(apt.id, activeClinic.id);
     }
-    
-    // 2. Se for derivado de paciente (apt-pat-xxx) ou se tiver patientId vinculado, exclui o cadastro do paciente
-    const realPatId = apt.id.startsWith('apt-pat-') 
-      ? apt.id.replace('apt-pat-', '') 
-      : apt.patientId;
 
-    if (realPatId) {
-      offlineDb.deletePatient(realPatId, clinicToDelete);
-      if (activeClinic.id !== clinicToDelete) {
-        offlineDb.deletePatient(realPatId, activeClinic.id);
-      }
-    }
-
-    // 3. Se for gerado a partir de encounter (apt-enc-xxx)
+    // 2. Se for gerado a partir de encounter temporário (apt-enc-xxx)
     if (apt.id.startsWith('apt-enc-')) {
       const encId = apt.id.replace('apt-enc-', '');
       const currentEncs = offlineDb.getEncounters(clinicToDelete).filter(enc => enc.id !== encId);
       offlineDb.saveEncounters(currentEncs, clinicToDelete);
     }
 
+    setAptToDelete(null);
     loadData();
     window.dispatchEvent(new CustomEvent('optomed_appointment_updated', { detail: { id: apt.id, clinicId: clinicToDelete, deleted: true } }));
-    window.dispatchEvent(new CustomEvent('optomed_patient_updated', { detail: { id: apt.patientId || realPatId, clinicId: clinicToDelete, deleted: true } }));
+  };
+
+  /**
+   * Alterna rapidamente a marcação de fora do período contratado de uma consulta
+   */
+  const handleToggleOutOfContractPeriod = (apt: Appointment, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    const targetClinic = (apt as any).clinicId || userClinicId || activeClinic.id;
+    const currentEvaluation = isAppointmentOutOfContract(apt, targetClinic);
+    const newStatus = !currentEvaluation.isOutOfContract;
+
+    const updatedApt: Appointment = {
+      ...apt,
+      isOutOfContractPeriod: newStatus,
+      updatedAt: new Date().toISOString()
+    };
+
+    offlineDb.saveAppointment(updatedApt, targetClinic);
+    loadData();
+    window.dispatchEvent(new CustomEvent('optomed_appointment_updated', { detail: updatedApt }));
   };
 
   const handleCreateAppointment = (e: React.FormEvent) => {
@@ -608,7 +914,15 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
     let patientNat: NationalityType = 'BR';
     let patientDoc = '';
 
-    if (bookingMode === 'existing') {
+    if (bookingMode === 'event') {
+      // Modo Evento / Compromisso / Bloqueio da Agenda
+      if (!quickPatientName.trim()) return;
+      patientId = selectedPatientId || generateUUID();
+      patientName = quickPatientName.trim();
+      patientPhone = quickPatientPhone.trim();
+      patientNat = quickPatientNationality;
+      patientDoc = '';
+    } else if (bookingMode === 'existing') {
       const existing = patients.find(p => p.id === selectedPatientId);
       if (!existing) return;
       patientId = existing.id;
@@ -654,7 +968,7 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
           documentNumber: '',
           phoneCountryCode: quickPatientNationality === 'PY' ? '+595' : '+55',
           phone: quickPatientPhone.trim() ? `${quickPatientNationality === 'PY' ? '+595' : '+55'} ${quickPatientPhone.trim()}` : undefined,
-          city: quickPatientNationality === 'PY' ? 'Ciudad del Este' : 'Foz do Iguaçu',
+          city: quickPatientNationality === 'PY' ? 'Pedro Juan Caballero' : 'Ponta Porã',
           country: quickPatientNationality === 'PY' ? 'Paraguai' : 'Brasil',
           address: '',
           notes: newNotes.trim() || 'Agendamento rápido realizado via agenda',
@@ -718,6 +1032,8 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
         status: existingApt?.status || 'scheduled',
         ticketNumber: existingApt?.ticketNumber || 'P-01',
         notes: newNotes,
+        isOutOfContractPeriod: newIsOutOfContractPeriod,
+        contractPeriodNotes: newContractPeriodNotes.trim() || undefined,
         room: existingApt?.room || 'Consultório 1',
         createdAt: existingApt?.createdAt || new Date().toISOString(),
         updatedAt: new Date().toISOString()
@@ -735,6 +1051,8 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
       setQuickPatientName('');
       setQuickPatientPhone('');
       setNewNotes('');
+      setNewIsOutOfContractPeriod(false);
+      setNewContractPeriodNotes('');
       setConflictWarning(null);
       return;
     }
@@ -761,6 +1079,8 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
       status: 'scheduled',
       ticketNumber: generatedTicket,
       notes: newNotes,
+      isOutOfContractPeriod: newIsOutOfContractPeriod,
+      contractPeriodNotes: newContractPeriodNotes.trim() || undefined,
       room: 'Consultório 1',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
@@ -806,9 +1126,7 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
         return dStr === selectedDate;
       }
       if (datePeriodFilter === 'this_week') {
-        // Mostra toda a semana de atendimento recente de setembro (05/09 a 18/09/2026)
-        if (dStr >= '2026-09-05' && dStr <= '2026-09-18') return true;
-        // Ou na mesma semana do selectedDate
+        // Semana dinâmica em torno da data selecionada
         const sel = new Date(selectedDate + 'T12:00:00');
         const curr = new Date(dStr + 'T12:00:00');
         const diffDays = Math.abs((curr.getTime() - sel.getTime()) / (1000 * 60 * 60 * 24));
@@ -851,19 +1169,15 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
       if (record.patientId) patientNameToKey.set(record.patientId, key);
     };
 
-    // Status precedence helper: completed > in_consultation > waiting > scheduled
     const mergeStatus = (currentStatus: AppointmentStatus, newStatus: AppointmentStatus): AppointmentStatus => {
-      if (currentStatus === 'completed' || newStatus === 'completed') return 'completed';
-      if (currentStatus === 'in_consultation' || newStatus === 'in_consultation') return 'in_consultation';
-      if (currentStatus === 'waiting' || newStatus === 'waiting') return 'waiting';
-      return newStatus || currentStatus;
+      return mergeAppointmentStatuses(currentStatus, newStatus);
     };
 
     if (clinicFilter === 'ALL') {
       const allClinicsApts = calendarIntegrationService.getAllClinicsAppointments();
       const filteredAll = allClinicsApts.filter(a => matchesPeriod(a.date));
 
-      // 1. Agendamentos
+      // 1. Agendamentos de todas as clínicas
       filteredAll.forEach(apt => {
         const key = apt.patientId || apt.id;
         const existingKey = findExistingKey(apt.patientId, apt.patientName);
@@ -872,45 +1186,104 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
           existing.status = mergeStatus(existing.status, apt.status);
           if (apt.time && apt.time !== '08:00') existing.time = apt.time;
           if (apt.notes) existing.notes = apt.notes;
+          if (apt.isOutOfContractPeriod !== undefined) existing.isOutOfContractPeriod = apt.isOutOfContractPeriod;
+          if (apt.contractPeriodNotes) existing.contractPeriodNotes = apt.contractPeriodNotes;
         } else {
           setRecord(key, { ...apt });
         }
       });
 
-      // 2. Pacientes cadastrados locais
-      const sourcePatients = patients.filter(p => matchesPeriod(p.createdAt));
+      // 2. Prontuários (Encounters) de todas as clínicas
+      const allClinics = offlineDb.getClinics();
+      allClinics.forEach(c => {
+        const clinicEncounters = offlineDb.getEncounters(c.id).filter(e => matchesPeriod(e.date));
+        const clinicPatients = offlineDb.getPatients(c.id);
+        clinicEncounters.forEach(enc => {
+          const patientObj = clinicPatients.find(p => p.id === enc.patientId);
+          const patientName = patientObj?.fullName || 'Paciente em Atendimento';
+          const existingKey = findExistingKey(enc.patientId, patientName);
+          const encDateStr = getLocalDateStr(enc.date) || selectedDate;
+          const mappedStatus: AppointmentStatus = enc.status === 'completed' ? 'completed' : 'in_consultation';
 
-      sourcePatients.forEach((p, idx) => {
-        const existingKey = findExistingKey(p.id, p.fullName);
-        if (existingKey) {
-          const existing = map.get(existingKey)!;
-          if (!existing.patientPhone && p.phone) existing.patientPhone = p.phone;
-          if (!existing.patientDocument && p.documentNumber) existing.patientDocument = p.documentNumber;
-        } else {
-          const patDateStr = getLocalDateStr(p.createdAt) || selectedDate;
-          setRecord(p.id, {
-            id: `apt-pat-${p.id}`,
-            patientId: p.id,
-            patientName: p.fullName,
-            patientNationality: p.nationality,
-            patientPhone: p.phone,
-            patientDocument: p.documentNumber,
-            examinerId: 'user-examinador',
-            examinerName: 'Dr. Rudson Meirelles',
-            date: patDateStr,
-            time: p.createdAt ? new Date(p.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '08:00',
-            durationMinutes: 3,
-            type: 'refrativo',
-            status: 'waiting',
-            ticketNumber: `P-${String(idx + 1).padStart(2, '0')}`,
-            notes: p.notes || 'Paciente cadastrado na recepção.',
-            room: 'Consultório 1',
-            clinicId: activeClinic.id,
-            clinicName: activeClinic.name,
-            createdAt: p.createdAt || new Date().toISOString(),
-            updatedAt: p.updatedAt || new Date().toISOString()
-          });
-        }
+          if (existingKey) {
+            const existing = map.get(existingKey)!;
+            existing.status = mergeStatus(existing.status, mappedStatus);
+            if (!existing.notes && enc.anamnesis?.chiefComplaint) {
+              existing.notes = enc.anamnesis.chiefComplaint;
+            }
+            if (patientObj) {
+              if (!existing.patientPhone) existing.patientPhone = patientObj.phone;
+              if (!existing.patientDocument) existing.patientDocument = patientObj.documentNumber;
+            }
+          } else {
+            const timeFromDate = enc.date && enc.date.includes('T')
+              ? new Date(enc.date).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+              : '08:00';
+
+            const recordKey = enc.patientId || `enc-${enc.id}`;
+            setRecord(recordKey, {
+              id: `apt-enc-${enc.id}`,
+              patientId: enc.patientId,
+              patientName: patientName,
+              patientNationality: patientObj?.nationality || 'BR',
+              patientPhone: patientObj?.phone,
+              patientDocument: patientObj?.documentNumber,
+              examinerId: 'user-examinador',
+              examinerName: enc.examinerName || 'Dr. Rudson Meirelles',
+              date: encDateStr,
+              time: timeFromDate,
+              durationMinutes: 3,
+              type: 'refrativo',
+              status: mappedStatus,
+              ticketNumber: 'P-01',
+              notes: enc.anamnesis?.chiefComplaint || 'Atendimento registrado no consultório.',
+              room: 'Consultório 1',
+              clinicId: c.id,
+              clinicName: c.name,
+              createdAt: enc.date || new Date().toISOString(),
+              updatedAt: enc.updatedAt || new Date().toISOString()
+            });
+          }
+        });
+
+        // 3. Pacientes cadastrados na clínica
+        const clinicSourcePatients = clinicPatients.filter(p => matchesPeriod(p.createdAt));
+        clinicSourcePatients.forEach((p, idx) => {
+          const existingKey = findExistingKey(p.id, p.fullName);
+          if (existingKey) {
+            const existing = map.get(existingKey)!;
+            if (!existing.patientPhone && p.phone) existing.patientPhone = p.phone;
+            if (!existing.patientDocument && p.documentNumber) existing.patientDocument = p.documentNumber;
+          } else {
+            const patDateStr = getLocalDateStr(p.createdAt) || selectedDate;
+            const hasCompletedEnc = clinicEncounters.some(e => e.patientId === p.id && e.status === 'completed');
+            const hasAnyEnc = clinicEncounters.some(e => e.patientId === p.id);
+            const computedStatus: AppointmentStatus = hasCompletedEnc ? 'completed' : (hasAnyEnc ? 'in_consultation' : 'waiting');
+
+            setRecord(p.id, {
+              id: `apt-pat-${p.id}`,
+              patientId: p.id,
+              patientName: p.fullName,
+              patientNationality: p.nationality,
+              patientPhone: p.phone,
+              patientDocument: p.documentNumber,
+              examinerId: 'user-examinador',
+              examinerName: 'Dr. Rudson Meirelles',
+              date: patDateStr,
+              time: p.createdAt ? new Date(p.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '08:00',
+              durationMinutes: 3,
+              type: 'refrativo',
+              status: computedStatus,
+              ticketNumber: `P-${String(idx + 1).padStart(2, '0')}`,
+              notes: p.notes || (hasCompletedEnc ? 'Atendimento concluído.' : 'Paciente cadastrado na recepção.'),
+              room: 'Consultório 1',
+              clinicId: c.id,
+              clinicName: c.name,
+              createdAt: p.createdAt || new Date().toISOString(),
+              updatedAt: p.updatedAt || new Date().toISOString()
+            });
+          }
+        });
       });
     } else {
       // Clínica Específica ou Ativa
@@ -931,6 +1304,8 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
           existing.status = mergeStatus(existing.status, apt.status);
           if (apt.time && apt.time !== '08:00') existing.time = apt.time;
           if (apt.notes) existing.notes = apt.notes;
+          if (apt.isOutOfContractPeriod !== undefined) existing.isOutOfContractPeriod = apt.isOutOfContractPeriod;
+          if (apt.contractPeriodNotes) existing.contractPeriodNotes = apt.contractPeriodNotes;
         } else {
           setRecord(key, { ...apt, clinicId: targetClinicId, clinicName: clinicObj.name });
         }
@@ -998,6 +1373,10 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
           if (!existing.patientDocument && p.documentNumber) existing.patientDocument = p.documentNumber;
         } else {
           const patDateStr = getLocalDateStr(p.createdAt) || selectedDate;
+          const hasCompletedEnc = targetEncounters.some(e => e.patientId === p.id && e.status === 'completed');
+          const hasAnyEnc = targetEncounters.some(e => e.patientId === p.id);
+          const computedStatus: AppointmentStatus = hasCompletedEnc ? 'completed' : (hasAnyEnc ? 'in_consultation' : 'waiting');
+
           setRecord(p.id, {
             id: `apt-pat-${p.id}`,
             patientId: p.id,
@@ -1011,9 +1390,9 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
             time: p.createdAt ? new Date(p.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '08:00',
             durationMinutes: 3,
             type: 'refrativo',
-            status: 'waiting',
+            status: computedStatus,
             ticketNumber: `P-${String(idx + 1).padStart(2, '0')}`,
-            notes: p.notes || 'Paciente cadastrado na recepção.',
+            notes: p.notes || (hasCompletedEnc ? 'Atendimento concluído.' : 'Paciente cadastrado na recepção.'),
             room: 'Consultório 1',
             clinicId: targetClinicId,
             clinicName: clinicObj.name,
@@ -1032,28 +1411,51 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
     });
   };
 
-  // Filtragem da agenda
-  const dayAppointments = getMergedDayAppointments();
+  // Escopo de Agenda Seguro (Isolamento de Examinador, Sala e Unidade)
+  const currentAgendaScope: ClinicAgendaScope = {
+    clinicId: userClinicId,
+    examinerId: currentUser.id,
+    room: lanController.getPairedRoom(),
+    role: currentUser.role,
+    isMultiunitAuthorized: isDoctorRudson
+  };
+
+  // Filtragem da agenda respeitando o escopo do usuário logado
+  const rawDayAppointments = getMergedDayAppointments();
+  const dayAppointments = filterAppointmentsByScope(rawDayAppointments, currentAgendaScope);
+
   const filteredAppointments = dayAppointments.filter(a => {
     const matchesStatus = filterStatus === 'ALL' || a.status === filterStatus;
     const matchesQuery = !searchQuery || 
       a.patientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (a.patientPhone && a.patientPhone.includes(searchQuery));
+    
+    // Filtro específico para consultas fora do período contratado
+    if (filterOutOfContract) {
+      const contractCheck = isAppointmentOutOfContract(a, activeClinic.id);
+      if (!contractCheck.isOutOfContract) return false;
+    }
+
     return matchesStatus && matchesQuery;
   });
 
-  // Métricas do Dia
-  const totalCount = dayAppointments.length;
-  const waitingCount = dayAppointments.filter(a => a.status === 'waiting').length;
-  const inConsultCount = dayAppointments.filter(a => a.status === 'in_consultation').length;
-  const completedCount = dayAppointments.filter(a => a.status === 'completed').length;
+  // Quantidade de consultas fora do período contratado no dia selecionado
+  const outOfContractCount = dayAppointments.filter(a => isAppointmentOutOfContract(a, activeClinic.id).isOutOfContract).length;
 
-  const activeClinic = offlineDb.getClinics().find(c => c.id === userClinicId) || offlineDb.getActiveClinic();
-  const isIvs = activeClinic.id === 'ivs';
-  const consultPrice = isIvs ? 50.00 : 150.00;
+  // Métricas Seguras do Dia (Scoped Counters)
+  const scopedCounters = calculateScopedAgendaCounters(rawDayAppointments, selectedDate, currentAgendaScope);
+  const totalCount = scopedCounters.totalDay;
+  const waitingCount = scopedCounters.waitingOrCheckedIn;
+  const inConsultCount = scopedCounters.inConsultation;
+  const completedCount = scopedCounters.completed;
 
-  // Escala oficial da data selecionada
-  const selectedDaySchedule = getDayOfficialSchedule(selectedDate);
+  // Próximo Paciente da Recepção ("O que preciso fazer agora?")
+  // Para recepção: próximo que precisa de Check-in ou chamar senha
+  const nextReceptionPatient = dayAppointments.find(a => a.status === 'scheduled' || a.status === 'confirmed') ||
+                               dayAppointments.find(a => a.status === 'waiting' || a.status === 'checked_in');
+
+  // Escala oficial ou personalizada da data selecionada
+  const selectedDaySchedule = getEffectiveDaySchedule(selectedDate);
 
   // Cálculo financeiro dos atendimentos concluídos/em andamento do dia
   const completedOrInConsult = dayAppointments.filter(a => a.status === 'completed' || a.status === 'in_consultation');
@@ -1114,6 +1516,25 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
     }
   };
 
+  const getEventBadgeDetails = (type: AppointmentType, clinicName?: string) => {
+    switch (type) {
+      case 'urgencia':
+        return { icon: '🚨', label: 'Cirurgia / Procedimento', bg: 'bg-red-50', text: 'text-red-700', border: 'border-red-200' };
+      case 'consulta_geral':
+        return { icon: '📋', label: 'Compromisso / Reunião', bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200' };
+      case 'refrativo':
+        return { icon: '🏥', label: clinicName || 'Atendimento / Plantão', bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200' };
+      case 'retorno':
+        return { icon: '🏖️', label: 'Folga / Ausência', bg: 'bg-amber-50', text: 'text-amber-800', border: 'border-amber-200' };
+      case 'baixa_visao':
+        return { icon: '🔒', label: 'Bloqueio / Particular', bg: 'bg-slate-100', text: 'text-slate-800', border: 'border-slate-300' };
+      case 'pediatrico':
+        return { icon: '🔬', label: 'Exame / Ambulatório', bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-200' };
+      default:
+        return { icon: '📅', label: getTypeLabel(type), bg: 'bg-sky-50', text: 'text-sky-700', border: 'border-sky-200' };
+    }
+  };
+
   const isToday = selectedDate === todayIso;
 
   // Cálculos do grid do mês atual
@@ -1122,7 +1543,7 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
   const monthName = new Date(calendarYear, calendarMonth - 1, 1).toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
 
   return (
-    <div className="p-6 sm:p-8 max-w-7xl mx-auto space-y-6 select-none animate-fadeIn">
+    <div className="p-6 sm:p-8 max-w-7xl mx-auto space-y-6 animate-fadeIn">
       
       {/* 1. Header com Título e Ação Rápida */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white/70 backdrop-blur-md p-6 rounded-3xl border border-slate-200/80 shadow-xs">
@@ -1172,17 +1593,30 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
             <span>Avisos da Agenda</span>
           </button>
 
-          {isExaminer && (
+          {canManageSchedule && (
             <button
-              onClick={openNewAppointmentModal}
+              onClick={() => openNewAppointmentModal(selectedDate)}
               className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-2xl text-xs font-black flex items-center gap-2 shadow-lg shadow-blue-600/25 active:scale-95 transition-all cursor-pointer"
-              title="Adicionar ou agendar evento na agenda do examinador"
+              title="Adicionar evento ou agendar atendimento na agenda do Dr. Rudson Meirelles"
             >
-              <Plus className="w-4 h-4" /> Novo Agendamento
+              <Plus className="w-4 h-4" /> Novo Evento / Agendamento
             </button>
           )}
         </div>
       </div>
+
+      {/* Identificação de Permissão do Dr. Rudson Meirelles */}
+      {isDoctorRudson && (
+        <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-800 rounded-2xl px-4 py-2 flex items-center justify-between gap-3 text-xs shadow-2xs">
+          <div className="flex items-center gap-2 font-bold">
+            <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+            <span>Perfil: <b>DR. Rudson Meirelles</b> — Permissão Total de Agenda Ativa (Adicionar, Editar e Excluir Eventos Liberado)</span>
+          </div>
+          <span className="text-[10px] bg-emerald-600 text-white px-2 py-0.5 rounded-full font-black uppercase">
+            Acesso Total Multi-Clínicas
+          </span>
+        </div>
+      )}
 
       {/* 2. Banner de Status da Escala do Dia Selecionado */}
       <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-blue-950 text-white rounded-3xl p-5 border border-slate-700 shadow-md">
@@ -1216,6 +1650,8 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                         ? 'bg-rose-500/90 border-rose-300 text-white'
                         : shift.shortName === 'Santa Rosa PY'
                         ? 'bg-slate-700/90 border-slate-500 text-white'
+                        : shift.shortName === 'Clínica Stillo'
+                        ? 'bg-amber-600/90 border-amber-400 text-white'
                         : 'bg-emerald-600/90 border-emerald-400 text-white'
                     }`}
                   >
@@ -1227,10 +1663,62 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                   </div>
                 ))
               )}
+
+              {canManageSchedule && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setScaleEditDate(selectedDate);
+                    const existing = selectedDaySchedule.shifts[0];
+                    if (existing) {
+                      setScaleLocationName(existing.locationName);
+                      setScaleShortName(existing.shortName);
+                      setScaleHours(existing.hours);
+                      setScaleIsOffDay(Boolean(selectedDaySchedule.isOffDay));
+                      setScaleDescription(selectedDaySchedule.description || '');
+                    } else {
+                      setScaleLocationName('Instituto da Visão e Saúde (IVS)');
+                      setScaleShortName('Instituto');
+                      setScaleHours('08:00 às 18:00 (Br)');
+                      setScaleIsOffDay(Boolean(selectedDaySchedule.isOffDay));
+                      setScaleDescription(selectedDaySchedule.description || '');
+                    }
+                    setIsScaleModalOpen(true);
+                  }}
+                  className="px-3 py-1.5 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 text-amber-200 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-xs"
+                  title="Editar escala ou turnos do Dr. Rudson Meirelles nesta data"
+                >
+                  <Edit3 className="w-3.5 h-3.5 text-amber-300" />
+                  <span>Ajustar Escala / Turno</span>
+                </button>
+              )}
             </div>
           </div>
 
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center gap-2.5 shrink-0 flex-wrap">
+            {/* Botão de Ação Rápida: Agendar Consulta */}
+            <button
+              type="button"
+              onClick={() => openNewAppointmentModal(selectedDate)}
+              className="px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-black rounded-xl transition-all shadow-md shadow-emerald-600/25 flex items-center gap-1.5 cursor-pointer active:scale-95"
+              title="Agendar nova consulta ou atendimento clínico para esta data"
+            >
+              <CalendarPlus className="w-4 h-4 text-white" />
+              <span>Agendar Consulta</span>
+            </button>
+
+            {(waitingCount > 0 || inConsultCount > 0) && (
+              <button
+                type="button"
+                onClick={handleCompleteAllWaiting}
+                className="px-3.5 py-2 bg-emerald-700/80 hover:bg-emerald-600 text-white text-xs font-bold rounded-xl transition-all shadow-sm flex items-center gap-1.5 cursor-pointer border border-emerald-500/50"
+                title="Concluir todos os atendimentos pendentes do dia"
+              >
+                <CheckCircle2 className="w-4 h-4 text-emerald-300" />
+                <span>Concluir Fila do Dia ({waitingCount + inConsultCount})</span>
+              </button>
+            )}
+
             <button
               onClick={handleSetToday}
               className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-black rounded-xl transition-all shadow-sm cursor-pointer"
@@ -1242,15 +1730,31 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
       </div>
 
       {/* 3. Cards de Métricas e KPIs Rápidos do Dia & Financeiro IVS */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-        <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-xs flex items-center justify-between">
+      <div className={`grid grid-cols-2 sm:grid-cols-2 ${canViewFinancials ? 'lg:grid-cols-5' : 'lg:grid-cols-4'} gap-4`}>
+        <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-xs flex items-center justify-between group hover:border-blue-300 transition-all">
           <div>
-            <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Agendados no Dia</span>
+            <div className="flex items-center gap-1.5">
+              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Agendados no Dia</span>
+              <button
+                type="button"
+                onClick={() => openNewAppointmentModal(selectedDate)}
+                className="opacity-80 group-hover:opacity-100 text-[10px] bg-blue-50 hover:bg-blue-600 text-blue-700 hover:text-white px-1.5 py-0.5 rounded-md font-black transition-all cursor-pointer flex items-center gap-0.5"
+                title="Agendar nova consulta para esta data"
+              >
+                <Plus className="w-2.5 h-2.5" />
+                <span>Agendar</span>
+              </button>
+            </div>
             <span className="text-2xl font-black text-slate-900 mt-0.5 block">{totalCount}</span>
           </div>
-          <div className="p-3 bg-blue-50 text-blue-600 rounded-xl">
+          <button
+            type="button"
+            onClick={() => openNewAppointmentModal(selectedDate)}
+            className="p-3 bg-blue-50 text-blue-600 rounded-xl group-hover:bg-blue-600 group-hover:text-white transition-all cursor-pointer shadow-2xs"
+            title="Clique para agendar consulta para esta data"
+          >
             <CalendarCheck className="w-5 h-5" />
-          </div>
+          </button>
         </div>
 
         <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-xs flex items-center justify-between">
@@ -1283,23 +1787,25 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
           </div>
         </div>
 
-        {/* Faturamento do Dia & Acerto do Examinador */}
-        <div className="bg-gradient-to-br from-slate-900 to-blue-950 text-white rounded-2xl p-4 shadow-md flex items-center justify-between col-span-2 sm:col-span-1 border border-blue-900/50">
-          <div>
-            <span className="text-[10px] font-black text-emerald-400 uppercase tracking-wider block">
-              {isIvs ? 'Atendimentos IVS (Hoje)' : 'Receita do Dia'}
-            </span>
-            <span className="text-xl font-black text-white mt-0.5 block">
-              R$ {dayEstimatedRevenue.toFixed(2)}
-            </span>
-            <span className="text-[10px] text-slate-300 font-medium block mt-0.5">
-              {paidConsultationsCount} pagas (R$ {consultPrice.toFixed(0)}) {freeReturnsCount > 0 && `• ${freeReturnsCount} retornos (R$ 0)`}
-            </span>
+        {/* Faturamento do Dia & Acerto do Examinador (Oculto para perfil Recepção; visível apenas para Financeiro / Examinador / Admin) */}
+        {canViewFinancials && (
+          <div className="bg-gradient-to-br from-slate-900 to-blue-950 text-white rounded-2xl p-4 shadow-md flex items-center justify-between col-span-2 sm:col-span-1 border border-blue-900/50">
+            <div>
+              <span className="text-[10px] font-black text-emerald-400 uppercase tracking-wider block">
+                {isIvs ? 'Atendimentos IVS (Hoje)' : 'Receita do Dia'}
+              </span>
+              <span className="text-xl font-black text-white mt-0.5 block">
+                R$ {dayEstimatedRevenue.toFixed(2)}
+              </span>
+              <span className="text-[10px] text-slate-300 font-medium block mt-0.5">
+                {paidConsultationsCount} pagas (R$ {consultPrice.toFixed(0)}) {freeReturnsCount > 0 && `• ${freeReturnsCount} retornos (R$ 0)`}
+              </span>
+            </div>
+            <div className="p-2.5 bg-emerald-500/20 text-emerald-400 rounded-xl border border-emerald-500/30">
+              <Wallet className="w-5 h-5" />
+            </div>
           </div>
-          <div className="p-2.5 bg-emerald-500/20 text-emerald-400 rounded-xl border border-emerald-500/30">
-            <Wallet className="w-5 h-5" />
-          </div>
-        </div>
+        )}
       </div>
 
       {/* 4. Seletor de Abas Principais (Agenda vs Retornos) e Alternância de Visualização */}
@@ -1515,7 +2021,9 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                   {Array.from({ length: totalDaysInMonth }, (_, i) => {
                     const dayNum = i + 1;
                     const dateStr = `${calendarYear}-${String(calendarMonth).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`;
-                    const schedule = getDayOfficialSchedule(dateStr);
+                    const schedule = getEffectiveDaySchedule(dateStr);
+                    // Agendamentos e eventos do dia
+                    const dayApts = appointments.filter(a => getLocalDateStr(a.date) === dateStr && a.status !== 'canceled');
                     // Contagem consolidada (Agendamentos + Encounters + Pacientes do dia)
                     const dayPatIds = new Set<string>();
                     appointments.filter(a => getLocalDateStr(a.date) === dateStr).forEach(a => dayPatIds.add(a.patientId || a.id));
@@ -1530,6 +2038,7 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                         key={dateStr}
                         onClick={() => {
                           setSelectedDate(dateStr);
+                          setDatePeriodFilter('day');
                           setScheduleViewMode('day');
                         }}
                         className={`h-28 sm:h-32 rounded-2xl p-2 flex flex-col justify-between transition-all cursor-pointer relative group overflow-hidden border ${
@@ -1544,7 +2053,7 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                             : 'bg-slate-50'
                         }`}
                       >
-                        {/* Topo do Card: Número do Dia + Badge Hoje */}
+                        {/* Topo do Card: Número do Dia + Badge Hoje + Botão Rápido de Adicionar Evento */}
                         <div className="flex items-center justify-between">
                           <span className={`text-sm font-black ${
                             schedule.isOffDay ? 'text-red-600' : 'text-slate-900'
@@ -1563,16 +2072,30 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                                 {totalDayPatients}p
                               </span>
                             )}
+                            {canManageSchedule && (
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setSelectedDate(dateStr);
+                                  openNewAppointmentModal(dateStr);
+                                }}
+                                className="p-1 rounded-md bg-blue-50 hover:bg-blue-600 text-blue-700 hover:text-white transition-all shadow-2xs cursor-pointer opacity-70 group-hover:opacity-100"
+                                title={`Adicionar evento ou consulta no dia ${dayNum} (${dateStr})`}
+                              >
+                                <Plus className="w-3 h-3" />
+                              </button>
+                            )}
                           </div>
                         </div>
 
-                        {/* Conteúdo / Locais de Atendimento Conforme Calendário Trimestral */}
-                        <div className="space-y-1 my-auto">
+                        {/* Conteúdo / Locais de Atendimento Conforme Calendário Trimestral e Eventos */}
+                        <div className="space-y-1 my-auto overflow-hidden">
                           {schedule.isOffDay ? (
                             <div className="text-[10px] text-red-500 font-bold text-center py-1">
                               Folga
                             </div>
-                          ) : schedule.shifts.length === 0 ? (
+                          ) : schedule.shifts.length === 0 && dayApts.length === 0 ? (
                             <div className="text-[10px] text-slate-400 font-bold flex items-center gap-1">
                               <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
                               <span>Livre</span>
@@ -1582,13 +2105,33 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                               {schedule.shifts.map((shift, sIdx) => (
                                 <div
                                   key={sIdx}
-                                  className={`rounded-lg px-1.5 py-1 text-[9px] font-black leading-tight shadow-xs ${shift.colorBg} ${shift.colorText}`}
+                                  className={`rounded-lg px-1.5 py-0.5 text-[9px] font-black leading-tight shadow-xs ${shift.colorBg} ${shift.colorText}`}
                                   title={`${shift.locationName} (${shift.hours})`}
                                 >
                                   <div className="truncate">{shift.shortName}</div>
                                   <div className="text-[8px] opacity-90 truncate font-mono">{shift.hours}</div>
                                 </div>
                               ))}
+
+                              {/* Eventos e Atendimentos do Dia com Ícones Vibrantes */}
+                              {dayApts.slice(0, 2).map((apt, aIdx) => {
+                                const badge = getEventBadgeDetails(apt.type, apt.clinicName);
+                                return (
+                                  <div
+                                    key={`apt-${aIdx}`}
+                                    className={`rounded-lg px-1.5 py-0.5 text-[8px] font-black flex items-center gap-1 border truncate shadow-2xs ${badge.bg} ${badge.text} ${badge.border}`}
+                                    title={`${badge.icon} ${apt.patientName} (${apt.time})`}
+                                  >
+                                    <span className="shrink-0">{badge.icon}</span>
+                                    <span className="truncate">{apt.patientName}</span>
+                                  </div>
+                                );
+                              })}
+                              {dayApts.length > 2 && (
+                                <div className="text-[8px] text-purple-700 font-extrabold px-1">
+                                  +{dayApts.length - 2} evento(s)
+                                </div>
+                              )}
                             </div>
                           )}
                         </div>
@@ -1728,7 +2271,7 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                         ? 'bg-blue-600 text-white shadow-xs'
                         : 'text-blue-700 hover:bg-blue-50'
                     }`}
-                    title="Exibir todos os pacientes atendidos nesta semana (Setembro 2026)"
+                    title="Exibir todos os pacientes atendidos nesta semana"
                   >
                     <span>⭐ Esta Semana ({dayAppointments.length})</span>
                   </button>
@@ -1844,6 +2387,28 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                 <option value="scheduled">Agendados</option>
                 <option value="completed">Concluídos</option>
               </select>
+
+              {/* Botão de Filtro Rápido: Fora do Período Contratado */}
+              <button
+                type="button"
+                onClick={() => setFilterOutOfContract(!filterOutOfContract)}
+                className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer shadow-xs ${
+                  filterOutOfContract
+                    ? 'bg-amber-600 text-white shadow-amber-600/30 ring-2 ring-amber-400'
+                    : 'bg-amber-50 text-amber-900 border border-amber-300 hover:bg-amber-100'
+                }`}
+                title="Filtrar apenas consultas atendidas fora do período contratado (IVS Terça 13h-18h / Quarta 08h-12h ou Avulsos)"
+              >
+                <ClockAlert className={`w-3.5 h-3.5 ${filterOutOfContract ? 'text-white' : 'text-amber-700'}`} />
+                <span>Fora do Contrato</span>
+                {outOfContractCount > 0 && (
+                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+                    filterOutOfContract ? 'bg-amber-800 text-white' : 'bg-amber-200 text-amber-950'
+                  }`}>
+                    {outOfContractCount}
+                  </span>
+                )}
+              </button>
             </div>
           </div>
 
@@ -1863,6 +2428,74 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
               >
                 Limpar busca
               </button>
+            </div>
+          )}
+
+          {/* Card de Ação Rápida da Recepção: "O QUE PRECISO FAZER AGORA?" */}
+          {nextReceptionPatient && (
+            <div className="bg-gradient-to-r from-blue-900 via-indigo-950 to-slate-900 text-white p-4 sm:p-5 rounded-2xl sm:rounded-3xl shadow-md border border-blue-500/30 flex flex-col md:flex-row items-center justify-between gap-4 animate-fadeIn">
+              <div className="flex items-center gap-3.5 w-full md:w-auto">
+                <div className="w-12 h-12 rounded-2xl bg-blue-500/20 border border-blue-400/40 flex items-center justify-center text-blue-300 shrink-0 shadow-inner">
+                  <UserCheck className="w-6 h-6" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300 text-[10px] font-black uppercase tracking-wider">
+                      O QUE PRECISO FAZER AGORA?
+                    </span>
+                    <span className="px-2 py-0.5 rounded-full bg-amber-400/20 text-amber-300 font-mono text-xs font-bold">
+                      {nextReceptionPatient.ticketNumber || 'P-01'} • {nextReceptionPatient.time}
+                    </span>
+                    {nextReceptionPatient.isPriority && (
+                      <span className="px-2 py-0.5 rounded bg-rose-500/30 text-rose-300 text-[10px] font-black uppercase">
+                        Prioridade Legal
+                      </span>
+                    )}
+                  </div>
+                  <h3 className="text-lg font-black tracking-tight text-white mt-0.5">
+                    {nextReceptionPatient.patientName}
+                  </h3>
+                  <p className="text-xs text-slate-300 font-medium">
+                    {nextReceptionPatient.status === 'scheduled' || nextReceptionPatient.status === 'confirmed'
+                      ? 'Paciente agendado: realize o Check-in com 1 clique para transferi-lo à fila do examinador.'
+                      : 'Paciente já em espera: anuncie no painel da TV ou acesse seu cadastro.'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2.5 w-full md:w-auto justify-end shrink-0">
+                {(nextReceptionPatient.status === 'scheduled' || nextReceptionPatient.status === 'confirmed') && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCheckInTargetAppointment(nextReceptionPatient);
+                      setIsCheckInModalOpen(true);
+                    }}
+                    className="px-5 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white rounded-xl text-xs font-black flex items-center gap-2 shadow-md shadow-emerald-500/30 transition-all active:scale-95 cursor-pointer"
+                  >
+                    <UserCheck className="w-4 h-4 text-white" />
+                    <span>Fazer Check-In Agora</span>
+                  </button>
+                )}
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    const ticketNum = nextReceptionPatient.ticketNumber || 'P-01';
+                    lanController.callPatient({
+                      ticketNumber: ticketNum,
+                      patientName: nextReceptionPatient.patientName,
+                      roomName: nextReceptionPatient.room || 'Consultório 1',
+                      examinerName: nextReceptionPatient.examinerName || 'Dr. Rudson Meirelles',
+                      priority: nextReceptionPatient.isPriority
+                    });
+                  }}
+                  className="px-4 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-xl text-xs font-black flex items-center gap-2 shadow-md transition-all active:scale-95 cursor-pointer"
+                >
+                  <Bell className="w-4 h-4 text-slate-950" />
+                  <span>Chamar TV</span>
+                </button>
+              </div>
             </div>
           )}
 
@@ -1893,15 +2526,15 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                       onClick={() => setDatePeriodFilter('this_week')}
                       className="px-5 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black rounded-xl text-xs flex items-center gap-2 shadow-md transition-all cursor-pointer"
                     >
-                      <span>⭐ Ver Consultas Desta Semana ({appointments.filter(a => a.date && a.date >= '2026-09-05' && a.date <= '2026-09-18').length})</span>
+                      <span>⭐ Ver Consultas Desta Semana ({appointments.filter(a => a.date && a.date >= '2026-09-05' && a.date <= '2026-09-19').length})</span>
                     </button>
                   )}
-                  {isExaminer && (
+                  {canManageSchedule && (
                     searchQuery.trim() ? (
                       <button
                         type="button"
                         onClick={() => {
-                          openNewAppointmentModal();
+                          openNewAppointmentModal(selectedDate);
                           setQuickPatientName(searchQuery.trim());
                           setBookingMode('quick');
                         }}
@@ -1913,11 +2546,11 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                     ) : (
                       <button
                         type="button"
-                        onClick={openNewAppointmentModal}
+                        onClick={() => openNewAppointmentModal(selectedDate)}
                         className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-black transition-all shadow-sm hover:shadow flex items-center gap-2 cursor-pointer"
                       >
                         <Plus className="w-4 h-4" />
-                        <span>+ Agendar Novo Atendimento</span>
+                        <span>+ Agendar Novo Atendimento / Evento</span>
                       </button>
                     )
                   )}
@@ -1981,11 +2614,48 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                             {apt.patientNationality === 'PY' ? '🇵🇾 PY' : '🇧🇷 BR'}
                           </span>
 
-                          <span className="text-[11px] font-semibold px-2 py-0.5 rounded-lg bg-sky-50 text-sky-700 border border-sky-200/70">
-                            {getTypeLabel(apt.type)}
-                          </span>
+                          {/* Tipo de Atendimento / Procedimento sem repetir o nome da clínica */}
+                          {(() => {
+                            const badge = getEventBadgeDetails(apt.type);
+                            // Não exibe se o label for idêntico à clínica já mostrada
+                            if (badge.label === apt.clinicName) return null;
+                            return (
+                              <span className={`text-[11px] font-bold px-2 py-0.5 rounded-lg border inline-flex items-center gap-1 shadow-2xs ${badge.bg} ${badge.text} ${badge.border}`}>
+                                <span>{badge.icon}</span>
+                                <span>{badge.label}</span>
+                              </span>
+                            );
+                          })()}
 
                           {getStatusBadge(apt.status)}
+
+                          {/* Badge de Horário Contratual / Fora do Período / Negociado */}
+                          {(() => {
+                            const contractCheck = isAppointmentOutOfContract(apt, activeClinic.id);
+                            if (contractCheck.isOutOfContract) {
+                              return (
+                                <span
+                                  className="text-[11px] font-black px-2 py-0.5 rounded-lg border inline-flex items-center gap-1 shadow-2xs bg-amber-50 text-amber-900 border-amber-300"
+                                  title={`${contractCheck.reason}${apt.contractPeriodNotes ? ` • Obs: ${apt.contractPeriodNotes}` : ''}`}
+                                >
+                                  <ClockAlert className="w-3 h-3 text-amber-600 shrink-0" />
+                                  <span>{contractCheck.label}</span>
+                                </span>
+                              );
+                            }
+                            if (contractCheck.isNegotiatedPeriod) {
+                              return (
+                                <span
+                                  className="text-[11px] font-black px-2 py-0.5 rounded-lg border inline-flex items-center gap-1 shadow-2xs bg-purple-50 text-purple-900 border-purple-200"
+                                  title={contractCheck.reason}
+                                >
+                                  <Sparkles className="w-3 h-3 text-purple-600 shrink-0" />
+                                  <span>{contractCheck.label}</span>
+                                </span>
+                              );
+                            }
+                            return null;
+                          })()}
                         </div>
 
                         {/* Linha 2: Contato, Examinador e Sala */}
@@ -2021,51 +2691,54 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                       </div>
                     </div>
 
-                    {/* Bloco Direito: Barra de Ferramentas e Ações Clínicas / Recepção */}
-                    <div className="flex items-center justify-end gap-2 pt-3 lg:pt-0 border-t lg:border-t-0 border-slate-100 shrink-0 flex-wrap">
+                    {/* Bloco Direito: Barra de Ferramentas e Ações Clínicas / Recepção com Disposição Otimizada */}
+                    <div className="flex items-center justify-end gap-1.5 sm:gap-2 pt-3 lg:pt-0 border-t lg:border-t-0 border-slate-100 shrink-0 flex-wrap">
                       
-                      {/* Botão Chamar Senha na TV */}
-                      <button
-                        type="button"
-                        onClick={() => {
-                          lanController.callPatient({
-                            ticketNumber: ticketNum,
-                            patientName: apt.patientName,
-                            roomName: apt.room || 'Consultório 1',
-                            examinerName: apt.examinerName || 'Dr. Rudson Meirelles',
-                            priority: apt.isPriority
-                          });
-                        }}
-                        className="px-3 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-xl text-xs flex items-center gap-1.5 shadow-sm shadow-amber-500/20 active:scale-95 transition-all cursor-pointer"
-                        title="Chamar senha e nome do paciente no telão da TV com som"
-                      >
-                        <Bell className="w-3.5 h-3.5" />
-                        <span>Chamar TV</span>
-                      </button>
+                      {/* Grupo 1: Comunicação Rápida (Chamar TV + WhatsApp) */}
+                      <div className="flex items-center gap-1.5">
+                        {/* Botão Chamar Senha na TV */}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            lanController.callPatient({
+                              ticketNumber: ticketNum,
+                              patientName: apt.patientName,
+                              roomName: apt.room || 'Consultório 1',
+                              examinerName: apt.examinerName || 'Dr. Rudson Meirelles',
+                              priority: apt.isPriority
+                            });
+                          }}
+                          className="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-xl text-xs flex items-center gap-1.5 shadow-sm shadow-amber-500/20 active:scale-95 transition-all cursor-pointer"
+                          title="Chamar senha e nome do paciente no telão da TV com som"
+                        >
+                          <Bell className="w-3.5 h-3.5" />
+                          <span>Chamar TV</span>
+                        </button>
 
-                      {/* Botão WhatsApp */}
-                      <a
-                        href={calendarIntegrationService.generateWhatsAppAppointmentUrl(apt, activeClinic)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="px-2.5 py-2 bg-emerald-50 hover:bg-emerald-100/80 text-emerald-800 border border-emerald-200/80 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
-                        title="Enviar lembrete e confirmação de agendamento no WhatsApp do paciente"
-                      >
-                        <MessageSquare className="w-3.5 h-3.5 text-emerald-600" />
-                        <span className="hidden sm:inline">WhatsApp</span>
-                      </a>
+                        {/* Botão WhatsApp */}
+                        <a
+                          href={calendarIntegrationService.generateWhatsAppAppointmentUrl(apt, activeClinic)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-1.5 sm:px-2.5 sm:py-1.5 bg-emerald-50 hover:bg-emerald-100/80 text-emerald-800 border border-emerald-200/80 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+                          title="Enviar lembrete e confirmação de agendamento no WhatsApp do paciente"
+                        >
+                          <MessageSquare className="w-3.5 h-3.5 text-emerald-600" />
+                          <span className="hidden xl:inline">WhatsApp</span>
+                        </a>
+                      </div>
 
-                      {/* Botão Calendário (Google Agenda / .ics integrado) */}
-                      <div className="inline-flex items-center rounded-xl border border-slate-200/80 bg-slate-50/50 p-0.5">
+                      {/* Grupo 2: Integração de Calendário (Google Agenda + Download .ics) */}
+                      <div className="inline-flex items-center rounded-xl border border-slate-200/80 bg-slate-50/70 p-0.5">
                         <a
                           href={calendarIntegrationService.generateGoogleCalendarUrl(apt, activeClinic)}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="px-2 py-1.5 text-slate-600 hover:text-blue-600 hover:bg-white rounded-lg text-xs font-medium flex items-center gap-1 transition-all cursor-pointer"
+                          className="p-1.5 sm:px-2 sm:py-1 text-slate-600 hover:text-blue-600 hover:bg-white rounded-lg text-xs font-medium flex items-center gap-1 transition-all cursor-pointer"
                           title="Sincronizar no Google Agenda"
                         >
                           <CalendarPlus className="w-3.5 h-3.5 text-blue-500" />
-                          <span className="hidden xl:inline">Google</span>
+                          <span className="hidden 2xl:inline">Google</span>
                         </a>
                         <button
                           type="button"
@@ -2077,62 +2750,92 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                         </button>
                       </div>
 
-                      {/* Ações de Gestão de Cadastro e Edição */}
-                      <div className="inline-flex items-center rounded-xl border border-slate-200/80 bg-slate-50/50 p-0.5">
+                      {/* Grupo 3: Cadastro e Gestão */}
+                      <div className="inline-flex items-center rounded-xl border border-slate-200/80 bg-slate-50/70 p-0.5">
                         {/* Botão Dados / Cadastro */}
                         <button
                           type="button"
                           onClick={(e) => openCompleteModal(apt, e)}
-                          className="px-2.5 py-1.5 text-slate-700 hover:text-blue-700 hover:bg-white rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
+                          className="px-2 py-1 text-slate-700 hover:text-blue-700 hover:bg-white rounded-lg text-xs font-semibold flex items-center gap-1 transition-all cursor-pointer"
                           title="Completar ou verificar dados cadastrais (CPF/CI, nascimento, endereço)"
                         >
                           <UserCheck className="w-3.5 h-3.5 text-blue-600" />
-                          <span>Cadastro</span>
+                          <span className="hidden sm:inline">Cadastro</span>
                         </button>
 
-                        {/* Ações de Edição e Exclusão (Exclusivo para o Examinador / Admin) */}
-                        {isExaminer && (
+                        {/* Ações de Edição e Exclusão */}
+                        {canManageSchedule && (
                           <>
-                            {/* Botão Editar */}
+                            {/* Botão / Ícone de Seleção Rápida de Fora do Período Contratado */}
+                            {(() => {
+                              const contractCheck = isAppointmentOutOfContract(apt, activeClinic.id);
+                              return (
+                                <button
+                                  type="button"
+                                  onClick={(e) => handleToggleOutOfContractPeriod(apt, e)}
+                                  className={`p-1.5 sm:px-2 sm:py-1 rounded-lg transition-all cursor-pointer flex items-center gap-1 font-bold text-xs ${
+                                    contractCheck.isOutOfContract
+                                      ? 'bg-amber-100 text-amber-900 border border-amber-300 shadow-2xs hover:bg-amber-200'
+                                      : 'text-slate-400 hover:text-amber-700 hover:bg-amber-50'
+                                  }`}
+                                  title={
+                                    contractCheck.isOutOfContract
+                                      ? `Consulta marcada como FORA DO PERÍODO CONTRATADO (${contractCheck.reason}). Clique para desmarcar.`
+                                      : 'Marcar consulta como ATENDIDA FORA DO PERÍODO CONTRATADO (Avulso / Extraordinário negociado)'
+                                  }
+                                >
+                                  <ClockAlert className={`w-3.5 h-3.5 ${contractCheck.isOutOfContract ? 'text-amber-700' : 'text-slate-400'}`} />
+                                  <span className="hidden xl:inline">
+                                    {contractCheck.isOutOfContract ? 'Fora Contrato' : 'Contratado'}
+                                  </span>
+                                </button>
+                              );
+                            })()}
+
                             <button
                               type="button"
                               onClick={(e) => openEditAppointmentModal(apt, e)}
-                              className="p-1.5 text-slate-500 hover:text-blue-600 hover:bg-white rounded-lg transition-all cursor-pointer"
-                              title="Editar agendamento (horário, data, tipo, notas) - Apenas Examinador"
+                              className="p-1.5 sm:px-2 sm:py-1 text-slate-600 hover:text-blue-700 hover:bg-white rounded-lg transition-all cursor-pointer flex items-center gap-1 font-bold text-xs"
+                              title="Editar agendamento"
                             >
-                              <Edit3 className="w-3.5 h-3.5" />
+                              <Edit3 className="w-3.5 h-3.5 text-blue-600" />
+                              <span className="hidden xl:inline">Editar</span>
                             </button>
 
-                            {/* Botão Excluir */}
                             <button
                               type="button"
                               onClick={(e) => handleDeleteAppointment(apt, e)}
-                              className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all cursor-pointer"
-                              title="Cancelar/Excluir agendamento - Apenas Examinador"
+                              className="p-1.5 sm:px-2 sm:py-1 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all cursor-pointer flex items-center gap-1 font-bold text-xs"
+                              title="Excluir agendamento"
                             >
-                              <Trash2 className="w-3.5 h-3.5" />
+                              <Trash2 className="w-3.5 h-3.5 text-rose-600" />
+                              <span className="hidden xl:inline">Excluir</span>
                             </button>
                           </>
                         )}
                       </div>
 
-                      {/* Ações Exclusivas de Perfil (Recepção vs Examinador) */}
+                      {/* Grupo 4: Ações Exclusivas de Perfil (Recepção vs Examinador) */}
                       {currentUser.role === 'reception' && (
-                        <>
-                          {apt.status === 'scheduled' && (
+                        <div className="flex items-center gap-1.5">
+                          {(apt.status === 'scheduled' || apt.status === 'confirmed') && (
                             <button
-                              onClick={() => {
-                                handleStatusChange(apt.id, 'waiting');
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setCheckInTargetAppointment(apt);
+                                setIsCheckInModalOpen(true);
                               }}
-                              className="px-3.5 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-xl text-xs font-extrabold flex items-center gap-1.5 shadow-sm shadow-amber-500/20 active:scale-95 transition-all cursor-pointer"
+                              className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-black flex items-center gap-1.5 shadow-sm shadow-emerald-600/20 active:scale-95 transition-all cursor-pointer"
+                              title="Fazer Check-in do Paciente e Inserir na Fila de Espera"
                             >
-                              <UserCheck className="w-3.5 h-3.5 text-slate-950" />
-                              <span>Chegou</span>
+                              <UserCheck className="w-3.5 h-3.5 text-white" />
+                              <span>Check-In</span>
                             </button>
                           )}
-                          {apt.status === 'waiting' && (
-                            <span className="text-xs text-amber-800 font-bold bg-amber-100/70 px-3 py-1.5 rounded-xl border border-amber-300">
-                              Na Espera
+                          {(apt.status === 'checked_in' || apt.status === 'waiting') && (
+                            <span className="text-xs text-amber-800 font-bold bg-amber-100/70 px-2.5 py-1 rounded-xl border border-amber-300">
+                              Na Espera ({apt.ticketNumber || 'P-01'})
                             </span>
                           )}
                           <button
@@ -2156,24 +2859,73 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                                 };
                                 offlineDb.savePatient(p);
                               }
-                              // Localiza o encounter existente com a refração do paciente
                               const existingEnc = encounters.find(e => e.patientId === p!.id && getLocalDateStr(e.date) === (apt.date || selectedDate)) ||
                                                   encounters.find(e => e.patientId === p!.id);
                               onStartEncounter(p, existingEnc);
                             }}
-                            className="px-3 py-2 bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all cursor-pointer"
+                            className="p-1.5 sm:px-2.5 sm:py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all cursor-pointer"
                             title="Visualizar refração e imprimir receituário do paciente"
                           >
                             <Glasses className="w-3.5 h-3.5 text-blue-600" />
-                            <span>Ver Refração / Receita</span>
+                            <span className="hidden sm:inline">Receita</span>
                           </button>
-                        </>
+                        </div>
                       )}
 
+                      {/* Grupo 5: Alteração Rápida de Status */}
+                      {(apt.status === 'scheduled' || apt.status === 'in_consultation' || apt.status === 'waiting' || apt.status === 'checked_in') && (
+                        <div className="inline-flex items-center rounded-xl border border-slate-200/80 bg-slate-50/70 p-0.5">
+                          {apt.status === 'scheduled' && (
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleStatusChange(apt.id, 'confirmed');
+                              }}
+                              className="px-2 py-1 text-blue-700 hover:bg-blue-100/70 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1"
+                              title="Confirmar presença / agendamento"
+                            >
+                              <Check className="w-3.5 h-3.5 text-blue-600" />
+                              <span className="hidden sm:inline">Confirmar</span>
+                            </button>
+                          )}
+
+                          {(apt.status === 'in_consultation' || apt.status === 'waiting' || apt.status === 'checked_in') && (
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleStatusChange(apt.id, 'completed');
+                              }}
+                              className="px-2 py-1 text-emerald-700 hover:bg-emerald-100/70 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1"
+                              title="Concluir consulta na agenda"
+                            >
+                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                              <span className="hidden sm:inline">Concluir</span>
+                            </button>
+                          )}
+
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (window.confirm(`Deseja cancelar o agendamento de "${apt.patientName}"?`)) {
+                                handleStatusChange(apt.id, 'canceled');
+                              }
+                            }}
+                            className="p-1 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg text-xs font-bold transition-all cursor-pointer"
+                            title="Cancelar agendamento"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      )}
+
+                      {/* Grupo 6: Ação Principal de Atendimento */}
                       {currentUser.role !== 'reception' && (
                         <button
                           onClick={() => handleCallPatient(apt)}
-                          className="px-4.5 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-xl text-xs font-black flex items-center gap-2 shadow-sm shadow-emerald-600/20 active:scale-95 transition-all cursor-pointer"
+                          className="px-4 py-1.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-xl text-xs font-black flex items-center gap-1.5 shadow-sm shadow-emerald-600/20 active:scale-95 transition-all cursor-pointer"
                         >
                           <Play className="w-3.5 h-3.5 fill-white" />
                           <span>Atender</span>
@@ -2209,8 +2961,8 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
               </button>
             </div>
 
-            {/* Alternador entre Agendamento Rápido (Nome + Telefone) e Paciente Já Cadastrado */}
-            <div className="flex bg-slate-100 p-1 rounded-2xl mb-4 text-xs font-bold">
+            {/* Alternador entre Consulta Rápida, Paciente Cadastrado e Evento da Agenda */}
+            <div className="flex bg-slate-100 p-1 rounded-2xl mb-4 text-xs font-bold gap-1">
               <button
                 type="button"
                 onClick={() => setBookingMode('quick')}
@@ -2218,7 +2970,7 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                   bookingMode === 'quick' ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                ⚡ Agendamento Rápido (Nome + Telefone)
+                ⚡ Consulta Rápida
               </button>
               <button
                 type="button"
@@ -2227,7 +2979,16 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                   bookingMode === 'existing' ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                👤 Paciente Já Cadastrado
+                👤 Paciente Cadastrado
+              </button>
+              <button
+                type="button"
+                onClick={() => setBookingMode('event')}
+                className={`flex-1 py-2 rounded-xl transition-all cursor-pointer ${
+                  bookingMode === 'event' ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                📅 Evento / Compromisso
               </button>
             </div>
 
@@ -2247,7 +3008,20 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
 
               {/* Clínica de Atendimento (Suporte Multi-Clínica do Dr. Rudson Meirelles) */}
               <div className="bg-slate-50 p-3 rounded-2xl border border-slate-200">
-                <label className="font-bold text-slate-700 block mb-1">CLÍNICA / UNIDADE DE ATENDIMENTO *</label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="font-bold text-slate-700 block">CLÍNICA / UNIDADE DE ATENDIMENTO *</label>
+                  {canManageSchedule && (
+                    <button
+                      type="button"
+                      onClick={() => setIsNewClinicModalOpen(true)}
+                      className="text-[11px] font-extrabold text-blue-700 hover:text-blue-900 bg-blue-100/70 hover:bg-blue-200/80 px-2 py-0.5 rounded-lg flex items-center gap-1 transition-all cursor-pointer shadow-2xs"
+                      title="Cadastrar uma nova clínica ou consultório parceiro"
+                    >
+                      <Plus className="w-3 h-3 text-blue-700" />
+                      <span>+ Nova Clínica</span>
+                    </button>
+                  )}
+                </div>
                 {isRestrictedUser ? (
                   <div className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 flex items-center justify-between">
                     <span>🏥 {offlineDb.getClinics().find(c => c.id === userClinicId)?.name || 'Esta Unidade'}</span>
@@ -2258,7 +3032,13 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                 ) : (
                   <select
                     value={targetBookingClinicId}
-                    onChange={(e) => setTargetBookingClinicId(e.target.value)}
+                    onChange={(e) => {
+                      if (e.target.value === '__add_new_clinic__') {
+                        setIsNewClinicModalOpen(true);
+                      } else {
+                        setTargetBookingClinicId(e.target.value);
+                      }
+                    }}
                     className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-blue-500 cursor-pointer"
                   >
                     {offlineDb.getClinics().map(c => (
@@ -2266,6 +3046,11 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                         {c.name} ({c.country === 'Paraguai' ? '🇵🇾' : '🇧🇷'} {c.city || c.country})
                       </option>
                     ))}
+                    {canManageSchedule && (
+                      <option value="__add_new_clinic__" className="text-blue-700 font-extrabold">
+                        ➕ [Cadastrar Nova Clínica / Unidade...]
+                      </option>
+                    )}
                   </select>
                 )}
                 <span className="text-[10px] text-slate-400 mt-0.5 block">
@@ -2273,9 +3058,9 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                 </span>
               </div>
 
-              {/* Data da Consulta (Permite reprogramar ao editar ou selecionar data específica) */}
+              {/* Data da Consulta / Evento */}
               <div className="bg-slate-50 p-3 rounded-2xl border border-slate-200">
-                <label className="font-bold text-slate-700 block mb-1">DATA DA CONSULTA *</label>
+                <label className="font-bold text-slate-700 block mb-1">DATA DO EVENTO / CONSULTA *</label>
                 <input
                   type="date"
                   required
@@ -2285,7 +3070,56 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                 />
               </div>
 
-              {bookingMode === 'quick' ? (
+              {bookingMode === 'event' ? (
+                <div className="space-y-3 bg-purple-50/60 p-4 rounded-2xl border border-purple-100">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-purple-900 text-xs">Compromisso / Bloqueio na Agenda</span>
+                    <span className="text-[10px] text-purple-700 bg-purple-100 px-2 py-0.5 rounded-full font-bold">
+                      Dr. Rudson Meirelles
+                    </span>
+                  </div>
+
+                  <div>
+                    <label className="font-bold text-slate-700 block mb-1">TÍTULO DO EVENTO OU MOTIVO DO BLOQUEIO *</label>
+                    <input
+                      type="text"
+                      required
+                      value={quickPatientName}
+                      onChange={(e) => setQuickPatientName(e.target.value)}
+                      placeholder="Ex: Cirurgias Manhã, Reunião de Equipe, Plantão Santa Rosa, Folga, Congresso..."
+                      className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-purple-500"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="font-bold text-slate-700 block mb-1">LOCAL OU DETALHE</label>
+                      <input
+                        type="text"
+                        value={quickPatientPhone}
+                        onChange={(e) => setQuickPatientPhone(e.target.value)}
+                        placeholder="Ex: Sala de Procedimentos, Auditório..."
+                        className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-purple-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="font-bold text-slate-700 block mb-1">CATEGORIA / ÍCONE DO EVENTO</label>
+                      <select
+                        value={newType}
+                        onChange={(e) => setNewType(e.target.value as any)}
+                        className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-purple-500 cursor-pointer"
+                      >
+                        <option value="urgencia">🚨 Cirurgia / Procedimento Cirúrgico</option>
+                        <option value="consulta_geral">📋 Reunião / Compromisso Profissional</option>
+                        <option value="refrativo">🏥 Plantão / Atendimento em Nova Clínica</option>
+                        <option value="retorno">🏖️ Folga / Ausência Programada</option>
+                        <option value="baixa_visao">🔒 Bloqueio de Horário / Particular</option>
+                        <option value="pediatrico">🔬 Procedimento Ambulatorial / Exame</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              ) : bookingMode === 'quick' ? (
                 <div className="space-y-3 bg-blue-50/50 p-4 rounded-2xl border border-blue-100">
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-blue-900 text-xs">Dados Rápidos do Paciente</span>
@@ -2477,6 +3311,49 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                 />
               </div>
 
+
+
+              {/* Seleção de Atendimento Fora do Período Contratado / Negociado */}
+              <div className="p-3.5 bg-amber-50/70 border border-amber-200/80 rounded-2xl space-y-2">
+                <div className="flex items-start gap-2.5">
+                  <input
+                    type="checkbox"
+                    id="isOutOfContractPeriodCheck"
+                    checked={newIsOutOfContractPeriod}
+                    onChange={(e) => setNewIsOutOfContractPeriod(e.target.checked)}
+                    className="w-4 h-4 text-amber-600 rounded mt-0.5 cursor-pointer accent-amber-600"
+                  />
+                  <div className="flex-1">
+                    <label
+                      htmlFor="isOutOfContractPeriodCheck"
+                      className="font-bold text-amber-950 text-xs flex items-center gap-1.5 cursor-pointer"
+                    >
+                      <ClockAlert className="w-3.5 h-3.5 text-amber-700" />
+                      <span>Atendimento fora do período contratado (Avulso / Hora Extra / Negociado)</span>
+                    </label>
+                    <p className="text-[10px] text-amber-800 font-medium mt-0.5">
+                      Contrato oficial IVS: <b>Terça-feira (13:00 às 18:00)</b> e <b>Quarta-feira (08:00 às 12:00)</b>. 
+                      Marque esta opção caso a consulta ocorra fora desse expediente ou seja combinada em dia negociado por período.
+                    </p>
+                  </div>
+                </div>
+
+                {newIsOutOfContractPeriod && (
+                  <div className="pt-2 border-t border-amber-200/60">
+                    <label className="font-bold text-[11px] text-amber-900 block mb-1">
+                      JUSTIFICATIVA / DETALHES DO PERÍODO NEGOCIADO (OPCIONAL)
+                    </label>
+                    <input
+                      type="text"
+                      value={newContractPeriodNotes}
+                      onChange={(e) => setNewContractPeriodNotes(e.target.value)}
+                      placeholder="Ex: Mutirão extraordinário, acordo de encaixe, atendimento pós-escala..."
+                      className="w-full bg-white border border-amber-300 rounded-xl px-3 py-1.5 text-xs text-amber-950 focus:outline-none focus:border-amber-500 font-medium"
+                    />
+                  </div>
+                )}
+              </div>
+
               <div>
                 <label className="font-bold text-slate-700 block mb-1">OBSERVAÇÕES DO AGENDAMENTO</label>
                 <textarea
@@ -2512,6 +3389,413 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                   {conflictWarningIsWarning 
                     ? 'Confirmar Agendamento Mesmo com Aviso' 
                     : (editingAppointmentId ? 'Salvar Alterações' : 'Confirmar Agendamento')}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Ajuste de Escala / Eventos Oficiais do Calendário (Dr. Rudson Meirelles) */}
+      {isScaleModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto animate-fadeIn">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-6 text-slate-900 border border-slate-200">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+              <div className="flex items-center gap-2 text-blue-700 font-black">
+                <Building2 className="w-5 h-5 text-blue-600" />
+                <span>AJUSTAR ESCALA / TURNO DA AGENDA (DR. RUDSON MEIRELLES)</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsScaleModalOpen(false)}
+                className="text-slate-400 hover:text-slate-600 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (scaleIsOffDay) {
+                  saveCustomShiftOverride(scaleEditDate, {
+                    date: scaleEditDate,
+                    isOffDay: true,
+                    description: scaleDescription.trim() || 'Folga / Sem Atendimento Externo',
+                    shifts: []
+                  });
+                } else {
+                  const matched = offlineDb.getClinics().find(c => c.name === scaleShortName || c.name === scaleLocationName);
+                  const isCentral = scaleShortName.toLowerCase().includes('central');
+                  const isVisual = scaleShortName.toLowerCase().includes('visual');
+                  const isSanta = scaleShortName.toLowerCase().includes('santa');
+                  const isMega = scaleShortName.toLowerCase().includes('mega');
+                  const isStillo = scaleShortName.toLowerCase().includes('stillo');
+
+                  saveCustomShiftOverride(scaleEditDate, {
+                    date: scaleEditDate,
+                    isOffDay: false,
+                    shifts: [
+                      {
+                        locationName: scaleLocationName.trim(),
+                        shortName: scaleShortName.trim(),
+                        hours: scaleHours.trim(),
+                        colorBg: isCentral
+                          ? 'bg-cyan-500 hover:bg-cyan-600'
+                          : isVisual
+                          ? 'bg-rose-500 hover:bg-rose-600'
+                          : isSanta
+                          ? 'bg-slate-700 hover:bg-slate-800'
+                          : isMega
+                          ? 'bg-emerald-600 hover:bg-emerald-700'
+                          : isStillo
+                          ? 'bg-amber-600 hover:bg-amber-700'
+                          : matched?.primaryColor
+                          ? 'bg-indigo-600 hover:bg-indigo-700'
+                          : 'bg-blue-600 hover:bg-blue-700',
+                        colorBorder: 'border-slate-700',
+                        colorText: isCentral ? 'text-slate-950' : 'text-white',
+                        badgeBg: 'bg-black/30',
+                        badgeText: 'text-white',
+                        customColor: matched?.primaryColor
+                      }
+                    ]
+                  });
+                }
+                setCustomShiftsTick(t => t + 1);
+                setIsScaleModalOpen(false);
+              }}
+              className="space-y-4 text-xs"
+            >
+              <div>
+                <label className="font-bold text-slate-700 block mb-1">DATA DA ESCALA</label>
+                <input
+                  type="date"
+                  value={scaleEditDate}
+                  onChange={(e) => setScaleEditDate(e.target.value)}
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-mono font-bold text-slate-900"
+                />
+              </div>
+
+              <div className="flex items-center gap-2 bg-slate-50 p-3 rounded-2xl border border-slate-200">
+                <input
+                  type="checkbox"
+                  id="scaleOffDayCheck"
+                  checked={scaleIsOffDay}
+                  onChange={(e) => setScaleIsOffDay(e.target.checked)}
+                  className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 cursor-pointer"
+                />
+                <label htmlFor="scaleOffDayCheck" className="font-bold text-slate-800 cursor-pointer">
+                  Marcar este dia como Folga / Sem Atendimento
+                </label>
+              </div>
+
+              {!scaleIsOffDay && (
+                <>
+                  <div>
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="font-bold text-slate-700 block">LOCAL / UNIDADE DE ATENDIMENTO</label>
+                      <button
+                        type="button"
+                        onClick={() => setIsNewClinicModalOpen(true)}
+                        className="text-[11px] font-extrabold text-blue-700 hover:text-blue-900 bg-blue-100/70 hover:bg-blue-200/80 px-2 py-0.5 rounded-lg flex items-center gap-1 transition-all cursor-pointer shadow-2xs"
+                        title="Cadastrar uma nova clínica para incluir na escala"
+                      >
+                        <Plus className="w-3 h-3 text-blue-700" />
+                        <span>+ Nova Clínica</span>
+                      </button>
+                    </div>
+                    <select
+                      value={scaleShortName}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        if (val === '__add_new_clinic__') {
+                          setIsNewClinicModalOpen(true);
+                          return;
+                        }
+                        setScaleShortName(val);
+                        if (val === 'Instituto') {
+                          setScaleLocationName('Instituto da Visão e Saúde (IVS)');
+                          setScaleHours('08:00 às 18:00 (Br)');
+                        } else if (val === 'Clínica Central') {
+                          setScaleLocationName('Clínica Central (PY)');
+                          setScaleHours('13:00 às 15:45 (Py)');
+                        } else if (val === 'Clínica Visual') {
+                          setScaleLocationName('Clínica Visual (PY)');
+                          setScaleHours('16:00 às 17:30 (Py)');
+                        } else if (val === 'Santa Rosa PY') {
+                          setScaleLocationName('Hospital Santa Rosa PY');
+                          setScaleHours('Dia Inteiro');
+                        } else if (val === 'Mega Star') {
+                          setScaleLocationName('Mega Star');
+                        } else if (val === 'Clínica Stillo') {
+                          setScaleLocationName('Clínica Stillo Itamarati');
+                          setScaleHours('08:00 às 15:00');
+                        } else {
+                          const matchedClinic = offlineDb.getClinics().find(c => c.name === val || c.code === val || c.id === val);
+                          if (matchedClinic) {
+                            setScaleLocationName(matchedClinic.name);
+                            setScaleHours('08:00 às 18:00');
+                          }
+                        }
+                      }}
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 cursor-pointer"
+                    >
+                      <option value="Instituto">IVS - Instituto da Visão e Saúde (Ponta Porã)</option>
+                      <option value="Clínica Stillo">Clínica Stillo Itamarati (08:00 às 15:00)</option>
+                      <option value="Clínica Central">Clínica Central (PY - Pedro Juan Caballero)</option>
+                      <option value="Clínica Visual">Clínica Visual (PY - Pedro Juan Caballero)</option>
+                      <option value="Santa Rosa PY">Hospital Santa Rosa PY</option>
+                      <option value="Mega Star">Mega Star Consultório (Pedro Juan Caballero)</option>
+                      {offlineDb.getClinics()
+                        .filter(c => !['ivs', 'megastar', 'vision'].includes(c.id) && !c.name.toLowerCase().includes('instituto') && !c.name.toLowerCase().includes('mega star'))
+                        .map(c => (
+                          <option key={c.id} value={c.name}>
+                            🏥 {c.name} ({c.country === 'Paraguai' ? '🇵🇾' : '🇧🇷'} {c.city || c.country})
+                          </option>
+                        ))
+                      }
+                      <option value="__add_new_clinic__" className="text-blue-700 font-extrabold">
+                        ➕ [Cadastrar Nova Clínica / Unidade...]
+                      </option>
+                      <option value="Outro">Outro Local / Evento Personalizado</option>
+                    </select>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="font-bold text-slate-700 block mb-1">NOME DA UNIDADE / EVENTO</label>
+                      <input
+                        type="text"
+                        value={scaleLocationName}
+                        onChange={(e) => setScaleLocationName(e.target.value)}
+                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-900"
+                      />
+                    </div>
+                    <div>
+                      <label className="font-bold text-slate-700 block mb-1">HORÁRIO / TURNO</label>
+                      <input
+                        type="text"
+                        value={scaleHours}
+                        onChange={(e) => setScaleHours(e.target.value)}
+                        placeholder="Ex: 08:00 às 18:00"
+                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-900"
+                      />
+                    </div>
+                  </div>
+                </>
+              )}
+
+              <div className="flex items-center justify-between gap-3 pt-3 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => {
+                    removeCustomShiftOverride(scaleEditDate);
+                    setCustomShiftsTick(t => t + 1);
+                    setIsScaleModalOpen(false);
+                  }}
+                  className="px-3 py-2 text-xs font-bold text-rose-600 hover:bg-rose-50 rounded-xl transition-all cursor-pointer"
+                  title="Restaurar a escala padrão oficial trimestral para esta data"
+                >
+                  Restaurar Escala Padrão
+                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setIsScaleModalOpen(false)}
+                    className="px-4 py-2 font-bold text-slate-600 hover:text-slate-800 cursor-pointer"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-5 py-2.5 font-bold bg-blue-600 hover:bg-blue-500 text-white rounded-xl shadow-md cursor-pointer"
+                  >
+                    Salvar Escala
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal para Cadastrar Nova Clínica / Consultório Diretamente na Agenda */}
+      {isNewClinicModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto animate-fadeIn">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-6 text-slate-900 border border-slate-200">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+              <div className="flex items-center gap-2 text-blue-700 font-black">
+                <Building2 className="w-5 h-5 text-blue-600" />
+                <span>CADASTRAR NOVA CLÍNICA / UNIDADE DE ATENDIMENTO</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsNewClinicModalOpen(false)}
+                className="text-slate-400 hover:text-slate-600 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (!newClinicName.trim()) return;
+
+                const clinicId = generateUUID();
+                const codeGenerated = newClinicName.trim().toUpperCase().replace(/[^A-Z0-9]/g, '_').slice(0, 15);
+                const createdClinic: ClinicConfig = {
+                  id: clinicId,
+                  code: codeGenerated,
+                  name: newClinicName.trim(),
+                  tagline: 'Centro de Atendimento Clínico & Diagnóstico',
+                  primaryColor: newClinicColor,
+                  city: newClinicCity.trim() || (newClinicCountry === 'Paraguai' ? 'Pedro Juan Caballero' : 'Ponta Porã'),
+                  country: newClinicCountry,
+                  defaultLanguage: newClinicCountry === 'Paraguai' ? ('es-PY' as const) : ('pt-BR' as const),
+                  defaultCurrency: newClinicCountry === 'Paraguai' ? ('PYG' as const) : ('BRL' as const),
+                  timezone: newClinicCountry === 'Paraguai' ? 'America/Asuncion' : 'America/Sao_Paulo',
+                  currency: newClinicCountry === 'Paraguai' ? ('PYG' as const) : ('BRL' as const),
+                  language: newClinicCountry === 'Paraguai' ? ('es-PY' as const) : ('pt-BR' as const),
+                  status: 'active',
+                  address: newClinicAddress.trim() || 'Consultório Parceiro',
+                  phone: newClinicPhone.trim() || undefined,
+                  clinicalSettings: {
+                    defaultConsultationDurationMinutes: 30,
+                    optotypeDistanceMeters: 6,
+                    enableSmartTV: true,
+                    enableRemoteControl: true
+                  },
+                  createdAt: new Date().toISOString(),
+                  updatedAt: new Date().toISOString()
+                };
+
+                offlineDb.saveClinic(createdClinic);
+
+                // Define como clínica ativa da seleção
+                setTargetBookingClinicId(clinicId);
+                setScaleShortName(createdClinic.name);
+                setScaleLocationName(createdClinic.name);
+
+                // Limpa campos
+                setNewClinicName('');
+                setNewClinicAddress('');
+                setNewClinicPhone('');
+                setIsNewClinicModalOpen(false);
+                setCustomShiftsTick(t => t + 1);
+                loadData();
+              }}
+              className="space-y-4 text-xs"
+            >
+              <div>
+                <label className="font-bold text-slate-700 block mb-1">NOME DA NOVA CLÍNICA / CONSULTÓRIO *</label>
+                <input
+                  type="text"
+                  required
+                  value={newClinicName}
+                  onChange={(e) => setNewClinicName(e.target.value)}
+                  placeholder="Ex: Clínica Oftalmológica São Lucas, Hospital Regional..."
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-blue-500"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="font-bold text-slate-700 block mb-1">PAÍS / JURISDIÇÃO</label>
+                  <select
+                    value={newClinicCountry}
+                    onChange={(e) => {
+                      const c = e.target.value as 'Brasil' | 'Paraguai';
+                      setNewClinicCountry(c);
+                      setNewClinicCity(c === 'Paraguai' ? 'Pedro Juan Caballero' : 'Ponta Porã');
+                    }}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-blue-500 cursor-pointer"
+                  >
+                    <option value="Brasil">🇧🇷 Brasil</option>
+                    <option value="Paraguai">🇵🇾 Paraguai</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="font-bold text-slate-700 block mb-1">CIDADE</label>
+                  <input
+                    type="text"
+                    required
+                    value={newClinicCity}
+                    onChange={(e) => setNewClinicCity(e.target.value)}
+                    placeholder="Ex: Ponta Porã ou Pedro Juan Caballero"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="font-bold text-slate-700 block mb-1">ENDEREÇO / LOCALIZAÇÃO</label>
+                  <input
+                    type="text"
+                    value={newClinicAddress}
+                    onChange={(e) => setNewClinicAddress(e.target.value)}
+                    placeholder="Ex: Av. Central, Sala 201"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-medium text-slate-900 focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="font-bold text-slate-700 block mb-1">TELEFONE / WHATSAPP</label>
+                  <input
+                    type="text"
+                    value={newClinicPhone}
+                    onChange={(e) => setNewClinicPhone(e.target.value)}
+                    placeholder="Ex: (67) 99999-0000"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-medium text-slate-900 focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="font-bold text-slate-700 block mb-1">COR DE IDENTIFICAÇÃO NA AGENDA</label>
+                <div className="flex items-center gap-2 flex-wrap">
+                  {[
+                    { color: '#2563EB', name: 'Azul (Padrão)' },
+                    { color: '#7C3AED', name: 'Roxo' },
+                    { color: '#059669', name: 'Verde Esmeralda' },
+                    { color: '#EA580C', name: 'Laranja' },
+                    { color: '#E11D48', name: 'Rosa/Cereja' },
+                    { color: '#0891B2', name: 'Ciano' },
+                    { color: '#475569', name: 'Ardósia / Grafite' }
+                  ].map(opt => (
+                    <button
+                      key={opt.color}
+                      type="button"
+                      onClick={() => setNewClinicColor(opt.color)}
+                      style={{ backgroundColor: opt.color }}
+                      className={`w-7 h-7 rounded-xl transition-all cursor-pointer shadow-xs flex items-center justify-center text-white ${
+                        newClinicColor === opt.color ? 'ring-3 ring-offset-2 ring-slate-800 scale-110' : 'opacity-80 hover:opacity-100'
+                      }`}
+                      title={opt.name}
+                    >
+                      {newClinicColor === opt.color && <Check className="w-3.5 h-3.5" />}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => setIsNewClinicModalOpen(false)}
+                  className="px-4 py-2 font-bold text-slate-600 hover:text-slate-800 cursor-pointer"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2.5 font-bold bg-blue-600 hover:bg-blue-500 text-white rounded-xl shadow-md cursor-pointer flex items-center gap-1.5"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Cadastrar e Selecionar Clínica</span>
                 </button>
               </div>
             </form>
@@ -2573,10 +3857,10 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                       setCompleteNationality(nat);
                       if (nat === 'PY') {
                         setCompleteDocumentType('CI_PY');
-                        if (!completeCity || completeCity === 'Foz do Iguaçu') setCompleteCity('Ciudad del Este');
+                        if (!completeCity || completeCity === 'Ponta Porã' || completeCity === 'Foz do Iguaçu') setCompleteCity('Pedro Juan Caballero');
                       } else {
                         setCompleteDocumentType('CPF');
-                        if (!completeCity || completeCity === 'Ciudad del Este') setCompleteCity('Foz do Iguaçu');
+                        if (!completeCity || completeCity === 'Pedro Juan Caballero' || completeCity === 'Ciudad del Este') setCompleteCity('Ponta Porã');
                       }
                     }}
                     className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-blue-500 cursor-pointer"
@@ -2853,7 +4137,7 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                   ✓ O arquivo com 101 atendimentos e turnos futuros (até o fim de 2026) foi gerado e baixado!
                 </p>
                 <p className="text-emerald-800">
-                  Foram incluídos todos os atendimentos do <b>IVS (segundas e terças)</b>, <b>Clínica Central (quartas)</b>, <b>Hospital Santa Rosa PY</b>, <b>Mega Star</b> e <b>Visual Clínica dos Olhos</b>.
+                  Foram incluídos os atendimentos do <b>IVS (terças 13h às 18h e quartas 08h às 13h)</b>, <b>Stillo Ita (1º sábado 08h às 15h)</b>, <b>Hospital Santa Rosa PY</b> e <b>Mega Star</b>.
                 </p>
               </div>
             </div>
@@ -2936,6 +4220,68 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                 className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-black transition-colors cursor-pointer"
               >
                 Entendi e Concluir
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Check-In Profissional com Regras Anti-Concorrência e Prioridade Legal */}
+      <CheckInModal
+        isOpen={isCheckInModalOpen}
+        onClose={() => {
+          setIsCheckInModalOpen(false);
+          setCheckInTargetAppointment(null);
+        }}
+        initialAppointment={checkInTargetAppointment}
+        onSuccess={() => {
+          loadData();
+        }}
+      />
+
+      {/* FASE 29: Modal de Confirmação Acessível de Cancelamento/Exclusão de Agendamento */}
+      {aptToDelete && (
+        <div 
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fadeIn"
+          role="alertdialog"
+          aria-modal="true"
+          aria-labelledby="delete-apt-title"
+          aria-describedby="delete-apt-desc"
+        >
+          <div className="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl border border-red-200 space-y-4">
+            <div className="flex items-center gap-3 text-red-600">
+              <div className="p-2.5 bg-red-50 rounded-2xl">
+                <AlertTriangle className="w-6 h-6 text-red-600" />
+              </div>
+              <div>
+                <h3 id="delete-apt-title" className="font-black text-sm text-slate-900 uppercase tracking-tight">
+                  Cancelar / Excluir Agendamento
+                </h3>
+                <span className="text-[11px] text-slate-500 font-medium">
+                  Ação que liberará o horário na grade clínica
+                </span>
+              </div>
+            </div>
+
+            <p id="delete-apt-desc" className="text-xs text-slate-600 leading-relaxed">
+              Deseja realmente remover o agendamento de <strong>"{aptToDelete.patientName}"</strong> previsto para as <strong>{aptToDelete.time}</strong>? O horário ficará imediatamente disponível para novo paciente.
+            </p>
+
+            <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100">
+              <button
+                type="button"
+                autoFocus
+                onClick={() => setAptToDelete(null)}
+                className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl cursor-pointer transition-colors"
+              >
+                Manter Agendamento
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmDeleteAppointment}
+                className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white font-bold text-xs rounded-xl cursor-pointer shadow-md shadow-red-600/25 transition-colors"
+              >
+                Sim, Cancelar Horário
               </button>
             </div>
           </div>

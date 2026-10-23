@@ -1,7 +1,11 @@
 export * from './optics/visualAcuity';
 export * from './optics/calibration';
 export * from './optics/optotypes';
+export * from './optics/refractionMath';
 export * from './protocols/websocketMessages';
 export * from './clinical/types';
 export * from './clinical/defaultProtocols';
+export * from './clinical/patientIdentity';
+export * from './clinical/appointmentStateMachine';
+export * from './clinical/financialMath';
 //# sourceMappingURL=index.js.map

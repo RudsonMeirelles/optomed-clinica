@@ -30,6 +30,7 @@ import { ClinicalEncounter, Prescription } from '@optotipo/shared';
 import { UnifiedPrintCenterModal } from '../components/UnifiedPrintCenterModal';
 import { PatientMedicalRecordModal } from '../components/PatientMedicalRecordModal';
 import { ClinicalReportModal } from '../components/ClinicalReportModal';
+import { CheckInModal } from '../components/CheckInModal';
 
 interface PatientsListProps {
   onSelectPatient: (patient: Patient) => void;
@@ -60,6 +61,10 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, onS
   const [isReportModalOpen, setIsReportModalOpen] = useState<boolean>(false);
   const [reportEncounter, setReportEncounter] = useState<ClinicalEncounter | null>(null);
   const [reportPatient, setReportPatient] = useState<Patient | null>(null);
+
+  // Estados para Check-In Direto da Recepção
+  const [isCheckInModalOpen, setIsCheckInModalOpen] = useState<boolean>(false);
+  const [checkInPatient, setCheckInPatient] = useState<Patient | null>(null);
 
   const handleOpenRecordModal = (patient: Patient, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
@@ -177,7 +182,7 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, onS
   const [documentNumber, setDocumentNumber] = useState<string>('');
   const [phoneCountryCode, setPhoneCountryCode] = useState<string>('+55');
   const [phone, setPhone] = useState<string>('');
-  const [city, setCity] = useState<string>('Foz do Iguaçu');
+  const [city, setCity] = useState<string>('Ponta Porã');
   const [address, setAddress] = useState<string>('');
   const [guardianName, setGuardianName] = useState<string>('');
   const [notes, setNotes] = useState<string>('');
@@ -185,43 +190,39 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, onS
 
   useEffect(() => {
     const refreshPatients = () => {
-      // 1. Busca pacientes da clínica ativa
-      const primaryPatients = offlineDb.getPatients(effectiveClinicId);
-      const primaryEncounters = offlineDb.getEncounters(effectiveClinicId);
-      
-      // 2. Garante que se houver pacientes em 'ivs' ou 'clinica-principal', nenhum paciente atendido fique oculto
-      const allClinicPatients = ['ivs', 'clinica-principal'].flatMap(cid => offlineDb.getPatients(cid));
-      const mapPatients = new Map<string, Patient>();
-      allClinicPatients.forEach(p => { if (p && p.id) mapPatients.set(p.id, p); });
-      primaryPatients.forEach(p => { if (p && p.id) mapPatients.set(p.id, p); });
+      // 1. Busca pacientes e prontuários EXCLUSIVAMENTE da clínica efetiva autorizada na sessão
+      const clinicPatients = offlineDb.getPatients(effectiveClinicId);
+      const clinicEncounters = offlineDb.getEncounters(effectiveClinicId);
 
-      const allClinicEncounters = ['ivs', 'clinica-principal'].flatMap(cid => offlineDb.getEncounters(cid));
-      const mapEncounters = new Map<string, ClinicalEncounter>();
-      allClinicEncounters.forEach(e => { if (e && e.id) mapEncounters.set(e.id, e); });
-      primaryEncounters.forEach(e => { if (e && e.id) mapEncounters.set(e.id, e); });
+      setPatients(clinicPatients);
+      setEncounters(clinicEncounters);
+    };
 
-      setPatients(Array.from(mapPatients.values()));
-      setEncounters(Array.from(mapEncounters.values()));
+    const handleOpenNewPatientTrigger = () => {
+      openNewPatientModal();
     };
 
     refreshPatients();
-
+    window.addEventListener('storage', refreshPatients);
     window.addEventListener('optomed_patient_updated', refreshPatients);
     window.addEventListener('optomed_new_patient_registered', refreshPatients);
     window.addEventListener('optomed_encounter_updated', refreshPatients);
-    window.addEventListener('storage', refreshPatients);
+    window.addEventListener('optomed_clinic_changed', refreshPatients);
+    window.addEventListener('optomed_open_new_patient_modal', handleOpenNewPatientTrigger);
 
     return () => {
+      window.removeEventListener('storage', refreshPatients);
       window.removeEventListener('optomed_patient_updated', refreshPatients);
       window.removeEventListener('optomed_new_patient_registered', refreshPatients);
       window.removeEventListener('optomed_encounter_updated', refreshPatients);
-      window.removeEventListener('storage', refreshPatients);
+      window.removeEventListener('optomed_clinic_changed', refreshPatients);
+      window.removeEventListener('optomed_open_new_patient_modal', handleOpenNewPatientTrigger);
     };
   }, [effectiveClinicId]);
 
   const openNewPatientModal = () => {
     const activeClinic = offlineDb.getActiveClinic();
-    const isPyClinic = activeClinic?.defaultLanguage === 'es-PY' || activeClinic?.id === 'vision';
+    const isPyClinic = activeClinic?.defaultLanguage === 'es-PY' || activeClinic?.id === 'vision' || activeClinic?.id === 'megastar';
 
     setEditingPatient(null);
     setFullName('');
@@ -232,7 +233,7 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, onS
     setDocumentNumber('');
     setPhoneCountryCode(isPyClinic ? '+595' : '+55');
     setPhone('');
-    setCity(isPyClinic ? 'Pedro Juan Caballero' : 'Foz do Iguaçu');
+    setCity(isPyClinic ? 'Pedro Juan Caballero' : 'Ponta Porã');
     setAddress('');
     setGuardianName('');
     setNotes('');
@@ -257,7 +258,7 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, onS
       : '';
     setPhone(cleanPhone);
     
-    setCity(patient.city || (patient.nationality === 'PY' ? 'Ciudad del Este' : 'Foz do Iguaçu'));
+    setCity(patient.city || (patient.nationality === 'PY' ? 'Pedro Juan Caballero' : 'Ponta Porã'));
     setAddress(patient.address || '');
     setGuardianName(patient.guardianName || '');
     setNotes(patient.notes || '');
@@ -270,11 +271,11 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, onS
     if (nat === 'PY') {
       setDocumentType('CI_PY');
       setPhoneCountryCode('+595');
-      if (!city || city === 'Foz do Iguaçu') setCity('Ciudad del Este');
+      if (!city || city === 'Ponta Porã' || city === 'Foz do Iguaçu') setCity('Pedro Juan Caballero');
     } else {
       setDocumentType('CPF');
       setPhoneCountryCode('+55');
-      if (!city || city === 'Ciudad del Este') setCity('Foz do Iguaçu');
+      if (!city || city === 'Pedro Juan Caballero' || city === 'Ciudad del Este') setCity('Ponta Porã');
     }
   };
 
@@ -506,70 +507,58 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, onS
               <div key={patient.id} className="transition-colors hover:bg-slate-50/70">
                 <div
                   onClick={() => onSelectPatient(patient)}
-                  className="p-4 cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                  className="p-4 sm:p-5 cursor-pointer flex flex-col xl:flex-row xl:items-center justify-between gap-4 transition-all"
                 >
-                  <div className="flex items-start gap-4">
-                    <div className={`w-11 h-11 rounded-2xl font-bold flex items-center justify-center text-sm shadow-sm shrink-0 ${
+                  {/* Informações Principais do Paciente */}
+                  <div className="flex items-start gap-3.5 flex-1 min-w-0">
+                    <div className={`w-10 h-10 rounded-xl font-bold flex items-center justify-center text-sm shadow-2xs shrink-0 ${
                       patient.nationality === 'PY' 
-                        ? 'bg-red-50 text-red-700 border border-red-200' 
-                        : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                        ? 'bg-red-50 text-red-700 border border-red-200/80' 
+                        : 'bg-emerald-50 text-emerald-700 border border-emerald-200/80'
                     }`}>
                       {patient.nationality === 'PY' ? '🇵🇾' : '🇧🇷'}
                     </div>
 
-                    <div className="space-y-1">
+                    <div className="space-y-1 flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-bold text-sm text-slate-900">{patient.fullName}</span>
-                        <span className="text-[10px] font-mono bg-slate-100 text-slate-600 px-2 py-0.5 rounded border border-slate-200">
+                        <span className="font-bold text-sm text-slate-900 truncate">{patient.fullName}</span>
+                        <span className="text-[10px] font-mono bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md border border-slate-200/80">
                           {patient.documentType || 'DOC'}: {patient.documentNumber || 'Sem número'}
                         </span>
                         {patientEncounters.length > 0 && (
-                          <>
-                            <span className="text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-full flex items-center gap-1">
-                              <FileCheck2 className="w-3 h-3 text-blue-600" />
-                              {patientEncounters.length} {patientEncounters.length === 1 ? 'Prontuário' : 'Prontuários'}
-                            </span>
-
-                            {/* Botão Retorno Rápido no Topo */}
-                            <button
-                              type="button"
-                              onClick={(e) => handleRegisterReturn(patient, lastEncounter, e)}
-                              className="text-[11px] font-black bg-indigo-600 hover:bg-indigo-700 text-white px-2.5 py-0.5 rounded-full flex items-center gap-1 shadow-xs cursor-pointer transition-all active:scale-95"
-                              title="Registrar retorno deste paciente (preserva histórico e refração anterior)"
-                            >
-                              <RotateCcw className="w-3 h-3" />
-                              <span>↩ Retorno</span>
-                            </button>
-                          </>
+                          <span className="text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200/80 px-2 py-0.5 rounded-full flex items-center gap-1">
+                            <FileCheck2 className="w-3 h-3 text-blue-600" />
+                            {patientEncounters.length} {patientEncounters.length === 1 ? 'Prontuário' : 'Prontuários'}
+                          </span>
                         )}
                       </div>
 
-                      <div className="text-xs text-slate-500 flex flex-wrap items-center gap-x-4 gap-y-1">
+                      <div className="text-xs text-slate-500 flex flex-wrap items-center gap-x-3.5 gap-y-1">
                         {patient.birthDate && (
-                          <span className="flex items-center gap-1.5 font-medium text-slate-700">
+                          <span className="flex items-center gap-1 font-medium text-slate-600">
                             <Calendar className="w-3.5 h-3.5 text-blue-500" />
                             <span>{new Date(patient.birthDate).toLocaleDateString('pt-BR')}</span>
                             {calculateAge(patient.birthDate) && (
-                              <span className="text-[10px] font-bold bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full border border-blue-200">
+                              <span className="text-[10px] font-bold bg-blue-100/80 text-blue-800 px-1.5 py-0.2 rounded-full border border-blue-200">
                                 {calculateAge(patient.birthDate)?.formatted}
                               </span>
                             )}
                           </span>
                         )}
                         {patient.phone && (
-                          <span className="flex items-center gap-1.5 font-medium text-slate-700">
+                          <span className="flex items-center gap-1 font-medium text-slate-600">
                             <Phone className="w-3.5 h-3.5 text-emerald-600" />
                             <span>{patient.phone}</span>
                           </span>
                         )}
                         {patient.city && (
-                          <span className="flex items-center gap-1.5 font-medium text-slate-700">
+                          <span className="flex items-center gap-1 font-medium text-slate-600">
                             <MapPin className="w-3.5 h-3.5 text-rose-500" />
                             <span>{patient.city}</span>
                           </span>
                         )}
                         {patient.guardianName && (
-                          <span className="flex items-center gap-1.5 font-medium text-slate-700">
+                          <span className="flex items-center gap-1 font-medium text-slate-600">
                             Resp: {patient.guardianName}
                           </span>
                         )}
@@ -577,63 +566,66 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, onS
 
                       {/* Exibição Rápida da Última Refração / Dioptria Cadastrada com Data do Atendimento */}
                       {lastEncounter && hasDioptria && (
-                        <div className="mt-2 bg-slate-50 border border-slate-200/80 rounded-xl p-2.5 flex flex-wrap items-center justify-between gap-2 text-xs">
-                          <div className="flex flex-wrap items-center gap-2">
-                            {/* Data do Atendimento */}
-                            <span className="font-bold text-[11px] text-blue-900 bg-blue-100/70 border border-blue-200 px-2.5 py-0.5 rounded-lg flex items-center gap-1">
-                              <Clock className="w-3 h-3 text-blue-600" />
-                              <span>Atendido em: <strong>{new Date(lastEncounter.date).toLocaleDateString('pt-BR')} às {new Date(lastEncounter.date).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</strong></span>
-                            </span>
+                        <div className="mt-2 bg-slate-50 border border-slate-200/70 rounded-xl p-2 flex flex-wrap items-center gap-2 text-xs">
+                          {/* Data do Atendimento */}
+                          <span className="font-bold text-[11px] text-blue-900 bg-blue-100/70 border border-blue-200 px-2 py-0.5 rounded-md flex items-center gap-1">
+                            <Clock className="w-3 h-3 text-blue-600" />
+                            <span>Atendido em: <strong>{new Date(lastEncounter.date).toLocaleDateString('pt-BR')} às {new Date(lastEncounter.date).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</strong></span>
+                          </span>
 
-                            <span className="text-[10px] font-black uppercase tracking-wider text-slate-500 flex items-center gap-1">
-                              <Glasses className="w-3.5 h-3.5 text-blue-600" /> Grau:
+                          <span className="text-[10px] font-black uppercase tracking-wider text-slate-500 flex items-center gap-1">
+                            <Glasses className="w-3.5 h-3.5 text-blue-600" /> Grau:
+                          </span>
+                          <span className="font-mono text-[11px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                            OD: {formatDioptria(odRef)}
+                          </span>
+                          <span className="font-mono text-[11px] font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                            OE: {formatDioptria(oeRef)}
+                          </span>
+                          {lastEncounter.subjectiveRefraction?.addition && (
+                            <span className="font-mono text-[11px] font-bold text-indigo-800 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">
+                              Adição: +{lastEncounter.subjectiveRefraction.addition.toFixed(2)}
                             </span>
-                            <span className="font-mono text-[11px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                              OD: {formatDioptria(odRef)}
+                          )}
+                          {lastEncounter.conduct && (
+                            <span className="text-[10px] text-slate-600 truncate max-w-xs" title={lastEncounter.conduct}>
+                              Conduta: {lastEncounter.conduct}
                             </span>
-                            <span className="font-mono text-[11px] font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
-                              OE: {formatDioptria(oeRef)}
-                            </span>
-                            {lastEncounter.subjectiveRefraction?.addition && (
-                              <span className="font-mono text-[11px] font-bold text-indigo-800 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">
-                                Adição: +{lastEncounter.subjectiveRefraction.addition.toFixed(2)}
-                              </span>
-                            )}
-                            {lastEncounter.conduct && (
-                              <span className="text-[10px] text-slate-600 truncate max-w-xs" title={lastEncounter.conduct}>
-                                Conduta: {lastEncounter.conduct}
-                              </span>
-                            )}
-                          </div>
-
-                          {/* Botão de Retorno Direto na barra de Grau */}
-                          <button
-                            type="button"
-                            onClick={(e) => handleRegisterReturn(patient, lastEncounter, e)}
-                            className="px-2.5 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-900 border border-indigo-300 rounded-lg text-xs font-black flex items-center gap-1 cursor-pointer transition-all active:scale-95 shadow-2xs"
-                            title="Nova consulta de retorno baseada nesta refração"
-                          >
-                            <RotateCcw className="w-3.5 h-3.5 text-indigo-600" />
-                            <span>Retorno</span>
-                          </button>
+                          )}
                         </div>
                       )}
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2 self-end sm:self-center shrink-0 flex-wrap justify-end">
-                    {/* Botão de Retorno Principal Destacado */}
+                  {/* Barra de Ações Rápida Enquadrada & Harmonizada */}
+                  <div className="flex items-center gap-2 shrink-0 flex-wrap justify-start xl:justify-end pt-2 xl:pt-0 border-t xl:border-t-0 border-slate-100">
+                    {/* Botão de Check-In Rápido da Recepção */}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setCheckInPatient(patient);
+                        setIsCheckInModalOpen(true);
+                      }}
+                      className="px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer bg-teal-600 hover:bg-teal-700 text-white shadow-2xs active:scale-95"
+                      title="Realizar check-in do paciente na recepção e emitir senha para a sala de espera"
+                    >
+                      <Clock className="w-3.5 h-3.5" />
+                      <span>Check-In</span>
+                    </button>
+
+                    {/* Botão de Retorno Principal */}
                     <button
                       type="button"
                       onClick={(e) => handleRegisterReturn(patient, lastEncounter, e)}
-                      className="px-3.5 py-2 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all cursor-pointer border-2 bg-indigo-600 hover:bg-indigo-700 text-white border-indigo-700 shadow-md active:scale-95"
-                      title="Registrar retorno deste paciente (reavaliação visual preservando dados da consulta anterior)"
+                      className="px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white shadow-2xs active:scale-95"
+                      title="Registrar retorno deste paciente (reavaliação visual preservando histórico anterior)"
                     >
-                      <RotateCcw className="w-3.5 h-3.5 text-white" />
+                      <RotateCcw className="w-3.5 h-3.5" />
                       <span>Retorno</span>
                     </button>
 
-                    {/* Botão Histórico Inline (dropdown) */}
+                    {/* Botão Histórico Inline */}
                     {patientEncounters.length > 0 && (
                       <button
                         type="button"
@@ -641,38 +633,38 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, onS
                           e.stopPropagation();
                           setExpandedPatientId(isExpanded ? null : patient.id);
                         }}
-                        className={`px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors border cursor-pointer ${
+                        className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors border cursor-pointer ${
                           isExpanded 
-                            ? 'bg-blue-600 text-white border-blue-600 shadow-xs' 
-                            : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200'
+                            ? 'bg-blue-600 text-white border-blue-600 shadow-2xs' 
+                            : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200 shadow-2xs'
                         }`}
                         title="Ver histórico de consultas na lista"
                       >
-                        <History className="w-3.5 h-3.5" />
+                        <History className="w-3.5 h-3.5 text-slate-500" />
                         <span>Histórico ({patientEncounters.length})</span>
                         <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
                       </button>
                     )}
 
-                    {/* Botão Prontuário Completo (Abre modal de prontuário com linha do tempo) */}
+                    {/* Botão Prontuário Completo */}
                     <button
                       type="button"
                       onClick={(e) => handleOpenRecordModal(patient, e)}
-                      className="px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors border bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300 shadow-2xs cursor-pointer"
-                      title="Abrir prontuário clínico completo com todo o histórico de atendimentos"
+                      className="px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors border bg-white hover:bg-slate-50 text-slate-700 border-slate-200 shadow-2xs cursor-pointer"
+                      title="Abrir prontuário clínico completo com histórico"
                     >
                       <FileCheck2 className="w-3.5 h-3.5 text-blue-600" />
                       <span>Prontuário</span>
                     </button>
 
-                    {/* Botão de Impressão Direta de Receituário */}
+                    {/* Botão Receita */}
                     <button
                       type="button"
                       onClick={(e) => handleQuickPrint(patient, lastEncounter, e)}
-                      className={`px-3 py-2 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all cursor-pointer border shadow-2xs ${
+                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer border shadow-2xs ${
                         hasDioptria
-                          ? 'bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border-emerald-300'
-                          : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200'
+                          ? 'bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border-emerald-300/80'
+                          : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200'
                       }`}
                       title="Imprimir receituário óptico/médico com 1 clique"
                     >
@@ -680,31 +672,34 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, onS
                       <span>Receita</span>
                     </button>
 
+                    {/* Botão Editar */}
                     <button
                       type="button"
                       onClick={(e) => openEditPatientModal(patient, e)}
-                      className="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs flex items-center gap-1.5 transition-colors border border-slate-200 hover:border-slate-300 cursor-pointer"
+                      className="px-2.5 py-1.5 bg-white hover:bg-slate-50 text-slate-700 font-semibold rounded-lg text-xs flex items-center gap-1 transition-colors border border-slate-200 shadow-2xs cursor-pointer"
                       title="Editar cadastro deste paciente"
                     >
                       <Edit3 className="w-3.5 h-3.5 text-slate-500" />
                       <span>Editar</span>
                     </button>
 
+                    {/* Botão Excluir */}
                     <button
                       type="button"
                       onClick={(e) => handleDeletePatient(patient, e)}
-                      className="p-2 bg-slate-100 hover:bg-rose-50 text-slate-400 hover:text-rose-600 rounded-xl transition-colors border border-slate-200 hover:border-rose-200 cursor-pointer"
+                      className="p-1.5 bg-white hover:bg-rose-50 text-slate-400 hover:text-rose-600 rounded-lg transition-colors border border-slate-200 hover:border-rose-200 shadow-2xs cursor-pointer"
                       title="Excluir paciente"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
 
+                    {/* Botão Iniciar / Abrir Ficha */}
                     <button 
                       type="button"
                       onClick={(e) => { e.stopPropagation(); onSelectPatient(patient); }}
-                      className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl text-xs flex items-center gap-1.5 shadow-sm active:scale-95 transition-all cursor-pointer"
+                      className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-xs flex items-center gap-1 shadow-xs active:scale-95 transition-all cursor-pointer"
                     >
-                      <span>{userRole === 'reception' ? 'Abrir Ficha' : 'Iniciar Exame'}</span>
+                      <span>{userRole === 'reception' ? 'Abrir Ficha' : 'Iniciar'}</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </button>
                   </div>
@@ -975,7 +970,7 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, onS
                     type="text"
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
-                    placeholder="Ex: Foz do Iguaçu / Ciudad del Este"
+                    placeholder="Ex: Ponta Porã / Pedro Juan Caballero"
                     className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-blue-500"
                   />
                 </div>
@@ -1059,6 +1054,7 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, onS
         isOpen={isRecordModalOpen}
         patient={recordPatient}
         encounters={encounters.filter(e => e.patientId === recordPatient?.id)}
+        clinicId={effectiveClinicId}
         onClose={() => {
           setIsRecordModalOpen(false);
           setRecordPatient(null);
@@ -1082,6 +1078,19 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, onS
           setIsReportModalOpen(false);
           setReportPatient(null);
           setReportEncounter(null);
+        }}
+      />
+
+      {/* Modal de Check-In Profissional da Recepção */}
+      <CheckInModal
+        isOpen={isCheckInModalOpen}
+        onClose={() => {
+          setIsCheckInModalOpen(false);
+          setCheckInPatient(null);
+        }}
+        patient={checkInPatient}
+        onSuccess={() => {
+          // Atualiza lista se necessário
         }}
       />
     </div>

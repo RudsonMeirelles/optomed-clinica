@@ -1,0 +1,118 @@
+[
+  {
+    "id": "be870ab4-7e1d-46bb-9dfd-bcf3cf58f046",
+    "clinicId": "megastar",
+    "patientId": "19a85493-5bc5-4eea-8d5d-c53ffc5cd75d",
+    "title": "Atendimento Oftalmológico e Refração",
+    "status": "ACTIVE",
+    "startDate": "2026-09-26T15:16:15.146Z",
+    "createdAt": "2026-09-26T15:16:15.146Z",
+    "updatedAt": "2026-09-26T15:16:15.147Z",
+    "version": 1
+  },
+  {
+    "id": "7e48f7f8-7ef7-4606-b422-c001b2990f08",
+    "clinicId": "megastar",
+    "patientId": "622c3c6a-cc01-47ce-9ce3-8bfa293433fd",
+    "patientGlobalId": "gid_1790435221213_e98c07bd",
+    "title": "Atendimento Oftalmológico e Refração",
+    "status": "ACTIVE",
+    "startDate": "2026-09-26T15:07:01.419Z",
+    "createdAt": "2026-09-26T15:07:01.419Z",
+    "updatedAt": "2026-09-26T15:07:01.419Z",
+    "version": 1
+  },
+  {
+    "id": "018aa745-0015-47d0-9cb4-0bcb67da5c9a",
+    "clinicId": "megastar",
+    "patientId": "bc827c26-978c-49ec-bd22-8962cf607776",
+    "title": "Atendimento Oftalmológico e Refração",
+    "status": "ACTIVE",
+    "startDate": "2026-09-26T14:57:33.642Z",
+    "createdAt": "2026-09-26T14:57:33.642Z",
+    "updatedAt": "2026-09-26T14:57:33.642Z",
+    "version": 1
+  },
+  {
+    "id": "715af910-8988-4776-8f2e-209d97fe7571",
+    "clinicId": "megastar",
+    "patientId": "eb9bc25c-c436-4b7e-bcb2-19a57d274ace",
+    "patientGlobalId": "gid_1790433480365_dcbbd90b",
+    "title": "Atendimento Oftalmológico e Refração",
+    "status": "ACTIVE",
+    "startDate": "2026-09-26T14:38:00.530Z",
+    "createdAt": "2026-09-26T14:38:00.530Z",
+    "updatedAt": "2026-09-26T14:38:00.530Z",
+    "version": 1
+  },
+  {
+    "id": "d0021d8d-0e68-42d7-8d03-7e60408f2da2",
+    "clinicId": "megastar",
+    "patientId": "de9d06e7-d68d-4928-8cf8-ed9e1a3cb859",
+    "patientGlobalId": "gid_1790432474058_944fde07",
+    "title": "Atendimento Oftalmológico e Refração",
+    "status": "ACTIVE",
+    "startDate": "2026-09-26T14:21:14.296Z",
+    "createdAt": "2026-09-26T14:21:14.296Z",
+    "updatedAt": "2026-09-26T14:21:14.296Z",
+    "version": 1
+  },
+  {
+    "id": "b991167f-9137-403a-b4d0-ce0bf636acbb",
+    "clinicId": "megastar",
+    "patientId": "42d07495-7de7-46a4-a401-5ecec69e18c3",
+    "title": "Atendimento Oftalmológico e Refração",
+    "status": "ACTIVE",
+    "startDate": "2026-09-26T13:49:53.910Z",
+    "createdAt": "2026-09-26T13:49:53.910Z",
+    "updatedAt": "2026-09-26T13:49:53.910Z",
+    "version": 1
+  },
+  {
+    "id": "628f0a4c-f411-4c70-8612-0a9bb271c34e",
+    "clinicId": "megastar",
+    "patientId": "24f78222-6aff-4414-9042-d8caa7353995",
+    "title": "Atendimento Oftalmológico e Refração",
+    "status": "ACTIVE",
+    "startDate": "2026-09-26T13:37:16.706Z",
+    "createdAt": "2026-09-26T13:37:16.706Z",
+    "updatedAt": "2026-09-26T13:37:16.707Z",
+    "version": 1
+  },
+  {
+    "id": "06b382b7-eb88-4cd6-a8e0-37de7f05eaa3",
+    "clinicId": "megastar",
+    "patientId": "43cade02-88d0-4473-a332-05ae7e795212",
+    "patientGlobalId": "gid_1790427913701_6e18cee9",
+    "title": "Atendimento Oftalmológico e Refração",
+    "status": "ACTIVE",
+    "startDate": "2026-09-26T13:05:13.923Z",
+    "createdAt": "2026-09-26T13:05:13.923Z",
+    "updatedAt": "2026-09-26T13:05:13.923Z",
+    "version": 1
+  },
+  {
+    "id": "0dbf4fef-401c-4b1a-825e-4b7853bbc3a0",
+    "clinicId": "megastar",
+    "patientId": "ef4ec70c-8f4b-4a2e-9e02-62f0c2dadce6",
+    "patientGlobalId": "gid_1790427299801_b0673ad7",
+    "title": "Atendimento Oftalmológico e Refração",
+    "status": "ACTIVE",
+    "startDate": "2026-09-26T12:55:00.051Z",
+    "createdAt": "2026-09-26T12:55:00.051Z",
+    "updatedAt": "2026-09-26T12:55:00.051Z",
+    "version": 1
+  },
+  {
+    "id": "ade44761-44d0-461e-870f-bda1e16022c8",
+    "clinicId": "megastar",
+    "patientId": "963bca80-8122-48b8-9f29-37788bff17ae",
+    "patientGlobalId": "gid_1790426573500_d8f71608",
+    "title": "Atendimento Oftalmológico e Refração",
+    "status": "ACTIVE",
+    "startDate": "2026-09-26T12:43:01.250Z",
+    "createdAt": "2026-09-26T12:43:01.250Z",
+    "updatedAt": "2026-09-26T12:43:01.250Z",
+    "version": 1
+  }
+]

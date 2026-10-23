@@ -1,0 +1,32 @@
+[
+  {
+    "id": "6fd65324-5864-4fdc-ba8c-7e40f31f98de",
+    "timestamp": "2026-09-26T15:21:46.880Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "bb3c5847-2cd4-47f1-a0cb-9ff1e5ee51e6",
+    "details": "[MEGASTAR] Prontuário clínico atualizado (status: completed, ep: be870ab4-7e1d-46bb-9dfd-bcf3cf58f046)"
+  },
+  {
+    "id": "712777d8-959b-412c-adf4-8ddf298e0b0f",
+    "timestamp": "2026-09-26T15:21:46.474Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "CREATE",
+    "resourceType": "FINANCE",
+    "resourceId": "44e4270f-a062-4dd3-80c0-1c9b0f6bcb77",
+    "details": "[MEGASTAR] Entrada de BRL 150.00 - Consulta Oftalmológica / Refração - Paciente: Ivonete Cabral"
+  },
+  {
+    "id": "c8bae054-ecb0-46c4-bec9-6d56a57fa2f7",
+    "timestamp": "2026-09-26T15:21:46.470Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "bb3c5847-2cd4-47f1-a0cb-9ff1e5ee51e6",
+    "details": "[MEGASTAR] Prontuário clínico atualizado (status: completed, ep: be870ab4-7e1d-46bb-9dfd-bcf3cf58f046)"
+  }
+]

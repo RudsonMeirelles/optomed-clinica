@@ -1,0 +1,2128 @@
+[
+  {
+    "id": "rem_apt_apt-ivs-20261001-01",
+    "appointmentId": "apt-ivs-20261001-01",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "8e7491f7-7ed7-4991-aa89-bcc200beddc1",
+    "patientName": "Lilian Regina Medeiro de Sena",
+    "date": "2026-10-01",
+    "time": "09:00",
+    "appointmentType": "refrativo",
+    "periodKind": "avulso",
+    "periodId": "eav_ivs_meirelles",
+    "ruleDescription": "Atendimento Avulso IVS: Consulta fora dos períodos fixos - R$ 100,00",
+    "calculationBasis": "Atendimento realizado em 2026-10-01 às 09:00. Regra: AVULSO. Valor: R$ 100.00",
+    "ruleSnapshot": {
+      "ruleId": "eav_ivs_meirelles",
+      "ruleType": "avulso",
+      "remunerationType": "per_appointment",
+      "remunerationValue": 100,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Atendimento Avulso IVS: Consulta fora dos períodos fixos - R$ 100,00",
+      "snapshotAt": "2026-10-01T09:30:00.000Z"
+    },
+    "calculatedAmount": 100,
+    "finalAmount": 100,
+    "status": "paid",
+    "paidAt": "2026-10-08T18:00:00.000Z",
+    "paymentMethod": "pix",
+    "closureId": "closure_ivs_meirelles_20261001_20261008",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-01T09:30:00.000Z",
+        "newAmount": 100,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #apt-ivs-20261001-01"
+      },
+      {
+        "action": "CLOSE",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Fechamento de competência de 01/10/2026 a 08/10/2026"
+      },
+      {
+        "action": "PAY",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Pagamento efetuado via PIX e liquidado no caixa"
+      }
+    ],
+    "createdAt": "2026-10-01T09:00:00.000Z",
+    "updatedAt": "2026-10-08T18:00:00.000Z"
+  },
+  {
+    "id": "rem_apt_apt-ivs-20261001-02",
+    "appointmentId": "apt-ivs-20261001-02",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "c6d79e1e-15dd-491a-ac3c-465f58af9ffb",
+    "patientName": "Jocicela Lescano",
+    "date": "2026-10-01",
+    "time": "14:30",
+    "appointmentType": "consulta_geral",
+    "periodKind": "avulso",
+    "periodId": "eav_ivs_meirelles",
+    "ruleDescription": "Atendimento Avulso IVS: Consulta fora dos períodos fixos - R$ 100,00",
+    "calculationBasis": "Atendimento realizado em 2026-10-01 às 14:30. Regra: AVULSO. Valor: R$ 100.00",
+    "ruleSnapshot": {
+      "ruleId": "eav_ivs_meirelles",
+      "ruleType": "avulso",
+      "remunerationType": "per_appointment",
+      "remunerationValue": 100,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Atendimento Avulso IVS: Consulta fora dos períodos fixos - R$ 100,00",
+      "snapshotAt": "2026-10-01T15:00:00.000Z"
+    },
+    "calculatedAmount": 100,
+    "finalAmount": 100,
+    "status": "paid",
+    "paidAt": "2026-10-08T18:00:00.000Z",
+    "paymentMethod": "pix",
+    "closureId": "closure_ivs_meirelles_20261001_20261008",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-01T15:00:00.000Z",
+        "newAmount": 100,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #apt-ivs-20261001-02"
+      },
+      {
+        "action": "CLOSE",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Fechamento de competência de 01/10/2026 a 08/10/2026"
+      },
+      {
+        "action": "PAY",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Pagamento efetuado via PIX e liquidado no caixa"
+      }
+    ],
+    "createdAt": "2026-10-01T14:30:00.000Z",
+    "updatedAt": "2026-10-08T18:00:00.000Z"
+  },
+  {
+    "id": "rem_apt_apt-ivs-20261002-01",
+    "appointmentId": "apt-ivs-20261002-01",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "068e73c5-d4ad-4370-bbfe-f83457ee0ac4",
+    "patientName": "Cleide Carine",
+    "date": "2026-10-02",
+    "time": "10:15",
+    "appointmentType": "refrativo",
+    "periodKind": "avulso",
+    "periodId": "eav_ivs_meirelles",
+    "ruleDescription": "Atendimento Avulso IVS: Consulta fora dos períodos fixos - R$ 100,00",
+    "calculationBasis": "Atendimento realizado em 2026-10-02 às 10:15. Regra: AVULSO. Valor: R$ 100.00",
+    "ruleSnapshot": {
+      "ruleId": "eav_ivs_meirelles",
+      "ruleType": "avulso",
+      "remunerationType": "per_appointment",
+      "remunerationValue": 100,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Atendimento Avulso IVS: Consulta fora dos períodos fixos - R$ 100,00",
+      "snapshotAt": "2026-10-02T10:45:00.000Z"
+    },
+    "calculatedAmount": 100,
+    "finalAmount": 100,
+    "status": "paid",
+    "paidAt": "2026-10-08T18:00:00.000Z",
+    "paymentMethod": "pix",
+    "closureId": "closure_ivs_meirelles_20261001_20261008",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-02T10:45:00.000Z",
+        "newAmount": 100,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #apt-ivs-20261002-01"
+      },
+      {
+        "action": "CLOSE",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Fechamento de competência de 01/10/2026 a 08/10/2026"
+      },
+      {
+        "action": "PAY",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Pagamento efetuado via PIX e liquidado no caixa"
+      }
+    ],
+    "createdAt": "2026-10-02T10:15:00.000Z",
+    "updatedAt": "2026-10-08T18:00:00.000Z"
+  },
+  {
+    "id": "rem_apt_apt-ivs-20261002-02",
+    "appointmentId": "apt-ivs-20261002-02",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "e305d61f-7e5d-40a0-b7d8-0a0a001f1dd2",
+    "patientName": "Paulo Cezar de Oliveira",
+    "date": "2026-10-02",
+    "time": "15:45",
+    "appointmentType": "consulta_geral",
+    "periodKind": "avulso",
+    "periodId": "eav_ivs_meirelles",
+    "ruleDescription": "Atendimento Avulso IVS: Consulta fora dos períodos fixos - R$ 100,00",
+    "calculationBasis": "Atendimento realizado em 2026-10-02 às 15:45. Regra: AVULSO. Valor: R$ 100.00",
+    "ruleSnapshot": {
+      "ruleId": "eav_ivs_meirelles",
+      "ruleType": "avulso",
+      "remunerationType": "per_appointment",
+      "remunerationValue": 100,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Atendimento Avulso IVS: Consulta fora dos períodos fixos - R$ 100,00",
+      "snapshotAt": "2026-10-02T16:15:00.000Z"
+    },
+    "calculatedAmount": 100,
+    "finalAmount": 100,
+    "status": "paid",
+    "paidAt": "2026-10-08T18:00:00.000Z",
+    "paymentMethod": "pix",
+    "closureId": "closure_ivs_meirelles_20261001_20261008",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-02T16:15:00.000Z",
+        "newAmount": 100,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #apt-ivs-20261002-02"
+      },
+      {
+        "action": "CLOSE",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Fechamento de competência de 01/10/2026 a 08/10/2026"
+      },
+      {
+        "action": "PAY",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Pagamento efetuado via PIX e liquidado no caixa"
+      }
+    ],
+    "createdAt": "2026-10-02T15:45:00.000Z",
+    "updatedAt": "2026-10-08T18:00:00.000Z"
+  },
+  {
+    "id": "rem_apt_apt-ivs-20261005-01",
+    "appointmentId": "apt-ivs-20261005-01",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "8fd59954-fb84-4a94-b809-3f62e4711090",
+    "patientName": "Graciela Cape de Villa",
+    "date": "2026-10-05",
+    "time": "09:30",
+    "appointmentType": "refrativo",
+    "periodKind": "avulso",
+    "periodId": "eav_ivs_meirelles",
+    "ruleDescription": "Atendimento Avulso IVS: Consulta fora dos períodos fixos - R$ 100,00",
+    "calculationBasis": "Atendimento realizado em 2026-10-05 às 09:30. Regra: AVULSO. Valor: R$ 100.00",
+    "ruleSnapshot": {
+      "ruleId": "eav_ivs_meirelles",
+      "ruleType": "avulso",
+      "remunerationType": "per_appointment",
+      "remunerationValue": 100,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Atendimento Avulso IVS: Consulta fora dos períodos fixos - R$ 100,00",
+      "snapshotAt": "2026-10-05T10:00:00.000Z"
+    },
+    "calculatedAmount": 100,
+    "finalAmount": 100,
+    "status": "paid",
+    "paidAt": "2026-10-08T18:00:00.000Z",
+    "paymentMethod": "pix",
+    "closureId": "closure_ivs_meirelles_20261001_20261008",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-05T10:00:00.000Z",
+        "newAmount": 100,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #apt-ivs-20261005-01"
+      },
+      {
+        "action": "CLOSE",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Fechamento de competência de 01/10/2026 a 08/10/2026"
+      },
+      {
+        "action": "PAY",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Pagamento efetuado via PIX e liquidado no caixa"
+      }
+    ],
+    "createdAt": "2026-10-05T09:30:00.000Z",
+    "updatedAt": "2026-10-08T18:00:00.000Z"
+  },
+  {
+    "id": "rem_apt_apt-ivs-20261005-02",
+    "appointmentId": "apt-ivs-20261005-02",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "9e6845a7-558e-4f01-acbc-47aadd0ea324",
+    "patientName": "Fabiele Escobar",
+    "date": "2026-10-05",
+    "time": "14:00",
+    "appointmentType": "consulta_geral",
+    "periodKind": "avulso",
+    "periodId": "eav_ivs_meirelles",
+    "ruleDescription": "Atendimento Avulso IVS: Consulta fora dos períodos fixos - R$ 100,00",
+    "calculationBasis": "Atendimento realizado em 2026-10-05 às 14:00. Regra: AVULSO. Valor: R$ 100.00",
+    "ruleSnapshot": {
+      "ruleId": "eav_ivs_meirelles",
+      "ruleType": "avulso",
+      "remunerationType": "per_appointment",
+      "remunerationValue": 100,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Atendimento Avulso IVS: Consulta fora dos períodos fixos - R$ 100,00",
+      "snapshotAt": "2026-10-05T14:30:00.000Z"
+    },
+    "calculatedAmount": 100,
+    "finalAmount": 100,
+    "status": "paid",
+    "paidAt": "2026-10-08T18:00:00.000Z",
+    "paymentMethod": "pix",
+    "closureId": "closure_ivs_meirelles_20261001_20261008",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-05T14:30:00.000Z",
+        "newAmount": 100,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #apt-ivs-20261005-02"
+      },
+      {
+        "action": "CLOSE",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Fechamento de competência de 01/10/2026 a 08/10/2026"
+      },
+      {
+        "action": "PAY",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Pagamento efetuado via PIX e liquidado no caixa"
+      }
+    ],
+    "createdAt": "2026-10-05T14:00:00.000Z",
+    "updatedAt": "2026-10-08T18:00:00.000Z"
+  },
+  {
+    "id": "rem_apt_apt-ivs-20261006-01",
+    "appointmentId": "apt-ivs-20261006-01",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "dca905df-1a98-4867-b0ba-ad2d4ea083e2",
+    "patientName": "Larissa Roevas",
+    "date": "2026-10-06",
+    "time": "13:15",
+    "appointmentType": "refrativo",
+    "periodKind": "fixed",
+    "periodId": "efp_ivs_tuesday",
+    "ruleDescription": "Período Fixo Terça-feira (13:00 às 18:00) - Turno Meia Diária R$ 500,00",
+    "calculationBasis": "Atendimento realizado em 2026-10-06 às 13:15. Regra: FIXED. Valor: R$ 500.00",
+    "ruleSnapshot": {
+      "ruleId": "efp_ivs_tuesday",
+      "ruleType": "fixed",
+      "remunerationType": "fixed_period",
+      "remunerationValue": 500,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Período Fixo Terça-feira (13:00 às 18:00) - Turno Meia Diária R$ 500,00",
+      "snapshotAt": "2026-10-06T13:45:00.000Z"
+    },
+    "calculatedAmount": 500,
+    "finalAmount": 500,
+    "status": "paid",
+    "paidAt": "2026-10-08T18:00:00.000Z",
+    "paymentMethod": "pix",
+    "closureId": "closure_ivs_meirelles_20261001_20261008",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-06T13:45:00.000Z",
+        "newAmount": 500,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #apt-ivs-20261006-01"
+      },
+      {
+        "action": "CLOSE",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Fechamento de competência de 01/10/2026 a 08/10/2026"
+      },
+      {
+        "action": "PAY",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Pagamento efetuado via PIX e liquidado no caixa"
+      }
+    ],
+    "createdAt": "2026-10-06T13:15:00.000Z",
+    "updatedAt": "2026-10-08T18:00:00.000Z"
+  },
+  {
+    "id": "rem_apt_apt-ivs-20261006-02",
+    "appointmentId": "apt-ivs-20261006-02",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "c0acd52d-00d3-4a50-8783-31afde55f011",
+    "patientName": "Gabriela Maria Estigarribia Pedra",
+    "date": "2026-10-06",
+    "time": "14:00",
+    "appointmentType": "refrativo",
+    "periodKind": "fixed",
+    "periodId": "efp_ivs_tuesday",
+    "ruleDescription": "Período Fixo Terça-feira (13:00 às 18:00) - Turno Meia Diária R$ 500,00",
+    "calculationBasis": "Atendimento realizado em 2026-10-06 às 14:00. Regra: FIXED. Valor: R$ 500.00",
+    "ruleSnapshot": {
+      "ruleId": "efp_ivs_tuesday",
+      "ruleType": "fixed",
+      "remunerationType": "fixed_period",
+      "remunerationValue": 500,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Período Fixo Terça-feira (13:00 às 18:00) - Turno Meia Diária R$ 500,00",
+      "snapshotAt": "2026-10-06T14:30:00.000Z"
+    },
+    "calculatedAmount": 500,
+    "finalAmount": 500,
+    "status": "paid",
+    "paidAt": "2026-10-08T18:00:00.000Z",
+    "paymentMethod": "pix",
+    "closureId": "closure_ivs_meirelles_20261001_20261008",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-06T14:30:00.000Z",
+        "newAmount": 500,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #apt-ivs-20261006-02"
+      },
+      {
+        "action": "CLOSE",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Fechamento de competência de 01/10/2026 a 08/10/2026"
+      },
+      {
+        "action": "PAY",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Pagamento efetuado via PIX e liquidado no caixa"
+      }
+    ],
+    "createdAt": "2026-10-06T14:00:00.000Z",
+    "updatedAt": "2026-10-08T18:00:00.000Z"
+  },
+  {
+    "id": "rem_apt_apt-ivs-20261006-03",
+    "appointmentId": "apt-ivs-20261006-03",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "23873f09-50bd-4323-b932-4c8c7d1ce1c7",
+    "patientName": "Zuleica Aparecida de Araujo",
+    "date": "2026-10-06",
+    "time": "14:45",
+    "appointmentType": "consulta_geral",
+    "periodKind": "fixed",
+    "periodId": "efp_ivs_tuesday",
+    "ruleDescription": "Período Fixo Terça-feira (13:00 às 18:00) - Turno Meia Diária R$ 500,00",
+    "calculationBasis": "Atendimento realizado em 2026-10-06 às 14:45. Regra: FIXED. Valor: R$ 500.00",
+    "ruleSnapshot": {
+      "ruleId": "efp_ivs_tuesday",
+      "ruleType": "fixed",
+      "remunerationType": "fixed_period",
+      "remunerationValue": 500,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Período Fixo Terça-feira (13:00 às 18:00) - Turno Meia Diária R$ 500,00",
+      "snapshotAt": "2026-10-06T15:15:00.000Z"
+    },
+    "calculatedAmount": 500,
+    "finalAmount": 500,
+    "status": "paid",
+    "paidAt": "2026-10-08T18:00:00.000Z",
+    "paymentMethod": "pix",
+    "closureId": "closure_ivs_meirelles_20261001_20261008",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-06T15:15:00.000Z",
+        "newAmount": 500,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #apt-ivs-20261006-03"
+      },
+      {
+        "action": "CLOSE",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Fechamento de competência de 01/10/2026 a 08/10/2026"
+      },
+      {
+        "action": "PAY",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Pagamento efetuado via PIX e liquidado no caixa"
+      }
+    ],
+    "createdAt": "2026-10-06T14:45:00.000Z",
+    "updatedAt": "2026-10-08T18:00:00.000Z"
+  },
+  {
+    "id": "rem_apt_apt-ivs-20261006-04",
+    "appointmentId": "apt-ivs-20261006-04",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "49f43db3-7324-41f2-b98c-5ba24ebe285b",
+    "patientName": "Sara Manueli",
+    "date": "2026-10-06",
+    "time": "15:30",
+    "appointmentType": "refrativo",
+    "periodKind": "fixed",
+    "periodId": "efp_ivs_tuesday",
+    "ruleDescription": "Período Fixo Terça-feira (13:00 às 18:00) - Turno Meia Diária R$ 500,00",
+    "calculationBasis": "Atendimento realizado em 2026-10-06 às 15:30. Regra: FIXED. Valor: R$ 500.00",
+    "ruleSnapshot": {
+      "ruleId": "efp_ivs_tuesday",
+      "ruleType": "fixed",
+      "remunerationType": "fixed_period",
+      "remunerationValue": 500,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Período Fixo Terça-feira (13:00 às 18:00) - Turno Meia Diária R$ 500,00",
+      "snapshotAt": "2026-10-06T16:00:00.000Z"
+    },
+    "calculatedAmount": 500,
+    "finalAmount": 500,
+    "status": "paid",
+    "paidAt": "2026-10-08T18:00:00.000Z",
+    "paymentMethod": "pix",
+    "closureId": "closure_ivs_meirelles_20261001_20261008",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-06T16:00:00.000Z",
+        "newAmount": 500,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #apt-ivs-20261006-04"
+      },
+      {
+        "action": "CLOSE",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Fechamento de competência de 01/10/2026 a 08/10/2026"
+      },
+      {
+        "action": "PAY",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Pagamento efetuado via PIX e liquidado no caixa"
+      }
+    ],
+    "createdAt": "2026-10-06T15:30:00.000Z",
+    "updatedAt": "2026-10-08T18:00:00.000Z"
+  },
+  {
+    "id": "rem_apt_apt-ivs-20261006-05",
+    "appointmentId": "apt-ivs-20261006-05",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "155084c0-823d-41fd-842a-4a44f9d07258",
+    "patientName": "Maria Helena",
+    "date": "2026-10-06",
+    "time": "16:15",
+    "appointmentType": "consulta_geral",
+    "periodKind": "fixed",
+    "periodId": "efp_ivs_tuesday",
+    "ruleDescription": "Período Fixo Terça-feira (13:00 às 18:00) - Turno Meia Diária R$ 500,00",
+    "calculationBasis": "Atendimento realizado em 2026-10-06 às 16:15. Regra: FIXED. Valor: R$ 500.00",
+    "ruleSnapshot": {
+      "ruleId": "efp_ivs_tuesday",
+      "ruleType": "fixed",
+      "remunerationType": "fixed_period",
+      "remunerationValue": 500,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Período Fixo Terça-feira (13:00 às 18:00) - Turno Meia Diária R$ 500,00",
+      "snapshotAt": "2026-10-06T16:45:00.000Z"
+    },
+    "calculatedAmount": 500,
+    "finalAmount": 500,
+    "status": "paid",
+    "paidAt": "2026-10-08T18:00:00.000Z",
+    "paymentMethod": "pix",
+    "closureId": "closure_ivs_meirelles_20261001_20261008",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-06T16:45:00.000Z",
+        "newAmount": 500,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #apt-ivs-20261006-05"
+      },
+      {
+        "action": "CLOSE",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Fechamento de competência de 01/10/2026 a 08/10/2026"
+      },
+      {
+        "action": "PAY",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Pagamento efetuado via PIX e liquidado no caixa"
+      }
+    ],
+    "createdAt": "2026-10-06T16:15:00.000Z",
+    "updatedAt": "2026-10-08T18:00:00.000Z"
+  },
+  {
+    "id": "rem_apt_apt-ivs-20261006-06",
+    "appointmentId": "apt-ivs-20261006-06",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "3ef1d40c-dbb5-4142-8eba-0a9380f3d903",
+    "patientName": "Hilda Espinola",
+    "date": "2026-10-06",
+    "time": "17:00",
+    "appointmentType": "refrativo",
+    "periodKind": "fixed",
+    "periodId": "efp_ivs_tuesday",
+    "ruleDescription": "Período Fixo Terça-feira (13:00 às 18:00) - Turno Meia Diária R$ 500,00",
+    "calculationBasis": "Atendimento realizado em 2026-10-06 às 17:00. Regra: FIXED. Valor: R$ 500.00",
+    "ruleSnapshot": {
+      "ruleId": "efp_ivs_tuesday",
+      "ruleType": "fixed",
+      "remunerationType": "fixed_period",
+      "remunerationValue": 500,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Período Fixo Terça-feira (13:00 às 18:00) - Turno Meia Diária R$ 500,00",
+      "snapshotAt": "2026-10-06T17:30:00.000Z"
+    },
+    "calculatedAmount": 500,
+    "finalAmount": 500,
+    "status": "paid",
+    "paidAt": "2026-10-08T18:00:00.000Z",
+    "paymentMethod": "pix",
+    "closureId": "closure_ivs_meirelles_20261001_20261008",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-06T17:30:00.000Z",
+        "newAmount": 500,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #apt-ivs-20261006-06"
+      },
+      {
+        "action": "CLOSE",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Fechamento de competência de 01/10/2026 a 08/10/2026"
+      },
+      {
+        "action": "PAY",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Pagamento efetuado via PIX e liquidado no caixa"
+      }
+    ],
+    "createdAt": "2026-10-06T17:00:00.000Z",
+    "updatedAt": "2026-10-08T18:00:00.000Z"
+  },
+  {
+    "id": "rem_apt_apt-ivs-20261007-01",
+    "appointmentId": "apt-ivs-20261007-01",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "673d0bc7-ab56-408e-b212-feda1ef28f9e",
+    "patientName": "Mercelis Lorena Gonçales",
+    "date": "2026-10-07",
+    "time": "08:15",
+    "appointmentType": "refrativo",
+    "periodKind": "fixed",
+    "periodId": "efp_ivs_wednesday",
+    "ruleDescription": "Período Fixo Quarta-feira (08:00 às 13:00) - Turno Meia Diária R$ 500,00",
+    "calculationBasis": "Atendimento realizado em 2026-10-07 às 08:15. Regra: FIXED. Valor: R$ 500.00",
+    "ruleSnapshot": {
+      "ruleId": "efp_ivs_wednesday",
+      "ruleType": "fixed",
+      "remunerationType": "fixed_period",
+      "remunerationValue": 500,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Período Fixo Quarta-feira (08:00 às 13:00) - Turno Meia Diária R$ 500,00",
+      "snapshotAt": "2026-10-07T08:45:00.000Z"
+    },
+    "calculatedAmount": 500,
+    "finalAmount": 500,
+    "status": "paid",
+    "paidAt": "2026-10-08T18:00:00.000Z",
+    "paymentMethod": "pix",
+    "closureId": "closure_ivs_meirelles_20261001_20261008",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-07T08:45:00.000Z",
+        "newAmount": 500,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #apt-ivs-20261007-01"
+      },
+      {
+        "action": "CLOSE",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Fechamento de competência de 01/10/2026 a 08/10/2026"
+      },
+      {
+        "action": "PAY",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Pagamento efetuado via PIX e liquidado no caixa"
+      }
+    ],
+    "createdAt": "2026-10-07T08:15:00.000Z",
+    "updatedAt": "2026-10-08T18:00:00.000Z"
+  },
+  {
+    "id": "rem_apt_apt-ivs-20261007-02",
+    "appointmentId": "apt-ivs-20261007-02",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "f482d6c1-fcb9-4ff0-8b4c-5b0b9a84fd59",
+    "patientName": "Alanis Vitoria C Correa",
+    "date": "2026-10-07",
+    "time": "09:00",
+    "appointmentType": "consulta_geral",
+    "periodKind": "fixed",
+    "periodId": "efp_ivs_wednesday",
+    "ruleDescription": "Período Fixo Quarta-feira (08:00 às 13:00) - Turno Meia Diária R$ 500,00",
+    "calculationBasis": "Atendimento realizado em 2026-10-07 às 09:00. Regra: FIXED. Valor: R$ 500.00",
+    "ruleSnapshot": {
+      "ruleId": "efp_ivs_wednesday",
+      "ruleType": "fixed",
+      "remunerationType": "fixed_period",
+      "remunerationValue": 500,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Período Fixo Quarta-feira (08:00 às 13:00) - Turno Meia Diária R$ 500,00",
+      "snapshotAt": "2026-10-07T09:30:00.000Z"
+    },
+    "calculatedAmount": 500,
+    "finalAmount": 500,
+    "status": "paid",
+    "paidAt": "2026-10-08T18:00:00.000Z",
+    "paymentMethod": "pix",
+    "closureId": "closure_ivs_meirelles_20261001_20261008",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-07T09:30:00.000Z",
+        "newAmount": 500,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #apt-ivs-20261007-02"
+      },
+      {
+        "action": "CLOSE",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Fechamento de competência de 01/10/2026 a 08/10/2026"
+      },
+      {
+        "action": "PAY",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Pagamento efetuado via PIX e liquidado no caixa"
+      }
+    ],
+    "createdAt": "2026-10-07T09:00:00.000Z",
+    "updatedAt": "2026-10-08T18:00:00.000Z"
+  },
+  {
+    "id": "rem_apt_apt-ivs-20261007-03",
+    "appointmentId": "apt-ivs-20261007-03",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "4e88c27c-dbd0-4042-8d1c-9212c4d2e290",
+    "patientName": "Maria Valentina",
+    "date": "2026-10-07",
+    "time": "09:45",
+    "appointmentType": "refrativo",
+    "periodKind": "fixed",
+    "periodId": "efp_ivs_wednesday",
+    "ruleDescription": "Período Fixo Quarta-feira (08:00 às 13:00) - Turno Meia Diária R$ 500,00",
+    "calculationBasis": "Atendimento realizado em 2026-10-07 às 09:45. Regra: FIXED. Valor: R$ 500.00",
+    "ruleSnapshot": {
+      "ruleId": "efp_ivs_wednesday",
+      "ruleType": "fixed",
+      "remunerationType": "fixed_period",
+      "remunerationValue": 500,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Período Fixo Quarta-feira (08:00 às 13:00) - Turno Meia Diária R$ 500,00",
+      "snapshotAt": "2026-10-07T10:15:00.000Z"
+    },
+    "calculatedAmount": 500,
+    "finalAmount": 500,
+    "status": "paid",
+    "paidAt": "2026-10-08T18:00:00.000Z",
+    "paymentMethod": "pix",
+    "closureId": "closure_ivs_meirelles_20261001_20261008",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-07T10:15:00.000Z",
+        "newAmount": 500,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #apt-ivs-20261007-03"
+      },
+      {
+        "action": "CLOSE",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Fechamento de competência de 01/10/2026 a 08/10/2026"
+      },
+      {
+        "action": "PAY",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Pagamento efetuado via PIX e liquidado no caixa"
+      }
+    ],
+    "createdAt": "2026-10-07T09:45:00.000Z",
+    "updatedAt": "2026-10-08T18:00:00.000Z"
+  },
+  {
+    "id": "rem_apt_apt-ivs-20261007-04",
+    "appointmentId": "apt-ivs-20261007-04",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "dcbde17f-cf07-4ff6-8460-cc7a16573aa2",
+    "patientName": "Maria José",
+    "date": "2026-10-07",
+    "time": "10:30",
+    "appointmentType": "refrativo",
+    "periodKind": "fixed",
+    "periodId": "efp_ivs_wednesday",
+    "ruleDescription": "Período Fixo Quarta-feira (08:00 às 13:00) - Turno Meia Diária R$ 500,00",
+    "calculationBasis": "Atendimento realizado em 2026-10-07 às 10:30. Regra: FIXED. Valor: R$ 500.00",
+    "ruleSnapshot": {
+      "ruleId": "efp_ivs_wednesday",
+      "ruleType": "fixed",
+      "remunerationType": "fixed_period",
+      "remunerationValue": 500,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Período Fixo Quarta-feira (08:00 às 13:00) - Turno Meia Diária R$ 500,00",
+      "snapshotAt": "2026-10-07T11:00:00.000Z"
+    },
+    "calculatedAmount": 500,
+    "finalAmount": 500,
+    "status": "paid",
+    "paidAt": "2026-10-08T18:00:00.000Z",
+    "paymentMethod": "pix",
+    "closureId": "closure_ivs_meirelles_20261001_20261008",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-07T11:00:00.000Z",
+        "newAmount": 500,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #apt-ivs-20261007-04"
+      },
+      {
+        "action": "CLOSE",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Fechamento de competência de 01/10/2026 a 08/10/2026"
+      },
+      {
+        "action": "PAY",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Pagamento efetuado via PIX e liquidado no caixa"
+      }
+    ],
+    "createdAt": "2026-10-07T10:30:00.000Z",
+    "updatedAt": "2026-10-08T18:00:00.000Z"
+  },
+  {
+    "id": "rem_apt_apt-ivs-20261007-05",
+    "appointmentId": "apt-ivs-20261007-05",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "4b5acbb1-e930-4ae0-8d63-aea1582ffb07",
+    "patientName": "Keli Cristina da Rocha Stuck",
+    "date": "2026-10-07",
+    "time": "11:15",
+    "appointmentType": "consulta_geral",
+    "periodKind": "fixed",
+    "periodId": "efp_ivs_wednesday",
+    "ruleDescription": "Período Fixo Quarta-feira (08:00 às 13:00) - Turno Meia Diária R$ 500,00",
+    "calculationBasis": "Atendimento realizado em 2026-10-07 às 11:15. Regra: FIXED. Valor: R$ 500.00",
+    "ruleSnapshot": {
+      "ruleId": "efp_ivs_wednesday",
+      "ruleType": "fixed",
+      "remunerationType": "fixed_period",
+      "remunerationValue": 500,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Período Fixo Quarta-feira (08:00 às 13:00) - Turno Meia Diária R$ 500,00",
+      "snapshotAt": "2026-10-07T11:45:00.000Z"
+    },
+    "calculatedAmount": 500,
+    "finalAmount": 500,
+    "status": "paid",
+    "paidAt": "2026-10-08T18:00:00.000Z",
+    "paymentMethod": "pix",
+    "closureId": "closure_ivs_meirelles_20261001_20261008",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-07T11:45:00.000Z",
+        "newAmount": 500,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #apt-ivs-20261007-05"
+      },
+      {
+        "action": "CLOSE",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Fechamento de competência de 01/10/2026 a 08/10/2026"
+      },
+      {
+        "action": "PAY",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Pagamento efetuado via PIX e liquidado no caixa"
+      }
+    ],
+    "createdAt": "2026-10-07T11:15:00.000Z",
+    "updatedAt": "2026-10-08T18:00:00.000Z"
+  },
+  {
+    "id": "rem_apt_apt-ivs-20261007-06",
+    "appointmentId": "apt-ivs-20261007-06",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "104b0e68-60aa-454a-aed6-73d49eca088e",
+    "patientName": "Vitoria Coelho Saraiva de Lima",
+    "date": "2026-10-07",
+    "time": "12:00",
+    "appointmentType": "refrativo",
+    "periodKind": "fixed",
+    "periodId": "efp_ivs_wednesday",
+    "ruleDescription": "Período Fixo Quarta-feira (08:00 às 13:00) - Turno Meia Diária R$ 500,00",
+    "calculationBasis": "Atendimento realizado em 2026-10-07 às 12:00. Regra: FIXED. Valor: R$ 500.00",
+    "ruleSnapshot": {
+      "ruleId": "efp_ivs_wednesday",
+      "ruleType": "fixed",
+      "remunerationType": "fixed_period",
+      "remunerationValue": 500,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Período Fixo Quarta-feira (08:00 às 13:00) - Turno Meia Diária R$ 500,00",
+      "snapshotAt": "2026-10-07T12:30:00.000Z"
+    },
+    "calculatedAmount": 500,
+    "finalAmount": 500,
+    "status": "paid",
+    "paidAt": "2026-10-08T18:00:00.000Z",
+    "paymentMethod": "pix",
+    "closureId": "closure_ivs_meirelles_20261001_20261008",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-07T12:30:00.000Z",
+        "newAmount": 500,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #apt-ivs-20261007-06"
+      },
+      {
+        "action": "CLOSE",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Fechamento de competência de 01/10/2026 a 08/10/2026"
+      },
+      {
+        "action": "PAY",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Pagamento efetuado via PIX e liquidado no caixa"
+      }
+    ],
+    "createdAt": "2026-10-07T12:00:00.000Z",
+    "updatedAt": "2026-10-08T18:00:00.000Z"
+  },
+  {
+    "id": "rem_apt_apt-ivs-20261008-01",
+    "appointmentId": "apt-ivs-20261008-01",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "223c8cf2-32ba-42bf-8d46-5b6861c77aa2",
+    "patientName": "Jose Francisco",
+    "date": "2026-10-08",
+    "time": "11:00",
+    "appointmentType": "refrativo",
+    "periodKind": "avulso",
+    "periodId": "eav_ivs_meirelles",
+    "ruleDescription": "Atendimento Avulso IVS: Consulta fora dos períodos fixos - R$ 100,00",
+    "calculationBasis": "Atendimento realizado em 2026-10-08 às 11:00. Regra: AVULSO. Valor: R$ 100.00",
+    "ruleSnapshot": {
+      "ruleId": "eav_ivs_meirelles",
+      "ruleType": "avulso",
+      "remunerationType": "per_appointment",
+      "remunerationValue": 100,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Atendimento Avulso IVS: Consulta fora dos períodos fixos - R$ 100,00",
+      "snapshotAt": "2026-10-08T11:30:00.000Z"
+    },
+    "calculatedAmount": 100,
+    "finalAmount": 100,
+    "status": "paid",
+    "paidAt": "2026-10-08T18:00:00.000Z",
+    "paymentMethod": "pix",
+    "closureId": "closure_ivs_meirelles_20261001_20261008",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-08T11:30:00.000Z",
+        "newAmount": 100,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #apt-ivs-20261008-01"
+      },
+      {
+        "action": "CLOSE",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Fechamento de competência de 01/10/2026 a 08/10/2026"
+      },
+      {
+        "action": "PAY",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Pagamento efetuado via PIX e liquidado no caixa"
+      }
+    ],
+    "createdAt": "2026-10-08T11:00:00.000Z",
+    "updatedAt": "2026-10-08T18:00:00.000Z"
+  },
+  {
+    "id": "rem_apt_apt-ivs-20261008-02",
+    "appointmentId": "apt-ivs-20261008-02",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "3c7f7025-3194-44eb-a96d-6b1cb7d25315",
+    "patientName": "Lidia Noemi Lopez",
+    "date": "2026-10-08",
+    "time": "14:30",
+    "appointmentType": "consulta_geral",
+    "periodKind": "avulso",
+    "periodId": "eav_ivs_meirelles",
+    "ruleDescription": "Atendimento Avulso IVS: Consulta fora dos períodos fixos - R$ 100,00",
+    "calculationBasis": "Atendimento realizado em 2026-10-08 às 14:30. Regra: AVULSO. Valor: R$ 100.00",
+    "ruleSnapshot": {
+      "ruleId": "eav_ivs_meirelles",
+      "ruleType": "avulso",
+      "remunerationType": "per_appointment",
+      "remunerationValue": 100,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Atendimento Avulso IVS: Consulta fora dos períodos fixos - R$ 100,00",
+      "snapshotAt": "2026-10-08T15:00:00.000Z"
+    },
+    "calculatedAmount": 100,
+    "finalAmount": 100,
+    "status": "paid",
+    "paidAt": "2026-10-08T18:00:00.000Z",
+    "paymentMethod": "pix",
+    "closureId": "closure_ivs_meirelles_20261001_20261008",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-08T15:00:00.000Z",
+        "newAmount": 100,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #apt-ivs-20261008-02"
+      },
+      {
+        "action": "CLOSE",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Fechamento de competência de 01/10/2026 a 08/10/2026"
+      },
+      {
+        "action": "PAY",
+        "author": "Diretoria Financeira",
+        "timestamp": "2026-10-08T18:00:00.000Z",
+        "reason": "Pagamento efetuado via PIX e liquidado no caixa"
+      }
+    ],
+    "createdAt": "2026-10-08T14:30:00.000Z",
+    "updatedAt": "2026-10-08T18:00:00.000Z"
+  },
+  {
+    "id": "rem_apt_369c0d0a-f1c0-4dfe-9d41-cd1ecfc5351a",
+    "appointmentId": "369c0d0a-f1c0-4dfe-9d41-cd1ecfc5351a",
+    "clinicId": "ivs",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "668248a9-7209-412c-816e-5815bc44fadf",
+    "patientName": "Heitor Macari",
+    "date": "2026-10-10",
+    "time": "14:54",
+    "appointmentType": "refrativo",
+    "periodKind": "extraordinary",
+    "periodId": "esp_ivs_1791644243026",
+    "ruleDescription": "Período Extraordinário: Mutirão Especial de Sábado (08:00 às 18:00) - Data 2026-10-10",
+    "calculationBasis": "Atendimento realizado em 2026-10-10 às 14:54. Tipo: EXTRAORDINARY. Valor calculado: R$ 1.00. Origem: esp_ivs_1791644243026",
+    "ruleSnapshot": {
+      "ruleId": "esp_ivs_1791644243026",
+      "ruleType": "extraordinary",
+      "remunerationType": "fixed_period",
+      "remunerationValue": 1,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Período Extraordinário: Mutirão Especial de Sábado (08:00 às 18:00) - Data 2026-10-10",
+      "snapshotAt": "2026-10-10T19:00:32.678Z"
+    },
+    "calculatedAmount": 1,
+    "finalAmount": 1,
+    "status": "pending",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-10T19:00:32.678Z",
+        "newAmount": 1,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #369c0d0a-f1c0-4dfe-9d41-cd1ecfc5351a"
+      }
+    ],
+    "createdAt": "2026-10-10T19:00:32.678Z",
+    "updatedAt": "2026-10-10T19:00:32.678Z"
+  },
+  {
+    "id": "rem_apt_2ab98244-9749-45da-8cab-13eed1506824",
+    "appointmentId": "2ab98244-9749-45da-8cab-13eed1506824",
+    "clinicId": "ivs",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "e05d0ede-de05-4f2e-a481-a72615c96e0a",
+    "patientName": "Beatriz Santin",
+    "date": "2026-10-10",
+    "time": "14:43",
+    "appointmentType": "refrativo",
+    "periodKind": "extraordinary",
+    "periodId": "esp_ivs_1791644243026",
+    "ruleDescription": "Período Extraordinário: Mutirão Especial de Sábado (08:00 às 18:00) - Data 2026-10-10",
+    "calculationBasis": "Atendimento realizado em 2026-10-10 às 14:43. Tipo: EXTRAORDINARY. Valor calculado: R$ 1.00. Origem: esp_ivs_1791644243026",
+    "ruleSnapshot": {
+      "ruleId": "esp_ivs_1791644243026",
+      "ruleType": "extraordinary",
+      "remunerationType": "fixed_period",
+      "remunerationValue": 1,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Período Extraordinário: Mutirão Especial de Sábado (08:00 às 18:00) - Data 2026-10-10",
+      "snapshotAt": "2026-10-10T18:47:15.529Z"
+    },
+    "calculatedAmount": 1,
+    "finalAmount": 1,
+    "status": "pending",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-10T18:47:15.529Z",
+        "newAmount": 1,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #2ab98244-9749-45da-8cab-13eed1506824"
+      }
+    ],
+    "createdAt": "2026-10-10T18:47:15.529Z",
+    "updatedAt": "2026-10-10T18:47:15.529Z"
+  },
+  {
+    "id": "rem_apt_0c5765fa-4201-440e-85af-395e8d7fdd90",
+    "appointmentId": "0c5765fa-4201-440e-85af-395e8d7fdd90",
+    "clinicId": "ivs",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "c3036d18-632b-4780-82e4-b74f99b12028",
+    "patientName": "Jenifer Santos",
+    "date": "2026-10-10",
+    "time": "14:37",
+    "appointmentType": "refrativo",
+    "periodKind": "extraordinary",
+    "periodId": "esp_ivs_1791644243026",
+    "ruleDescription": "Período Extraordinário: Mutirão Especial de Sábado (08:00 às 18:00) - Data 2026-10-10",
+    "calculationBasis": "Atendimento realizado em 2026-10-10 às 14:37. Tipo: EXTRAORDINARY. Valor calculado: R$ 1.00. Origem: esp_ivs_1791644243026",
+    "ruleSnapshot": {
+      "ruleId": "esp_ivs_1791644243026",
+      "ruleType": "extraordinary",
+      "remunerationType": "fixed_period",
+      "remunerationValue": 1,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Período Extraordinário: Mutirão Especial de Sábado (08:00 às 18:00) - Data 2026-10-10",
+      "snapshotAt": "2026-10-10T18:41:12.515Z"
+    },
+    "calculatedAmount": 1,
+    "finalAmount": 1,
+    "status": "pending",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-10T18:41:12.515Z",
+        "newAmount": 1,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #0c5765fa-4201-440e-85af-395e8d7fdd90"
+      }
+    ],
+    "createdAt": "2026-10-10T18:41:12.515Z",
+    "updatedAt": "2026-10-10T18:41:12.515Z"
+  },
+  {
+    "id": "rem_apt_63dc5094-efcb-451e-8c39-395c18de7fde",
+    "appointmentId": "63dc5094-efcb-451e-8c39-395c18de7fde",
+    "clinicId": "ivs",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "e419a346-3e7b-467a-8544-3f5903a13d1d",
+    "patientName": "Tiana Romero",
+    "date": "2026-10-10",
+    "time": "14:22",
+    "appointmentType": "refrativo",
+    "periodKind": "extraordinary",
+    "periodId": "esp_ivs_1791644243026",
+    "ruleDescription": "Período Extraordinário: Mutirão Especial de Sábado (08:00 às 18:00) - Data 2026-10-10",
+    "calculationBasis": "Atendimento realizado em 2026-10-10 às 14:22. Tipo: EXTRAORDINARY. Valor calculado: R$ 1.00. Origem: esp_ivs_1791644243026",
+    "ruleSnapshot": {
+      "ruleId": "esp_ivs_1791644243026",
+      "ruleType": "extraordinary",
+      "remunerationType": "fixed_period",
+      "remunerationValue": 1,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Período Extraordinário: Mutirão Especial de Sábado (08:00 às 18:00) - Data 2026-10-10",
+      "snapshotAt": "2026-10-10T18:27:33.099Z"
+    },
+    "calculatedAmount": 1,
+    "finalAmount": 1,
+    "status": "pending",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-10T18:27:33.099Z",
+        "newAmount": 1,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #63dc5094-efcb-451e-8c39-395c18de7fde"
+      }
+    ],
+    "createdAt": "2026-10-10T18:27:33.099Z",
+    "updatedAt": "2026-10-10T18:27:33.100Z"
+  },
+  {
+    "id": "rem_apt_87207112-d033-4925-bb68-4d593642f83f",
+    "appointmentId": "87207112-d033-4925-bb68-4d593642f83f",
+    "clinicId": "ivs",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "38d7f89e-29ff-4121-a880-f9b8c457eb62",
+    "patientName": "GISELE ROCHA",
+    "date": "2026-10-10",
+    "time": "13:30",
+    "appointmentType": "refrativo",
+    "periodKind": "extraordinary",
+    "periodId": "esp_ivs_1791644243026",
+    "ruleDescription": "Período Extraordinário: Mutirão Especial de Sábado (08:00 às 18:00) - Data 2026-10-10",
+    "calculationBasis": "Atendimento realizado em 2026-10-10 às 13:30. Tipo: EXTRAORDINARY. Valor calculado: R$ 1.00. Origem: esp_ivs_1791644243026",
+    "ruleSnapshot": {
+      "ruleId": "esp_ivs_1791644243026",
+      "ruleType": "extraordinary",
+      "remunerationType": "fixed_period",
+      "remunerationValue": 1,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Período Extraordinário: Mutirão Especial de Sábado (08:00 às 18:00) - Data 2026-10-10",
+      "snapshotAt": "2026-10-10T17:34:17.370Z"
+    },
+    "calculatedAmount": 1,
+    "finalAmount": 1,
+    "status": "pending",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-10T17:34:17.370Z",
+        "newAmount": 1,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #87207112-d033-4925-bb68-4d593642f83f"
+      }
+    ],
+    "createdAt": "2026-10-10T17:34:17.370Z",
+    "updatedAt": "2026-10-10T17:34:17.370Z"
+  },
+  {
+    "id": "rem_apt_82b4488f-ecb9-4845-b596-2fe55391174f",
+    "appointmentId": "82b4488f-ecb9-4845-b596-2fe55391174f",
+    "clinicId": "ivs",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "9fafc4f0-e828-40c5-bb9f-4f4a225707ad",
+    "patientName": "Sol Moraes Ramos",
+    "date": "2026-10-10",
+    "time": "12:23",
+    "appointmentType": "refrativo",
+    "periodKind": "extraordinary",
+    "periodId": "esp_ivs_1791644243026",
+    "ruleDescription": "Período Extraordinário: Mutirão Especial de Sábado (08:00 às 18:00) - Data 2026-10-10",
+    "calculationBasis": "Atendimento realizado em 2026-10-10 às 12:23. Tipo: EXTRAORDINARY. Valor calculado: R$ 1.00. Origem: esp_ivs_1791644243026",
+    "ruleSnapshot": {
+      "ruleId": "esp_ivs_1791644243026",
+      "ruleType": "extraordinary",
+      "remunerationType": "fixed_period",
+      "remunerationValue": 1,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Período Extraordinário: Mutirão Especial de Sábado (08:00 às 18:00) - Data 2026-10-10",
+      "snapshotAt": "2026-10-10T16:30:46.075Z"
+    },
+    "calculatedAmount": 1,
+    "finalAmount": 1,
+    "status": "pending",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-10T16:30:46.075Z",
+        "newAmount": 1,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #82b4488f-ecb9-4845-b596-2fe55391174f"
+      }
+    ],
+    "createdAt": "2026-10-10T16:30:46.075Z",
+    "updatedAt": "2026-10-10T16:30:46.075Z"
+  },
+  {
+    "id": "rem_apt_104ad68b-6e48-4897-af0d-d2430b297d34",
+    "appointmentId": "104ad68b-6e48-4897-af0d-d2430b297d34",
+    "clinicId": "ivs",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "2ba4f7c1-3693-46b1-b765-5e6e4c86a42b",
+    "patientName": "Fabiany Delsy Benitez Gonzales",
+    "date": "2026-10-10",
+    "time": "12:19",
+    "appointmentType": "refrativo",
+    "periodKind": "extraordinary",
+    "periodId": "esp_ivs_1791644243026",
+    "ruleDescription": "Período Extraordinário: Mutirão Especial de Sábado (08:00 às 18:00) - Data 2026-10-10",
+    "calculationBasis": "Atendimento realizado em 2026-10-10 às 12:19. Tipo: EXTRAORDINARY. Valor calculado: R$ 1.00. Origem: esp_ivs_1791644243026",
+    "ruleSnapshot": {
+      "ruleId": "esp_ivs_1791644243026",
+      "ruleType": "extraordinary",
+      "remunerationType": "fixed_period",
+      "remunerationValue": 1,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Período Extraordinário: Mutirão Especial de Sábado (08:00 às 18:00) - Data 2026-10-10",
+      "snapshotAt": "2026-10-10T16:21:20.487Z"
+    },
+    "calculatedAmount": 1,
+    "finalAmount": 1,
+    "status": "pending",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-10T16:21:20.487Z",
+        "newAmount": 1,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #104ad68b-6e48-4897-af0d-d2430b297d34"
+      }
+    ],
+    "createdAt": "2026-10-10T16:21:20.487Z",
+    "updatedAt": "2026-10-10T16:21:20.487Z"
+  },
+  {
+    "id": "rem_apt_48d9b754-0adb-4e3c-a1e9-385bc0019eee",
+    "appointmentId": "48d9b754-0adb-4e3c-a1e9-385bc0019eee",
+    "clinicId": "ivs",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "9ff9c19d-22de-40d3-aecf-5b38b4121ae0",
+    "patientName": "Delsy  Fabiola Benitez Golzales",
+    "date": "2026-10-10",
+    "time": "12:04",
+    "appointmentType": "refrativo",
+    "periodKind": "extraordinary",
+    "periodId": "esp_ivs_1791644243026",
+    "ruleDescription": "Período Extraordinário: Mutirão Especial de Sábado (08:00 às 18:00) - Data 2026-10-10",
+    "calculationBasis": "Atendimento realizado em 2026-10-10 às 12:04. Tipo: EXTRAORDINARY. Valor calculado: R$ 1.00. Origem: esp_ivs_1791644243026",
+    "ruleSnapshot": {
+      "ruleId": "esp_ivs_1791644243026",
+      "ruleType": "extraordinary",
+      "remunerationType": "fixed_period",
+      "remunerationValue": 1,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Período Extraordinário: Mutirão Especial de Sábado (08:00 às 18:00) - Data 2026-10-10",
+      "snapshotAt": "2026-10-10T16:12:25.100Z"
+    },
+    "calculatedAmount": 1,
+    "finalAmount": 1,
+    "status": "pending",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-10T16:12:25.100Z",
+        "newAmount": 1,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #48d9b754-0adb-4e3c-a1e9-385bc0019eee"
+      }
+    ],
+    "createdAt": "2026-10-10T16:12:25.100Z",
+    "updatedAt": "2026-10-10T16:12:25.100Z"
+  },
+  {
+    "id": "rem_apt_d5a7dd49-968d-40f8-829d-d6354498f536",
+    "appointmentId": "d5a7dd49-968d-40f8-829d-d6354498f536",
+    "clinicId": "ivs",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "14408d36-3442-4cd9-b065-43baa1bd7a0a",
+    "patientName": "MArcia Barros",
+    "date": "2026-10-10",
+    "time": "10:27",
+    "appointmentType": "refrativo",
+    "periodKind": "extraordinary",
+    "periodId": "esp_ivs_mutirao_1010",
+    "ruleDescription": "Período Extraordinário: Mutirão Especial de Sábado - R$ 350,00 (08:00 às 12:00) - Data 2026-10-10",
+    "calculationBasis": "Atendimento realizado em 2026-10-10 às 10:27. Tipo: EXTRAORDINARY. Valor calculado: R$ 350.00. Origem: esp_ivs_mutirao_1010",
+    "ruleSnapshot": {
+      "ruleId": "esp_ivs_mutirao_1010",
+      "ruleType": "extraordinary",
+      "remunerationType": "fixed_period",
+      "remunerationValue": 350,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Período Extraordinário: Mutirão Especial de Sábado - R$ 350,00 (08:00 às 12:00) - Data 2026-10-10",
+      "snapshotAt": "2026-10-10T14:32:23.250Z"
+    },
+    "calculatedAmount": 350,
+    "finalAmount": 350,
+    "status": "pending",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-10T14:32:23.250Z",
+        "newAmount": 350,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #d5a7dd49-968d-40f8-829d-d6354498f536"
+      }
+    ],
+    "createdAt": "2026-10-10T14:32:23.250Z",
+    "updatedAt": "2026-10-10T14:32:23.250Z"
+  },
+  {
+    "id": "rem_apt_80191af5-6cb7-4bd4-899c-d03ea74318f2",
+    "appointmentId": "80191af5-6cb7-4bd4-899c-d03ea74318f2",
+    "clinicId": "ivs",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "573c9725-9796-43ac-821a-6fb790402de0",
+    "patientName": "Yasmin Aparecida Tenório",
+    "date": "2026-10-10",
+    "time": "10:07",
+    "appointmentType": "refrativo",
+    "periodKind": "extraordinary",
+    "periodId": "esp_ivs_mutirao_1010",
+    "ruleDescription": "Período Extraordinário: Mutirão Especial de Sábado - R$ 350,00 (08:00 às 12:00) - Data 2026-10-10",
+    "calculationBasis": "Atendimento realizado em 2026-10-10 às 10:07. Tipo: EXTRAORDINARY. Valor calculado: R$ 350.00. Origem: esp_ivs_mutirao_1010",
+    "ruleSnapshot": {
+      "ruleId": "esp_ivs_mutirao_1010",
+      "ruleType": "extraordinary",
+      "remunerationType": "fixed_period",
+      "remunerationValue": 350,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Período Extraordinário: Mutirão Especial de Sábado - R$ 350,00 (08:00 às 12:00) - Data 2026-10-10",
+      "snapshotAt": "2026-10-10T14:24:18.649Z"
+    },
+    "calculatedAmount": 350,
+    "finalAmount": 350,
+    "status": "pending",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-10T14:24:18.649Z",
+        "newAmount": 350,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #80191af5-6cb7-4bd4-899c-d03ea74318f2"
+      }
+    ],
+    "createdAt": "2026-10-10T14:24:18.649Z",
+    "updatedAt": "2026-10-10T14:24:18.649Z"
+  },
+  {
+    "id": "rem_apt_7e1c7d23-d287-4cbd-a0cd-c952df2948bf",
+    "appointmentId": "7e1c7d23-d287-4cbd-a0cd-c952df2948bf",
+    "clinicId": "ivs",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "47c6fa1c-a4ac-4ac5-b94e-3a4cbb9f286e",
+    "patientName": "Maiza Gabriele Araujo",
+    "date": "2026-10-10",
+    "time": "09:57",
+    "appointmentType": "refrativo",
+    "periodKind": "extraordinary",
+    "periodId": "esp_ivs_mutirao_1010",
+    "ruleDescription": "Período Extraordinário: Mutirão Especial de Sábado - R$ 350,00 (08:00 às 12:00) - Data 2026-10-10",
+    "calculationBasis": "Atendimento realizado em 2026-10-10 às 09:57. Tipo: EXTRAORDINARY. Valor calculado: R$ 350.00. Origem: esp_ivs_mutirao_1010",
+    "ruleSnapshot": {
+      "ruleId": "esp_ivs_mutirao_1010",
+      "ruleType": "extraordinary",
+      "remunerationType": "fixed_period",
+      "remunerationValue": 350,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Período Extraordinário: Mutirão Especial de Sábado - R$ 350,00 (08:00 às 12:00) - Data 2026-10-10",
+      "snapshotAt": "2026-10-10T14:04:44.374Z"
+    },
+    "calculatedAmount": 350,
+    "finalAmount": 350,
+    "status": "pending",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-10T14:04:44.374Z",
+        "newAmount": 350,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #7e1c7d23-d287-4cbd-a0cd-c952df2948bf"
+      }
+    ],
+    "createdAt": "2026-10-10T14:04:44.374Z",
+    "updatedAt": "2026-10-10T14:04:44.374Z"
+  },
+  {
+    "id": "rem_apt_25cb6daa-7b45-4223-83dd-c9eb18d31a86",
+    "appointmentId": "25cb6daa-7b45-4223-83dd-c9eb18d31a86",
+    "clinicId": "ivs",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "993c1ec3-d262-4172-96ff-fdc9f9613bbf",
+    "patientName": "Cristina Cabreira",
+    "date": "2026-10-10",
+    "time": "09:05",
+    "appointmentType": "refrativo",
+    "periodKind": "extraordinary",
+    "periodId": "esp_ivs_mutirao_1010",
+    "ruleDescription": "Período Extraordinário: Mutirão Especial de Sábado - R$ 350,00 (08:00 às 12:00) - Data 2026-10-10",
+    "calculationBasis": "Atendimento realizado em 2026-10-10 às 09:05. Tipo: EXTRAORDINARY. Valor calculado: R$ 350.00. Origem: esp_ivs_mutirao_1010",
+    "ruleSnapshot": {
+      "ruleId": "esp_ivs_mutirao_1010",
+      "ruleType": "extraordinary",
+      "remunerationType": "fixed_period",
+      "remunerationValue": 350,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Período Extraordinário: Mutirão Especial de Sábado - R$ 350,00 (08:00 às 12:00) - Data 2026-10-10",
+      "snapshotAt": "2026-10-10T13:14:34.216Z"
+    },
+    "calculatedAmount": 350,
+    "finalAmount": 350,
+    "status": "pending",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-10T13:14:34.216Z",
+        "newAmount": 350,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #25cb6daa-7b45-4223-83dd-c9eb18d31a86"
+      }
+    ],
+    "createdAt": "2026-10-10T13:14:34.216Z",
+    "updatedAt": "2026-10-10T13:14:34.217Z"
+  },
+  {
+    "id": "rem_apt_c746b770-1ae8-4433-83b8-e59a51c91704",
+    "appointmentId": "c746b770-1ae8-4433-83b8-e59a51c91704",
+    "clinicId": "ivs",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "e1cc032c-ed22-4bef-bd06-79f36197749b",
+    "patientName": "Antonio C. Duarte",
+    "date": "2026-10-09",
+    "time": "17:04",
+    "appointmentType": "refrativo",
+    "periodKind": "avulso",
+    "periodId": "eav_ivs_meirelles",
+    "ruleDescription": "Atendimento Avulso: Consulta realizada fora dos períodos fixos ou extraordinários vigentes. Valor por consulta: R$ 50.00.",
+    "calculationBasis": "Atendimento realizado em 2026-10-09 às 17:04. Tipo: AVULSO. Valor calculado: R$ 50.00. Origem: eav_ivs_meirelles",
+    "ruleSnapshot": {
+      "ruleId": "eav_ivs_meirelles",
+      "ruleType": "avulso",
+      "remunerationType": "per_appointment",
+      "remunerationValue": 50,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Atendimento Avulso: Consulta realizada fora dos períodos fixos ou extraordinários vigentes. Valor por consulta: R$ 50.00.",
+      "snapshotAt": "2026-10-09T21:11:12.087Z"
+    },
+    "calculatedAmount": 50,
+    "finalAmount": 50,
+    "status": "pending",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-09T21:11:12.087Z",
+        "newAmount": 50,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #c746b770-1ae8-4433-83b8-e59a51c91704"
+      }
+    ],
+    "createdAt": "2026-10-09T21:11:12.087Z",
+    "updatedAt": "2026-10-09T21:11:12.088Z"
+  },
+  {
+    "id": "rem_apt_2e60e7b0-4bbc-4b4c-ab41-c8db003b2b04",
+    "appointmentId": "2e60e7b0-4bbc-4b4c-ab41-c8db003b2b04",
+    "clinicId": "ivs",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "584d5ec5-2bf2-4ee8-8ce2-0755b6ef2a80",
+    "patientName": "Catalino Martinez",
+    "date": "2026-10-09",
+    "time": "16:23",
+    "appointmentType": "refrativo",
+    "periodKind": "avulso",
+    "periodId": "eav_ivs_meirelles",
+    "ruleDescription": "Atendimento Avulso: Consulta realizada fora dos períodos fixos ou extraordinários vigentes. Valor por consulta: R$ 50.00.",
+    "calculationBasis": "Atendimento realizado em 2026-10-09 às 16:23. Tipo: AVULSO. Valor calculado: R$ 50.00. Origem: eav_ivs_meirelles",
+    "ruleSnapshot": {
+      "ruleId": "eav_ivs_meirelles",
+      "ruleType": "avulso",
+      "remunerationType": "per_appointment",
+      "remunerationValue": 50,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Atendimento Avulso: Consulta realizada fora dos períodos fixos ou extraordinários vigentes. Valor por consulta: R$ 50.00.",
+      "snapshotAt": "2026-10-09T20:28:32.180Z"
+    },
+    "calculatedAmount": 50,
+    "finalAmount": 50,
+    "status": "pending",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-09T20:28:32.180Z",
+        "newAmount": 50,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #2e60e7b0-4bbc-4b4c-ab41-c8db003b2b04"
+      }
+    ],
+    "createdAt": "2026-10-09T20:28:32.180Z",
+    "updatedAt": "2026-10-09T20:28:32.180Z"
+  },
+  {
+    "id": "rem_apt_ef7db155-fd4d-4f14-9e89-e213a35f61ec",
+    "appointmentId": "ef7db155-fd4d-4f14-9e89-e213a35f61ec",
+    "clinicId": "ivs",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "eb821923-17a0-4901-8f8e-abd864450998",
+    "patientName": "Glacos Nunes",
+    "date": "2026-10-09",
+    "time": "09:00",
+    "appointmentType": "refrativo",
+    "periodKind": "avulso",
+    "periodId": "eav_ivs_meirelles",
+    "ruleDescription": "Atendimento Avulso: Consulta realizada fora dos períodos fixos ou extraordinários vigentes. Valor por consulta: R$ 100.00.",
+    "calculationBasis": "Atendimento realizado em 2026-10-09 às 09:00. Tipo: AVULSO. Valor calculado: R$ 100.00. Origem: eav_ivs_meirelles",
+    "ruleSnapshot": {
+      "ruleId": "eav_ivs_meirelles",
+      "ruleType": "avulso",
+      "remunerationType": "per_appointment",
+      "remunerationValue": 100,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Atendimento Avulso: Consulta realizada fora dos períodos fixos ou extraordinários vigentes. Valor por consulta: R$ 100.00.",
+      "snapshotAt": "2026-10-09T13:29:46.706Z"
+    },
+    "calculatedAmount": 100,
+    "finalAmount": 100,
+    "status": "pending",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-09T13:29:46.706Z",
+        "newAmount": 100,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #ef7db155-fd4d-4f14-9e89-e213a35f61ec"
+      }
+    ],
+    "createdAt": "2026-10-09T13:29:46.706Z",
+    "updatedAt": "2026-10-09T13:29:46.707Z"
+  },
+  {
+    "id": "rem_apt_d4a6345d-dcce-4898-8161-66b636aeaab8",
+    "appointmentId": "d4a6345d-dcce-4898-8161-66b636aeaab8",
+    "clinicId": "ivs",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "e400d447-85b8-4de8-85f6-965111d1d6ba",
+    "patientName": "Alan Gabriel Busquet",
+    "date": "2026-10-10",
+    "time": "15:03",
+    "appointmentType": "refrativo",
+    "periodKind": "extraordinary",
+    "periodId": "esp_ivs_1791644243026",
+    "ruleDescription": "Período Extraordinário: Mutirão Especial de Sábado (08:00 às 18:00) - Data 2026-10-10",
+    "calculationBasis": "Atendimento realizado em 2026-10-10 às 15:03. Tipo: EXTRAORDINARY. Valor calculado: R$ 1.00. Origem: esp_ivs_1791644243026",
+    "ruleSnapshot": {
+      "ruleId": "esp_ivs_1791644243026",
+      "ruleType": "extraordinary",
+      "remunerationType": "fixed_period",
+      "remunerationValue": 1,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Período Extraordinário: Mutirão Especial de Sábado (08:00 às 18:00) - Data 2026-10-10",
+      "snapshotAt": "2026-10-10T19:13:40.098Z"
+    },
+    "calculatedAmount": 1,
+    "finalAmount": 1,
+    "status": "pending",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-10T19:13:40.098Z",
+        "newAmount": 1,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #d4a6345d-dcce-4898-8161-66b636aeaab8"
+      }
+    ],
+    "createdAt": "2026-10-10T19:13:40.098Z",
+    "updatedAt": "2026-10-10T19:13:40.099Z"
+  },
+  {
+    "id": "rem_apt_90d8c26a-1080-4b43-ac26-7940cae32441",
+    "appointmentId": "90d8c26a-1080-4b43-ac26-7940cae32441",
+    "clinicId": "ivs",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "c21b4778-8c19-431e-8b68-c931f5d15c14",
+    "patientName": "ELPIDIO QUINHONEZ",
+    "date": "2026-10-10",
+    "time": "14:13",
+    "appointmentType": "refrativo",
+    "periodKind": "extraordinary",
+    "periodId": "esp_ivs_1791644243026",
+    "ruleDescription": "Período Extraordinário: Mutirão Especial de Sábado (08:00 às 18:00) - Data 2026-10-10",
+    "calculationBasis": "Atendimento realizado em 2026-10-10 às 14:13. Tipo: EXTRAORDINARY. Valor calculado: R$ 1.00. Origem: esp_ivs_1791644243026",
+    "ruleSnapshot": {
+      "ruleId": "esp_ivs_1791644243026",
+      "ruleType": "extraordinary",
+      "remunerationType": "fixed_period",
+      "remunerationValue": 1,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Período Extraordinário: Mutirão Especial de Sábado (08:00 às 18:00) - Data 2026-10-10",
+      "snapshotAt": "2026-10-10T19:27:45.748Z"
+    },
+    "calculatedAmount": 1,
+    "finalAmount": 1,
+    "status": "pending",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-10T19:27:45.748Z",
+        "newAmount": 1,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #90d8c26a-1080-4b43-ac26-7940cae32441"
+      }
+    ],
+    "createdAt": "2026-10-10T19:27:45.748Z",
+    "updatedAt": "2026-10-10T19:27:45.748Z"
+  },
+  {
+    "id": "rem_apt_e3469aa2-821d-4504-a59a-81a408ec8506",
+    "appointmentId": "e3469aa2-821d-4504-a59a-81a408ec8506",
+    "clinicId": "ivs",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "5f0ab8f2-3e9f-41c8-a600-eb5f57af1878",
+    "patientName": "CINTIA RAQUEL",
+    "date": "2026-10-10",
+    "time": "14:10",
+    "appointmentType": "refrativo",
+    "periodKind": "extraordinary",
+    "periodId": "esp_ivs_1791644243026",
+    "ruleDescription": "Período Extraordinário: Mutirão Especial de Sábado (08:00 às 18:00) - Data 2026-10-10",
+    "calculationBasis": "Atendimento realizado em 2026-10-10 às 14:10. Tipo: EXTRAORDINARY. Valor calculado: R$ 1.00. Origem: esp_ivs_1791644243026",
+    "ruleSnapshot": {
+      "ruleId": "esp_ivs_1791644243026",
+      "ruleType": "extraordinary",
+      "remunerationType": "fixed_period",
+      "remunerationValue": 1,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Período Extraordinário: Mutirão Especial de Sábado (08:00 às 18:00) - Data 2026-10-10",
+      "snapshotAt": "2026-10-10T19:40:37.913Z"
+    },
+    "calculatedAmount": 1,
+    "finalAmount": 1,
+    "status": "pending",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-10T19:40:37.913Z",
+        "newAmount": 1,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #e3469aa2-821d-4504-a59a-81a408ec8506"
+      }
+    ],
+    "createdAt": "2026-10-10T19:40:37.913Z",
+    "updatedAt": "2026-10-10T19:40:37.913Z"
+  },
+  {
+    "id": "rem_apt_ea35bb67-72ab-4bec-b3f7-20a302e29d4e",
+    "appointmentId": "ea35bb67-72ab-4bec-b3f7-20a302e29d4e",
+    "clinicId": "ivs",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "bc1037f6-5165-423a-8104-de7e0006a54c",
+    "patientName": "Darquis",
+    "date": "2026-10-10",
+    "time": "16:19",
+    "appointmentType": "refrativo",
+    "periodKind": "extraordinary",
+    "periodId": "esp_ivs_1791644243026",
+    "ruleDescription": "Período Extraordinário: Mutirão Especial de Sábado (08:00 às 18:00) - Data 2026-10-10",
+    "calculationBasis": "Atendimento realizado em 2026-10-10 às 16:19. Tipo: EXTRAORDINARY. Valor calculado: R$ 1.00. Origem: esp_ivs_1791644243026",
+    "ruleSnapshot": {
+      "ruleId": "esp_ivs_1791644243026",
+      "ruleType": "extraordinary",
+      "remunerationType": "fixed_period",
+      "remunerationValue": 1,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Período Extraordinário: Mutirão Especial de Sábado (08:00 às 18:00) - Data 2026-10-10",
+      "snapshotAt": "2026-10-10T20:24:44.879Z"
+    },
+    "calculatedAmount": 1,
+    "finalAmount": 1,
+    "status": "pending",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-10T20:24:44.879Z",
+        "newAmount": 1,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #ea35bb67-72ab-4bec-b3f7-20a302e29d4e"
+      }
+    ],
+    "createdAt": "2026-10-10T20:24:44.879Z",
+    "updatedAt": "2026-10-10T20:24:44.879Z"
+  },
+  {
+    "id": "rem_apt_9effebd6-e567-43be-bd85-14e3c0e2a7d6",
+    "appointmentId": "9effebd6-e567-43be-bd85-14e3c0e2a7d6",
+    "clinicId": "ivs",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "d87b070d-cb94-4fd0-b16b-b40b0ef79453",
+    "patientName": "Evilin Ramona",
+    "date": "2026-10-10",
+    "time": "16:27",
+    "appointmentType": "refrativo",
+    "periodKind": "extraordinary",
+    "periodId": "esp_ivs_1791644243026",
+    "ruleDescription": "Período Extraordinário: Mutirão Especial de Sábado (08:00 às 18:00) - Data 2026-10-10",
+    "calculationBasis": "Atendimento realizado em 2026-10-10 às 16:27. Tipo: EXTRAORDINARY. Valor calculado: R$ 1.00. Origem: esp_ivs_1791644243026",
+    "ruleSnapshot": {
+      "ruleId": "esp_ivs_1791644243026",
+      "ruleType": "extraordinary",
+      "remunerationType": "fixed_period",
+      "remunerationValue": 1,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Período Extraordinário: Mutirão Especial de Sábado (08:00 às 18:00) - Data 2026-10-10",
+      "snapshotAt": "2026-10-10T20:31:37.732Z"
+    },
+    "calculatedAmount": 1,
+    "finalAmount": 1,
+    "status": "pending",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-10T20:31:37.732Z",
+        "newAmount": 1,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #9effebd6-e567-43be-bd85-14e3c0e2a7d6"
+      }
+    ],
+    "createdAt": "2026-10-10T20:31:37.732Z",
+    "updatedAt": "2026-10-10T20:31:37.732Z"
+  },
+  {
+    "id": "rem_apt_376a5b65-464d-4d04-a23a-5b0f166d84f4",
+    "appointmentId": "376a5b65-464d-4d04-a23a-5b0f166d84f4",
+    "clinicId": "ivs",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "a6e3bdb7-f197-4dca-b07d-28ef1b4bfd15",
+    "patientName": "Adriana  Raquel",
+    "date": "2026-10-10",
+    "time": "16:33",
+    "appointmentType": "refrativo",
+    "periodKind": "extraordinary",
+    "periodId": "esp_ivs_1791644243026",
+    "ruleDescription": "Período Extraordinário: Mutirão Especial de Sábado (08:00 às 18:00) - Data 2026-10-10",
+    "calculationBasis": "Atendimento realizado em 2026-10-10 às 16:33. Tipo: EXTRAORDINARY. Valor calculado: R$ 1.00. Origem: esp_ivs_1791644243026",
+    "ruleSnapshot": {
+      "ruleId": "esp_ivs_1791644243026",
+      "ruleType": "extraordinary",
+      "remunerationType": "fixed_period",
+      "remunerationValue": 1,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Período Extraordinário: Mutirão Especial de Sábado (08:00 às 18:00) - Data 2026-10-10",
+      "snapshotAt": "2026-10-10T20:38:01.755Z"
+    },
+    "calculatedAmount": 1,
+    "finalAmount": 1,
+    "status": "pending",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-10T20:38:01.755Z",
+        "newAmount": 1,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #376a5b65-464d-4d04-a23a-5b0f166d84f4"
+      }
+    ],
+    "createdAt": "2026-10-10T20:38:01.755Z",
+    "updatedAt": "2026-10-10T20:38:01.755Z"
+  },
+  {
+    "id": "rem_apt_b5a2508b-bdf2-4298-a2f5-3a65990112a7",
+    "appointmentId": "b5a2508b-bdf2-4298-a2f5-3a65990112a7",
+    "clinicId": "ivs",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "79ee0dce-afcc-4595-9b2f-91f97309f960",
+    "patientName": "João Carlos Babuena",
+    "date": "2026-10-10",
+    "time": "16:42",
+    "appointmentType": "refrativo",
+    "periodKind": "extraordinary",
+    "periodId": "esp_ivs_1791644243026",
+    "ruleDescription": "Período Extraordinário: Mutirão Especial de Sábado (08:00 às 18:00) - Data 2026-10-10",
+    "calculationBasis": "Atendimento realizado em 2026-10-10 às 16:42. Tipo: EXTRAORDINARY. Valor calculado: R$ 1.00. Origem: esp_ivs_1791644243026",
+    "ruleSnapshot": {
+      "ruleId": "esp_ivs_1791644243026",
+      "ruleType": "extraordinary",
+      "remunerationType": "fixed_period",
+      "remunerationValue": 1,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Período Extraordinário: Mutirão Especial de Sábado (08:00 às 18:00) - Data 2026-10-10",
+      "snapshotAt": "2026-10-10T20:45:51.122Z"
+    },
+    "calculatedAmount": 1,
+    "finalAmount": 1,
+    "status": "pending",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-10T20:45:51.122Z",
+        "newAmount": 1,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #b5a2508b-bdf2-4298-a2f5-3a65990112a7"
+      }
+    ],
+    "createdAt": "2026-10-10T20:45:51.122Z",
+    "updatedAt": "2026-10-10T20:45:51.122Z"
+  },
+  {
+    "id": "rem_apt_d47a3c63-16a0-4eaa-9ded-e51ef675f0f8",
+    "appointmentId": "d47a3c63-16a0-4eaa-9ded-e51ef675f0f8",
+    "clinicId": "ivs",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "patientId": "43e4f73c-6939-4843-8ffa-19afb8008902",
+    "patientName": "Carolaine  de Souza Silva",
+    "date": "2026-10-10",
+    "time": "16:49",
+    "appointmentType": "refrativo",
+    "periodKind": "extraordinary",
+    "periodId": "esp_ivs_1791644243026",
+    "ruleDescription": "Período Extraordinário: Mutirão Especial de Sábado (08:00 às 18:00) - Data 2026-10-10",
+    "calculationBasis": "Atendimento realizado em 2026-10-10 às 16:49. Tipo: EXTRAORDINARY. Valor calculado: R$ 1.00. Origem: esp_ivs_1791644243026",
+    "ruleSnapshot": {
+      "ruleId": "esp_ivs_1791644243026",
+      "ruleType": "extraordinary",
+      "remunerationType": "fixed_period",
+      "remunerationValue": 1,
+      "clinicId": "ivs",
+      "examinerId": "user-examinador",
+      "examinerName": "Dr. Rudson Meirelles",
+      "explanation": "Período Extraordinário: Mutirão Especial de Sábado (08:00 às 18:00) - Data 2026-10-10",
+      "snapshotAt": "2026-10-10T20:57:31.446Z"
+    },
+    "calculatedAmount": 1,
+    "finalAmount": 1,
+    "status": "pending",
+    "auditTrail": [
+      {
+        "action": "CREATE",
+        "author": "Sistema Automático",
+        "timestamp": "2026-10-10T20:57:31.446Z",
+        "newAmount": 1,
+        "newStatus": "pending",
+        "reason": "Geração automática pós conclusão da consulta #d47a3c63-16a0-4eaa-9ded-e51ef675f0f8"
+      }
+    ],
+    "createdAt": "2026-10-10T20:57:31.446Z",
+    "updatedAt": "2026-10-10T20:57:31.448Z"
+  }
+]

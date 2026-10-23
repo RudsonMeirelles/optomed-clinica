@@ -8,7 +8,8 @@ import {
   ShieldCheck,
   Building2,
   Eye,
-  EyeOff
+  EyeOff,
+  RefreshCw
 } from 'lucide-react';
 import { authService } from '../services/authService';
 import { OptomedBrandLogo } from '../components/SyncStatusBadge';
@@ -37,45 +38,66 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
   const [regUsername, setRegUsername] = useState('');
   const [regPassword, setRegPassword] = useState('');
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
     setIsLoading(true);
 
-    setTimeout(() => {
-      const res = authService.login(identifier, password);
+    try {
+      const res = await authService.login(identifier, password);
       setIsLoading(false);
       if (res.success && res.user) {
         onLoginSuccess(res.user);
       } else {
         setErrorMessage(res.error || 'Credenciais inválidas. Verifique seu e-mail e senha.');
       }
-    }, 300);
+    } catch (err: any) {
+      console.error('[OptoMed Auth] Erro inesperado no login:', err);
+      setIsLoading(false);
+      setErrorMessage(err?.message ? `Erro ao autenticar: ${err.message}` : 'Erro ao tentar autenticar. Verifique o console.');
+    }
   };
 
-  const handleRegisterClinic = (e: React.FormEvent) => {
+  const handleResetDefaults = () => {
+    try {
+      authService.resetDefaultAccounts();
+      setIdentifier('dr.meirelles');
+      setPassword('123456');
+      setErrorMessage(null);
+      setSuccessMessage('Credenciais de fábrica restauradas com sucesso! Você pode clicar em "Entrar no Sistema".');
+      setTimeout(() => setSuccessMessage(null), 5000);
+    } catch {
+      setErrorMessage('Erro ao restaurar credenciais.');
+    }
+  };
+
+  const handleRegisterClinic = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
 
-    const res = authService.registerNewClinic({
-      clinicName: regClinicName,
-      ownerName: regOwnerName,
-      ownerEmail: regOwnerEmail,
-      phone: regPhone,
-      city: regCity,
-      country: regCountry,
-      username: regUsername,
-      password: regPassword,
-      plan: 'trial'
-    });
+    try {
+      const res = await authService.registerNewClinic({
+        clinicName: regClinicName,
+        ownerName: regOwnerName,
+        ownerEmail: regOwnerEmail,
+        phone: regPhone,
+        city: regCity,
+        country: regCountry,
+        username: regUsername,
+        password: regPassword,
+        plan: 'trial'
+      });
 
-    if (res.success && res.user) {
-      setSuccessMessage('Clínica cadastrada com sucesso! Iniciando seu período de teste grátis...');
-      setTimeout(() => {
-        onLoginSuccess(res.user!);
-      }, 800);
-    } else {
-      setErrorMessage(res.error || 'Erro ao realizar cadastro.');
+      if (res.success && res.user) {
+        setSuccessMessage('Clínica cadastrada com sucesso! Iniciando seu período de teste grátis...');
+        setTimeout(() => {
+          onLoginSuccess(res.user!);
+        }, 800);
+      } else {
+        setErrorMessage(res.error || 'Erro ao realizar cadastro.');
+      }
+    } catch {
+      setErrorMessage('Erro ao realizar cadastro.');
     }
   };
 
@@ -219,9 +241,21 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
               )}
             </button>
 
-            <div className="pt-3 border-t border-slate-800/80 flex items-center justify-center gap-2 text-[11px] text-slate-400">
-              <ShieldCheck className="w-4 h-4 text-teal-400 shrink-0" />
-              <span>Conexão criptografada de alta segurança • Ponta a Ponta</span>
+            <div className="pt-3 border-t border-slate-800/80 flex flex-col items-center justify-center gap-2 text-[11px] text-slate-400">
+              <div className="flex items-center justify-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-teal-400 shrink-0" />
+                <span>Conexão criptografada de alta segurança • Ponta a Ponta</span>
+              </div>
+              
+              <button
+                type="button"
+                onClick={handleResetDefaults}
+                className="mt-1 text-[11px] text-slate-500 hover:text-slate-300 underline underline-offset-2 flex items-center gap-1.5 transition-colors cursor-pointer"
+                title="Restaura os acessos padrão de fábrica se o cache do navegador estiver corrompido"
+              >
+                <RefreshCw className="w-3 h-3 text-slate-500" />
+                <span>Restaurar credenciais de fábrica / Limpar cache de login</span>
+              </button>
             </div>
           </form>
         ) : (
@@ -290,7 +324,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
                   <label className="text-slate-300 font-bold block mb-1">CIDADE</label>
                   <input 
                     type="text"
-                    placeholder="Foz do Iguaçu"
+                    placeholder="Ponta Porã"
                     value={regCity}
                     onChange={(e) => setRegCity(e.target.value)}
                     className="w-full px-3 py-2 bg-slate-950 border border-slate-700/80 rounded-xl text-white focus:outline-none focus:border-blue-500"

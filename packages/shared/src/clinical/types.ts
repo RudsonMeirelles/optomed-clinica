@@ -1,5 +1,32 @@
 
 
+export type SyncAction = 'create' | 'update' | 'delete' | 'upsert';
+export type SyncState = 'pending' | 'processing' | 'synced' | 'failed' | 'conflict';
+
+export interface SyncableMetadata {
+  operationId?: string;
+  version?: number;
+  _deleted?: boolean;
+  deletedAt?: string;
+  deletedBy?: string;
+  lastSyncedAt?: string;
+}
+
+export interface SyncQueueItem {
+  operationId: string;
+  clinicId: string;
+  entity: string;
+  action: SyncAction;
+  recordId: string;
+  payload: any;
+  version: number;
+  createdAt: string;
+  attempts: number;
+  lastError?: string;
+  nextRetryAt: number;
+  state: SyncState;
+}
+
 export type NationalityType = 'BR' | 'PY' | 'other';
 export type DocumentType = 'CPF' | 'RG' | 'CI_PY' | 'RUC_PY' | 'PASSPORT' | 'OTHER';
 export type UserRole = 'superadmin' | 'admin' | 'examiner' | 'reception';
@@ -56,18 +83,25 @@ export interface FinancialTransaction {
   type: TransactionType; // 'income' (Entrada) ou 'expense' (Saída)
   category: TransactionCategory;
   description: string;
-  amount: number; // Valor em R$
+  amount: number; // Valor decimal na moeda
+  amountCents?: number; // Representação segura em centavos inteiros (Fase 8.0)
+  currency?: 'BRL' | 'PYG' | 'USD';
+  discount?: number; // Desconto concedido
   date: string; // YYYY-MM-DD
   paymentMethod: PaymentMethod;
   patientId?: string;
   patientName?: string;
+  appointmentId?: string;
   encounterId?: string;
   receiptNumber?: string; // Número do recibo/comprovante
+  cashRegisterId?: string; // Vínculo com a sessão de caixa
   status: 'completed' | 'pending' | 'canceled';
   isSettled?: boolean; // Se o valor já foi liquidado/baixado
   settledAt?: string; // Data/hora da liquidação
   createdBy: string;
   createdAt: string;
+  updatedAt?: string;
+  _deleted?: boolean;
 }
 
 export interface POSItem {
@@ -77,7 +111,29 @@ export interface POSItem {
   category: 'consulta' | 'exame' | 'produto' | 'servico';
   price: number;
   costPrice?: number;
+  currency?: 'BRL' | 'PYG' | 'USD';
   isActive: boolean;
+}
+
+export interface CashRegisterSession {
+  id: string; // UUID
+  clinicId: string;
+  operatorId: string;
+  operatorName: string;
+  openedAt: string;
+  closedAt?: string;
+  status: 'open' | 'closed';
+  openingBalance: number;
+  openingBalanceCents: number;
+  totalIncome: number;
+  totalExpense: number;
+  expectedBalance: number;
+  declaredBalance?: number;
+  difference?: number;
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
+  _deleted?: boolean;
 }
 
 export interface CashRegisterSummary {
@@ -87,6 +143,7 @@ export interface CashRegisterSummary {
   totalExpense: number;
   currentBalance: number;
   transactionsCount: number;
+  activeSession?: CashRegisterSession | null;
 }
 
 export interface BillingInvoice {
@@ -142,24 +199,211 @@ export interface ProfessionalSettlementReport {
   settlementStatus: 'pending' | 'settled';
 }
 
-export interface ClinicConfig {
-  id: string; // 'ivs' | 'megastar' | 'vision' | 'outro' ou custom UUID
-  code: string; // 'IVS', 'MEGA_STAR', 'VISION', 'OUTRO'
-  name: string;
-  tagline?: string;
-  logoUrl?: string; // Data URL / SVG / path
-  primaryColor?: string; // ex: '#3B82F6', '#10B981', '#8B5CF6'
-  phone?: string;
-  address?: string;
+// --------------------------------------------------------------------------
+// MOTOR FINANCEIRO DE REMUNERAÇÃO DOS EXAMINADORES (IVS & MULTIUNIDADES)
+// --------------------------------------------------------------------------
+
+export type ExaminerRemunerationRuleType = 'fixed_period' | 'per_appointment' | 'percentage' | 'mixed_guarantee';
+export type ExaminerPeriodKind = 'extraordinary' | 'fixed' | 'avulso';
+export type RemunerationStatus = 'pending' | 'approved' | 'closed' | 'paid' | 'canceled' | 'adjusted';
+
+export interface ExaminerFixedPeriod {
+  id: string;
+  clinicId: string;
+  examinerId: string;
+  examinerName: string;
+  dayOfWeek: number; // 0=Dom, 1=Seg, 2=Ter, 3=Qua, 4=Qui, 5=Sex, 6=Sáb
+  startTime: string; // HH:mm ex: "13:00"
+  endTime: string; // HH:mm ex: "17:30"
+  validFrom: string; // YYYY-MM-DD
+  validUntil?: string; // YYYY-MM-DD opcional
+  remunerationType: ExaminerRemunerationRuleType;
+  fixedAmount?: number; // Ex: 500.00
+  perAppointmentAmount?: number; // Ex: 100.00
+  percentage?: number;
+  minimumGuarantee?: number;
+  active: boolean;
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
+  createdBy?: string;
+  updatedBy?: string;
+}
+
+export interface ExaminerSpecialPeriod {
+  id: string;
+  clinicId: string;
+  examinerId: string;
+  examinerName: string;
+  date: string; // YYYY-MM-DD
+  startTime: string; // HH:mm ex: "08:00"
+  endTime: string; // HH:mm ex: "12:00"
+  remunerationType: ExaminerRemunerationRuleType;
+  fixedAmount?: number; // Ex: 350.00
+  perAppointmentAmount?: number;
+  percentage?: number;
+  status: 'active' | 'canceled';
+  notes?: string; // Motivo: Mutirão, Campanha, etc.
+  createdAt: string;
+  updatedAt: string;
+  createdBy?: string;
+  updatedBy?: string;
+}
+
+export interface ExaminerAvulsoRule {
+  id: string;
+  clinicId: string;
+  examinerId: string;
+  examinerName: string;
+  perAppointmentAmount: number; // Ex: 100.00
+  percentage?: number;
+  validFrom?: string;
+  validUntil?: string;
+  active: boolean;
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface RemunerationRuleSnapshot {
+  ruleId: string;
+  ruleType: ExaminerPeriodKind;
+  remunerationType: ExaminerRemunerationRuleType;
+  remunerationValue: number;
+  clinicId: string;
+  examinerId: string;
+  examinerName: string;
+  validFrom?: string;
+  validUntil?: string;
+  explanation: string;
+  snapshotAt: string;
+}
+
+export interface RemunerationAuditEntry {
+  action: 'CREATE' | 'APPROVE' | 'CLOSE' | 'PAY' | 'CANCEL' | 'ADJUST' | 'REOPEN';
+  author: string;
+  timestamp: string;
+  oldAmount?: number;
+  newAmount?: number;
+  oldStatus?: RemunerationStatus;
+  newStatus?: RemunerationStatus;
+  reason?: string;
+}
+
+export interface ExaminerRemunerationRecord {
+  id: string; // Idempotente: rem_apt_{appointmentId}
+  appointmentId: string;
+  clinicId: string;
+  clinicName?: string;
+  examinerId: string;
+  examinerName: string;
+  patientId?: string;
+  patientName: string;
+  date: string; // YYYY-MM-DD
+  time: string; // HH:mm
+  appointmentType: string;
+  periodKind: ExaminerPeriodKind;
+  periodId?: string;
+  ruleDescription: string;
+  calculationBasis: string; // Explicação detalhada transparente
+  ruleSnapshot: RemunerationRuleSnapshot; // Preserva o histórico mesmo se a regra mudar futuramente
+  calculatedAmount: number;
+  finalAmount: number;
+  status: RemunerationStatus;
+  closureId?: string;
+  paidAt?: string;
+  paymentMethod?: string;
+  isRetroactiveAdjusted?: boolean;
+  hasConflict?: boolean;
+  conflictDetails?: string;
+  auditTrail: RemunerationAuditEntry[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ExaminerClosureRecord {
+  id: string; // ex: closure_{clinicId}_{examinerId}_{YYYYMM}
+  clinicId: string;
+  examinerId: string;
+  examinerName: string;
+  startDate: string;
+  endDate: string;
+  totalFixedAmount: number;
+  totalAvulsoAmount: number;
+  totalExtraordinaryAmount: number;
+  totalGrossAmount: number;
+  status: 'closed' | 'paid';
+  closedBy: string;
+  closedAt: string;
+  paidBy?: string;
+  paidAt?: string;
+  paymentMethod?: string;
+  remunerationIds: string[];
+  notes?: string;
+}
+
+export interface RemunerationPreviewResult {
+  applicable: boolean;
+  ruleType: ExaminerPeriodKind;
+  ruleId: string;
+  examinerId: string;
+  examinerName: string;
+  clinicId: string;
+  appointmentId?: string;
+  amount: number;
+  status: 'PREVIEW' | 'CONFLICT' | 'NOT_APPLICABLE';
+  explanation: string;
+  conflict: boolean;
+  conflictDetails?: string;
+}
+
+export interface ConflictCheckResult {
+  hasConflict: boolean;
+  conflictType?: 'EXTRAORDINARY_OVERLAP' | 'FIXED_OVERLAP' | 'MULTIPLE_SPECIAL_SAME_TIME';
+  message?: string;
+  conflictingRules?: Array<{
+    id: string;
+    type: 'fixed' | 'extraordinary';
+    description: string;
+    timeRange: string;
+  }>;
+}
+
+export interface ClinicUnit {
+  id: string; // ex: 'ivs' | 'megastar' | 'vision' | 'outro' ou UUID
+  name: string; // Nome da unidade
+  code: string; // 'IVS', 'MEGA_STAR', 'VISUAL', etc.
+  country: 'Brasil' | 'Paraguai' | 'other';
   city?: string;
-  country?: 'Brasil' | 'Paraguai' | 'other';
-  defaultLanguage?: 'pt-BR' | 'es-PY';
-  defaultCurrency?: 'BRL' | 'PYG' | 'USD';
+  address?: string;
+  timezone: string; // ex: 'America/Sao_Paulo' ou 'America/Asuncion'
+  currency: 'BRL' | 'PYG' | 'USD';
+  language: 'pt-BR' | 'es-PY';
+  status: 'active' | 'inactive' | 'suspended';
+  clinicalSettings?: {
+    defaultConsultationDurationMinutes?: number;
+    optotypeDistanceMeters?: number;
+    enableSmartTV?: boolean;
+    enableRemoteControl?: boolean;
+    prescriptionFooterText?: string;
+    customDisclaimers?: string[];
+  };
+  phone?: string;
   documentCnpjOrRuc?: string;
+  tagline?: string;
+  logoUrl?: string;
+  primaryColor?: string;
   ownerEmail?: string;
   ownerName?: string;
   subscription?: ClinicSubscription;
-  createdAt?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ClinicConfig extends ClinicUnit {
+  // Aliases para retrocompatibilidade
+  defaultLanguage?: 'pt-BR' | 'es-PY';
+  defaultCurrency?: 'BRL' | 'PYG' | 'USD';
 }
 
 export interface UserAccount {
@@ -178,9 +422,20 @@ export interface UserAccount {
 }
 
 export type AppointmentType = 'consulta_geral' | 'refrativo' | 'retorno' | 'pediatrico' | 'baixa_visao' | 'urgencia';
-export type AppointmentStatus = 'scheduled' | 'confirmed' | 'waiting' | 'in_consultation' | 'completed' | 'canceled' | 'no_show';
+export type AppointmentStatus = 
+  | 'scheduled'
+  | 'confirmed'
+  | 'checked_in'
+  | 'waiting'
+  | 'called'
+  | 'in_consultation'
+  | 'completed'
+  | 'canceled'
+  | 'no_show'
+  | 'rescheduled';
 
 export interface Appointment {
+  patientGlobalId?: string;
   id: string; // UUID v4
   patientId: string;
   patientName: string;
@@ -196,13 +451,22 @@ export interface Appointment {
   status: AppointmentStatus;
   ticketNumber?: string; // Senha do Paciente (ex: 'P-01', 'A-05', '042')
   isPriority?: boolean; // Preferencial / Prioridade
+  isOutOfContractPeriod?: boolean; // Consulta atendida fora do período contratado / Avulso negociado
+  contractPeriodNotes?: string; // Justificativa ou notas do período negociado/extraordinário
   notes?: string;
   room?: string; // ex: 'Consultório 1'
+  clinicId?: string;
+  clinicName?: string;
+  checkInAt?: string; // ISO timestamp do momento do check-in / chegada
+  calledAt?: string; // ISO timestamp do momento da chamada na TV
+  startedAt?: string; // ISO timestamp do início da consulta
+  completedAt?: string; // ISO timestamp da finalização da consulta
   createdAt: string;
   updatedAt: string;
 }
 
 export interface Patient {
+  patientGlobalId?: string;
   id: string; // UUID v4
   fullName: string;
   birthDate: string; // YYYY-MM-DD
@@ -226,18 +490,45 @@ export interface Patient {
 export interface Anamnesis {
   id: string;
   encounterId: string;
+  
+  // 1. Queixa e Doença Atual
   chiefComplaint: string;
-  historyOfPresentIllness?: string;
+  historyOfPresentIllness?: string; // HDA
+  
+  // 2. Antecedentes Oculares e Sistêmicos
   ocularHistory?: string;
+  systemicHistory?: string; // Antecedentes clínicos e sistêmicos estruturados
   personalHistory?: string;
   familyHistory?: string;
-  currentGlasses: boolean;
-  contactLenses: boolean;
-  previousSurgeries?: string;
-  traumaHistory?: string;
-  allergies?: string; // Quadro alérgico (medicamentos, colírios, etc.)
-  medicationsInUse?: string; // Fármacos e medicamentos que o paciente faz uso contínuo
-  pathologicalHistory?: string; // Histórico patológico pregresso (doenças preexistentes, cirurgias, infecções)
+  
+  // 3. Medicamentos e Alergias
+  medications?: string; // Fármacos estruturados
+  medicationsInUse?: string; // Fármacos em uso contínuo (legado mantido)
+  allergies?: string; // Alergias oculares, medicamentosas e sistêmicas
+  
+  // 4. Cirurgias e Traumatismos
+  surgicalHistory?: string; // Cirurgias oftalmológicas e gerais estruturadas
+  previousSurgeries?: string; // Cirurgias prévias (legado mantido)
+  traumaHistory?: string; // Traumas oculares e craniofaciais
+  
+  // 5. Óculos e Lentes de Contato
+  previousGlasses?: boolean; // Uso pregresso de óculos
+  currentGlasses: boolean; // Uso atual de óculos (legado mantido)
+  contactLensHistory?: string; // Histórico, tipo e rotina de lentes de contato
+  contactLenses: boolean; // Uso atual de lentes de contato (legado mantido)
+  
+  // 6. Ocupação, Telas e Hábitos
+  occupationalHistory?: string; // Profissão / atividade visual predominante
+  screenExposure?: string; // Exposição a computadores, celulares e telas (ex: "8h/dia")
+  habits?: string; // Hábitos (tabagismo, etilismo, esportes de impacto, sol)
+  pregnancyStatus?: string; // Gravidez / lactação (se clinicamente aplicável)
+  
+  // 7. Observações Gerais
+  observations?: string; // Observações livres do ato assistencial
+  clinicalNotes?: string; // Notas clínicas gerais (legado mantido)
+  pathologicalHistory?: string; // Histórico patológico pregresso (legado mantido)
+  
+  // Parâmetros vitais e biomarcadores legados mantidos intactos:
   hasHypertension: boolean;
   bloodPressure?: string; // Pressão Arterial (ex: "120/80 mmHg")
   hasDiabetes: boolean;
@@ -248,7 +539,11 @@ export interface Anamnesis {
   hasPterygium?: boolean; // Pterígio
   hasDryEye?: boolean; // Olho Seco
   otherSystemicConditions?: string;
-  clinicalNotes?: string; // Dados clínicos gerais / antecedentes clínicos do paciente
+  
+  // Rastreabilidade e Auditoria
+  updatedAt?: string; // ISO
+  updatedBy?: string; // Nome ou ID do profissional
+  version?: number;
 }
 
 export interface EyeRefractionValues {
@@ -319,6 +614,15 @@ export interface SubjectiveRefraction {
   notes?: string;
 }
 
+/**
+ * FASE 4.0: Refração Final Homologada pelo examinador.
+ * Representa a decisão refrativa definitiva da qual a prescrição óptica é derivada.
+ */
+export interface FinalRefraction extends SubjectiveRefraction {
+  confirmedAt?: string;
+  confirmedBy?: string;
+}
+
 export interface BinocularTestsRecord {
   id: string;
   encounterId: string;
@@ -362,6 +666,8 @@ export interface Prescription {
   encounterId: string;
   patientId: string;
   patientName: string;
+  clinicId?: string;
+  clinicName?: string;
   date: string;
   od: EyeRefractionValues;
   oe: EyeRefractionValues;
@@ -377,6 +683,9 @@ export interface Prescription {
   examinerName?: string;
   examinerRegistry?: string;
   expirationDate: string;
+  version?: number;
+  supersedesId?: string;
+  isIssued?: boolean;
 }
 
 export interface OphthalmicImageRecord {
@@ -406,10 +715,42 @@ export interface EyeDrawingData {
   updatedAt: string;
 }
 
+export type EpisodeStatus = 'ACTIVE' | 'COMPLETED' | 'CANCELLED' | 'ARCHIVED';
+
+export interface ClinicalEpisode {
+  id: string; // UUID v4
+  clinicId: string;
+  patientId: string;
+  patientGlobalId?: string;
+  title: string;
+  description?: string;
+  status: EpisodeStatus;
+  startDate: string; // ISO ou YYYY-MM-DD
+  endDate?: string;
+  doctorId?: string;
+  doctorName?: string;
+  createdAt: string; // ISO
+  updatedAt: string; // ISO
+  closedAt?: string; // ISO
+  version?: number;
+  _deleted?: boolean;
+  deletedAt?: string;
+  deletedBy?: string;
+}
+
 export interface ClinicalEncounter {
+  patientGlobalId?: string;
   id: string; // UUID v4
   patientId: string;
+  clinicId?: string;
+  clinicName?: string;
+  country?: string;
+  episodeId?: string; // Referência ao ClinicalEpisode
+  appointmentId?: string; // Referência ao agendamento administrativo correspondente
   date: string; // ISO
+  startedAt?: string; // ISO início do ato assistencial
+  completedAt?: string; // ISO finalização do ato assistencial
+  version?: number; // Versionamento incremental
   status: 'waiting' | 'in_progress' | 'completed' | 'canceled';
   examinerId: string;
   examinerName: string;
@@ -420,6 +761,7 @@ export interface ClinicalEncounter {
   visualAcuity?: VisualAcuityRecord;
   autorefraction?: Autorefraction;
   subjectiveRefraction?: SubjectiveRefraction;
+  finalRefraction?: FinalRefraction;
   binocularTests?: BinocularTestsRecord;
   contrastTest?: ContrastTestRecord;
   colorVision?: ColorVisionRecord;
@@ -432,6 +774,17 @@ export interface ClinicalEncounter {
   isReturnEncounter?: boolean; // Indica se este atendimento é uma consulta de retorno
   returnReferenceEncounterId?: string; // ID da consulta anterior de referência
   
+  // FASE 3.7: Diagnóstico e Conduta Estruturada
+  diagnoses?: DiagnosisEntry[];
+  structuredConduct?: ClinicalConduct;
+
+  // FASE 3.8: Evoluções e Adendos Vinculados
+  evolutions?: ClinicalEvolution[];
+
+  // FASE 3.9: Prescrição Médica e Documentos Clínicos Emitidos
+  medicalPrescriptions?: MedicalPrescriptionRecord[];
+  clinicalDocuments?: ClinicalDocumentRecord[];
+
   // Imagens e Desenhos Anatômicos Oculares
   clinicalImages?: OphthalmicImageRecord[];
   eyeDrawing?: EyeDrawingData;
@@ -441,6 +794,126 @@ export interface ClinicalEncounter {
   updatedAt: string;
 }
 
+// ==========================================
+// FASE 3.7: DIAGNÓSTICO + CONDUTA CLÍNICA
+// ==========================================
+
+export type DiagnosisEye = 'OD' | 'OE' | 'OU' | 'unspecified';
+export type DiagnosisStatus = 'suspected' | 'confirmed' | 'historical' | 'resolved';
+
+export interface DiagnosisEntry {
+  id: string; // UUID v4
+  encounterId: string;
+  code?: string; // Ex: "H52.1" (CID-10) ou "9D00.1" (CID-11)
+  codingSystem?: 'CID-10' | 'CID-11' | 'SNOMED-CT' | 'custom';
+  description: string; // Ex: "Miopia"
+  eye: DiagnosisEye;
+  status: DiagnosisStatus;
+  primary: boolean; // Diagnóstico principal do encontro
+  notes?: string;
+  createdAt: string; // ISO
+  updatedAt?: string;
+}
+
+export interface ClinicalConduct {
+  id: string;
+  encounterId: string;
+  treatmentPlan?: string;
+  orientations?: string; // Orientações ao paciente (ergonomia, cuidados)
+  returnWeeks?: number;
+  returnInstructions?: string; // Instrução de retorno
+  returnTargetDate?: string; // YYYY-MM-DD
+  referrals?: string; // Encaminhamentos
+  requestedExams?: string[]; // Exames complementares solicitados
+  notes?: string;
+}
+
+// ==========================================
+// FASE 3.8: EVOLUÇÃO CLÍNICA & AMENDMENTS
+// ==========================================
+
+export type EvolutionType = 'evolution' | 'amendment' | 'correction' | 'addendum' | 'clinical_note';
+
+export interface ClinicalEvolution {
+  id: string; // UUID v4
+  encounterId: string;
+  patientId: string;
+  clinicId: string;
+  professionalId: string;
+  professionalName: string;
+  timestamp: string; // ISO
+  text: string;
+  structuredData?: Record<string, any>;
+  type: EvolutionType;
+  version: number;
+  supersedesId?: string; // ID da evolução ou registro que este adendo retifica
+  amendmentReason?: string; // Motivo da retificação
+  previousContent?: string; // Conteúdo anterior arquivado de forma imutável
+  createdAt: string;
+  createdBy: string;
+}
+
+// ==========================================
+// FASE 3.9: PRESCRIÇÕES & DOCUMENTOS CLÍNICOS
+// ==========================================
+
+export interface PrescribedMedication {
+  id: string;
+  name: string;
+  activePrinciple?: string;
+  concentration?: string;
+  dosage: string;
+  route: string; // 'Uso Tópico Ocular' | 'Uso Oral' | 'Uso Tópico Palpebral'
+  frequency: string;
+  duration?: string;
+  instructions?: string;
+  notes?: string;
+}
+
+export interface MedicalPrescriptionRecord {
+  id: string;
+  encounterId: string;
+  patientId: string;
+  patientName: string;
+  clinicId: string;
+  date: string;
+  medications: PrescribedMedication[];
+  generalInstructions?: string;
+  examinerId: string;
+  examinerName: string;
+  examinerRegistry?: string;
+  version: number;
+  createdAt: string;
+  supersedesId?: string;
+}
+
+export type ClinicalDocumentType = 
+  | 'optical_prescription'
+  | 'medical_prescription'
+  | 'referral_letter'
+  | 'exam_request'
+  | 'medical_certificate'
+  | 'clinical_report';
+
+export interface ClinicalDocumentRecord {
+  id: string;
+  encounterId: string;
+  patientId: string;
+  clinicId: string;
+  type: ClinicalDocumentType;
+  title: string;
+  content: string;
+  structuredPayload?: any;
+  professionalId: string;
+  professionalName: string;
+  professionalRegistry?: string;
+  issuedAt: string;
+  version: number;
+  supersedesId?: string;
+  isSigned?: boolean;
+}
+
+
 
 export interface AuditLogEntry {
   id: string;
@@ -448,7 +921,7 @@ export interface AuditLogEntry {
   userId: string;
   userName: string;
   action: 'CREATE' | 'READ' | 'UPDATE' | 'DELETE' | 'EXPORT' | 'PAIR_DEVICE';
-  resourceType: 'PATIENT' | 'ENCOUNTER' | 'PRESCRIPTION' | 'DEVICE' | 'AUTH' | 'FINANCE';
+  resourceType: 'PATIENT' | 'EPISODE' | 'ENCOUNTER' | 'PRESCRIPTION' | 'DEVICE' | 'AUTH' | 'FINANCE';
   resourceId: string;
   details: string;
 }

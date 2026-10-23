@@ -1,0 +1,93 @@
+[
+  {
+    "id": "bb3c5847-2cd4-47f1-a0cb-9ff1e5ee51e6",
+    "patientId": "19a85493-5bc5-4eea-8d5d-c53ffc5cd75d",
+    "date": "2026-09-26T15:16:15.094Z",
+    "status": "completed",
+    "examinerId": "dr-meirelles",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "updatedAt": "2026-09-26T15:21:46.879Z",
+    "anamnesis": {
+      "id": "e99604d9-ebb7-4525-9eb6-038eae9986d1",
+      "encounterId": "",
+      "chiefComplaint": "usuaria de lentes corretivas",
+      "currentGlasses": false,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false,
+      "medicationsInUse": "Metformina 850mg 02 cp/d (usuaria de de Polivitaminico).",
+      "pathologicalHistory": "Nega antecedentes patológicos",
+      "allergies": "",
+      "ocularHistory": "",
+      "medications": "Metformina 850mg 02 cp/d (usuaria de de Polivitaminico).",
+      "systemicHistory": "Nega antecedentes patológicos",
+      "observations": "Visão embaçada para perto, Cefaleia frequente",
+      "clinicalNotes": "Visão embaçada para perto, Cefaleia frequente"
+    },
+    "lensometry": {
+      "id": "0e626c9b-8025-460d-8409-5d3540b51a65",
+      "encounterId": "",
+      "od": {
+        "sphere": 1.5
+      },
+      "oe": {
+        "sphere": 1.5
+      },
+      "addition": 2.5,
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "visualAcuity": {
+      "id": "f699f33a-2d62-47d6-a76e-c08d33e95980",
+      "encounterId": "",
+      "testedAt": "2026-09-26T15:16:15.095Z",
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "id": "390b3378-4777-4c48-bbf5-fe2977fa8b1c",
+      "encounterId": "",
+      "od": {
+        "sphere": 1.75,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 1.75,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 2.5,
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo Digital",
+        "Filtro Luz Azul (BlueCut)"
+      ],
+      "specialLenses": "",
+      "additionalOpticalInfo": ""
+    },
+    "episodeId": "be870ab4-7e1d-46bb-9dfd-bcf3cf58f046",
+    "version": 1,
+    "startedAt": "2026-09-26T15:21:46.879Z",
+    "completedAt": "2026-09-26T15:21:46.879Z"
+  }
+]

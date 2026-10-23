@@ -17,12 +17,15 @@ import { offlineDb } from '../services/offlineDb';
 interface DoctorNotificationToastProps {
   onStartEncounter: (patient: Patient) => void;
   onOpenPatientView?: (patient: Patient) => void;
+  clinicId?: string;
 }
 
 export const DoctorNotificationToast: React.FC<DoctorNotificationToastProps> = ({
   onStartEncounter,
-  onOpenPatientView
+  onOpenPatientView,
+  clinicId
 }) => {
+  const effectiveClinicId = (clinicId && clinicId !== 'all') ? clinicId : offlineDb.getActiveClinicId();
   const [notification, setNotification] = useState<{
     id: string;
     patientName: string;
@@ -38,6 +41,11 @@ export const DoctorNotificationToast: React.FC<DoctorNotificationToastProps> = (
     const handleNewPatientRegistered = (e: any) => {
       const data = e.detail;
       if (data) {
+        // P0: Se o evento carregar clinicId específico, ignora se for diferente da clínica ativa
+        if (data.clinicId && data.clinicId !== effectiveClinicId && effectiveClinicId !== 'all') {
+          return;
+        }
+
         setNotification({
           id: 'notif_' + Date.now(),
           patientName: data.patientName,
@@ -49,32 +57,65 @@ export const DoctorNotificationToast: React.FC<DoctorNotificationToastProps> = (
           appointmentId: data.appointmentId
         });
 
-        // Toca aviso sonoro discreto para o examinador
-        try {
-          const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
-          const osc = audioCtx.createOscillator();
-          const gain = audioCtx.createGain();
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(880, audioCtx.currentTime); // Nota A5
-          osc.frequency.exponentialRampToValueAtTime(1320, audioCtx.currentTime + 0.15); // Nota E6
-          gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.35);
-          osc.connect(gain);
-          gain.connect(audioCtx.destination);
-          osc.start();
-          osc.stop(audioCtx.currentTime + 0.4);
-        } catch {}
+        // Toca aviso sonoro discreto e agradável para o examinador
+        playNotificationChime();
       }
     };
 
+    // Alerta o examinador também quando a recepção realiza o Check-in ou altera status para waiting/checked_in
+    const handleAppointmentUpdated = (e: any) => {
+      const data = e.detail;
+      const apt = data?.appointment || data;
+      if (apt && (apt.status === 'waiting' || apt.status === 'checked_in')) {
+        const aptClinic = data?.clinicId || apt.clinicId;
+        if (aptClinic && aptClinic !== effectiveClinicId && effectiveClinicId !== 'all') {
+          return;
+        }
+
+        setNotification({
+          id: 'notif_apt_' + Date.now(),
+          patientName: apt.patientName || 'Paciente na Recepção',
+          patientId: apt.patientId,
+          ticketNumber: apt.ticketNumber || 'P-01',
+          time: apt.time || new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+          type: apt.type === 'refrativo' ? 'Refração & Grau' : apt.type === 'retorno' ? 'Retorno' : 'Consulta na Recepção',
+          isPriority: apt.isPriority,
+          appointmentId: apt.id
+        });
+
+        playNotificationChime();
+      }
+    };
+
+    function playNotificationChime() {
+      try {
+        const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(880, audioCtx.currentTime); // Nota A5
+        osc.frequency.exponentialRampToValueAtTime(1320, audioCtx.currentTime + 0.15); // Nota E6
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.3);
+      } catch {}
+    }
+
     window.addEventListener('optomed_new_patient_registered', handleNewPatientRegistered);
-    return () => window.removeEventListener('optomed_new_patient_registered', handleNewPatientRegistered);
-  }, []);
+    window.addEventListener('optomed_appointment_updated', handleAppointmentUpdated);
+    return () => {
+      window.removeEventListener('optomed_new_patient_registered', handleNewPatientRegistered);
+      window.removeEventListener('optomed_appointment_updated', handleAppointmentUpdated);
+    };
+  }, [effectiveClinicId]);
 
   if (!notification) return null;
 
   const handleStartExam = () => {
-    const allPatients = offlineDb.getPatients();
+    const allPatients = offlineDb.getPatients(effectiveClinicId);
     const patient: Patient = allPatients.find(p => p.id === notification.patientId) || {
       id: notification.patientId,
       fullName: notification.patientName,
@@ -89,11 +130,11 @@ export const DoctorNotificationToast: React.FC<DoctorNotificationToastProps> = (
     
     // Atualiza status na agenda se houver
     if (notification.appointmentId) {
-      const apts = offlineDb.getAppointments();
+      const apts = offlineDb.getAppointments(effectiveClinicId);
       const apt = apts.find(a => a.id === notification.appointmentId);
       if (apt) {
         apt.status = 'in_consultation';
-        offlineDb.saveAppointment(apt);
+        offlineDb.saveAppointment(apt, effectiveClinicId);
       }
     }
 
@@ -102,7 +143,7 @@ export const DoctorNotificationToast: React.FC<DoctorNotificationToastProps> = (
   };
 
   const handleViewPatient = () => {
-    const allPatients = offlineDb.getPatients();
+    const allPatients = offlineDb.getPatients(effectiveClinicId);
     const patient = allPatients.find(p => p.id === notification.patientId);
     if (patient && onOpenPatientView) {
       onOpenPatientView(patient);

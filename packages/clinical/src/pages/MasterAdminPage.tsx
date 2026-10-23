@@ -55,7 +55,7 @@ export const MasterAdminPage: React.FC<MasterAdminPageProps> = ({ currentUser })
   const [formOwnerEmail, setFormOwnerEmail] = useState('');
   const [formUsername, setFormUsername] = useState('');
   const [formPassword, setFormPassword] = useState('123456');
-  const [formCity, setFormCity] = useState('Foz do Iguaçu');
+  const [formCity, setFormCity] = useState('Ponta Porã');
   const [formCountry, setFormCountry] = useState<'Brasil' | 'Paraguai'>('Brasil');
   const [formPlan, setFormPlan] = useState<'monthly' | 'semiannual' | 'annual' | 'trial'>('annual');
   const [createError, setCreateError] = useState<string | null>(null);
@@ -120,37 +120,41 @@ export const MasterAdminPage: React.FC<MasterAdminPageProps> = ({ currentUser })
     return acc;
   }, 0);
 
-  const handleCreateClinicSubmit = (e: React.FormEvent) => {
+  const handleCreateClinicSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setCreateError(null);
 
-    const res = authService.registerNewClinic({
-      clinicName: formClinicName,
-      ownerName: formOwnerName,
-      ownerEmail: formOwnerEmail,
-      username: formUsername,
-      password: formPassword,
-      city: formCity,
-      country: formCountry,
-      plan: formPlan
-    });
+    try {
+      const res = await authService.registerNewClinic({
+        clinicName: formClinicName,
+        ownerName: formOwnerName,
+        ownerEmail: formOwnerEmail,
+        username: formUsername,
+        password: formPassword,
+        city: formCity,
+        country: formCountry,
+        plan: formPlan
+      });
 
-    if (!res.success) {
-      setCreateError(res.error || 'Erro ao cadastrar clínica.');
-      return;
+      if (!res.success) {
+        setCreateError(res.error || 'Erro ao cadastrar clínica.');
+        return;
+      }
+
+      if (formPlan !== 'trial' && res.clinic) {
+        const months = formPlan === 'annual' ? 12 : formPlan === 'semiannual' ? 6 : 1;
+        licensingService.setClinicSubscriptionManually(res.clinic.id, formPlan, months);
+      }
+
+      setShowCreateModal(false);
+      setFormClinicName('');
+      setFormOwnerName('');
+      setFormOwnerEmail('');
+      setFormUsername('');
+      loadData();
+    } catch {
+      setCreateError('Erro inesperado ao cadastrar clínica.');
     }
-
-    if (formPlan !== 'trial' && res.clinic) {
-      const months = formPlan === 'annual' ? 12 : formPlan === 'semiannual' ? 6 : 1;
-      licensingService.setClinicSubscriptionManually(res.clinic.id, formPlan, months);
-    }
-
-    setShowCreateModal(false);
-    setFormClinicName('');
-    setFormOwnerName('');
-    setFormOwnerEmail('');
-    setFormUsername('');
-    loadData();
   };
 
   const handleExtendLicense = (clinicId: string, months: number, plan: SubscriptionPlan = 'annual') => {
@@ -164,34 +168,38 @@ export const MasterAdminPage: React.FC<MasterAdminPageProps> = ({ currentUser })
     setShowProposalModal(true);
   };
 
-  const handleAddStaffSubmit = (e: React.FormEvent) => {
+  const handleAddStaffSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStaffError(null);
 
-    const res = authService.addStaffMember({
-      clinicId: staffClinicId,
-      fullName: staffFullName,
-      username: staffUsername,
-      role: staffRole,
-      registryNumber: staffRegistry,
-      email: staffEmail,
-      phone: staffPhone,
-      password: staffPassword
-    });
+    try {
+      const res = await authService.addStaffMember({
+        clinicId: staffClinicId,
+        fullName: staffFullName,
+        username: staffUsername,
+        role: staffRole,
+        registryNumber: staffRegistry,
+        email: staffEmail,
+        phone: staffPhone,
+        password: staffPassword
+      });
 
-    if (!res.success) {
-      setStaffError(res.error || 'Erro ao cadastrar profissional.');
-      return;
+      if (!res.success) {
+        setStaffError(res.error || 'Erro ao cadastrar profissional.');
+        return;
+      }
+
+      setShowAddStaffModal(false);
+      setStaffFullName('');
+      setStaffUsername('');
+      setStaffRegistry('');
+      setStaffEmail('');
+      setStaffPhone('');
+      loadData();
+      showNotification(`Profissional cadastrado com sucesso na clínica!`);
+    } catch {
+      setStaffError('Erro inesperado ao cadastrar profissional.');
     }
-
-    setShowAddStaffModal(false);
-    setStaffFullName('');
-    setStaffUsername('');
-    setStaffRegistry('');
-    setStaffEmail('');
-    setStaffPhone('');
-    loadData();
-    showNotification(`Profissional cadastrado com sucesso na clínica!`);
   };
 
   const handleToggleUserStatus = (userId: string) => {
@@ -437,7 +445,7 @@ export const MasterAdminPage: React.FC<MasterAdminPageProps> = ({ currentUser })
                           <div>
                             <div className="font-bold text-white text-sm">{clinic.name}</div>
                             <div className="text-[11px] text-slate-400">
-                              {clinic.city || 'Foz do Iguaçu'} • Resp: <span className="text-slate-300 font-semibold">{clinic.ownerName || 'Não informado'}</span>
+                              {clinic.city || 'Ponta Porã'} • Resp: <span className="text-slate-300 font-semibold">{clinic.ownerName || 'Não informado'}</span>
                             </div>
                           </div>
                         </div>

@@ -25,17 +25,37 @@ export const FireTVPairingModal: React.FC<FireTVPairingModalProps> = ({ isOpen, 
   const [copiedUrl, setCopiedUrl] = useState<string | null>(null);
   const [localIp, setLocalIp] = useState<string>('192.168.0.104');
   const [testSuccess, setTestSuccess] = useState<boolean>(false);
+  const [currentRoom, setCurrentRoom] = useState<string>(lanController.getPairedRoom());
+  const [isTvOnline, setIsTvOnline] = useState<boolean>(lanController.isTvOnline());
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.location.hostname && window.location.hostname !== 'localhost') {
+    if (typeof window !== 'undefined' && window.location.hostname && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
       setLocalIp(window.location.hostname);
+    } else {
+      setLocalIp('192.168.1.25');
     }
+    const handleStatus = (e: any) => {
+      if (e.detail) {
+        setIsTvOnline(e.detail.isTvOnline);
+        if (e.detail.pairedRoom) setCurrentRoom(e.detail.pairedRoom);
+      }
+    };
+    window.addEventListener('optomed_tv_status_changed', handleStatus);
+    lanController.queryRoomDevices();
+    return () => window.removeEventListener('optomed_tv_status_changed', handleStatus);
   }, []);
 
   if (!isOpen) return null;
 
-  const tvFarUrl = `http://${localIp}:5173`;
-  const remoteControllerUrl = `http://${localIp}:5174`;
+  // Em redes locais ou público, rota direta para TV e para Controle Remoto no Celular
+  const tvFarUrl = `http://${localIp}:8765/tv`;
+  const remoteControllerUrl = `http://${localIp}:8765/controle?direct=1`;
+
+  const handleRoomChange = (newRoom: string) => {
+    setCurrentRoom(newRoom);
+    lanController.setPairedRoom(newRoom);
+    lanController.queryRoomDevices();
+  };
 
   const handleCopy = (url: string, label: string) => {
     navigator.clipboard.writeText(url);
@@ -63,7 +83,7 @@ export const FireTVPairingModal: React.FC<FireTVPairingModalProps> = ({ isOpen, 
 
   return (
     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto select-none animate-fadeIn">
-      <div className="bg-slate-900 border border-slate-700 text-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl space-y-6 relative">
+      <div className="bg-slate-900 border border-slate-700 text-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl space-y-5 relative">
         {/* Botão Fechar */}
         <button
           onClick={onClose}
@@ -77,13 +97,39 @@ export const FireTVPairingModal: React.FC<FireTVPairingModalProps> = ({ isOpen, 
           <div className="p-3 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl text-white shadow-lg shadow-blue-500/30">
             <Wifi className="w-6 h-6" />
           </div>
-          <div>
+          <div className="flex-1">
             <h2 className="text-xl font-black tracking-wide text-white flex items-center gap-2">
-              CENTRAL DE PAREAMENTO MULTI-DISPOSITIVOS
+              CENTRAL DE PAREAMENTO TV + SALA
             </h2>
             <p className="text-xs text-slate-400 font-medium">
-              Conecte TV de Longe, Tablet de Perto, Smartphones e Telas na mesma Rede Local (Wi-Fi)
+              Pareie com precisão a Smart TV / TV Box na mesma rede local e sala de atendimento
             </p>
+          </div>
+        </div>
+
+        {/* Barra de Seleção de Sala e Conectividade */}
+        <div className="bg-slate-950 p-3.5 rounded-2xl border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="flex items-center gap-2 w-full sm:w-auto">
+            <label className="text-xs font-bold text-slate-300">Sala Ativa do Examinador:</label>
+            <input
+              type="text"
+              value={currentRoom}
+              onChange={(e) => handleRoomChange(e.target.value)}
+              placeholder="Ex: Consultório 1"
+              className="bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-xs font-bold text-blue-400 focus:outline-none focus:border-blue-500"
+            />
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-slate-400 font-medium">Status da TV na Sala:</span>
+            <span className={`text-[10px] font-black px-2.5 py-1 rounded-full border flex items-center gap-1.5 ${
+              isTvOnline
+                ? 'bg-emerald-950 text-emerald-300 border-emerald-800'
+                : 'bg-rose-950 text-rose-300 border-rose-800'
+            }`}>
+              <span className={`w-2 h-2 rounded-full ${isTvOnline ? 'bg-emerald-400 animate-pulse' : 'bg-rose-500'}`} />
+              {isTvOnline ? 'TV CONECTADA' : 'TV OFFLINE'}
+            </span>
           </div>
         </div>
 
@@ -171,7 +217,7 @@ export const FireTVPairingModal: React.FC<FireTVPairingModalProps> = ({ isOpen, 
               <Smartphone className="w-4 h-4" /> CONTROLE REMOTO NO SEU CELULAR / TABLET DO EXAMINADOR:
             </span>
             <span className="text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-800 px-2 py-0.5 rounded-full font-mono">
-              Porta 5174
+              Porta 8765 / Direto
             </span>
           </div>
 

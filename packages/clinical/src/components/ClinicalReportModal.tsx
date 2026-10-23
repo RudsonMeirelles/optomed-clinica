@@ -23,6 +23,33 @@ export const ClinicalReportModal: React.FC<ClinicalReportModalProps> = ({
   const activeClinic = offlineDb.getActiveClinic();
 
   const handlePrint = () => {
+    // FASE 26: Rastreabilidade e arquivamento de relatório clínico emitido
+    try {
+      const activeClinicId = offlineDb.getActiveClinicId();
+      const docRecord = {
+        id: `doc-${Date.now()}`,
+        encounterId: encounter.id,
+        patientId: patient.id,
+        clinicId: activeClinicId,
+        type: 'clinical_report' as const,
+        title: `Relatório Clínico - ${patient.fullName}`,
+        content: `Relatório clínico completo de avaliação visual impresso em papel A4 retrato.`,
+        structuredPayload: {
+          encounterId: encounter.id,
+          examinerName: encounter.examinerName,
+          date: encounter.date
+        },
+        professionalId: encounter.examinerId || 'dr-meirelles',
+        professionalName: encounter.examinerName || 'Dr. Rudson Meirelles',
+        professionalRegistry: 'CRM/CROO 123456',
+        issuedAt: new Date().toISOString(),
+        version: 1
+      };
+      offlineDb.saveClinicalDocument(docRecord, activeClinicId);
+    } catch (e) {
+      console.warn('[ClinicalReportModal] Erro ao registrar documento clínico:', e);
+    }
+
     const printEl = document.getElementById('clinical-report-sheet');
     if (printEl) {
       printIsolatedElement(printEl, {
@@ -130,15 +157,30 @@ export const ClinicalReportModal: React.FC<ClinicalReportModalProps> = ({
               <div>
                 <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">ANAMNESE & HISTÓRICO CLÍNICO</h3>
                 <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-lg text-xs space-y-1.5">
-                  <div><strong>Queixa Principal:</strong> {encounter.anamnesis.chiefComplaint || 'Consulta de rotina / avaliação refrativa'}</div>
-                  {encounter.anamnesis.medicationsInUse && (
-                    <div><strong>Medicamentos em Uso Contínuo:</strong> {encounter.anamnesis.medicationsInUse}</div>
+                  <div><strong>Queixa Principal (QP):</strong> {encounter.anamnesis.chiefComplaint || 'Consulta de rotina / avaliação refrativa'}</div>
+                  {encounter.anamnesis.historyOfPresentIllness && (
+                    <div><strong>História da Doença Atual (HDA):</strong> {encounter.anamnesis.historyOfPresentIllness}</div>
                   )}
-                  {encounter.anamnesis.pathologicalHistory && (
-                    <div><strong>Histórico Patológico Pregresso:</strong> {encounter.anamnesis.pathologicalHistory}</div>
+                  {(encounter.anamnesis.medicationsInUse || encounter.anamnesis.medications) && (
+                    <div><strong>Medicamentos em Uso:</strong> {encounter.anamnesis.medicationsInUse || encounter.anamnesis.medications}</div>
+                  )}
+                  {(encounter.anamnesis.pathologicalHistory || encounter.anamnesis.systemicHistory) && (
+                    <div><strong>Histórico Patológico / Antecedentes:</strong> {encounter.anamnesis.pathologicalHistory || encounter.anamnesis.systemicHistory}</div>
+                  )}
+                  {(encounter.anamnesis.surgicalHistory || encounter.anamnesis.previousSurgeries) && (
+                    <div><strong>Cirurgias Prévias:</strong> {encounter.anamnesis.surgicalHistory || encounter.anamnesis.previousSurgeries}</div>
+                  )}
+                  {encounter.anamnesis.traumaHistory && (
+                    <div><strong>Traumatismos:</strong> {encounter.anamnesis.traumaHistory}</div>
                   )}
                   {encounter.anamnesis.allergies && (
                     <div><strong>Quadro Alérgico:</strong> {encounter.anamnesis.allergies}</div>
+                  )}
+                  {(encounter.anamnesis.occupationalHistory || encounter.anamnesis.screenExposure) && (
+                    <div>
+                      {encounter.anamnesis.occupationalHistory && <span><strong>Ocupação:</strong> {encounter.anamnesis.occupationalHistory} </span>}
+                      {encounter.anamnesis.screenExposure && <span>| <strong>Telas:</strong> {encounter.anamnesis.screenExposure}</span>}
+                    </div>
                   )}
                   {(encounter.anamnesis.bloodPressure || encounter.anamnesis.bloodGlucoseMgDl) && (
                     <div>
@@ -214,6 +256,35 @@ export const ClinicalReportModal: React.FC<ClinicalReportModalProps> = ({
                     DNP (Distância Naso-Pupilar): <strong>{encounter.subjectiveRefraction.pdDistanceMm} mm</strong>
                   </p>
                 )}
+              </div>
+            )}
+
+            {/* Diagnósticos Clínicos (CID-10 / CID-11) */}
+            {encounter.diagnoses && encounter.diagnoses.length > 0 && (
+              <div>
+                <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">DIAGNÓSTICOS CLÍNICOS</h3>
+                <table className="w-full border-collapse border border-slate-300 text-xs">
+                  <thead>
+                    <tr className="bg-slate-100 font-bold text-slate-700">
+                      <th className="p-2 border border-slate-300 text-left">CÓDIGO</th>
+                      <th className="p-2 border border-slate-300 text-left">DIAGNÓSTICO</th>
+                      <th className="p-2 border border-slate-300 text-center">LATERALIDADE</th>
+                      <th className="p-2 border border-slate-300 text-center">STATUS</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {encounter.diagnoses.map((diag, i) => (
+                      <tr key={diag.id || i} className={diag.primary ? 'bg-blue-50/50 font-bold' : ''}>
+                        <td className="p-2 border border-slate-300 font-mono text-blue-800">{diag.code || '-'}</td>
+                        <td className="p-2 border border-slate-300 text-slate-900">
+                          {diag.description} {diag.primary && <span className="text-[10px] text-blue-600 font-normal">(Principal)</span>}
+                        </td>
+                        <td className="p-2 border border-slate-300 text-center">{diag.eye}</td>
+                        <td className="p-2 border border-slate-300 text-center capitalize">{diag.status}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             )}
 

@@ -1,0 +1,51 @@
+[
+  {
+    "id": "pos_1",
+    "name": "Consulta Oftalmológica / Refração Completa",
+    "category": "consulta",
+    "price": 150,
+    "isActive": true
+  },
+  {
+    "id": "pos_2",
+    "name": "Consulta de Retorno (Não Cobrar)",
+    "category": "consulta",
+    "price": 0,
+    "isActive": true
+  },
+  {
+    "id": "pos_3",
+    "name": "Exame de Tonometria de Aplanação",
+    "category": "exame",
+    "price": 80,
+    "isActive": true
+  },
+  {
+    "id": "pos_4",
+    "name": "Mapeamento de Retina / Fundoscopia",
+    "category": "exame",
+    "price": 120,
+    "isActive": true
+  },
+  {
+    "id": "pos_5",
+    "name": "Adaptação e Teste de Lentes de Contato",
+    "category": "servico",
+    "price": 100,
+    "isActive": true
+  },
+  {
+    "id": "pos_6",
+    "name": "Armação Receituário Premium",
+    "category": "produto",
+    "price": 250,
+    "isActive": true
+  },
+  {
+    "id": "pos_7",
+    "name": "Lentes com Filtro de Luz Azul & Antirreflexo",
+    "category": "produto",
+    "price": 200,
+    "isActive": true
+  }
+]

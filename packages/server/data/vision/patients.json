@@ -1,0 +1,21 @@
+[
+  {
+    "id": "p3-vision",
+    "fullName": "Enzo Gabriel Silva (Menor)",
+    "birthDate": "2018-03-10",
+    "sex": "M",
+    "nationality": "BR",
+    "documentType": "RG",
+    "documentNumber": "12.345.678-9",
+    "phoneCountryCode": "+55",
+    "phone": "+55 (45) 97777-8888",
+    "city": "Ponta Porã",
+    "country": "Brasil",
+    "guardianName": "Juliana Silva (Mãe)",
+    "notes": "Triagem visual escolar infantil.",
+    "lgpdConsent": true,
+    "lgpdConsentDate": "2026-09-19T20:50:43.057Z",
+    "createdAt": "2026-09-19T20:50:43.057Z",
+    "updatedAt": "2026-09-19T20:50:43.057Z"
+  }
+]

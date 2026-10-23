@@ -19,6 +19,7 @@ import {
   Filter
 } from 'lucide-react';
 import { offlineDb } from '../services/offlineDb';
+import { printIsolatedElement } from '../services/printService';
 
 interface ReportsPageProps {
   onNavigate?: (page: string) => void;
@@ -50,7 +51,16 @@ export const ReportsPage: React.FC<ReportsPageProps> = ({ onNavigate }) => {
   }
 
   const handlePrint = () => {
-    window.print();
+    const printEl = document.getElementById('reports-print-container');
+    if (printEl) {
+      printIsolatedElement(printEl, {
+        title: `Relatório Estatístico - ${activeClinic.name}`,
+        orientation: 'portrait',
+        margins: '8mm 8mm'
+      });
+    } else {
+      window.print();
+    }
   };
 
   const totalAgeCount = 
@@ -175,22 +185,35 @@ export const ReportsPage: React.FC<ReportsPageProps> = ({ onNavigate }) => {
         )}
       </div>
 
-      {/* Cabeçalho de Impressão (Exclusivo para papel) */}
-      <div className="hidden print:block border-b-2 border-slate-900 pb-2 mb-4">
-        <div className="flex justify-between items-center">
-          <div>
-            <h2 className="text-xl font-black">{activeClinic.name}</h2>
-            <p className="text-xs text-slate-600">{activeClinic.address} - {activeClinic.city} | Tel: {activeClinic.phone}</p>
-          </div>
-          <div className="text-right text-xs">
-            <p className="font-bold">RELATÓRIO ESTATÍSTICO GERENCIAL</p>
-            <p className="text-slate-500">Período: {stats.startDate} a {stats.endDate}</p>
+      {/* ========================================================================= */}
+      {/* CONTAINER EXCLUSIVO DE IMPRESSÃO / FOLHA DO RELATÓRIO ESTATÍSTICO        */}
+      {/* ========================================================================= */}
+      <div id="reports-print-container" className="reports-printable space-y-6 bg-white p-0 sm:p-2 rounded-2xl">
+        {/* Cabeçalho de Impressão (Visível tanto no papel quanto no container isolado) */}
+        <div className="border-b-2 border-slate-900 pb-3 mb-4">
+          <div className="flex justify-between items-start">
+            <div className="flex items-center gap-3">
+              {activeClinic.logoUrl && (
+                <img src={activeClinic.logoUrl} alt="Logo" className="w-12 h-12 object-contain" />
+              )}
+              <div>
+                <h2 className="text-xl font-black text-slate-900">{activeClinic.name}</h2>
+                <p className="text-xs text-slate-600">{activeClinic.address} - {activeClinic.city} | Tel: {activeClinic.phone}</p>
+                <p className="text-[10px] text-slate-400 mt-0.5">Sistema de Gestão Clínica Integrada OptoMed</p>
+              </div>
+            </div>
+            <div className="text-right text-xs">
+              <span className="inline-block px-2.5 py-1 bg-slate-900 text-white font-black rounded-lg text-[10px] tracking-wide mb-1">
+                RELATÓRIO ESTATÍSTICO GERENCIAL
+              </span>
+              <p className="font-bold text-slate-800">Período: {stats.startDate} a {stats.endDate}</p>
+              <p className="text-[10px] text-slate-500">Emitido em: {new Date().toLocaleDateString('pt-BR')} às {new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</p>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Cards de Métricas Principais (KPIs) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Cards de Métricas Principais (KPIs) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
           <div>
             <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total de Consultas</span>
@@ -351,7 +374,7 @@ export const ReportsPage: React.FC<ReportsPageProps> = ({ onNavigate }) => {
                 <span className="text-2xl">🇧🇷</span>
                 <div>
                   <div className="font-bold text-xs text-emerald-900">Pacientes Brasileiros (CPF / RG)</div>
-                  <div className="text-[11px] text-emerald-700">Foz do Iguaçu e Região</div>
+                  <div className="text-[11px] text-emerald-700">Ponta Porã e Região</div>
                 </div>
               </div>
               <div className="font-black text-base font-mono text-emerald-950">
@@ -364,7 +387,7 @@ export const ReportsPage: React.FC<ReportsPageProps> = ({ onNavigate }) => {
                 <span className="text-2xl">🇵🇾</span>
                 <div>
                   <div className="font-bold text-xs text-red-900">Pacientes Paraguaios (C.I. / RUC)</div>
-                  <div className="text-[11px] text-red-700">Ciudad del Este e Região</div>
+                  <div className="text-[11px] text-red-700">Pedro Juan Caballero e Região</div>
                 </div>
               </div>
               <div className="font-black text-base font-mono text-red-950">
@@ -411,6 +434,17 @@ export const ReportsPage: React.FC<ReportsPageProps> = ({ onNavigate }) => {
             Nenhum dado registrado para o período selecionado.
           </div>
         )}
+      </div>
+
+        {/* Rodapé Oficial de Autenticação para Impressão */}
+        <div className="pt-4 border-t border-slate-200 flex justify-between items-center text-[10px] text-slate-400">
+          <div>
+            OptoMed Clínicas v2.5 • Responsável Técnico: Dr. Rudson Meirelles
+          </div>
+          <div>
+            Página 1 de 1 • Documento emitido para fins gerenciais e controle estatístico
+          </div>
+        </div>
       </div>
     </div>
   );

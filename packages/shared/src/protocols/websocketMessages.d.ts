@@ -43,9 +43,51 @@ export interface PatientTicketCall {
     priority?: boolean;
 }
 /**
+ * Mensagens de Presença e Registro de Dispositivos (Handshake e Status)
+ */
+export interface DevicePresenceInfo {
+    deviceId: string;
+    deviceType: 'tv' | 'clinical';
+    clinicId?: string;
+    room?: string;
+    status: 'online' | 'offline';
+    lastSeen?: string;
+    isCalibrated?: boolean;
+}
+export type DeviceRegistrationMessage = {
+    type: 'REGISTER_DEVICE';
+    deviceType: 'tv' | 'clinical';
+    clinicId?: string;
+    room?: string;
+    authToken?: string;
+    deviceId?: string;
+} | {
+    type: 'DEVICE_REGISTERED';
+    deviceId: string;
+    effectiveClinicId?: string;
+    room?: string;
+    username?: string;
+    role?: string;
+} | {
+    type: 'REGISTER_REJECTED';
+    reason: string;
+} | {
+    type: 'QUERY_ROOM_DEVICES';
+    clinicId?: string;
+    room?: string;
+} | {
+    type: 'ROOM_DEVICES_STATUS';
+    clinicId: string;
+    room: string;
+    devices: DevicePresenceInfo[];
+} | {
+    type: 'DEVICE_PRESENCE_CHANGED';
+    device: DevicePresenceInfo;
+};
+/**
  * Mensagens Cliente (Clinical) -> Servidor/TV (Offline TV)
  */
-export type ClientMessage = {
+export type ClientMessage = DeviceRegistrationMessage | {
     type: 'PAIR_REQUEST';
     pin: string;
     deviceName: string;
@@ -84,6 +126,15 @@ export type ClientMessage = {
 } | {
     type: 'TOGGLE_CROWDING';
 } | {
+    type: 'SET_DIRECTION';
+    direction: 'up' | 'down' | 'left' | 'right';
+} | {
+    type: 'PAUSE_EXAM';
+} | {
+    type: 'RESUME_EXAM';
+} | {
+    type: 'RESTART_EXAM';
+} | {
     type: 'TRIGGER_SCREENSAVER';
 } | {
     type: 'WAKE_SCREEN';
@@ -98,7 +149,7 @@ export type ClientMessage = {
 /**
  * Mensagens TV -> Servidor/Clinical
  */
-export type TVMessage = {
+export type TVMessage = DeviceRegistrationMessage | {
     type: 'PAIR_CONFIRMED';
     deviceId: string;
     deviceName: string;

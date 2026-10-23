@@ -1,0 +1,282 @@
+[
+  {
+    "id": "20724c9c-ad90-4a15-b018-b8bc809b7df7",
+    "patientId": "8e7491f7-7ed7-4991-aa89-bcc200beddc1",
+    "date": "2026-09-26T20:41:11.009Z",
+    "status": "completed",
+    "examinerId": "dr-meirelles",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "updatedAt": "2026-09-26T20:47:31.369Z",
+    "anamnesis": {
+      "id": "24d4f262-f012-407a-b341-ba0404aa388d",
+      "encounterId": "",
+      "chiefComplaint": "01 anos mesmo rx",
+      "currentGlasses": false,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false,
+      "medicationsInUse": "Nega uso de medicamentos",
+      "pathologicalHistory": "Nega antecedentes patológicos",
+      "allergies": "",
+      "ocularHistory": "",
+      "medications": "Nega uso de medicamentos",
+      "systemicHistory": "Nega antecedentes patológicos",
+      "observations": "",
+      "clinicalNotes": ""
+    },
+    "lensometry": {
+      "id": "6f5e39ac-f57b-419a-8923-b63deb5b892a",
+      "encounterId": "",
+      "od": {
+        "sphere": 0,
+        "cylinder": -2,
+        "axis": 160
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": -1,
+        "axis": 10
+      },
+      "addition": 1.5,
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ],
+      "usageTime": "6 meses a 1 ano",
+      "notes": "Lentes muito riscadas, Armação torta / frouxa"
+    },
+    "visualAcuity": {
+      "id": "f054f49c-fda1-4f46-82b5-9d740cb09684",
+      "encounterId": "",
+      "testedAt": "2026-09-26T20:41:11.009Z",
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "id": "00bab375-cd78-472a-a31a-84b34e1dd4fc",
+      "encounterId": "",
+      "od": {
+        "sphere": 0,
+        "cylinder": -2,
+        "axis": 160,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": -1,
+        "axis": 10,
+        "visualAcuity": "20/20"
+      },
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo Digital",
+        "Filtro Luz Azul (BlueCut)"
+      ],
+      "specialLenses": "",
+      "additionalOpticalInfo": ""
+    },
+    "episodeId": "2989f59c-4300-424f-9168-ac932a88edf3",
+    "version": 33,
+    "startedAt": "2026-09-26T20:41:11.055Z",
+    "completedAt": "2026-09-26T20:47:31.369Z"
+  },
+  {
+    "id": "62c3b61c-5a3e-4b96-b885-f3490ecfd07d",
+    "patientId": "c6d79e1e-15dd-491a-ac3c-465f58af9ffb",
+    "date": "2026-09-26T20:32:18.391Z",
+    "status": "completed",
+    "examinerId": "dr-meirelles",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "updatedAt": "2026-09-26T20:40:36.832Z",
+    "anamnesis": {
+      "id": "86decf17-ecd8-4ad7-bc82-7c0c4d0dc1e5",
+      "encounterId": "",
+      "chiefComplaint": "usuaria de lentes dcorreitivas ",
+      "currentGlasses": false,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false,
+      "medicationsInUse": "Nega uso de medicamentos",
+      "pathologicalHistory": "Nega antecedentes patológicos",
+      "allergies": "dipirona ",
+      "ocularHistory": "",
+      "medications": "Nega uso de medicamentos",
+      "systemicHistory": "Nega antecedentes patológicos",
+      "observations": "Cefaleia frequente, Sensibilidade à luz / Fotofobia",
+      "clinicalNotes": "Cefaleia frequente, Sensibilidade à luz / Fotofobia"
+    },
+    "lensometry": {
+      "id": "2deede15-034f-4002-b5b7-401a80e5bd55",
+      "encounterId": "",
+      "od": {},
+      "oe": {},
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "visualAcuity": {
+      "id": "bea7fe6b-7a27-45c8-9899-da15e55facea",
+      "encounterId": "",
+      "testedAt": "2026-09-26T20:32:18.391Z",
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "id": "ac85508b-3a0b-4db2-9340-c01e07cced77",
+      "encounterId": "",
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo Digital",
+        "Filtro Luz Azul (BlueCut)"
+      ],
+      "specialLenses": "",
+      "additionalOpticalInfo": ""
+    },
+    "returnInstructions": "Retorno em 1 ano (Controle Anual)",
+    "conduct": "fotofobia ",
+    "structuredConduct": {
+      "id": "6a974c41-dd1e-4e27-b11a-ce45ed7fc1e1",
+      "encounterId": "62c3b61c-5a3e-4b96-b885-f3490ecfd07d",
+      "treatmentPlan": "fotofobia "
+    },
+    "episodeId": "af731b3b-b575-49bf-a060-69f3e25a2ae2",
+    "version": 30,
+    "startedAt": "2026-09-26T20:32:18.430Z",
+    "completedAt": "2026-09-26T20:40:36.832Z"
+  },
+  {
+    "id": "f071e563-293d-4a67-bf84-3e6bcb63a137",
+    "patientId": "068e73c5-d4ad-4370-bbfe-f83457ee0ac4",
+    "date": "2026-09-26T20:18:56.015Z",
+    "status": "completed",
+    "examinerId": "dr-meirelles",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "updatedAt": "2026-09-26T20:24:29.850Z",
+    "anamnesis": {
+      "id": "9555167f-4bef-409d-868f-74f6bb3da9c4",
+      "encounterId": "",
+      "chiefComplaint": "rotina",
+      "currentGlasses": false,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false,
+      "medicationsInUse": "Nega uso de medicamentos",
+      "pathologicalHistory": "Nega antecedentes patológicos",
+      "allergies": "",
+      "ocularHistory": "",
+      "medications": "Nega uso de medicamentos",
+      "systemicHistory": "Nega antecedentes patológicos",
+      "observations": "Visão embaçada para perto, Astenopia ao fim do dia",
+      "clinicalNotes": "Visão embaçada para perto, Astenopia ao fim do dia"
+    },
+    "lensometry": {
+      "id": "483a13b6-4fe5-4efa-b00a-24fcd7af2f34",
+      "encounterId": "",
+      "od": {
+        "sphere": -0.5,
+        "cylinder": -0.25,
+        "axis": 10
+      },
+      "oe": {
+        "sphere": -0.75
+      },
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "visualAcuity": {
+      "id": "65d1f74d-aa70-4e0a-8b00-4bae060a9161",
+      "encounterId": "",
+      "testedAt": "2026-09-26T20:18:56.015Z",
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "id": "0e71f418-87e0-4304-b974-3cbdd8d29e36",
+      "encounterId": "",
+      "od": {
+        "sphere": -0.75,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/"
+      },
+      "oe": {
+        "sphere": -0.75,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 1,
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo Digital",
+        "Filtro Luz Azul (BlueCut)"
+      ],
+      "specialLenses": "",
+      "additionalOpticalInfo": ""
+    },
+    "episodeId": "b85d152d-a59f-4b57-8e24-a53ee8323ec0",
+    "version": 7,
+    "startedAt": "2026-09-26T20:22:58.832Z",
+    "completedAt": "2026-09-26T20:24:29.850Z"
+  }
+]

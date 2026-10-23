@@ -1,0 +1,57 @@
+[
+  {
+    "id": "tx_megastar_1",
+    "clinicId": "megastar",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica & Exame de Refração - Maria Helena",
+    "amount": 150,
+    "date": "2026-09-26",
+    "paymentMethod": "pix",
+    "patientName": "Maria Helena dos Santos",
+    "status": "completed",
+    "createdBy": "Recepção",
+    "createdAt": "2026-09-26T19:26:12.722Z"
+  },
+  {
+    "id": "tx_megastar_2",
+    "clinicId": "megastar",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta de Retorno (Controle de Rotina) - Retorno Gratuito",
+    "amount": 0,
+    "date": "2026-09-26",
+    "paymentMethod": "cash",
+    "patientName": "Enzo Gabriel Silva",
+    "status": "completed",
+    "createdBy": "Recepção",
+    "createdAt": "2026-09-26T19:26:12.722Z"
+  },
+  {
+    "id": "tx_megastar_3",
+    "clinicId": "megastar",
+    "type": "income",
+    "category": "venda_lentes",
+    "description": "Par de Lentes com Antirreflexo Crizal",
+    "amount": 200,
+    "date": "2026-09-26",
+    "paymentMethod": "credit_card",
+    "patientName": "Juan Carlos Benítez",
+    "status": "completed",
+    "createdBy": "Recepção",
+    "createdAt": "2026-09-26T19:26:12.722Z"
+  },
+  {
+    "id": "tx_megastar_4",
+    "clinicId": "megastar",
+    "type": "expense",
+    "category": "fornecedor_insumos",
+    "description": "Compra de colírios anestésicos e tiras de fluoresceína",
+    "amount": 55,
+    "date": "2026-09-26",
+    "paymentMethod": "pix",
+    "status": "completed",
+    "createdBy": "Administração",
+    "createdAt": "2026-09-26T19:26:12.722Z"
+  }
+]

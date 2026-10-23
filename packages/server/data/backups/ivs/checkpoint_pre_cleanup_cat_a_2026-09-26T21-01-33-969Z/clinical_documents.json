@@ -1,0 +1,54 @@
+[
+  {
+    "id": "doc-audit-001",
+    "encounterId": "enc-audit-311-001",
+    "patientId": "pat-audit-311-001",
+    "clinicId": "ivs",
+    "type": "optical_prescription",
+    "title": "Receita Óptica - Claudio Roberto Silveira",
+    "content": "Receita emitida com dioptrias multifocais.",
+    "version": 1,
+    "issuedAt": "2026-09-23T19:16:51.107Z"
+  },
+  {
+    "id": "doc-002-v2",
+    "encounterId": "enc-fase3-9-001",
+    "patientId": "pat-fase3-9-103",
+    "clinicId": "ivs",
+    "type": "medical_prescription",
+    "title": "Receituário Farmacológico - Maria Helena Albuquerque",
+    "content": "1. Carmelose Sódica 0,5% - 1 gota 6x/dia (ajuste de posologia)\n2. Lubrificante Gel - 1 gota ao deitar",
+    "structuredPayload": {
+      "medications": [
+        {
+          "id": "med-001",
+          "name": "Carmelose Sódica 0,5%",
+          "activePrinciple": "Carmelose Sódica",
+          "concentration": "5 mg/mL",
+          "dosage": "Instilar 1 gota em ambos os olhos 4 vezes ao dia",
+          "route": "Uso Tópico Ocular",
+          "frequency": "De 6 em 6 horas",
+          "duration": "30 dias",
+          "instructions": "Aguardar 5 minutos entre colírios diferentes se associado"
+        },
+        {
+          "id": "med-002",
+          "name": "Lubrificante Gel Oftálmico",
+          "activePrinciple": "Polietilenoglicol + Propilenoglicol",
+          "dosage": "Aplicar 1 gota em ambos os olhos ao deitar",
+          "route": "Uso Tópico Ocular",
+          "frequency": "1x à noite",
+          "duration": "60 dias"
+        }
+      ],
+      "instructions": "Manter frascos bem fechados em local fresco. Não encostar o conta-gotas nos olhos."
+    },
+    "professionalId": "dr-meirelles",
+    "professionalName": "Dr. Rudson Meirelles",
+    "professionalRegistry": "CRM 123456",
+    "issuedAt": "2026-09-23T19:16:51.416Z",
+    "version": 2,
+    "isSigned": true,
+    "supersedesId": "doc-001"
+  }
+]

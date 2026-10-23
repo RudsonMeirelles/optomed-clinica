@@ -1,0 +1,21 @@
+[
+  {
+    "id": "apt-ms-1",
+    "patientId": "p2-megastar",
+    "patientName": "Juan Carlos Benítez",
+    "patientNationality": "PY",
+    "patientPhone": "+595 981 456789",
+    "patientDocument": "4.892.120",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "date": "2026-09-26",
+    "time": "09:15",
+    "durationMinutes": 30,
+    "type": "consulta_geral",
+    "status": "confirmed",
+    "notes": "Exame de refração e adaptação de lentes.",
+    "room": "Consultório Mega Star",
+    "createdAt": "2026-09-26T15:16:15.151Z",
+    "updatedAt": "2026-09-26T15:16:15.151Z"
+  }
+]

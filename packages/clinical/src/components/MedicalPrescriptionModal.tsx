@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Patient } from '@optotipo/shared';
-import { Printer, X, Pill, Plus, Trash2, LayoutTemplate, FileSpreadsheet, Receipt, Sparkles, Check, AlertCircle } from 'lucide-react';
+import { Printer, X, Pill, Plus, Trash2, LayoutTemplate, FileSpreadsheet, Receipt } from 'lucide-react';
 import { offlineDb } from '../services/offlineDb';
 import { ClinicalProtocolDrug } from '../services/therapeuticProtocolsDb';
 import { OPHTHALMIC_DRUGS_DATABASE, OphthalmicDrug } from '../services/ophthalmicDrugsDb';
@@ -22,6 +22,9 @@ export interface PrescribedMedicationItem {
 interface MedicalPrescriptionModalProps {
   isOpen: boolean;
   patient: Patient | null;
+  encounterId?: string;
+  examinerName?: string;
+  examinerRegistry?: string;
   initialDrugs?: ClinicalProtocolDrug[];
   onClose: () => void;
 }
@@ -29,10 +32,30 @@ interface MedicalPrescriptionModalProps {
 export const MedicalPrescriptionModal: React.FC<MedicalPrescriptionModalProps> = ({
   isOpen,
   patient,
+  encounterId,
+  examinerName,
+  examinerRegistry,
   initialDrugs = [],
   onClose
 }) => {
   const [paperFormat, setPaperFormat] = useState<MedicalPaperFormat>('a4');
+
+  // Posição na Meia Folha Paisagem: 'left' = 1ª metade (Esquerda) | 'right' = 2ª metade (Direita / Outra Meia Folha)
+  const [halfSheetPosition, setHalfSheetPosition] = useState<'left' | 'right'>(() => {
+    try {
+      const saved = localStorage.getItem('optomed_print_half_sheet_position');
+      if (saved === 'right' || saved === 'left') return saved;
+    } catch {}
+    return 'left';
+  });
+
+  const handleSelectHalfSheetPosition = (pos: 'left' | 'right') => {
+    setHalfSheetPosition(pos);
+    try {
+      localStorage.setItem('optomed_print_half_sheet_position', pos);
+    } catch {}
+  };
+
   const [medications, setMedications] = useState<PrescribedMedicationItem[]>([]);
   const [generalInstructions, setGeneralInstructions] = useState<string>(
     'Aguardar intervalo mínimo de 5 minutos entre a aplicação de colírios diferentes. Manter frascos bem fechados em local fresco.'
@@ -100,6 +123,32 @@ export const MedicalPrescriptionModal: React.FC<MedicalPrescriptionModalProps> =
   };
 
   const handlePrint = () => {
+    // FASE 3.9: Persistência e Rastreabilidade Imutável do Documento Emitido
+    try {
+      const activeClinicId = offlineDb.getActiveClinicId();
+      const docRecord = {
+        id: `doc-${Date.now()}`,
+        encounterId: encounterId || '',
+        patientId: patient.id,
+        clinicId: activeClinicId,
+        type: 'medical_prescription' as const,
+        title: `Receituário Farmacológico - ${patient.fullName}`,
+        content: medications.map(m => `${m.commercialName} (${m.activePrinciple}) - ${m.dosage}`).join('\n'),
+        structuredPayload: {
+          medications,
+          generalInstructions
+        },
+        professionalId: 'dr-meirelles',
+        professionalName: examinerName || 'Dr. Rudson Meirelles',
+        professionalRegistry: examinerRegistry,
+        issuedAt: new Date().toISOString(),
+        version: 1
+      };
+      offlineDb.saveClinicalDocument(docRecord, activeClinicId);
+    } catch (e) {
+      console.warn('[MedicalPrescription] Erro ao registrar documento clínico:', e);
+    }
+
     const sheetEl = document.getElementById('medical-prescription-sheet');
     if (sheetEl) {
       printIsolatedElement(sheetEl, {
@@ -176,6 +225,44 @@ export const MedicalPrescriptionModal: React.FC<MedicalPrescriptionModalProps> =
             </button>
           </div>
         </div>
+
+        {/* Barra de Seleção da Meia Folha A5 (Paisagem) */}
+        {paperFormat === 'a5' && (
+          <div className="bg-slate-100 border-b border-slate-300 px-6 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs no-print">
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-slate-700">Qual Meia Folha Usar no Papel A4:</span>
+              <div className="flex items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => handleSelectHalfSheetPosition('left')}
+                  className={`px-3 py-1 rounded-lg font-bold border transition-all cursor-pointer ${
+                    halfSheetPosition === 'left'
+                      ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                      : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'
+                  }`}
+                  title="Imprimir na 1ª metade (Lado Esquerdo do papel A4)"
+                >
+                  📄 1ª Meia Folha (Esquerda)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleSelectHalfSheetPosition('right')}
+                  className={`px-3 py-1 rounded-lg font-bold border transition-all cursor-pointer ${
+                    halfSheetPosition === 'right'
+                      ? 'bg-amber-600 text-white border-amber-600 shadow-xs'
+                      : 'bg-white text-slate-700 border-slate-300 hover:bg-amber-50'
+                  }`}
+                  title="Imprimir na 2ª metade (Lado Direito / Outra Meia Folha para reaproveitar folha já usada)"
+                >
+                  📄 2ª Meia Folha (Direita — Outra Meia Folha)
+                </button>
+              </div>
+            </div>
+            <span className="text-[11px] text-slate-500 font-medium">
+              Permite reutilizar papel A4 já impresso no lado esquerdo sem sobreposição.
+            </span>
+          </div>
+        )}
 
         {/* Seletor Rápido de Inserção de Medicamento Adicional (Não impresso) */}
         <div className="px-6 py-2.5 bg-slate-100 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2 shrink-0 no-print text-xs">
@@ -351,54 +438,129 @@ export const MedicalPrescriptionModal: React.FC<MedicalPrescriptionModalProps> =
           )}
 
           {/* ========================================================================= */}
-          {/* FORMATO 2: A5 REDUZIDO (MEIA FOLHA) */}
+          {/* FORMATO 2: A5 REDUZIDO (MEIA FOLHA - PAISAGEM COM SUPORTE À OUTRA MEIA FOLHA) */}
           {/* ========================================================================= */}
           {paperFormat === 'a5' && (
-            <div id="medical-prescription-sheet" className="bg-white border-2 border-slate-900 p-5 rounded-xl shadow-lg max-w-xl w-full space-y-4 self-start print:shadow-none print:border-2 print:p-4 print:m-0 print:max-w-none text-xs">
-              {/* Cabeçalho */}
-              <div className="flex items-center justify-between border-b-2 border-slate-900 pb-2.5">
-                <div>
-                  <h1 className="text-base font-black tracking-tight text-slate-900">{activeClinic.name}</h1>
-                  <p className="text-[10px] text-slate-600 font-medium">Receituário Médico</p>
-                </div>
-                <div className="text-right text-[10px] font-mono text-slate-600">
-                  <div>Data: <strong>{currentDate}</strong></div>
-                </div>
-              </div>
+            <div id="medical-prescription-sheet" className="bg-white border-2 border-slate-900 p-6 rounded-xl shadow-lg max-w-5xl w-full grid grid-cols-1 md:grid-cols-2 gap-6 relative self-start print-page-landscape print:p-0 print:m-0 print:border-none print:shadow-none">
+              
+              {/* Lado Esquerdo da Folha A4 */}
+              <div className="h-full flex flex-col">
+                {halfSheetPosition === 'left' ? (
+                  <div className="bg-white border-2 border-slate-900 p-5 rounded-xl space-y-4 text-xs h-full flex flex-col justify-between print:border-none print:p-4 print:m-0">
+                    <div>
+                      {/* Cabeçalho */}
+                      <div className="flex items-center justify-between border-b-2 border-slate-900 pb-2.5">
+                        <div>
+                          <h1 className="text-base font-black tracking-tight text-slate-900">{activeClinic.name}</h1>
+                          <p className="text-[10px] text-slate-600 font-medium">Receituário Médico</p>
+                        </div>
+                        <div className="text-right text-[10px] font-mono text-slate-600">
+                          <div>Data: <strong>{currentDate}</strong></div>
+                        </div>
+                      </div>
 
-              {/* Paciente */}
-              <div className="bg-slate-50 p-2 rounded-lg border border-slate-300 flex justify-between items-center text-xs">
-                <div>Paciente: <strong className="text-slate-900">{patient.fullName}</strong></div>
-                {patient.birthDate && <span className="text-[10px] text-slate-500">Nasc: {new Date(patient.birthDate).toLocaleDateString('pt-BR')}</span>}
-              </div>
+                      {/* Paciente */}
+                      <div className="bg-slate-50 p-2 rounded-lg border border-slate-300 flex justify-between items-center text-xs mt-3">
+                        <div>Paciente: <strong className="text-slate-900">{patient.fullName}</strong></div>
+                        {patient.birthDate && <span className="text-[10px] text-slate-500">Nasc: {new Date(patient.birthDate).toLocaleDateString('pt-BR')}</span>}
+                      </div>
 
-              {/* Medicamentos */}
-              <div className="space-y-3">
-                {medications.map((item, index) => (
-                  <div key={item.id} className="p-2.5 bg-slate-50 rounded-lg border border-slate-300 space-y-1">
-                    <div className="flex justify-between items-center font-bold">
-                      <span className="text-slate-900">{index + 1}. {item.commercialName} ({item.activePrinciple})</span>
-                      <span className="text-[10px] text-slate-600 font-mono">Qtd: {item.quantity}</span>
+                      {/* Medicamentos */}
+                      <div className="space-y-3 mt-3">
+                        {medications.map((item, index) => (
+                          <div key={item.id} className="p-2.5 bg-slate-50 rounded-lg border border-slate-300 space-y-1">
+                            <div className="flex justify-between items-center font-bold">
+                              <span className="text-slate-900">{index + 1}. {item.commercialName} ({item.activePrinciple})</span>
+                              <span className="text-[10px] text-slate-600 font-mono">Qtd: {item.quantity}</span>
+                            </div>
+                            <div className="text-[10px] text-rose-800 font-bold uppercase">{item.route} - {item.presentation}</div>
+                            <p className="text-slate-800 text-[11px] font-medium leading-tight">{item.dosage}</p>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Orientações */}
+                      {generalInstructions && (
+                        <div className="text-[10px] text-slate-600 bg-slate-50 p-2 rounded border border-slate-200 mt-3">
+                          <b>Obs:</b> {generalInstructions}
+                        </div>
+                      )}
                     </div>
-                    <div className="text-[10px] text-rose-800 font-bold uppercase">{item.route} - {item.presentation}</div>
-                    <p className="text-slate-800 text-[11px] font-medium leading-tight">{item.dosage}</p>
+
+                    {/* Assinatura */}
+                    <div className="pt-8 flex justify-end border-t border-slate-200 mt-4">
+                      <div className="text-center">
+                        <div className="w-40 border-b border-slate-300 mb-1" />
+                        <span className="text-[9px] font-medium text-slate-500 uppercase tracking-wider">Assinatura & Carimbo</span>
+                      </div>
+                    </div>
                   </div>
-                ))}
+                ) : (
+                  <div className="h-full border-2 border-dashed border-amber-300 bg-amber-50/50 rounded-xl flex flex-col items-center justify-center text-amber-800 text-xs italic p-6 text-center print:border-none print:opacity-0 print:invisible min-h-[360px]">
+                    <p className="font-bold mb-1 text-sm">📄 1ª Meia Folha Vazia (Já Impressa)</p>
+                    <p className="text-[11px] text-slate-500">(Nada será impresso deste lado para preservar o papel já utilizado)</p>
+                  </div>
+                )}
               </div>
 
-              {/* Orientações */}
-              {generalInstructions && (
-                <div className="text-[10px] text-slate-600 bg-slate-50 p-2 rounded border border-slate-200">
-                  <b>Obs:</b> {generalInstructions}
-                </div>
-              )}
+              {/* Lado Direito da Folha A4 (Outra Meia Folha) */}
+              <div className="h-full flex flex-col">
+                {halfSheetPosition === 'right' ? (
+                  <div className="bg-white border-2 border-slate-900 p-5 rounded-xl space-y-4 text-xs h-full flex flex-col justify-between print:border-none print:p-4 print:m-0">
+                    <div>
+                      {/* Cabeçalho */}
+                      <div className="flex items-center justify-between border-b-2 border-slate-900 pb-2.5">
+                        <div>
+                          <h1 className="text-base font-black tracking-tight text-slate-900">{activeClinic.name}</h1>
+                          <p className="text-[10px] text-slate-600 font-medium">Receituário Médico</p>
+                        </div>
+                        <div className="text-right text-[10px] font-mono text-slate-600">
+                          <div>Data: <strong>{currentDate}</strong></div>
+                        </div>
+                      </div>
 
-              {/* Assinatura */}
-              <div className="pt-10 flex justify-end border-t border-slate-200">
-                <div className="text-center">
-                  <div className="w-40 border-b border-slate-300 mb-1" />
-                  <span className="text-[9px] font-medium text-slate-500 uppercase tracking-wider">Assinatura & Carimbo</span>
-                </div>
+                      {/* Paciente */}
+                      <div className="bg-slate-50 p-2 rounded-lg border border-slate-300 flex justify-between items-center text-xs mt-3">
+                        <div>Paciente: <strong className="text-slate-900">{patient.fullName}</strong></div>
+                        {patient.birthDate && <span className="text-[10px] text-slate-500">Nasc: {new Date(patient.birthDate).toLocaleDateString('pt-BR')}</span>}
+                      </div>
+
+                      {/* Medicamentos */}
+                      <div className="space-y-3 mt-3">
+                        {medications.map((item, index) => (
+                          <div key={item.id} className="p-2.5 bg-slate-50 rounded-lg border border-slate-300 space-y-1">
+                            <div className="flex justify-between items-center font-bold">
+                              <span className="text-slate-900">{index + 1}. {item.commercialName} ({item.activePrinciple})</span>
+                              <span className="text-[10px] text-slate-600 font-mono">Qtd: {item.quantity}</span>
+                            </div>
+                            <div className="text-[10px] text-rose-800 font-bold uppercase">{item.route} - {item.presentation}</div>
+                            <p className="text-slate-800 text-[11px] font-medium leading-tight">{item.dosage}</p>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Orientações */}
+                      {generalInstructions && (
+                        <div className="text-[10px] text-slate-600 bg-slate-50 p-2 rounded border border-slate-200 mt-3">
+                          <b>Obs:</b> {generalInstructions}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Assinatura */}
+                    <div className="pt-8 flex justify-end border-t border-slate-200 mt-4">
+                      <div className="text-center">
+                        <div className="w-40 border-b border-slate-300 mb-1" />
+                        <span className="text-[9px] font-medium text-slate-500 uppercase tracking-wider">Assinatura & Carimbo</span>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="h-full border-2 border-dashed border-slate-300 rounded-xl flex flex-col items-center justify-center text-slate-400 text-xs italic p-6 text-center print:border-none print:opacity-0 print:invisible min-h-[360px]">
+                    <p className="font-semibold mb-1 text-sm">📄 2ª Meia Folha Livre</p>
+                    <p className="text-[10px] text-slate-400">(Espaço em branco para corte e economia de papel)</p>
+                  </div>
+                )}
               </div>
             </div>
           )}

@@ -1,0 +1,6212 @@
+[
+  {
+    "id": "304b1e03-636e-4ed3-963c-23cad60f6f13",
+    "patientId": "9fafc4f0-e828-40c5-bb9f-4f4a225707ad",
+    "date": "2026-10-10T16:23:07.637Z",
+    "status": "completed",
+    "examinerId": "dr-meirelles",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "updatedAt": "2026-10-10T16:31:45.141Z",
+    "anamnesis": {
+      "id": "a613ac9b-fac1-4ece-aa59-e53a1d6c5644",
+      "encounterId": "",
+      "chiefComplaint": "não usuaria de lentes corretivas, BAV longe",
+      "currentGlasses": false,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false,
+      "medicationsInUse": "",
+      "pathologicalHistory": "",
+      "allergies": "",
+      "ocularHistory": ""
+    },
+    "lensometry": {
+      "id": "2c959b99-e78b-4b46-9d06-16c0692a046b",
+      "encounterId": "",
+      "od": {},
+      "oe": {},
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "visualAcuity": {
+      "id": "c08ee667-95c1-4468-be01-36faedd2f974",
+      "encounterId": "",
+      "testedAt": "2026-10-10T16:23:07.638Z",
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "id": "25d22219-f196-42f2-a6fb-7b553565ea27",
+      "encounterId": "",
+      "od": {
+        "sphere": -0.25,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/"
+      },
+      "oe": {
+        "sphere": -0.25,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/"
+      },
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo Digital",
+        "Filtro Luz Azul (BlueCut)"
+      ],
+      "specialLenses": "",
+      "additionalOpticalInfo": ""
+    },
+    "conduct": "solicito retorno em 06 meses, para acompanhemanteo de dioptria ",
+    "structuredConduct": {
+      "id": "5a7c9264-cb5b-4b10-b6cc-2d19953bd4a4",
+      "encounterId": "304b1e03-636e-4ed3-963c-23cad60f6f13",
+      "treatmentPlan": "solicito retorno em 06 meses, para acompanhemanteo de dioptria "
+    },
+    "episodeId": "72a2c3c6-7e60-4c83-9f62-fddb2563852d",
+    "version": 11,
+    "startedAt": "2026-10-10T16:23:07.696Z",
+    "completedAt": "2026-10-10T16:31:45.141Z"
+  },
+  {
+    "id": "633cd454-e751-4393-807c-d8220819bbcc",
+    "patientId": "9ff9c19d-22de-40d3-aecf-5b38b4121ae0",
+    "date": "2026-10-10T16:04:25.909Z",
+    "status": "completed",
+    "examinerId": "dr-meirelles",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "updatedAt": "2026-10-10T16:12:47.252Z",
+    "anamnesis": {
+      "id": "63cda544-f6f9-4154-b1dc-88a438e8377f",
+      "encounterId": "",
+      "chiefComplaint": "ão usuaria de lentes coretivas.",
+      "currentGlasses": false,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false,
+      "medicationsInUse": "",
+      "pathologicalHistory": "",
+      "allergies": "",
+      "ocularHistory": ""
+    },
+    "lensometry": {
+      "id": "d2135db9-378b-4c46-8630-1d311cfe40f6",
+      "encounterId": "",
+      "od": {},
+      "oe": {},
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "visualAcuity": {
+      "id": "5f3c1a63-f7c3-49fe-9836-a4a8b6bfaf6c",
+      "encounterId": "",
+      "testedAt": "2026-10-10T16:04:25.909Z",
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "id": "06330f9c-6491-4746-af54-4c9b1bcfaa8c",
+      "encounterId": "",
+      "od": {
+        "sphere": -0.5,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": -0.75,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "lensType": "monofocal_longe",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo Digital",
+        "Filtro Luz Azul (BlueCut)"
+      ],
+      "specialLenses": "",
+      "additionalOpticalInfo": ""
+    },
+    "episodeId": "316fb34f-3185-4f54-8785-103819838d1f",
+    "version": 7,
+    "startedAt": "2026-10-10T16:04:25.957Z",
+    "completedAt": "2026-10-10T16:12:47.252Z"
+  },
+  {
+    "id": "d5a8df05-310b-40d9-bbb6-fc76ba5d8667",
+    "patientId": "14408d36-3442-4cd9-b065-43baa1bd7a0a",
+    "date": "2026-10-10T14:27:56.004Z",
+    "status": "completed",
+    "examinerId": "dr-meirelles",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "updatedAt": "2026-10-10T14:36:33.527Z",
+    "anamnesis": {
+      "id": "dcf6c4c0-1e14-4988-b91d-2bc89d3614a8",
+      "encounterId": "",
+      "chiefComplaint": "",
+      "currentGlasses": false,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false,
+      "medicationsInUse": "",
+      "pathologicalHistory": "",
+      "allergies": "",
+      "ocularHistory": "",
+      "observations": "paciente retornou questionando dificuldade com adaptação de dioptria, relata dificudade com dioptria de longe ",
+      "clinicalNotes": "paciente retornou questionando dificuldade com adaptação de dioptria, relata dificudade com dioptria de longe "
+    },
+    "lensometry": {
+      "id": "dfaf0e8c-85aa-41fe-aeba-c458fe1544b7",
+      "encounterId": "",
+      "od": {},
+      "oe": {},
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "visualAcuity": {
+      "id": "51c0599e-da1e-4f81-8211-4416b1996739",
+      "encounterId": "",
+      "testedAt": "2026-10-10T14:27:56.004Z",
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "id": "11913485-14a3-4ee3-a236-d9492e715dca",
+      "encounterId": "",
+      "od": {
+        "sphere": -0.75,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/40"
+      },
+      "oe": {
+        "sphere": -0.75,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": ""
+      },
+      "addition": 1.5,
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo Digital",
+        "Filtro Luz Azul (BlueCut)"
+      ],
+      "specialLenses": "",
+      "additionalOpticalInfo": ""
+    },
+    "episodeId": "796d6f5b-a748-4880-ab39-15bb280024de",
+    "version": 17,
+    "startedAt": "2026-10-10T14:27:56.074Z",
+    "completedAt": "2026-10-10T14:36:33.527Z"
+  },
+  {
+    "id": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "patientId": "573c9725-9796-43ac-821a-6fb790402de0",
+    "date": "2026-10-10T14:07:29.488Z",
+    "status": "completed",
+    "examinerId": "dr-meirelles",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "updatedAt": "2026-10-10T14:27:18.319Z",
+    "anamnesis": {
+      "id": "924e3013-c6d1-44f1-8577-7361db00060e",
+      "encounterId": "",
+      "chiefComplaint": "usuaria de lentes corretivas, paciente relata dificuldade com rx novo",
+      "currentGlasses": false,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false,
+      "medicationsInUse": "amitriptilina ",
+      "pathologicalHistory": "",
+      "allergies": "",
+      "ocularHistory": "",
+      "medications": "amitriptilina ",
+      "observations": "pacinete realizou a troca da dioptria, porem relata que com novo RX não esta conseguindo utilizar com exaqueca, nausea, ",
+      "clinicalNotes": "pacinete realizou a troca da dioptria, porem relata que com novo RX não esta conseguindo utilizar com exaqueca, nausea, "
+    },
+    "lensometry": {
+      "id": "5ff69cc2-6c7e-47f2-addd-275355b01be7",
+      "encounterId": "",
+      "od": {
+        "sphere": -3.75,
+        "cylinder": -1,
+        "axis": 15
+      },
+      "oe": {
+        "sphere": -4,
+        "cylinder": -1,
+        "axis": 170
+      },
+      "lensType": "monofocal_longe",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "visualAcuity": {
+      "id": "67a300f3-b31a-4547-891d-9bc082fabd50",
+      "encounterId": "",
+      "testedAt": "2026-10-10T14:07:29.488Z",
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "id": "631707b8-8a93-4638-b9b9-945b7a9a489e",
+      "encounterId": "",
+      "od": {
+        "visualAcuity": "20/20",
+        "sphere": -4,
+        "cylinder": -0.75,
+        "axis": 15
+      },
+      "oe": {
+        "visualAcuity": "20/20",
+        "sphere": -4,
+        "cylinder": -1,
+        "axis": 170
+      },
+      "lensType": "monofocal_longe",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo Digital",
+        "Filtro Luz Azul (BlueCut)"
+      ],
+      "specialLenses": "",
+      "additionalOpticalInfo": ""
+    },
+    "episodeId": "ea1ed82e-2496-4a69-ace4-6f2bc03411af",
+    "version": 17,
+    "startedAt": "2026-10-10T14:07:29.559Z",
+    "appointmentId": "80191af5-6cb7-4bd4-899c-d03ea74318f2",
+    "autorefraction": {
+      "id": "baf3e98f-8d8d-437b-a624-142a8bf7f6e6",
+      "encounterId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+      "od": {
+        "sphere": -3.75
+      },
+      "oe": {
+        "sphere": -4,
+        "cylinder": 0.25,
+        "axis": 16
+      }
+    },
+    "conduct": "precrito nova RX, com base em refração dinamica, e bicromático com melhor acuidade visual.",
+    "structuredConduct": {
+      "id": "bf837d41-d9e0-4cb5-b53a-d1a2f96be39e",
+      "encounterId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+      "treatmentPlan": "precrito nova RX, com base em refração dinamica, e bicromático com melhor acuidade visual."
+    },
+    "completedAt": "2026-10-10T14:27:18.319Z"
+  },
+  {
+    "id": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "patientId": "47c6fa1c-a4ac-4ac5-b94e-3a4cbb9f286e",
+    "date": "2026-10-10T13:57:11.206Z",
+    "status": "completed",
+    "examinerId": "dr-meirelles",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "updatedAt": "2026-10-10T14:06:18.903Z",
+    "anamnesis": {
+      "id": "c5cace96-42d4-4f5c-a9b7-fcc806a995c9",
+      "encounterId": "",
+      "chiefComplaint": "não usuaria de lentes corretivas",
+      "currentGlasses": false,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false,
+      "medicationsInUse": "Nega uso de medicamentos",
+      "pathologicalHistory": "Nega antecedentes patológicos",
+      "allergies": "",
+      "ocularHistory": "",
+      "medications": "Nega uso de medicamentos",
+      "systemicHistory": "Nega antecedentes patológicos",
+      "observations": "paciente coom alta dioptria, porem não faz uso de lentes corretivas ",
+      "clinicalNotes": "paciente coom alta dioptria, porem não faz uso de lentes corretivas "
+    },
+    "lensometry": {
+      "id": "464e9ea9-8a98-4024-995d-df5ec038231e",
+      "encounterId": "",
+      "od": {},
+      "oe": {},
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "visualAcuity": {
+      "id": "92aa2770-8aef-4d08-8139-1deab5cfe617",
+      "encounterId": "",
+      "testedAt": "2026-10-10T13:57:11.206Z",
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "id": "f12da0cf-90cf-4564-8494-fed9765f19e6",
+      "encounterId": "",
+      "od": {
+        "sphere": -4,
+        "cylinder": -2,
+        "axis": 140,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": -1,
+        "cylinder": -1.75,
+        "axis": 65,
+        "visualAcuity": "20/20"
+      },
+      "lensType": "monofocal_longe",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo Digital",
+        "Filtro Luz Azul (BlueCut)"
+      ],
+      "specialLenses": "",
+      "additionalOpticalInfo": ""
+    },
+    "autorefraction": {
+      "id": "0f65fd4d-9175-4e3c-abfd-a72da3658349",
+      "encounterId": "3c86693f-2241-4933-a645-8334f8b734b2",
+      "od": {
+        "sphere": -4,
+        "cylinder": -2,
+        "axis": 140
+      },
+      "oe": {
+        "sphere": -1,
+        "cylinder": -1.75,
+        "axis": 65
+      }
+    },
+    "episodeId": "a201ed16-ad5f-4dff-9458-b5d3cbfdab69",
+    "version": 32,
+    "startedAt": "2026-10-10T13:57:11.280Z",
+    "completedAt": "2026-10-10T14:06:18.903Z"
+  },
+  {
+    "id": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "patientId": "993c1ec3-d262-4172-96ff-fdc9f9613bbf",
+    "date": "2026-10-10T13:05:59.469Z",
+    "status": "completed",
+    "examinerId": "dr-meirelles",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "updatedAt": "2026-10-10T13:14:34.628Z",
+    "anamnesis": {
+      "id": "a9bd67e9-81b7-4187-9afa-453994c2d6d4",
+      "encounterId": "",
+      "chiefComplaint": "ususaria de lenytes corretivas",
+      "currentGlasses": false,
+      "contactLenses": false,
+      "hasHypertension": true,
+      "hasDiabetes": false,
+      "medicationsInUse": "Nega uso de medicamentos",
+      "pathologicalHistory": "Nega antecedentes patológicos",
+      "allergies": "",
+      "ocularHistory": "",
+      "medications": "Nega uso de medicamentos",
+      "systemicHistory": "Nega antecedentes patológicos"
+    },
+    "lensometry": {
+      "id": "e501807f-90c6-4e64-a95e-6bf5e450ed41",
+      "encounterId": "",
+      "od": {
+        "cylinder": -1,
+        "axis": 90
+      },
+      "oe": {
+        "sphere": 4.25,
+        "cylinder": -1,
+        "axis": 90
+      },
+      "addition": 2.75,
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ],
+      "usageTime": "1 a 2 anos"
+    },
+    "visualAcuity": {
+      "id": "8e481b36-cc38-41a8-8434-cc8bf2f596da",
+      "encounterId": "",
+      "testedAt": "2026-10-10T13:05:59.469Z",
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "id": "a8be39c6-2382-432f-8eee-a256a5ff84ee",
+      "encounterId": "",
+      "od": {
+        "sphere": 3,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 3,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/"
+      },
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo Digital",
+        "Filtro Luz Azul (BlueCut)"
+      ],
+      "specialLenses": "",
+      "additionalOpticalInfo": ""
+    },
+    "conduct": "catarata total OE. encaminhada a cirugia ",
+    "structuredConduct": {
+      "id": "711bf16d-5bf7-432c-b3f4-014af43b373d",
+      "encounterId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+      "treatmentPlan": "catarata total OE. encaminhada a cirugia "
+    },
+    "episodeId": "809938fe-9617-48be-b904-576e38b87a27",
+    "version": 32,
+    "startedAt": "2026-10-10T13:05:59.531Z",
+    "completedAt": "2026-10-10T13:14:34.628Z"
+  },
+  {
+    "id": "eb818771-8003-4b4d-a4cc-ec0af839cdeb",
+    "patientId": "e1cc032c-ed22-4bef-bd06-79f36197749b",
+    "date": "2026-10-09T21:04:41.608Z",
+    "status": "completed",
+    "examinerId": "dr-meirelles",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "updatedAt": "2026-10-09T21:23:52.194Z",
+    "anamnesis": {
+      "id": "df421004-aedc-4901-a914-ef1b5aee8a01",
+      "encounterId": "",
+      "chiefComplaint": "usuario de lentes corretivas, rotina",
+      "currentGlasses": true,
+      "contactLenses": false,
+      "hasHypertension": true,
+      "hasDiabetes": false,
+      "medicationsInUse": "hipertenso não medicado, paciete relata que faz uso ocasional de medicamento",
+      "pathologicalHistory": "",
+      "allergies": "",
+      "ocularHistory": "",
+      "previousGlasses": true,
+      "medications": "hipertenso não medicado, paciete relata que faz uso ocasional de medicamento"
+    },
+    "lensometry": {
+      "id": "aea77c0c-c53b-4bbb-a7dd-e8183b101ed1",
+      "encounterId": "",
+      "od": {},
+      "oe": {},
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "visualAcuity": {
+      "id": "864da9f7-b362-4384-a085-4030b39b14b8",
+      "encounterId": "",
+      "testedAt": "2026-10-09T21:04:41.608Z",
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "id": "4dfe63c8-dd85-4110-b803-60a77d97fd6c",
+      "encounterId": "",
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 2.5,
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo Digital",
+        "Filtro Luz Azul (BlueCut)"
+      ],
+      "specialLenses": "",
+      "additionalOpticalInfo": ""
+    },
+    "episodeId": "0ec2553d-73cb-4ba0-85af-b108a31c8fa5",
+    "version": 29,
+    "startedAt": "2026-10-09T21:04:41.667Z",
+    "completedAt": "2026-10-09T21:11:18.607Z",
+    "patientName": "Antonio C. Duarte",
+    "conduct": "Prescrição óptica emitida para correção de presbiopia com lentes multifocais em resina antirreflexo digital + bluecut. Orientações sobre ergonomia visual, adaptação às lentes e controle pressórico.",
+    "notes": "Paciente usuário de correção óptica prévia, queixa de dificuldade para perto. Hipertenso com uso irregular de medicação - orientado quanto ao acompanhamento clínico.",
+    "returnInWeeks": 52,
+    "returnInstructions": "Retorno em 1 ano para revisão refrativa ou antes se houver alterações visuais.",
+    "structuredConduct": {
+      "prescriptionIssued": true,
+      "guidanceProvided": true,
+      "returnWeeks": 52
+    },
+    "appointmentId": "c746b770-1ae8-4433-83b8-e59a51c91704"
+  },
+  {
+    "id": "a483911c-07a3-430a-addf-9dc463333386",
+    "patientId": "584d5ec5-2bf2-4ee8-8ce2-0755b6ef2a80",
+    "date": "2026-10-09T20:28:03.848Z",
+    "status": "completed",
+    "examinerId": "dr-meirelles",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "updatedAt": "2026-10-09T20:28:32.586Z",
+    "anamnesis": {
+      "id": "6a32ef95-64b4-44c8-9d9b-b05785984bed",
+      "encounterId": "",
+      "chiefComplaint": "usuario de lentes corretivas",
+      "currentGlasses": false,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false,
+      "medicationsInUse": "",
+      "pathologicalHistory": "",
+      "allergies": "",
+      "ocularHistory": ""
+    },
+    "lensometry": {
+      "id": "216a4354-49fa-4c2e-9b8b-377288016f9c",
+      "encounterId": "",
+      "od": {},
+      "oe": {},
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "visualAcuity": {
+      "id": "3ea6239c-1450-4851-a321-db795481c4c5",
+      "encounterId": "",
+      "testedAt": "2026-10-09T20:28:03.848Z",
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "id": "a0e7d2fe-e753-4a36-8b1b-8f2c6f8acaf3",
+      "encounterId": "",
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/"
+      },
+      "addition": 3,
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo Digital",
+        "Filtro Luz Azul (BlueCut)"
+      ],
+      "specialLenses": "",
+      "additionalOpticalInfo": ""
+    },
+    "episodeId": "abfd9d16-b74e-4c1d-9720-cbc534797b08",
+    "version": 9,
+    "startedAt": "2026-10-09T20:28:03.939Z",
+    "completedAt": "2026-10-09T20:28:32.586Z",
+    "patientName": "Catalino Martinez",
+    "conduct": "Prescrição óptica emitida para perto (Adição +3.00) com lentes multifocais em resina com tratamento antirreflexo digital + filtro luz azul. Orientações de uso e adaptação.",
+    "notes": "Exame de refração de rotina. Paciente refere uso prévio de lentes corretivas. Prescrição refrativa atualizada.",
+    "returnInWeeks": 52,
+    "returnInstructions": "Retorno anual de rotina para acompanhamento refrativo.",
+    "structuredConduct": {
+      "prescriptionIssued": true,
+      "guidanceProvided": true,
+      "returnWeeks": 52
+    }
+  },
+  {
+    "id": "a8c4ee28-3785-42ca-9002-aae02bce0f54",
+    "patientId": "eb821923-17a0-4901-8f8e-abd864450998",
+    "patientName": "Glauco Nunes",
+    "date": "2026-10-09T15:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-09T15:00:00.000Z",
+    "updatedAt": "2026-10-09T15:30:00.000Z",
+    "completedAt": "2026-10-09T15:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Avaliação refrativa e exame clínico",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica.",
+    "returnInWeeks": 52,
+    "notes": "Consulta com pagamento registrado no caixa em 2026-10-09",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20261008_c77aa2",
+    "patientId": "223c8cf2-32ba-42bf-8d46-5b6861c77aa2",
+    "patientName": "Jose Francisco",
+    "date": "2026-10-08T14:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-08T14:00:00.000Z",
+    "updatedAt": "2026-10-08T14:30:00.000Z",
+    "completedAt": "2026-10-08T14:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Exame de rotina / acuidade visual",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Prescrição oftálmica / refrativa emitida e orientações prestadas.",
+    "returnInWeeks": 52,
+    "notes": "Atendimento realizado em 2026-10-08 - Modalidade: consulta avulsa",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20261008_d25315",
+    "patientId": "3c7f7025-3194-44eb-a96d-6b1cb7d25315",
+    "patientName": "Lidia Noemi Lopez",
+    "date": "2026-10-08T14:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-08T14:00:00.000Z",
+    "updatedAt": "2026-10-08T14:30:00.000Z",
+    "completedAt": "2026-10-08T14:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Exame de rotina / acuidade visual",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Prescrição oftálmica / refrativa emitida e orientações prestadas.",
+    "returnInWeeks": 52,
+    "notes": "Atendimento realizado em 2026-10-08 - Modalidade: consulta avulsa",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "cff24d23-21ee-463c-bd02-8dd69d1bd422",
+    "patientId": "ec6d0123-c9a9-4f13-8193-a0e8c96526b5",
+    "patientName": "Ancelmo Nelson do Santos",
+    "date": "2026-10-07T15:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-07T15:00:00.000Z",
+    "updatedAt": "2026-10-07T15:30:00.000Z",
+    "completedAt": "2026-10-07T15:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Avaliação refrativa e exame clínico",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica.",
+    "returnInWeeks": 52,
+    "notes": "Consulta com pagamento registrado no caixa em 2026-10-07",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "bc548ed0-d199-4b93-a797-0a23be90d63a",
+    "patientId": "4c6b45bb-b661-48ca-9899-9ebb1432d5b9",
+    "patientName": "Rosana Amorim",
+    "date": "2026-10-07T15:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-07T15:00:00.000Z",
+    "updatedAt": "2026-10-07T15:30:00.000Z",
+    "completedAt": "2026-10-07T15:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Avaliação refrativa e exame clínico",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica.",
+    "returnInWeeks": 52,
+    "notes": "Consulta com pagamento registrado no caixa em 2026-10-07",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "e661dcbd-bb4e-4c14-a6a6-695c7985ded3",
+    "patientId": "3c6ecc4c-d289-4233-8441-397bc212f93a",
+    "patientName": "Maira Celebele da Mata",
+    "date": "2026-10-07T15:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-07T15:00:00.000Z",
+    "updatedAt": "2026-10-07T15:30:00.000Z",
+    "completedAt": "2026-10-07T15:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Avaliação refrativa e exame clínico",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica.",
+    "returnInWeeks": 52,
+    "notes": "Consulta com pagamento registrado no caixa em 2026-10-07",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "046466af-8d5d-4ca1-9651-0dc5f2410751",
+    "patientId": "3d0e0215-352b-45b2-9f75-a3ccdbc070d8",
+    "patientName": "Maria Beatriz",
+    "date": "2026-10-07T15:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-07T15:00:00.000Z",
+    "updatedAt": "2026-10-07T15:30:00.000Z",
+    "completedAt": "2026-10-07T15:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Avaliação refrativa e exame clínico",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica.",
+    "returnInWeeks": 52,
+    "notes": "Consulta com pagamento registrado no caixa em 2026-10-07",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "c04f91d6-4b1d-43b5-b688-00ee94989d2a",
+    "patientId": "63fefda3-07c1-4531-9bb8-56dfac777fdb",
+    "patientName": "Estela Mary",
+    "date": "2026-10-07T15:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-07T15:00:00.000Z",
+    "updatedAt": "2026-10-07T15:30:00.000Z",
+    "completedAt": "2026-10-07T15:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Avaliação refrativa e exame clínico",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica.",
+    "returnInWeeks": 52,
+    "notes": "Consulta com pagamento registrado no caixa em 2026-10-07",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "81702063-2677-4b1b-b070-d16c6481bab7",
+    "patientId": "1781bfaa-b921-4224-9bdc-26838bc94bda",
+    "patientName": "Edna Acosta",
+    "date": "2026-10-07T15:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-07T15:00:00.000Z",
+    "updatedAt": "2026-10-07T15:30:00.000Z",
+    "completedAt": "2026-10-07T15:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Avaliação refrativa e exame clínico",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica.",
+    "returnInWeeks": 52,
+    "notes": "Consulta com pagamento registrado no caixa em 2026-10-07",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "9c0e764c-1076-499b-91b1-4ca964504ba6",
+    "patientId": "5a3c36ce-25bd-4400-b911-9d596ac774d3",
+    "patientName": "Fania Soler",
+    "date": "2026-10-07T15:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-07T15:00:00.000Z",
+    "updatedAt": "2026-10-07T15:30:00.000Z",
+    "completedAt": "2026-10-07T15:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Avaliação refrativa e exame clínico",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica.",
+    "returnInWeeks": 52,
+    "notes": "Consulta com pagamento registrado no caixa em 2026-10-07",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "d9dcff9e-465b-4655-bcec-824dec96a34b",
+    "patientId": "ce3b4a7e-cb13-4ddc-96fa-64a08628769f",
+    "patientName": "Cristina Teles Martinez",
+    "date": "2026-10-07T15:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-07T15:00:00.000Z",
+    "updatedAt": "2026-10-07T15:30:00.000Z",
+    "completedAt": "2026-10-07T15:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Avaliação refrativa e exame clínico",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica.",
+    "returnInWeeks": 52,
+    "notes": "Consulta com pagamento registrado no caixa em 2026-10-07",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "2bb5b63f-a95d-44cf-aa6b-441b8d23c82a",
+    "patientId": "ca3b94c7-2417-4a9a-855c-28e911b0286c",
+    "patientName": "Maria Conceição Mendes",
+    "date": "2026-10-07T15:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-07T15:00:00.000Z",
+    "updatedAt": "2026-10-07T15:30:00.000Z",
+    "completedAt": "2026-10-07T15:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Avaliação refrativa e exame clínico",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica.",
+    "returnInWeeks": 52,
+    "notes": "Consulta com pagamento registrado no caixa em 2026-10-07",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "b9311b8e-9a9d-4f64-8eef-7a8eba3e3214",
+    "patientId": "6f8cceef-95b4-480a-ba8e-3e897d1ca763",
+    "patientName": "Maria Noemia",
+    "date": "2026-10-07T15:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-07T15:00:00.000Z",
+    "updatedAt": "2026-10-07T15:30:00.000Z",
+    "completedAt": "2026-10-07T15:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Avaliação refrativa e exame clínico",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica.",
+    "returnInWeeks": 52,
+    "notes": "Consulta com pagamento registrado no caixa em 2026-10-07",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "30bf04db-53cc-4e25-8060-0177024b8ce7",
+    "patientId": "cdf8b9f7-0254-4f10-a299-2ba230cded69",
+    "patientName": "Maria de Loudes Machado",
+    "date": "2026-10-07T15:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-07T15:00:00.000Z",
+    "updatedAt": "2026-10-09T21:24:27.325Z",
+    "completedAt": "2026-10-07T15:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Avaliação refrativa e exame clínico",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica.",
+    "returnInWeeks": 52,
+    "notes": "Consulta com pagamento registrado no caixa em 2026-10-07",
+    "episodeId": "d302dde0-ecbe-47dd-81f2-3bee1058ad3d",
+    "version": 2
+  },
+  {
+    "id": "4fd64b66-9ecd-4a24-bb92-2cf877e8673f",
+    "patientId": "9f3f04e7-d234-406b-92d2-61866522393c",
+    "patientName": "Hermenegilda Chaves",
+    "date": "2026-10-07T15:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-07T15:00:00.000Z",
+    "updatedAt": "2026-10-07T15:30:00.000Z",
+    "completedAt": "2026-10-07T15:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Avaliação refrativa e exame clínico",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica.",
+    "returnInWeeks": 52,
+    "notes": "Consulta com pagamento registrado no caixa em 2026-10-07",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "1056490d-32e7-448c-bd53-ac64546c734a",
+    "patientId": "2d86a1c2-fe34-4e2a-996a-6eaa8f7246f5",
+    "patientName": "Leandra Has",
+    "date": "2026-10-07T15:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-07T15:00:00.000Z",
+    "updatedAt": "2026-10-07T15:30:00.000Z",
+    "completedAt": "2026-10-07T15:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Avaliação refrativa e exame clínico",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica.",
+    "returnInWeeks": 52,
+    "notes": "Consulta com pagamento registrado no caixa em 2026-10-07",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20261007_f28f9e",
+    "patientId": "673d0bc7-ab56-408e-b212-feda1ef28f9e",
+    "patientName": "Mercelis Lorena Gonçales",
+    "date": "2026-10-07T14:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-07T14:00:00.000Z",
+    "updatedAt": "2026-10-07T14:30:00.000Z",
+    "completedAt": "2026-10-07T14:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Exame de rotina / acuidade visual",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Prescrição oftálmica / refrativa emitida e orientações prestadas.",
+    "returnInWeeks": 52,
+    "notes": "Atendimento realizado em 2026-10-07 - Modalidade: consulta avulsa",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20261007_84fd59",
+    "patientId": "f482d6c1-fcb9-4ff0-8b4c-5b0b9a84fd59",
+    "patientName": "Alanis Vitoria C Correa",
+    "date": "2026-10-07T14:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-07T14:00:00.000Z",
+    "updatedAt": "2026-10-07T14:30:00.000Z",
+    "completedAt": "2026-10-07T14:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Exame de rotina / acuidade visual",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Prescrição oftálmica / refrativa emitida e orientações prestadas.",
+    "returnInWeeks": 52,
+    "notes": "Atendimento realizado em 2026-10-07 - Modalidade: consulta avulsa",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20261007_d2e290",
+    "patientId": "4e88c27c-dbd0-4042-8d1c-9212c4d2e290",
+    "patientName": "Maria Valentina",
+    "date": "2026-10-07T14:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-07T14:00:00.000Z",
+    "updatedAt": "2026-10-07T14:30:00.000Z",
+    "completedAt": "2026-10-07T14:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Exame de rotina / acuidade visual",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Prescrição oftálmica / refrativa emitida e orientações prestadas.",
+    "returnInWeeks": 52,
+    "notes": "Atendimento realizado em 2026-10-07 - Modalidade: consulta avulsa",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20261007_573aa2",
+    "patientId": "dcbde17f-cf07-4ff6-8460-cc7a16573aa2",
+    "patientName": "Maria José",
+    "date": "2026-10-07T14:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-07T14:00:00.000Z",
+    "updatedAt": "2026-10-07T14:30:00.000Z",
+    "completedAt": "2026-10-07T14:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Exame de rotina / acuidade visual",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Prescrição oftálmica / refrativa emitida e orientações prestadas.",
+    "returnInWeeks": 52,
+    "notes": "Atendimento realizado em 2026-10-07 - Modalidade: consulta avulsa",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20261007_2ffb07",
+    "patientId": "4b5acbb1-e930-4ae0-8d63-aea1582ffb07",
+    "patientName": "Keli Cristina da Rocha Stuck",
+    "date": "2026-10-07T14:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-07T14:00:00.000Z",
+    "updatedAt": "2026-10-07T14:30:00.000Z",
+    "completedAt": "2026-10-07T14:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Exame de rotina / acuidade visual",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Prescrição oftálmica / refrativa emitida e orientações prestadas.",
+    "returnInWeeks": 52,
+    "notes": "Atendimento realizado em 2026-10-07 - Modalidade: consulta avulsa",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20261007_ca088e",
+    "patientId": "104b0e68-60aa-454a-aed6-73d49eca088e",
+    "patientName": "Vitoria Coelho Saraiva de Lima",
+    "date": "2026-10-07T14:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-07T14:00:00.000Z",
+    "updatedAt": "2026-10-07T14:30:00.000Z",
+    "completedAt": "2026-10-07T14:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Exame de rotina / acuidade visual",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Prescrição oftálmica / refrativa emitida e orientações prestadas.",
+    "returnInWeeks": 52,
+    "notes": "Atendimento realizado em 2026-10-07 - Modalidade: consulta avulsa",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "d5c0c3ec-3b34-4225-a6b7-ba7d9de1af7e",
+    "patientId": "06ac177f-4f0e-423e-94ff-109854e53e0d",
+    "patientName": "Idalino Escobar",
+    "date": "2026-10-06T15:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-06T15:00:00.000Z",
+    "updatedAt": "2026-10-06T15:30:00.000Z",
+    "completedAt": "2026-10-06T15:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Avaliação refrativa e exame clínico",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica.",
+    "returnInWeeks": 52,
+    "notes": "Consulta com pagamento registrado no caixa em 2026-10-06",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "d54c00a1-6387-415a-8b08-9c6ac82fc51b",
+    "patientId": "a1b14362-0bf9-463f-a22a-621fb84d7070",
+    "patientName": "Carolina Raquel",
+    "date": "2026-10-06T15:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-06T15:00:00.000Z",
+    "updatedAt": "2026-10-06T15:30:00.000Z",
+    "completedAt": "2026-10-06T15:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Avaliação refrativa e exame clínico",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica.",
+    "returnInWeeks": 52,
+    "notes": "Consulta com pagamento registrado no caixa em 2026-10-06",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "de9d1acf-4d14-47db-8ea1-64c4624f113f",
+    "patientId": "1055fd8e-48a5-49f1-9c7b-c2f912da0d1a",
+    "patientName": "Mikaela Paulino da Silva",
+    "date": "2026-10-06T15:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-06T15:00:00.000Z",
+    "updatedAt": "2026-10-06T15:30:00.000Z",
+    "completedAt": "2026-10-06T15:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Avaliação refrativa e exame clínico",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica.",
+    "returnInWeeks": 52,
+    "notes": "Consulta com pagamento registrado no caixa em 2026-10-06",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "5cba5a72-3bcd-40c5-b6c8-7ee8f7a8935a",
+    "patientId": "568e1b3a-621d-4a83-abb7-a7aa18062135",
+    "patientName": "Luiz Benitez",
+    "date": "2026-10-06T15:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-06T15:00:00.000Z",
+    "updatedAt": "2026-10-06T15:30:00.000Z",
+    "completedAt": "2026-10-06T15:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Avaliação refrativa e exame clínico",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica.",
+    "returnInWeeks": 52,
+    "notes": "Consulta com pagamento registrado no caixa em 2026-10-06",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "328fcd7e-5bff-40d3-80c7-ee3019aaffb7",
+    "patientId": "3d0713e8-fb44-4346-9ddb-88d728f27207",
+    "patientName": "Carmem Benites",
+    "date": "2026-10-06T15:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-06T15:00:00.000Z",
+    "updatedAt": "2026-10-06T15:30:00.000Z",
+    "completedAt": "2026-10-06T15:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Avaliação refrativa e exame clínico",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica.",
+    "returnInWeeks": 52,
+    "notes": "Consulta com pagamento registrado no caixa em 2026-10-06",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "de2163ba-15be-4c03-be83-30b4a5d125b1",
+    "patientId": "ce39675e-d539-4f2a-85ca-d330961d94dd",
+    "patientName": "Cristiane Gonzales",
+    "date": "2026-10-06T15:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-06T15:00:00.000Z",
+    "updatedAt": "2026-10-06T15:30:00.000Z",
+    "completedAt": "2026-10-06T15:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Avaliação refrativa e exame clínico",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica.",
+    "returnInWeeks": 52,
+    "notes": "Consulta com pagamento registrado no caixa em 2026-10-06",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "5cc3d805-e69f-4aa0-b096-4a0418c9b107",
+    "patientId": "ffa8ffc1-a5e7-49f9-bc37-86bece826604",
+    "patientName": "Gustavo C Pereira",
+    "date": "2026-10-06T15:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-06T15:00:00.000Z",
+    "updatedAt": "2026-10-06T15:30:00.000Z",
+    "completedAt": "2026-10-06T15:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Avaliação refrativa e exame clínico",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica.",
+    "returnInWeeks": 52,
+    "notes": "Consulta com pagamento registrado no caixa em 2026-10-06",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "c5a8779e-d857-403b-80da-1afaf7966521",
+    "patientId": "9b7f74f2-9cda-442c-90a2-4e0c3e36b045",
+    "patientName": "Gabriel Silva",
+    "date": "2026-10-06T15:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-06T15:00:00.000Z",
+    "updatedAt": "2026-10-06T15:30:00.000Z",
+    "completedAt": "2026-10-06T15:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Avaliação refrativa e exame clínico",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica.",
+    "returnInWeeks": 52,
+    "notes": "Consulta com pagamento registrado no caixa em 2026-10-06",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "4c49be27-a637-4f8a-b9a8-ad406d5f57cc",
+    "patientId": "067eb678-6263-4ba7-83d8-83bb659e1ca2",
+    "patientName": "Jade Vitoria Caceres",
+    "date": "2026-10-06T15:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-06T15:00:00.000Z",
+    "updatedAt": "2026-10-06T15:30:00.000Z",
+    "completedAt": "2026-10-06T15:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Avaliação refrativa e exame clínico",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica.",
+    "returnInWeeks": 52,
+    "notes": "Consulta com pagamento registrado no caixa em 2026-10-06",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "8977630f-eee2-474a-bbf6-410324b3b58e",
+    "patientId": "dab6d1c3-4710-4cd6-b602-1639b197cef7",
+    "patientName": "Mirna Ramona Brites",
+    "date": "2026-10-06T15:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-06T15:00:00.000Z",
+    "updatedAt": "2026-10-06T15:30:00.000Z",
+    "completedAt": "2026-10-06T15:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Avaliação refrativa e exame clínico",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica.",
+    "returnInWeeks": 52,
+    "notes": "Consulta com pagamento registrado no caixa em 2026-10-06",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "d75b7d9c-3413-47b8-9301-469e3a513877",
+    "patientId": "a9ec631d-51b3-4601-8a23-ab39a518254a",
+    "patientName": "Adrian Santos da Silva",
+    "date": "2026-10-06T15:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-06T15:00:00.000Z",
+    "updatedAt": "2026-10-06T15:30:00.000Z",
+    "completedAt": "2026-10-06T15:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Avaliação refrativa e exame clínico",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica.",
+    "returnInWeeks": 52,
+    "notes": "Consulta com pagamento registrado no caixa em 2026-10-06",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20261006_a083e2",
+    "patientId": "dca905df-1a98-4867-b0ba-ad2d4ea083e2",
+    "patientName": "Larissa Roevas",
+    "date": "2026-10-06T14:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-06T14:00:00.000Z",
+    "updatedAt": "2026-10-06T14:30:00.000Z",
+    "completedAt": "2026-10-06T14:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Exame de rotina / acuidade visual",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Prescrição oftálmica / refrativa emitida e orientações prestadas.",
+    "returnInWeeks": 52,
+    "notes": "Atendimento realizado em 2026-10-06 - Modalidade: consulta avulsa",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20261006_55f011",
+    "patientId": "c0acd52d-00d3-4a50-8783-31afde55f011",
+    "patientName": "Gabriela Maria Estigarribia Pedra",
+    "date": "2026-10-06T14:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-06T14:00:00.000Z",
+    "updatedAt": "2026-10-06T14:30:00.000Z",
+    "completedAt": "2026-10-06T14:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Exame de rotina / acuidade visual",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Prescrição oftálmica / refrativa emitida e orientações prestadas.",
+    "returnInWeeks": 52,
+    "notes": "Atendimento realizado em 2026-10-06 - Modalidade: consulta avulsa",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20261006_1ce1c7",
+    "patientId": "23873f09-50bd-4323-b932-4c8c7d1ce1c7",
+    "patientName": "Zuleica Aparecida de Araujo",
+    "date": "2026-10-06T14:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-06T14:00:00.000Z",
+    "updatedAt": "2026-10-06T14:30:00.000Z",
+    "completedAt": "2026-10-06T14:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Exame de rotina / acuidade visual",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Prescrição oftálmica / refrativa emitida e orientações prestadas.",
+    "returnInWeeks": 52,
+    "notes": "Atendimento realizado em 2026-10-06 - Modalidade: consulta avulsa",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20261006_be285b",
+    "patientId": "49f43db3-7324-41f2-b98c-5ba24ebe285b",
+    "patientName": "Sara Manueli",
+    "date": "2026-10-06T14:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-06T14:00:00.000Z",
+    "updatedAt": "2026-10-06T14:30:00.000Z",
+    "completedAt": "2026-10-06T14:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Exame de rotina / acuidade visual",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Prescrição oftálmica / refrativa emitida e orientações prestadas.",
+    "returnInWeeks": 52,
+    "notes": "Atendimento realizado em 2026-10-06 - Modalidade: consulta avulsa",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20261006_d07258",
+    "patientId": "155084c0-823d-41fd-842a-4a44f9d07258",
+    "patientName": "Maria Helena",
+    "date": "2026-10-06T14:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-06T14:00:00.000Z",
+    "updatedAt": "2026-10-06T14:30:00.000Z",
+    "completedAt": "2026-10-06T14:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Exame de rotina / acuidade visual",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Prescrição oftálmica / refrativa emitida e orientações prestadas.",
+    "returnInWeeks": 52,
+    "notes": "Atendimento realizado em 2026-10-06 - Modalidade: consulta avulsa",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20261006_f3d903",
+    "patientId": "3ef1d40c-dbb5-4142-8eba-0a9380f3d903",
+    "patientName": "Hilda Espinola",
+    "date": "2026-10-06T14:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-06T14:00:00.000Z",
+    "updatedAt": "2026-10-06T14:30:00.000Z",
+    "completedAt": "2026-10-06T14:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Exame de rotina / acuidade visual",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Prescrição oftálmica / refrativa emitida e orientações prestadas.",
+    "returnInWeeks": 52,
+    "notes": "Atendimento realizado em 2026-10-06 - Modalidade: consulta avulsa",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20261005_711090",
+    "patientId": "8fd59954-fb84-4a94-b809-3f62e4711090",
+    "patientName": "Graciela Cape de Villa",
+    "date": "2026-10-05T14:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-05T14:00:00.000Z",
+    "updatedAt": "2026-10-05T14:30:00.000Z",
+    "completedAt": "2026-10-05T14:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Exame de rotina / acuidade visual",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Prescrição oftálmica / refrativa emitida e orientações prestadas.",
+    "returnInWeeks": 52,
+    "notes": "Atendimento realizado em 2026-10-05 - Modalidade: consulta avulsa",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20261005_0ea324",
+    "patientId": "9e6845a7-558e-4f01-acbc-47aadd0ea324",
+    "patientName": "Fabiele Escobar",
+    "date": "2026-10-05T14:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-05T14:00:00.000Z",
+    "updatedAt": "2026-10-05T14:30:00.000Z",
+    "completedAt": "2026-10-05T14:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Exame de rotina / acuidade visual",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Prescrição oftálmica / refrativa emitida e orientações prestadas.",
+    "returnInWeeks": 52,
+    "notes": "Atendimento realizado em 2026-10-05 - Modalidade: consulta avulsa",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20261002_ee0ac4",
+    "patientId": "068e73c5-d4ad-4370-bbfe-f83457ee0ac4",
+    "patientName": "Cleide Carine",
+    "date": "2026-10-02T14:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-02T14:00:00.000Z",
+    "updatedAt": "2026-10-02T14:30:00.000Z",
+    "completedAt": "2026-10-02T14:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Exame de rotina / acuidade visual",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Prescrição oftálmica / refrativa emitida e orientações prestadas.",
+    "returnInWeeks": 52,
+    "notes": "Atendimento realizado em 2026-10-02 - Modalidade: consulta avulsa",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20261002_1f1dd2",
+    "patientId": "e305d61f-7e5d-40a0-b7d8-0a0a001f1dd2",
+    "patientName": "Paulo Cezar de Oliveira",
+    "date": "2026-10-02T14:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-02T14:00:00.000Z",
+    "updatedAt": "2026-10-02T14:30:00.000Z",
+    "completedAt": "2026-10-02T14:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Exame de rotina / acuidade visual",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Prescrição oftálmica / refrativa emitida e orientações prestadas.",
+    "returnInWeeks": 52,
+    "notes": "Atendimento realizado em 2026-10-02 - Modalidade: consulta avulsa",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20261001_beddc1",
+    "patientId": "8e7491f7-7ed7-4991-aa89-bcc200beddc1",
+    "patientName": "Lilian Regina Medeiro de Sena",
+    "date": "2026-10-01T14:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-01T14:00:00.000Z",
+    "updatedAt": "2026-10-01T14:30:00.000Z",
+    "completedAt": "2026-10-01T14:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Exame de rotina / acuidade visual",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Prescrição oftálmica / refrativa emitida e orientações prestadas.",
+    "returnInWeeks": 52,
+    "notes": "Atendimento realizado em 2026-10-01 - Modalidade: consulta avulsa",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20261001_af9ffb",
+    "patientId": "c6d79e1e-15dd-491a-ac3c-465f58af9ffb",
+    "patientName": "Jocicela Lescano",
+    "date": "2026-10-01T14:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "createdAt": "2026-10-01T14:00:00.000Z",
+    "updatedAt": "2026-10-01T14:30:00.000Z",
+    "completedAt": "2026-10-01T14:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Exame de rotina / acuidade visual",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0
+    },
+    "conduct": "Prescrição oftálmica / refrativa emitida e orientações prestadas.",
+    "returnInWeeks": 52,
+    "notes": "Atendimento realizado em 2026-10-01 - Modalidade: consulta avulsa",
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "9b09bc29-6093-429b-88f3-16ef722d2fe6",
+    "patientId": "8fd59954-fb84-4a94-b809-3f62e4711090",
+    "date": "2026-09-26T21:04:38.855Z",
+    "status": "completed",
+    "examinerId": "dr-meirelles",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "updatedAt": "2026-09-28T16:56:14.099Z",
+    "anamnesis": {
+      "id": "01341984-df9e-4dda-a752-7d748e5b68e2",
+      "encounterId": "",
+      "chiefComplaint": "não usuaria de lentes corretivas",
+      "currentGlasses": false,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false,
+      "medicationsInUse": "",
+      "pathologicalHistory": "",
+      "allergies": "",
+      "ocularHistory": ""
+    },
+    "lensometry": {
+      "id": "c9f634de-a6e3-408c-8287-83d0e3153fd5",
+      "encounterId": "",
+      "od": {},
+      "oe": {},
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "visualAcuity": {
+      "id": "538f5b55-7c84-480d-8045-f7b534053562",
+      "encounterId": "",
+      "testedAt": "2026-09-26T21:04:38.855Z",
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "id": "6225c69d-9eeb-42c5-9344-7a98c1ccc1e6",
+      "encounterId": "",
+      "od": {
+        "visualAcuity": "20/"
+      },
+      "oe": {
+        "visualAcuity": "20/"
+      }
+    },
+    "episodeId": "cf9dd18b-3154-4072-b31a-15e179d47899",
+    "version": 2,
+    "startedAt": "2026-09-26T21:04:38.907Z",
+    "completedAt": "2026-09-26T21:05:55.365Z",
+    "patientName": "Graciela Cape de Villa",
+    "conduct": "Prescrição oftálmica / refrativa emitida e orientações prestadas ao paciente.",
+    "notes": "Atendimento e avaliação de refração concluídos com emissão de receita óptica.",
+    "returnInWeeks": 52,
+    "structuredConduct": {
+      "prescriptionIssued": true,
+      "guidanceProvided": true,
+      "returnWeeks": 52
+    }
+  },
+  {
+    "id": "20724c9c-ad90-4a15-b018-b8bc809b7df7",
+    "patientId": "8e7491f7-7ed7-4991-aa89-bcc200beddc1",
+    "date": "2026-09-26T20:41:11.009Z",
+    "status": "completed",
+    "examinerId": "dr-meirelles",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "updatedAt": "2026-09-28T16:56:13.914Z",
+    "anamnesis": {
+      "id": "24d4f262-f012-407a-b341-ba0404aa388d",
+      "encounterId": "",
+      "chiefComplaint": "01 anos mesmo rx",
+      "currentGlasses": false,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false,
+      "medicationsInUse": "Nega uso de medicamentos",
+      "pathologicalHistory": "Nega antecedentes patológicos",
+      "allergies": "",
+      "ocularHistory": "",
+      "medications": "Nega uso de medicamentos",
+      "systemicHistory": "Nega antecedentes patológicos",
+      "observations": "",
+      "clinicalNotes": ""
+    },
+    "lensometry": {
+      "id": "6f5e39ac-f57b-419a-8923-b63deb5b892a",
+      "encounterId": "",
+      "od": {
+        "sphere": 0,
+        "cylinder": -2,
+        "axis": 160
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": -1,
+        "axis": 10
+      },
+      "addition": 1.5,
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ],
+      "usageTime": "6 meses a 1 ano",
+      "notes": "Lentes muito riscadas, Armação torta / frouxa"
+    },
+    "visualAcuity": {
+      "id": "f054f49c-fda1-4f46-82b5-9d740cb09684",
+      "encounterId": "",
+      "testedAt": "2026-09-26T20:41:11.009Z",
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "id": "00bab375-cd78-472a-a31a-84b34e1dd4fc",
+      "encounterId": "",
+      "od": {
+        "sphere": 0,
+        "cylinder": -2,
+        "axis": 160,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": -1,
+        "axis": 10,
+        "visualAcuity": "20/20"
+      },
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo Digital",
+        "Filtro Luz Azul (BlueCut)"
+      ],
+      "specialLenses": "",
+      "additionalOpticalInfo": ""
+    },
+    "episodeId": "2989f59c-4300-424f-9168-ac932a88edf3",
+    "version": 35,
+    "startedAt": "2026-09-26T20:41:11.055Z",
+    "completedAt": "2026-09-26T21:03:39.035Z",
+    "patientName": "Lilian Regina Medeiro de Sena",
+    "conduct": "Prescrição oftálmica / refrativa emitida e orientações prestadas ao paciente.",
+    "notes": "Atendimento e avaliação de refração concluídos com emissão de receita óptica.",
+    "returnInWeeks": 52,
+    "structuredConduct": {
+      "prescriptionIssued": true,
+      "guidanceProvided": true,
+      "returnWeeks": 52
+    }
+  },
+  {
+    "id": "62c3b61c-5a3e-4b96-b885-f3490ecfd07d",
+    "patientId": "c6d79e1e-15dd-491a-ac3c-465f58af9ffb",
+    "date": "2026-09-26T20:32:18.391Z",
+    "status": "completed",
+    "examinerId": "dr-meirelles",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "updatedAt": "2026-09-28T16:56:13.914Z",
+    "anamnesis": {
+      "id": "86decf17-ecd8-4ad7-bc82-7c0c4d0dc1e5",
+      "encounterId": "",
+      "chiefComplaint": "usuaria de lentes dcorreitivas ",
+      "currentGlasses": false,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false,
+      "medicationsInUse": "Nega uso de medicamentos",
+      "pathologicalHistory": "Nega antecedentes patológicos",
+      "allergies": "dipirona ",
+      "ocularHistory": "",
+      "medications": "Nega uso de medicamentos",
+      "systemicHistory": "Nega antecedentes patológicos",
+      "observations": "Cefaleia frequente, Sensibilidade à luz / Fotofobia",
+      "clinicalNotes": "Cefaleia frequente, Sensibilidade à luz / Fotofobia"
+    },
+    "lensometry": {
+      "id": "2deede15-034f-4002-b5b7-401a80e5bd55",
+      "encounterId": "",
+      "od": {},
+      "oe": {},
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "visualAcuity": {
+      "id": "bea7fe6b-7a27-45c8-9899-da15e55facea",
+      "encounterId": "",
+      "testedAt": "2026-09-26T20:32:18.391Z",
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "id": "ac85508b-3a0b-4db2-9340-c01e07cced77",
+      "encounterId": "",
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo Digital",
+        "Filtro Luz Azul (BlueCut)"
+      ],
+      "specialLenses": "",
+      "additionalOpticalInfo": ""
+    },
+    "returnInstructions": "Retorno em 1 ano (Controle Anual)",
+    "conduct": "fotofobia ",
+    "structuredConduct": {
+      "id": "6a974c41-dd1e-4e27-b11a-ce45ed7fc1e1",
+      "encounterId": "62c3b61c-5a3e-4b96-b885-f3490ecfd07d",
+      "treatmentPlan": "fotofobia "
+    },
+    "episodeId": "af731b3b-b575-49bf-a060-69f3e25a2ae2",
+    "version": 30,
+    "startedAt": "2026-09-26T20:32:18.430Z",
+    "completedAt": "2026-09-26T20:40:36.832Z",
+    "patientName": "Jocicela Lescano"
+  },
+  {
+    "id": "f071e563-293d-4a67-bf84-3e6bcb63a137",
+    "patientId": "068e73c5-d4ad-4370-bbfe-f83457ee0ac4",
+    "date": "2026-09-26T20:18:56.015Z",
+    "status": "completed",
+    "examinerId": "dr-meirelles",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "updatedAt": "2026-09-28T16:56:14.098Z",
+    "anamnesis": {
+      "id": "9555167f-4bef-409d-868f-74f6bb3da9c4",
+      "encounterId": "",
+      "chiefComplaint": "rotina",
+      "currentGlasses": false,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false,
+      "medicationsInUse": "Nega uso de medicamentos",
+      "pathologicalHistory": "Nega antecedentes patológicos",
+      "allergies": "",
+      "ocularHistory": "",
+      "medications": "Nega uso de medicamentos",
+      "systemicHistory": "Nega antecedentes patológicos",
+      "observations": "Visão embaçada para perto, Astenopia ao fim do dia",
+      "clinicalNotes": "Visão embaçada para perto, Astenopia ao fim do dia"
+    },
+    "lensometry": {
+      "id": "483a13b6-4fe5-4efa-b00a-24fcd7af2f34",
+      "encounterId": "",
+      "od": {
+        "sphere": -0.5,
+        "cylinder": -0.25,
+        "axis": 10
+      },
+      "oe": {
+        "sphere": -0.75
+      },
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "visualAcuity": {
+      "id": "65d1f74d-aa70-4e0a-8b00-4bae060a9161",
+      "encounterId": "",
+      "testedAt": "2026-09-26T20:18:56.015Z",
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "id": "0e71f418-87e0-4304-b974-3cbdd8d29e36",
+      "encounterId": "",
+      "od": {
+        "sphere": -0.75,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/"
+      },
+      "oe": {
+        "sphere": -0.75,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 1,
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo Digital",
+        "Filtro Luz Azul (BlueCut)"
+      ],
+      "specialLenses": "",
+      "additionalOpticalInfo": ""
+    },
+    "episodeId": "b85d152d-a59f-4b57-8e24-a53ee8323ec0",
+    "version": 7,
+    "startedAt": "2026-09-26T20:22:58.832Z",
+    "completedAt": "2026-09-26T20:24:29.850Z",
+    "patientName": "Cleide Carine",
+    "conduct": "Prescrição oftálmica / refrativa emitida e orientações prestadas ao paciente.",
+    "notes": "Atendimento e avaliação de refração concluídos com emissão de receita óptica.",
+    "returnInWeeks": 52,
+    "structuredConduct": {
+      "prescriptionIssued": true,
+      "guidanceProvided": true,
+      "returnWeeks": 52
+    }
+  },
+  {
+    "id": "enc-e305d61f-7e5d-40a0-b7d8-0a0a001f1dd2",
+    "patientId": "e305d61f-7e5d-40a0-b7d8-0a0a001f1dd2",
+    "clinicId": "ivs",
+    "date": "2026-09-26T20:02:27.229Z",
+    "examinerName": "Dr. Rudson Meirelles",
+    "status": "completed",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento de rotina e acuidade visual"
+    },
+    "createdAt": "2026-09-26T20:02:27.229Z",
+    "updatedAt": "2026-09-28T16:56:14.098Z",
+    "patientName": "Paulo Cezar de Oliveira",
+    "episodeId": "LEGACY_EPISODE",
+    "conduct": "Prescrição oftálmica / refrativa emitida e orientações prestadas ao paciente.",
+    "notes": "Atendimento e avaliação de refração concluídos com emissão de receita óptica.",
+    "returnInWeeks": 52,
+    "structuredConduct": {
+      "prescriptionIssued": true,
+      "guidanceProvided": true,
+      "returnWeeks": 52
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    }
+  },
+  {
+    "id": "enc-f087b74b-23b1-4d17-b813-3d9277383bfa",
+    "patientId": "f087b74b-23b1-4d17-b813-3d9277383bfa",
+    "clinicId": "ivs",
+    "date": "2026-09-26T19:46:28.081Z",
+    "examinerName": "Dr. Rudson Meirelles",
+    "status": "completed",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento de rotina e acuidade visual"
+    },
+    "createdAt": "2026-09-26T19:46:28.081Z",
+    "updatedAt": "2026-09-28T16:56:14.100Z",
+    "patientName": "Carlos Ramão",
+    "episodeId": "LEGACY_EPISODE",
+    "conduct": "Prescrição oftálmica / refrativa emitida e orientações prestadas ao paciente.",
+    "notes": "Atendimento e avaliação de refração concluídos com emissão de receita óptica.",
+    "returnInWeeks": 52,
+    "structuredConduct": {
+      "prescriptionIssued": true,
+      "guidanceProvided": true,
+      "returnWeeks": 52
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    }
+  },
+  {
+    "id": "enc-9e6845a7-558e-4f01-acbc-47aadd0ea324",
+    "patientId": "9e6845a7-558e-4f01-acbc-47aadd0ea324",
+    "clinicId": "ivs",
+    "date": "2026-09-26T19:38:48.429Z",
+    "examinerName": "Dr. Rudson Meirelles",
+    "status": "completed",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento de rotina e acuidade visual"
+    },
+    "createdAt": "2026-09-26T19:38:48.429Z",
+    "updatedAt": "2026-09-28T16:56:14.099Z",
+    "patientName": "Fabiele Escobar",
+    "episodeId": "LEGACY_EPISODE",
+    "conduct": "Prescrição oftálmica / refrativa emitida e orientações prestadas ao paciente.",
+    "notes": "Atendimento e avaliação de refração concluídos com emissão de receita óptica.",
+    "returnInWeeks": 52,
+    "structuredConduct": {
+      "prescriptionIssued": true,
+      "guidanceProvided": true,
+      "returnWeeks": 52
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    }
+  },
+  {
+    "id": "enc-dca905df-1a98-4867-b0ba-ad2d4ea083e2",
+    "patientId": "dca905df-1a98-4867-b0ba-ad2d4ea083e2",
+    "clinicId": "ivs",
+    "date": "2026-09-26T19:28:16.741Z",
+    "examinerName": "Dr. Rudson Meirelles",
+    "status": "completed",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento de rotina e acuidade visual"
+    },
+    "createdAt": "2026-09-26T19:28:16.741Z",
+    "updatedAt": "2026-09-28T16:56:14.099Z",
+    "patientName": "Larissa Roevas",
+    "episodeId": "LEGACY_EPISODE",
+    "conduct": "Prescrição oftálmica / refrativa emitida e orientações prestadas ao paciente.",
+    "notes": "Atendimento e avaliação de refração concluídos com emissão de receita óptica.",
+    "returnInWeeks": 52,
+    "structuredConduct": {
+      "prescriptionIssued": true,
+      "guidanceProvided": true,
+      "returnWeeks": 52
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    }
+  },
+  {
+    "id": "bb3c5847-2cd4-47f1-a0cb-9ff1e5ee51e6",
+    "patientId": "19a85493-5bc5-4eea-8d5d-c53ffc5cd75d",
+    "date": "2026-09-26T15:16:15.094Z",
+    "status": "completed",
+    "examinerId": "dr-meirelles",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "updatedAt": "2026-09-26T15:21:46.879Z",
+    "anamnesis": {
+      "id": "e99604d9-ebb7-4525-9eb6-038eae9986d1",
+      "encounterId": "",
+      "chiefComplaint": "usuaria de lentes corretivas",
+      "currentGlasses": false,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false,
+      "medicationsInUse": "Metformina 850mg 02 cp/d (usuaria de de Polivitaminico).",
+      "pathologicalHistory": "Nega antecedentes patológicos",
+      "allergies": "",
+      "ocularHistory": "",
+      "medications": "Metformina 850mg 02 cp/d (usuaria de de Polivitaminico).",
+      "systemicHistory": "Nega antecedentes patológicos",
+      "observations": "Visão embaçada para perto, Cefaleia frequente",
+      "clinicalNotes": "Visão embaçada para perto, Cefaleia frequente"
+    },
+    "lensometry": {
+      "id": "0e626c9b-8025-460d-8409-5d3540b51a65",
+      "encounterId": "",
+      "od": {
+        "sphere": 1.5
+      },
+      "oe": {
+        "sphere": 1.5
+      },
+      "addition": 2.5,
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "visualAcuity": {
+      "id": "f699f33a-2d62-47d6-a76e-c08d33e95980",
+      "encounterId": "",
+      "testedAt": "2026-09-26T15:16:15.095Z",
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "id": "390b3378-4777-4c48-bbf5-fe2977fa8b1c",
+      "encounterId": "",
+      "od": {
+        "sphere": 1.75,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 1.75,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 2.5,
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo Digital",
+        "Filtro Luz Azul (BlueCut)"
+      ],
+      "specialLenses": "",
+      "additionalOpticalInfo": ""
+    },
+    "episodeId": "be870ab4-7e1d-46bb-9dfd-bcf3cf58f046",
+    "version": 1,
+    "startedAt": "2026-09-26T15:21:46.879Z",
+    "completedAt": "2026-09-26T15:21:46.879Z",
+    "conduct": "Prescrição oftálmica / refrativa emitida e orientações prestadas ao paciente.",
+    "notes": "Atendimento e avaliação de refração concluídos com emissão de receita óptica.",
+    "returnInWeeks": 52,
+    "structuredConduct": {
+      "prescriptionIssued": true,
+      "guidanceProvided": true,
+      "returnWeeks": 52
+    }
+  },
+  {
+    "id": "ae40c571-aa20-4809-b0b9-d995d37f5d75",
+    "patientId": "a84131bd-ba44-47ca-8d71-bff029c6be22",
+    "date": "2026-09-18T20:25:01.507Z",
+    "status": "completed",
+    "examinerId": "dr-meirelles",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "anamnesis": {
+      "id": "3786d295-dfab-444b-8d19-a5dc8bc00888",
+      "chiefComplaint": "Cefaleia frequente e baixa acuidade visual",
+      "currentGlasses": true,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false,
+      "medicationsInUse": "Levotiroxina Sódica 25mg.",
+      "clinicalNotes": "usuaria de lentes corretivas, alergica a penicilina, Cefaleia frequente"
+    },
+    "lensometry": {
+      "id": "e0f8002c-b653-4627-81b6-409c92dc1296",
+      "od": {
+        "sphere": -6.5,
+        "cylinder": -1.5,
+        "axis": 125
+      },
+      "oe": {
+        "sphere": -2.5,
+        "cylinder": -1.25,
+        "axis": 5
+      },
+      "lensType": "monofocal_longe",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo",
+        "Filtro Luz Azul (BlueCut)",
+        "Fotossensível (Transitions)"
+      ],
+      "usageTime": "1 a 2 anos",
+      "notes": "Lentes muito riscadas, Perda de foco / visão cansada"
+    },
+    "visualAcuity": {
+      "id": "f3dec4c4-68f9-423a-b150-66bdff43e8fe",
+      "testedAt": "2026-09-18T20:25:01.507Z",
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "id": "54c8d002-f156-4de7-8010-a9f848e438a4",
+      "od": {
+        "sphere": -3,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/60"
+      },
+      "oe": {
+        "sphere": -3,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/60"
+      },
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo Digital",
+        "Filtro Luz Azul (BlueCut)"
+      ],
+      "additionalOpticalInfo": "paciente sob acompanhamento periodico, buscando melhora na AV"
+    },
+    "conduct": "Paciente sob acompanhamento periódico. Prescrição multifocal em resina com BlueCut e Antirreflexo Digital.",
+    "returnInstructions": "Retorno em 6 meses (Acompanhamento)",
+    "episodeId": "LEGACY_EPISODE",
+    "patientName": "Maira Fernandes"
+  },
+  {
+    "id": "d5e5ae8c-c78e-4854-a1ab-2da26b708c96",
+    "patientId": "33f6f16d-add7-4e59-8522-8a5f9b345bfd",
+    "date": "2026-09-18T18:48:58.316Z",
+    "status": "completed",
+    "examinerId": "dr-meirelles",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "anamnesis": {
+      "id": "7075c1ff-6104-4994-9e03-2288bc7c99f3",
+      "chiefComplaint": "Rotina e troca de óculos",
+      "currentGlasses": true,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false,
+      "clinicalNotes": "hipertensão gestacional a 21 anos"
+    },
+    "lensometry": {
+      "id": "d964a01f-754f-413d-bb19-018ade97aa21",
+      "od": {
+        "sphere": 2.75,
+        "cylinder": -0.5,
+        "axis": 95
+      },
+      "oe": {
+        "sphere": 3,
+        "cylinder": -1,
+        "axis": 90
+      },
+      "addition": 1.5,
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo",
+        "Fotossensível (Transitions)",
+        "Filtro Luz Azul (BlueCut)"
+      ],
+      "usageTime": "2 anos",
+      "notes": "Lentes muito riscadas, Desconforto para leitura, Antirreflexo descascando"
+    },
+    "visualAcuity": {
+      "id": "073a16aa-2042-475b-b80c-76c0e6d91dba",
+      "testedAt": "2026-09-18T18:48:58.316Z",
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "id": "cbd2cd5e-d437-4636-b5b1-08b035919621",
+      "od": {
+        "sphere": 3,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 3,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 1.75,
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo Digital",
+        "Filtro Luz Azul (BlueCut)",
+        "Fotossensível (Transitions)"
+      ]
+    },
+    "conduct": "Prescrição multifocal digital com adição +1.75, filtro BlueCut e fotossensível.",
+    "returnInstructions": "Retorno em 1 ano para controle visual de rotina.",
+    "episodeId": "LEGACY_EPISODE",
+    "patientName": "Elizangela Moura"
+  },
+  {
+    "id": "c5f5dbc7-bdd0-47c4-a3b0-b3da7cb7eb18",
+    "patientId": "39e695b2-0a56-4f83-b63a-bcbddaf85392",
+    "date": "2026-09-18T18:37:16.141Z",
+    "status": "completed",
+    "examinerId": "dr-meirelles",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "anamnesis": {
+      "id": "1b05604e-9582-4bd8-85c9-71216f76e7f9",
+      "chiefComplaint": "Cefaleia frequente, sensibilidade à luz e fadiga visual em telas",
+      "currentGlasses": true,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false,
+      "medicationsInUse": "Nega uso de medicamentos",
+      "clinicalNotes": "usuaria de lentes corretivas, Cefaleia frequente, Sensibilidade à luz / Fotofobia, Fadiga visual em telas, Lacrimejamento excessivo"
+    },
+    "lensometry": {
+      "id": "cab4db4f-5cad-40ba-9cef-139539483c10",
+      "od": {
+        "sphere": 0.5,
+        "cylinder": -0.25,
+        "axis": 175
+      },
+      "oe": {
+        "sphere": 0.5,
+        "cylinder": -0.5,
+        "axis": 5
+      },
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ],
+      "usageTime": "3 a 5 anos"
+    },
+    "visualAcuity": {
+      "id": "84872403-1c83-4a27-bb71-7f3ba16c36fa",
+      "testedAt": "2026-09-18T18:37:16.141Z",
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "id": "219e04c1-4ac9-48e0-b850-6558b46bc71c",
+      "od": {
+        "sphere": 0,
+        "cylinder": -0.75,
+        "axis": 180,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": -0.75,
+        "axis": 180,
+        "visualAcuity": "20/20"
+      },
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo Digital",
+        "Filtro Luz Azul (BlueCut)"
+      ]
+    },
+    "conduct": "Prescrição com correção de astigmatismo bilateral (-0.75 a 180°), proteção BlueCut para computador.",
+    "returnInstructions": "Retorno em 1 ano para controle visual de rotina.",
+    "episodeId": "LEGACY_EPISODE",
+    "patientName": "Erika Rodrigues"
+  },
+  {
+    "id": "a86750af-1a63-4e1b-a9b8-6d7c1f7ad1d5",
+    "patientId": "f3f7d16e-95f6-4d8f-8947-0ee9241c10e1",
+    "date": "2026-09-18T13:24:53.136Z",
+    "status": "completed",
+    "examinerId": "dr-meirelles",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "anamnesis": {
+      "id": "anam-scs-1",
+      "chiefComplaint": "Avaliação refrativa e renovação de óculos",
+      "currentGlasses": true,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false
+    },
+    "subjectiveRefraction": {
+      "id": "sr-scs-1",
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      }
+    },
+    "conduct": "Exame de refração concluído com sucesso. Orientação postural e controle visual.",
+    "returnInstructions": "Retorno em 1 ano para controle visual de rotina.",
+    "episodeId": "LEGACY_EPISODE",
+    "patientName": "Suzana C. dos Santos"
+  },
+  {
+    "id": "511baaec-43cb-49d5-b09f-ce03da9ddab0",
+    "patientId": "eb01d056-630d-452f-b6f4-50bb6e0c5ea7",
+    "date": "2026-09-18T12:27:29.919Z",
+    "status": "completed",
+    "examinerId": "dr-meirelles",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "anamnesis": {
+      "id": "anam-md-1",
+      "chiefComplaint": "Avaliação visual e refração de rotina",
+      "currentGlasses": true,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false
+    },
+    "subjectiveRefraction": {
+      "id": "sr-md-1",
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      }
+    },
+    "conduct": "Exame de refração realizado e finalizado. Orientado quanto ao uso correto das lentes.",
+    "returnInstructions": "Retorno em 1 ano para controle visual de rotina.",
+    "episodeId": "LEGACY_EPISODE",
+    "patientName": "Mauricio Dias"
+  },
+  {
+    "id": "enc_ivs_20260912_37",
+    "patientId": "pat-12092026-37",
+    "patientName": "Nicole",
+    "clinicId": "ivs",
+    "date": "2026-09-12T17:03:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T17:03:00.000Z",
+    "updatedAt": "2026-09-12T17:03:00.000Z",
+    "completedAt": "2026-09-12T17:03:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "Filha da Manu Priscila",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20260912_36",
+    "patientId": "pat-12092026-36",
+    "patientName": "Manu Priscila",
+    "clinicId": "ivs",
+    "date": "2026-09-12T17:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T17:00:00.000Z",
+    "updatedAt": "2026-09-12T17:00:00.000Z",
+    "completedAt": "2026-09-12T17:00:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "Consulta agendada",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20260912_35",
+    "patientId": "pat-12092026-35",
+    "patientName": "Marcela Veron",
+    "clinicId": "ivs",
+    "date": "2026-09-12T16:30:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T16:30:00.000Z",
+    "updatedAt": "2026-09-12T16:30:00.000Z",
+    "completedAt": "2026-09-12T16:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "[PENDÊNCIA DE HORÁRIO] PENDÊNCIA DE HORÁRIO / REAGENDAMENTO",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20260912_34",
+    "patientId": "pat-12092026-34",
+    "patientName": "Flávia",
+    "clinicId": "ivs",
+    "date": "2026-09-12T16:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T16:00:00.000Z",
+    "updatedAt": "2026-09-12T16:00:00.000Z",
+    "completedAt": "2026-09-12T16:00:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "Consulta agendada",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20260912_33",
+    "patientId": "pat-12092026-33",
+    "patientName": "Juliana",
+    "clinicId": "ivs",
+    "date": "2026-09-12T15:10:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T15:10:00.000Z",
+    "updatedAt": "2026-09-12T15:10:00.000Z",
+    "completedAt": "2026-09-12T15:10:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "Mãe do Samuel",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20260912_32",
+    "patientId": "pat-12092026-32",
+    "patientName": "Carol Walnier",
+    "clinicId": "ivs",
+    "date": "2026-09-12T15:06:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T15:06:00.000Z",
+    "updatedAt": "2026-09-12T15:06:00.000Z",
+    "completedAt": "2026-09-12T15:06:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "Consulta agendada",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20260912_31",
+    "patientId": "pat-12092026-31",
+    "patientName": "July Ivonete Camargo",
+    "clinicId": "ivs",
+    "date": "2026-09-12T15:03:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T15:03:00.000Z",
+    "updatedAt": "2026-09-12T15:03:00.000Z",
+    "completedAt": "2026-09-12T15:03:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "Consulta agendada",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20260912_30",
+    "patientId": "pat-12092026-30",
+    "patientName": "Samuel Torres",
+    "clinicId": "ivs",
+    "date": "2026-09-12T15:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T15:00:00.000Z",
+    "updatedAt": "2026-09-12T15:00:00.000Z",
+    "completedAt": "2026-09-12T15:00:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "Filho da Juliana",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20260912_29",
+    "patientId": "pat-12092026-29",
+    "patientName": "Neri",
+    "clinicId": "ivs",
+    "date": "2026-09-12T14:09:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T14:09:00.000Z",
+    "updatedAt": "2026-09-12T14:09:00.000Z",
+    "completedAt": "2026-09-12T14:09:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "Consulta agendada",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20260912_28",
+    "patientId": "pat-12092026-28",
+    "patientName": "Julia Mendonça",
+    "clinicId": "ivs",
+    "date": "2026-09-12T14:06:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T14:06:00.000Z",
+    "updatedAt": "2026-09-12T14:06:00.000Z",
+    "completedAt": "2026-09-12T14:06:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "Consulta agendada",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20260912_27",
+    "patientId": "pat-12092026-27",
+    "patientName": "Neiva Ribeiro",
+    "clinicId": "ivs",
+    "date": "2026-09-12T14:03:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T14:03:00.000Z",
+    "updatedAt": "2026-09-12T14:03:00.000Z",
+    "completedAt": "2026-09-12T14:03:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "Consulta agendada",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20260912_26",
+    "patientId": "pat-12092026-26",
+    "patientName": "Loira Ribeiro",
+    "clinicId": "ivs",
+    "date": "2026-09-12T14:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T14:00:00.000Z",
+    "updatedAt": "2026-09-12T14:00:00.000Z",
+    "completedAt": "2026-09-12T14:00:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "Consulta agendada",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20260912_25",
+    "patientId": "pat-12092026-25",
+    "patientName": "Alex Alves da Cunha",
+    "clinicId": "ivs",
+    "date": "2026-09-12T13:30:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T13:30:00.000Z",
+    "updatedAt": "2026-09-12T13:30:00.000Z",
+    "completedAt": "2026-09-12T13:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "Consulta agendada",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20260912_24",
+    "patientId": "pat-12092026-24",
+    "patientName": "Carlito Romero",
+    "clinicId": "ivs",
+    "date": "2026-09-12T13:03:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T13:03:00.000Z",
+    "updatedAt": "2026-09-12T13:03:00.000Z",
+    "completedAt": "2026-09-12T13:03:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "Consulta agendada",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20260912_23",
+    "patientId": "pat-12092026-23",
+    "patientName": "Kaique",
+    "clinicId": "ivs",
+    "date": "2026-09-12T13:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T13:00:00.000Z",
+    "updatedAt": "2026-09-12T13:00:00.000Z",
+    "completedAt": "2026-09-12T13:00:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "Consulta agendada",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20260912_22",
+    "patientId": "pat-12092026-22",
+    "patientName": "Mildel",
+    "clinicId": "ivs",
+    "date": "2026-09-12T10:30:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T10:30:00.000Z",
+    "updatedAt": "2026-09-12T10:30:00.000Z",
+    "completedAt": "2026-09-12T10:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "Filha do Kaique",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20260912_21",
+    "patientId": "pat-12092026-21",
+    "patientName": "Cristian Veron",
+    "clinicId": "ivs",
+    "date": "2026-09-12T10:27:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T10:27:00.000Z",
+    "updatedAt": "2026-09-12T10:27:00.000Z",
+    "completedAt": "2026-09-12T10:27:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "Consulta agendada",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20260912_20",
+    "patientId": "pat-12092026-20",
+    "patientName": "Paula",
+    "clinicId": "ivs",
+    "date": "2026-09-12T10:15:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T10:15:00.000Z",
+    "updatedAt": "2026-09-12T10:15:00.000Z",
+    "completedAt": "2026-09-12T10:15:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "Consulta agendada",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20260912_19",
+    "patientId": "pat-12092026-19",
+    "patientName": "Carlos Alberto",
+    "clinicId": "ivs",
+    "date": "2026-09-12T10:12:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T10:12:00.000Z",
+    "updatedAt": "2026-09-12T10:12:00.000Z",
+    "completedAt": "2026-09-12T10:12:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "Consulta agendada",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20260912_18",
+    "patientId": "pat-12092026-18",
+    "patientName": "Maria Salvadora",
+    "clinicId": "ivs",
+    "date": "2026-09-12T10:09:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T10:09:00.000Z",
+    "updatedAt": "2026-09-12T10:09:00.000Z",
+    "completedAt": "2026-09-12T10:09:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "Consulta agendada",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20260912_17",
+    "patientId": "pat-12092026-17",
+    "patientName": "Silvio Lopes",
+    "clinicId": "ivs",
+    "date": "2026-09-12T10:06:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T10:06:00.000Z",
+    "updatedAt": "2026-09-12T10:06:00.000Z",
+    "completedAt": "2026-09-12T10:06:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "Consulta agendada",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20260912_16",
+    "patientId": "pat-12092026-16",
+    "patientName": "Perla",
+    "clinicId": "ivs",
+    "date": "2026-09-12T10:03:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T10:03:00.000Z",
+    "updatedAt": "2026-09-12T10:03:00.000Z",
+    "completedAt": "2026-09-12T10:03:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "Consulta agendada",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20260912_15",
+    "patientId": "pat-12092026-15",
+    "patientName": "Carlos",
+    "clinicId": "ivs",
+    "date": "2026-09-12T10:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T10:00:00.000Z",
+    "updatedAt": "2026-09-12T10:00:00.000Z",
+    "completedAt": "2026-09-12T10:00:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "Esposo da Perla",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20260912_14",
+    "patientId": "pat-12092026-14",
+    "patientName": "Venino Ricardo",
+    "clinicId": "ivs",
+    "date": "2026-09-12T09:30:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T09:30:00.000Z",
+    "updatedAt": "2026-09-12T09:30:00.000Z",
+    "completedAt": "2026-09-12T09:30:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "Consulta agendada",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20260912_13",
+    "patientId": "pat-12092026-13",
+    "patientName": "Eliane",
+    "clinicId": "ivs",
+    "date": "2026-09-12T09:21:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T09:21:00.000Z",
+    "updatedAt": "2026-09-12T09:21:00.000Z",
+    "completedAt": "2026-09-12T09:21:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "Consulta agendada",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20260912_12",
+    "patientId": "pat-12092026-12",
+    "patientName": "Iara",
+    "clinicId": "ivs",
+    "date": "2026-09-12T09:18:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T09:18:00.000Z",
+    "updatedAt": "2026-09-12T09:18:00.000Z",
+    "completedAt": "2026-09-12T09:18:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "Filha do Eliezer",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20260912_11",
+    "patientId": "pat-12092026-11",
+    "patientName": "Vitória Mariana",
+    "clinicId": "ivs",
+    "date": "2026-09-12T09:15:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T09:15:00.000Z",
+    "updatedAt": "2026-09-12T09:15:00.000Z",
+    "completedAt": "2026-09-12T09:15:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "Consulta agendada",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20260912_10",
+    "patientId": "pat-12092026-10",
+    "patientName": "Helin",
+    "clinicId": "ivs",
+    "date": "2026-09-12T09:03:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T09:03:00.000Z",
+    "updatedAt": "2026-09-12T09:03:00.000Z",
+    "completedAt": "2026-09-12T09:03:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "Consulta agendada",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20260912_09",
+    "patientId": "pat-12092026-09",
+    "patientName": "Marcela Geovana",
+    "clinicId": "ivs",
+    "date": "2026-09-12T09:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T09:00:00.000Z",
+    "updatedAt": "2026-09-12T09:00:00.000Z",
+    "completedAt": "2026-09-12T09:00:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "Consulta agendada",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20260912_08",
+    "patientId": "pat-12092026-08",
+    "patientName": "Luana",
+    "clinicId": "ivs",
+    "date": "2026-09-12T08:58:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T08:58:00.000Z",
+    "updatedAt": "2026-09-12T08:58:00.000Z",
+    "completedAt": "2026-09-12T08:58:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "Consulta agendada",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20260912_07",
+    "patientId": "pat-12092026-07",
+    "patientName": "Francineia Asis",
+    "clinicId": "ivs",
+    "date": "2026-09-12T08:55:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T08:55:00.000Z",
+    "updatedAt": "2026-09-12T08:55:00.000Z",
+    "completedAt": "2026-09-12T08:55:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "Consulta agendada",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20260912_06",
+    "patientId": "pat-12092026-06",
+    "patientName": "Ana Luiza",
+    "clinicId": "ivs",
+    "date": "2026-09-12T08:22:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T08:22:00.000Z",
+    "updatedAt": "2026-09-12T08:22:00.000Z",
+    "completedAt": "2026-09-12T08:22:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "Consulta agendada",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20260912_05",
+    "patientId": "pat-12092026-05",
+    "patientName": "Eduardo",
+    "clinicId": "ivs",
+    "date": "2026-09-12T08:17:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T08:17:00.000Z",
+    "updatedAt": "2026-09-12T08:17:00.000Z",
+    "completedAt": "2026-09-12T08:17:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "Consulta agendada",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20260912_04",
+    "patientId": "pat-12092026-04",
+    "patientName": "Ademir Merey",
+    "clinicId": "ivs",
+    "date": "2026-09-12T08:09:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T08:09:00.000Z",
+    "updatedAt": "2026-09-12T08:09:00.000Z",
+    "completedAt": "2026-09-12T08:09:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "Consulta agendada",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20260912_03",
+    "patientId": "pat-12092026-03",
+    "patientName": "José",
+    "clinicId": "ivs",
+    "date": "2026-09-12T08:06:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T08:06:00.000Z",
+    "updatedAt": "2026-09-12T08:06:00.000Z",
+    "completedAt": "2026-09-12T08:06:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "Consulta agendada",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20260912_02",
+    "patientId": "pat-12092026-02",
+    "patientName": "Rafael",
+    "clinicId": "ivs",
+    "date": "2026-09-12T08:03:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T08:03:00.000Z",
+    "updatedAt": "2026-09-12T08:03:00.000Z",
+    "completedAt": "2026-09-12T08:03:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "Consulta agendada",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "enc_ivs_20260912_01",
+    "patientId": "pat-12092026-01",
+    "patientName": "Kamila Rios",
+    "clinicId": "ivs",
+    "date": "2026-09-12T08:00:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "syncStatus": "synced",
+    "createdAt": "2026-09-12T08:00:00.000Z",
+    "updatedAt": "2026-09-12T08:00:00.000Z",
+    "completedAt": "2026-09-12T08:00:00.000Z",
+    "anamnesis": {
+      "chiefComplaint": "Atendimento clínico e refração",
+      "currentGlasses": false,
+      "contactLenses": false
+    },
+    "visualAcuity": {
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/20"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "od": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/20"
+      },
+      "addition": 0,
+      "lensType": "monofocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "conduct": "Exame de refração concluído com prescrição óptica e orientações prestadas.",
+    "notes": "Consulta agendada",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE"
+  },
+  {
+    "id": "08f076f0-4990-4361-84e7-40bd5d952ab0",
+    "patientId": "4e88c27c-dbd0-4042-8d1c-9212c4d2e290",
+    "date": "2026-09-09T13:39:03.358Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "anamnesis": {
+      "id": "anam-val-1",
+      "encounterId": "08f076f0-4990-4361-84e7-40bd5d952ab0",
+      "chiefComplaint": "Triagem visual escolar - aproximação excessiva da televisão e dificuldade para leitura",
+      "ocularHistory": "Sem histórico de uso de óculos prévios",
+      "currentGlasses": false,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false
+    },
+    "subjectiveRefraction": {
+      "id": "sr-val-1",
+      "encounterId": "08f076f0-4990-4361-84e7-40bd5d952ab0",
+      "od": {
+        "sphere": 3,
+        "cylinder": 0,
+        "axis": 180,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 2.25,
+        "cylinder": -0.5,
+        "axis": 175,
+        "visualAcuity": "20/20"
+      },
+      "pdDistanceMm": 62,
+      "pdNear": 59
+    },
+    "conduct": "Prescrição óptica de lentes monofocais com filtro de luz azul (Blue Cut / UV400)",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE",
+    "patientName": "Maria Valentina"
+  },
+  {
+    "id": "d6ce046b-5702-4464-8da8-538ebf40afac",
+    "patientId": "dcbde17f-cf07-4ff6-8460-cc7a16573aa2",
+    "date": "2026-09-09T13:12:08.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "anamnesis": {
+      "id": "anam-mj-1",
+      "encounterId": "d6ce046b-5702-4464-8da8-538ebf40afac",
+      "chiefComplaint": "Visão embaçada para perto e cansaço visual após leitura/costura",
+      "currentGlasses": true,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false
+    },
+    "subjectiveRefraction": {
+      "id": "sr-mj-1",
+      "encounterId": "d6ce046b-5702-4464-8da8-538ebf40afac",
+      "od": {
+        "sphere": 0.75,
+        "cylinder": 0,
+        "axis": 90,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0.5,
+        "cylinder": 0,
+        "axis": 90,
+        "visualAcuity": "20/20"
+      },
+      "addition": 2.25,
+      "pdDistanceMm": 62
+    },
+    "conduct": "Prescrição de lentes bifocais / multifocais com tratamento fotossensível",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE",
+    "patientName": "Maria José"
+  },
+  {
+    "id": "02981472-b51c-4a98-af43-de22df156bb1",
+    "patientId": "223c8cf2-32ba-42bf-8d46-5b6861c77aa2",
+    "date": "2026-09-08T21:20:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "anamnesis": {
+      "id": "anam-jf-1",
+      "encounterId": "02981472-b51c-4a98-af43-de22df156bb1",
+      "chiefComplaint": "Cansaço visual no trabalho e necessidade de atualização de grau",
+      "currentGlasses": true,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false
+    },
+    "subjectiveRefraction": {
+      "id": "sr-jf-1",
+      "encounterId": "02981472-b51c-4a98-af43-de22df156bb1",
+      "od": {
+        "sphere": 0.5,
+        "cylinder": -0.75,
+        "axis": 90,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0.25,
+        "cylinder": -0.5,
+        "axis": 85,
+        "visualAcuity": "20/20"
+      },
+      "addition": 1.75,
+      "pdDistanceMm": 63
+    },
+    "conduct": "Prescrição multifocal digital para perto e longe.",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE",
+    "patientName": "Jose Francisco"
+  },
+  {
+    "id": "60ab1541-17dc-49e4-9a80-ec52a9c06b94",
+    "patientId": "104b0e68-60aa-454a-aed6-73d49eca088e",
+    "date": "2026-09-08T18:40:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "anamnesis": {
+      "id": "anam-vc-1",
+      "encounterId": "60ab1541-17dc-49e4-9a80-ec52a9c06b94",
+      "chiefComplaint": "Dificuldade para enxergar o quadro na escola (visão turva para longe)",
+      "currentGlasses": false,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false
+    },
+    "subjectiveRefraction": {
+      "id": "sr-vc-1",
+      "encounterId": "60ab1541-17dc-49e4-9a80-ec52a9c06b94",
+      "od": {
+        "sphere": -1.25,
+        "cylinder": -0.5,
+        "axis": 180,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": -1.5,
+        "cylinder": -0.25,
+        "axis": 175,
+        "visualAcuity": "20/20"
+      },
+      "pdDistanceMm": 58
+    },
+    "conduct": "Prescrição óptica para miopia e astigmatismo leve. Filtro antirreflexo.",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE",
+    "patientName": "Vitoria Coelho Saraiva de Lima"
+  },
+  {
+    "id": "enc-lnl-1",
+    "patientId": "3c7f7025-3194-44eb-a96d-6b1cb7d25315",
+    "date": "2026-09-08T18:25:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "anamnesis": {
+      "id": "anam-lnl-1",
+      "encounterId": "enc-lnl-1",
+      "chiefComplaint": "Dificuldade visual progressiva para leitura de perto",
+      "currentGlasses": true,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false
+    },
+    "subjectiveRefraction": {
+      "id": "sr-lnl-1",
+      "encounterId": "enc-lnl-1",
+      "od": {
+        "sphere": 1,
+        "cylinder": -0.25,
+        "axis": 180,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 1.25,
+        "cylinder": -0.5,
+        "axis": 170,
+        "visualAcuity": "20/20"
+      },
+      "addition": 2,
+      "pdDistanceMm": 61
+    },
+    "conduct": "Prescrição multifocal com antirreflexo para conforto de leitura.",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE",
+    "patientName": "Lidia Noemi Lopez"
+  },
+  {
+    "id": "b415f5b6-0696-4006-a117-b00ce9c13ed0",
+    "patientId": "4b5acbb1-e930-4ae0-8d63-aea1582ffb07",
+    "date": "2026-09-08T17:58:17.069Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "anamnesis": {
+      "id": "anam-kc-1",
+      "encounterId": "b415f5b6-0696-4006-a117-b00ce9c13ed0",
+      "chiefComplaint": "Há 01 ano com mesmo RX. Usuária de lamotrigina e puran 25mg. Relata queda e cefaleias episódicas. Acompanhamento com neurologista.",
+      "currentGlasses": true,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false,
+      "medicationsInUse": "Lamotrigina, Puran T4 25mg"
+    },
+    "subjectiveRefraction": {
+      "id": "sr-kc-1",
+      "encounterId": "b415f5b6-0696-4006-a117-b00ce9c13ed0",
+      "od": {
+        "sphere": -2.5,
+        "cylinder": -0.75,
+        "axis": 10,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": -2.25,
+        "cylinder": -0.5,
+        "axis": 170,
+        "visualAcuity": "20/20"
+      },
+      "addition": 1,
+      "pdDistanceMm": 60
+    },
+    "conduct": "Prescrição progressiva com filtro azul Blue Cut. Orientações posturais e controle neurológico.",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE",
+    "patientName": "Keli Cristina da Rocha Stuck"
+  },
+  {
+    "id": "enc-kc2-1",
+    "patientId": "a9347272-0529-4b2d-9633-6c6f396e8a40",
+    "date": "2026-09-05T17:25:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "anamnesis": {
+      "id": "anam-kc2-1",
+      "encounterId": "enc-kc2-1",
+      "chiefComplaint": "Visão embaçada para longe e sensibilidade à luz",
+      "currentGlasses": true,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false
+    },
+    "subjectiveRefraction": {
+      "id": "sr-kc2-1",
+      "encounterId": "enc-kc2-1",
+      "od": {
+        "sphere": -1.75,
+        "cylinder": -0.5,
+        "axis": 15,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": -1.5,
+        "cylinder": -0.75,
+        "axis": 165,
+        "visualAcuity": "20/20"
+      },
+      "pdDistanceMm": 61
+    },
+    "conduct": "Prescrição monofocal com proteção antirreflexo e filtro fotossensível.",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE",
+    "patientName": "Kelli Cristina"
+  },
+  {
+    "id": "enc-rrb-1",
+    "patientId": "ebeceff-1ea4-4de8-829e-a20c3c760090",
+    "date": "2026-09-05T11:45:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "anamnesis": {
+      "id": "anam-rrb-1",
+      "encounterId": "enc-rrb-1",
+      "chiefComplaint": "Dificuldade para focar de perto e cefaleia ao fim do dia",
+      "currentGlasses": true,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false
+    },
+    "subjectiveRefraction": {
+      "id": "sr-rrb-1",
+      "encounterId": "enc-rrb-1",
+      "od": {
+        "sphere": 0.75,
+        "cylinder": -0.5,
+        "axis": 180,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0.75,
+        "cylinder": -0.25,
+        "axis": 170,
+        "visualAcuity": "20/20"
+      },
+      "addition": 1.75,
+      "pdDistanceMm": 62
+    },
+    "conduct": "Prescrição multifocal digital.",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE",
+    "patientName": "Ramona Ribeiro Brito"
+  },
+  {
+    "id": "enc-gmb-1",
+    "patientId": "08d90c8b-fcdb-460e-b6d4-99b740042dd0",
+    "date": "2026-09-05T10:30:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "anamnesis": {
+      "id": "anam-gmb-1",
+      "encounterId": "enc-gmb-1",
+      "chiefComplaint": "Dificuldade visual para longe e necessidade de novos óculos",
+      "currentGlasses": true,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false
+    },
+    "subjectiveRefraction": {
+      "id": "sr-gmb-1",
+      "encounterId": "enc-gmb-1",
+      "od": {
+        "sphere": -2,
+        "cylinder": -0.5,
+        "axis": 180,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": -2.25,
+        "cylinder": -0.25,
+        "axis": 170,
+        "visualAcuity": "20/20"
+      },
+      "pdDistanceMm": 63
+    },
+    "conduct": "Prescrição óptica para miopia com filtro Blue UV.",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE",
+    "patientName": "Gabriel da Mota Brito"
+  },
+  {
+    "id": "enc-zm-1",
+    "patientId": "caf37cb8-0da4-45a5-be3e-68afbc55d900",
+    "date": "2026-09-05T10:25:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "anamnesis": {
+      "id": "anam-zm-1",
+      "encounterId": "enc-zm-1",
+      "chiefComplaint": "Visão cansada para leitura de jornais e textos pequenos",
+      "currentGlasses": true,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false
+    },
+    "subjectiveRefraction": {
+      "id": "sr-zm-1",
+      "encounterId": "enc-zm-1",
+      "od": {
+        "sphere": 1.5,
+        "cylinder": 0,
+        "axis": 90,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 1.5,
+        "cylinder": 0,
+        "axis": 90,
+        "visualAcuity": "20/20"
+      },
+      "addition": 2.5,
+      "pdDistanceMm": 61
+    },
+    "conduct": "Prescrição multifocal para perto e meia distância com antirreflexo.",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE",
+    "patientName": "Zeni Martins"
+  },
+  {
+    "id": "enc-lma-1",
+    "patientId": "d0a4662c-f285-47ce-b784-850d14a5b2e0",
+    "date": "2026-09-05T09:40:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "anamnesis": {
+      "id": "anam-lma-1",
+      "encounterId": "enc-lma-1",
+      "chiefComplaint": "Visão sombreada das letras e cansaço ao focar no trabalho",
+      "currentGlasses": true,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false
+    },
+    "subjectiveRefraction": {
+      "id": "sr-lma-1",
+      "encounterId": "enc-lma-1",
+      "od": {
+        "sphere": -1,
+        "cylinder": -1.25,
+        "axis": 175,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": -0.75,
+        "cylinder": -1.5,
+        "axis": 5,
+        "visualAcuity": "20/20"
+      },
+      "pdDistanceMm": 60
+    },
+    "conduct": "Prescrição monofocal asférica de alta precisão com antirreflexo.",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE",
+    "patientName": "Larissa Mayara de Almeida"
+  },
+  {
+    "id": "enc-zsf-1",
+    "patientId": "290c7900-33b0-4f82-b3b1-6bee5b58c8a0",
+    "date": "2026-09-05T09:10:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "anamnesis": {
+      "id": "anam-zsf-1",
+      "encounterId": "enc-zsf-1",
+      "chiefComplaint": "Dificuldade para ler no celular e no computador, dor de cabeça no fim da tarde",
+      "currentGlasses": true,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false
+    },
+    "subjectiveRefraction": {
+      "id": "sr-zsf-1",
+      "encounterId": "enc-zsf-1",
+      "od": {
+        "sphere": 0.5,
+        "cylinder": -0.5,
+        "axis": 90,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": 0.75,
+        "cylinder": -0.25,
+        "axis": 80,
+        "visualAcuity": "20/20"
+      },
+      "addition": 1.75,
+      "pdDistanceMm": 62
+    },
+    "conduct": "Prescrição de multifocal com filtro de luz azul para trabalho no computador.",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE",
+    "patientName": "Zoraide Santos Ferreira"
+  },
+  {
+    "id": "enc-jlv-1",
+    "patientId": "b788e9cd-8a70-4413-a643-74abead2ed50",
+    "date": "2026-09-05T08:15:00.000Z",
+    "status": "completed",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "anamnesis": {
+      "id": "anam-jlv-1",
+      "encounterId": "enc-jlv-1",
+      "chiefComplaint": "Visão borrada para longe ao dirigir à noite",
+      "currentGlasses": false,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false
+    },
+    "subjectiveRefraction": {
+      "id": "sr-jlv-1",
+      "encounterId": "enc-jlv-1",
+      "od": {
+        "sphere": -0.75,
+        "cylinder": -0.5,
+        "axis": 15,
+        "visualAcuity": "20/20"
+      },
+      "oe": {
+        "sphere": -0.75,
+        "cylinder": -0.25,
+        "axis": 165,
+        "visualAcuity": "20/20"
+      },
+      "pdDistanceMm": 64
+    },
+    "conduct": "Prescrição monofocal com antirreflexo especial para direção noturna.",
+    "returnInWeeks": 52,
+    "episodeId": "LEGACY_EPISODE",
+    "patientName": "Jean Lucas Viana"
+  },
+  {
+    "id": "d7331129-f086-4897-85fe-6a2dbedc423d",
+    "patientId": "2ba4f7c1-3693-46b1-b765-5e6e4c86a42b",
+    "date": "2026-10-10T16:19:31.422Z",
+    "status": "completed",
+    "examinerId": "dr-meirelles",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "syncStatus": "synced",
+    "updatedAt": "2026-10-10T16:22:01.351Z",
+    "anamnesis": {
+      "id": "24bf8ac2-8502-48dd-a6d6-4aefe7aa6efc",
+      "encounterId": "",
+      "chiefComplaint": "usuaria de lenyes corretivas",
+      "currentGlasses": false,
+      "contactLenses": false,
+      "hasHypertension": false,
+      "hasDiabetes": false,
+      "medicationsInUse": "",
+      "pathologicalHistory": "",
+      "allergies": "",
+      "ocularHistory": ""
+    },
+    "lensometry": {
+      "id": "89884f05-6beb-48f8-9304-ea809c3adc90",
+      "encounterId": "",
+      "od": {},
+      "oe": {},
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo"
+      ]
+    },
+    "visualAcuity": {
+      "id": "9ee6ff95-8c0c-45a8-b526-fe33cc209b89",
+      "encounterId": "",
+      "testedAt": "2026-10-10T16:19:31.422Z",
+      "entries": [
+        {
+          "eye": "OD",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        },
+        {
+          "eye": "OE",
+          "optotypeType": "snellen_letters",
+          "distanceMeters": 6,
+          "uncorrected": "20/"
+        }
+      ]
+    },
+    "subjectiveRefraction": {
+      "id": "16bebda5-c763-449c-a779-6f1d32dfef25",
+      "encounterId": "",
+      "od": {
+        "sphere": -1,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/"
+      },
+      "oe": {
+        "sphere": -1,
+        "cylinder": 0,
+        "axis": 0,
+        "visualAcuity": "20/"
+      },
+      "lensType": "multifocal",
+      "material": "resina",
+      "treatments": [
+        "Antirreflexo Digital",
+        "Filtro Luz Azul (BlueCut)"
+      ],
+      "specialLenses": "",
+      "additionalOpticalInfo": ""
+    },
+    "episodeId": "0b105158-1854-4996-b6d7-c93ce5c8fd50",
+    "version": 7,
+    "startedAt": "2026-10-10T16:19:31.486Z",
+    "completedAt": "2026-10-10T16:22:01.351Z"
+  }
+]

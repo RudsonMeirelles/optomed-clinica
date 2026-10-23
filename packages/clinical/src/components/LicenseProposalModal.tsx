@@ -19,6 +19,7 @@ import {
 import { ClinicConfig, SubscriptionPlan } from '@optotipo/shared';
 import { SUBSCRIPTION_PLANS, licensingService } from '../services/licensingService';
 import { OptomedBrandLogo } from '../components/SyncStatusBadge';
+import { printIsolatedElement } from '../services/printService';
 
 interface LicenseProposalModalProps {
   clinic: ClinicConfig;
@@ -61,7 +62,16 @@ export const LicenseProposalModal: React.FC<LicenseProposalModalProps> = ({
   };
 
   const handlePrint = () => {
-    window.print();
+    const printEl = document.getElementById('license-proposal-sheet');
+    if (printEl) {
+      printIsolatedElement(printEl, {
+        title: `Proposta de Licenciamento - ${clinic.name}`,
+        orientation: 'portrait',
+        margins: '8mm 8mm'
+      });
+    } else {
+      window.print();
+    }
   };
 
   const handleDirectActivation = () => {
@@ -164,7 +174,7 @@ export const LicenseProposalModal: React.FC<LicenseProposalModalProps> = ({
         </div>
 
         {/* ================= CORPO DA PROPOSTA (LAYOUT OFICIAL TIMBRADO) ================= */}
-        <div className="p-8 space-y-6 overflow-y-auto text-slate-200 print:text-black print:p-8 print:overflow-visible">
+        <div id="license-proposal-sheet" className="p-8 space-y-6 overflow-y-auto text-slate-200 print:text-black print:p-8 print:overflow-visible bg-slate-900 print:bg-white">
           
           {/* Cabeçalho Corporativo Timbrado */}
           <div className="flex items-start justify-between border-b-2 border-slate-700/80 print:border-black pb-6">
@@ -219,7 +229,7 @@ export const LicenseProposalModal: React.FC<LicenseProposalModalProps> = ({
                 Unidade & Localização
               </div>
               <div className="text-sm font-bold text-white print:text-black mt-0.5">
-                {clinic.city || 'Foz do Iguaçu'} — {clinic.country || 'Brasil'}
+                {clinic.city || 'Ponta Porã'} — {clinic.country || 'Brasil'}
               </div>
               <div className="text-xs text-slate-300 print:text-slate-700 mt-1">
                 <div>Código Tenant: <span className="font-mono font-bold text-blue-400 print:text-blue-700">{clinic.code}</span></div>

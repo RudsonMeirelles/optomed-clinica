@@ -4,6 +4,7 @@ import { offlineDb } from '../services/offlineDb';
 
 export const SyncStatusBadge: React.FC = () => {
   const [syncStatus, setSyncStatus] = useState<string>(() => offlineDb.getSyncStatus());
+  const [pendingCount, setPendingCount] = useState<number>(() => offlineDb.getPendingSyncCount());
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [isOnline, setIsOnline] = useState<boolean>(navigator.onLine);
@@ -15,16 +16,27 @@ export const SyncStatusBadge: React.FC = () => {
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
 
-    const onSyncChange = (status: string) => {
+    const onSyncChange = (status: string, pending?: number) => {
       setSyncStatus(status);
+      if (typeof pending === 'number') {
+        setPendingCount(pending);
+      } else {
+        setPendingCount(offlineDb.getPendingSyncCount());
+      }
       if (status !== 'syncing') setIsSyncing(false);
     };
     offlineDb.addSyncListener(onSyncChange);
+
+    // Polling de fallback espaçado (15s) pois os ouvintes onSyncChange já atualizam em tempo real
+    const interval = setInterval(() => {
+      setPendingCount(offlineDb.getPendingSyncCount());
+    }, 15000);
 
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
       offlineDb.removeSyncListener(onSyncChange);
+      clearInterval(interval);
     };
   }, []);
 
@@ -33,6 +45,7 @@ export const SyncStatusBadge: React.FC = () => {
     setIsSyncing(true);
     try {
       await offlineDb.manualSync();
+      setPendingCount(offlineDb.getPendingSyncCount());
     } finally {
       setIsSyncing(false);
     }
@@ -43,6 +56,7 @@ export const SyncStatusBadge: React.FC = () => {
     setIsUploading(true);
     try {
       await offlineDb.forceUploadAll();
+      setPendingCount(offlineDb.getPendingSyncCount());
       setUploadDone(true);
       setTimeout(() => setUploadDone(false), 4000);
     } finally {
@@ -60,10 +74,14 @@ export const SyncStatusBadge: React.FC = () => {
 
   const label = (() => {
     if (!isOnline) return 'Offline';
-    if (syncStatus === 'synced') return 'Sincronizado';
-    if (syncStatus === 'syncing') return 'Sincronizando…';
+    if (syncStatus === 'synced') {
+      return pendingCount > 0 ? `Sincronizado (${pendingCount} na fila)` : 'Sincronizado';
+    }
+    if (syncStatus === 'syncing') {
+      return pendingCount > 0 ? `Sincronizando (${pendingCount})…` : 'Sincronizando…';
+    }
     if (syncStatus === 'error') return 'Sem acesso ao servidor';
-    return 'Aguardando sync';
+    return pendingCount > 0 ? `Aguardando sync (${pendingCount})` : 'Aguardando sync';
   })();
 
   const Icon = (() => {

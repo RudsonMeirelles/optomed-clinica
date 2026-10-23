@@ -1,0 +1,50 @@
+[
+  {
+    "id": "sess_ivs_1",
+    "clinicId": "ivs",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "date": "2026-09-03",
+    "contractType": "per_consultation",
+    "baseAmount": 50,
+    "notes": "12 consultas realizadas",
+    "status": "closed",
+    "createdAt": "2026-09-03T18:00:00Z"
+  },
+  {
+    "id": "sess_ivs_2",
+    "clinicId": "ivs",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "date": "2026-09-04",
+    "contractType": "per_consultation",
+    "baseAmount": 50,
+    "notes": "5 consultas realizadas",
+    "status": "closed",
+    "createdAt": "2026-09-04T18:00:00Z"
+  },
+  {
+    "id": "sess_ivs_3",
+    "clinicId": "ivs",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "date": "2026-09-05",
+    "contractType": "period_half_day",
+    "baseAmount": 500,
+    "notes": "Atendimento por Período de 5h (Meia Diária)",
+    "status": "active",
+    "createdAt": "2026-09-05T08:00:00Z"
+  },
+  {
+    "id": "sess_ivs_1010",
+    "clinicId": "ivs",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "date": "2026-10-10",
+    "contractType": "period_full_day",
+    "baseAmount": 1000,
+    "notes": "Sábado (10/10/2026) - Período Fechado (Diária Integral) - Fixo R$ 1.000,00",
+    "status": "active",
+    "createdAt": "2026-10-10T08:00:00Z"
+  }
+]

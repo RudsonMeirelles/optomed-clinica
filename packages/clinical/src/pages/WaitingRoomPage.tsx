@@ -63,9 +63,10 @@ export const WaitingRoomPage: React.FC<WaitingRoomPageProps> = ({ activeClinic, 
       setCurrentTime(now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
     }, 1000);
 
+    // Polling de fallback a cada 10s (chamadas de senhas ocorrem instantaneamente via evento optomed_patient_called)
     const refreshInterval = setInterval(() => {
       loadAppointments();
-    }, 3000);
+    }, 10000);
 
     // Escuta novas chamadas de paciente emitidas pelo examinador
     const handlePatientCall = (e: any) => {
@@ -113,7 +114,21 @@ export const WaitingRoomPage: React.FC<WaitingRoomPageProps> = ({ activeClinic, 
   const activeMediaItems = mediaSettings.items.filter(i => i.active);
   const currentItem = activeMediaItems.length > 0 ? activeMediaItems[currentMediaIndex % activeMediaItems.length] : null;
 
-  const waitingPatients = appointments.filter(a => a.status === 'waiting');
+  // Fila de pacientes aguardando chamada ou já em check-in
+  const waitingPatients = appointments
+    .filter(a => a.status === 'waiting' || a.status === 'checked_in')
+    .sort((a, b) => {
+      // Prioridade Legal (Lei 10.048) primeiro
+      const prioA = a.isPriority ? 1 : 0;
+      const prioB = b.isPriority ? 1 : 0;
+      if (prioA !== prioB) return prioB - prioA;
+
+      // Horário de check-in / agendamento
+      if (a.checkInAt && b.checkInAt) {
+        return a.checkInAt.localeCompare(b.checkInAt);
+      }
+      return (a.time || '').localeCompare(b.time || '');
+    });
 
   const triggerTestCall = (apt: Appointment) => {
     const ticketNum = apt.ticketNumber || `P-${String(appointments.indexOf(apt) + 1).padStart(2, '0')}`;
@@ -343,16 +358,29 @@ export const WaitingRoomPage: React.FC<WaitingRoomPageProps> = ({ activeClinic, 
                 waitingPatients.slice(0, 6).map((apt, idx) => (
                   <div 
                     key={apt.id} 
-                    className="p-2.5 bg-slate-950 border border-slate-800 rounded-2xl flex items-center justify-between gap-2 hover:border-amber-400/40 transition-colors"
+                    className={`p-2.5 bg-slate-950 border rounded-2xl flex items-center justify-between gap-2 transition-colors ${
+                      apt.isPriority 
+                        ? 'border-rose-500/50 bg-rose-950/20 hover:border-rose-400' 
+                        : 'border-slate-800 hover:border-amber-400/40'
+                    }`}
                   >
                     <div className="flex items-center gap-2 truncate">
-                      <span className="font-mono font-black text-[11px] bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-md shrink-0">
+                      <span className={`font-mono font-black text-[11px] px-2 py-0.5 rounded-md shrink-0 border ${
+                        apt.isPriority
+                          ? 'bg-rose-500/20 text-rose-300 border-rose-500/40'
+                          : 'bg-amber-500/20 text-amber-300 border-amber-500/30'
+                      }`}>
                         {apt.ticketNumber || `P-${String(idx + 1).padStart(2, '0')}`}
                       </span>
                       <span className="font-bold text-xs text-white truncate">
                         {apt.patientName}
                       </span>
                     </div>
+                    {apt.isPriority && (
+                      <span className="px-1.5 py-0.5 rounded bg-rose-500/30 text-rose-300 text-[9px] font-black uppercase shrink-0">
+                        PREF
+                      </span>
+                    )}
                   </div>
                 ))
               )}

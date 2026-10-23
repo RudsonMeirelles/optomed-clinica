@@ -1,0 +1,50 @@
+[
+  {
+    "id": "2989f59c-4300-424f-9168-ac932a88edf3",
+    "clinicId": "ivs",
+    "patientId": "8e7491f7-7ed7-4991-aa89-bcc200beddc1",
+    "patientGlobalId": "gid_1790455270985_a3a3be5d",
+    "title": "Atendimento Oftalmológico e Refração",
+    "status": "ACTIVE",
+    "startDate": "2026-09-26T20:41:11.056Z",
+    "createdAt": "2026-09-26T20:41:11.056Z",
+    "updatedAt": "2026-09-26T20:41:11.056Z",
+    "version": 1
+  },
+  {
+    "id": "af731b3b-b575-49bf-a060-69f3e25a2ae2",
+    "clinicId": "ivs",
+    "patientId": "c6d79e1e-15dd-491a-ac3c-465f58af9ffb",
+    "patientGlobalId": "gid_1790454738211_838a8813",
+    "title": "Atendimento Oftalmológico e Refração",
+    "status": "ACTIVE",
+    "startDate": "2026-09-26T20:32:18.430Z",
+    "createdAt": "2026-09-26T20:32:18.430Z",
+    "updatedAt": "2026-09-26T20:32:18.430Z",
+    "version": 1
+  },
+  {
+    "id": "b85d152d-a59f-4b57-8e24-a53ee8323ec0",
+    "clinicId": "ivs",
+    "patientId": "068e73c5-d4ad-4370-bbfe-f83457ee0ac4",
+    "patientGlobalId": "gid_1790453935985_8b131d41",
+    "title": "Atendimento Oftalmológico e Refração",
+    "status": "ACTIVE",
+    "startDate": "2026-09-26T20:18:56.060Z",
+    "createdAt": "2026-09-26T20:18:56.060Z",
+    "updatedAt": "2026-09-26T20:18:56.061Z",
+    "version": 1
+  },
+  {
+    "id": "a4d3542c-7050-429d-9737-582d0b6896b0",
+    "clinicId": "ivs",
+    "patientId": "e305d61f-7e5d-40a0-b7d8-0a0a001f1dd2",
+    "patientGlobalId": "gid_1790452947229_88d2654e",
+    "title": "Atendimento Oftalmológico e Refração",
+    "status": "ACTIVE",
+    "startDate": "2026-09-26T20:02:43.492Z",
+    "createdAt": "2026-09-26T20:02:43.492Z",
+    "updatedAt": "2026-09-26T20:02:43.492Z",
+    "version": 1
+  }
+]

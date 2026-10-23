@@ -1,0 +1,31 @@
+[
+  {
+    "id": "evo-audit-001",
+    "encounterId": "enc-audit-311-001",
+    "patientId": "pat-audit-311-001",
+    "clinicId": "ivs",
+    "professionalId": "dr-meirelles",
+    "professionalName": "Dr. Rudson Meirelles",
+    "timestamp": "2026-09-23T19:16:51.107Z",
+    "text": "Paciente adaptado ao teste subjetivo com ótima acuidade visual de perto e longe.",
+    "type": "evolution",
+    "version": 1
+  },
+  {
+    "id": "evo-002-amend",
+    "encounterId": "enc-fase3-8-001",
+    "patientId": "pat-fase3-8-102",
+    "clinicId": "ivs",
+    "professionalId": "dr-meirelles",
+    "professionalName": "Dr. Rudson Meirelles",
+    "timestamp": "2026-09-23T10:30:00.000Z",
+    "text": "ADENDO CLÍNICO: Retificação da posologia do colírio lubrificante para 6x ao dia nas primeiras duas semanas devido à alta exposição ocupacional a ar-condicionado e telas de computador.",
+    "type": "amendment",
+    "version": 2,
+    "supersedesId": "evo-001",
+    "amendmentReason": "Ajuste de posologia inicial em função da gravidade ocupacional",
+    "previousContent": "Paciente comparece queixando-se de astenopia e ardência ocular. Exame biomicroscópico compatível com ceratite pontilhada difusa leve. Prescrito colírio lubrificante sem conservante 4x ao dia por 30 dias.",
+    "createdAt": "2026-09-23T10:30:00.000Z",
+    "createdBy": "Dr. Rudson Meirelles"
+  }
+]

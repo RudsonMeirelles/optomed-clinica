@@ -1,0 +1,13 @@
+[
+  {
+    "id": "eav_ivs_meirelles",
+    "clinicId": "ivs",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "perAppointmentAmount": 100,
+    "active": true,
+    "notes": "Atendimento Avulso IVS: R$ 100,00 por consulta fora de períodos fixos",
+    "createdAt": "2026-10-01T00:00:00.000Z",
+    "updatedAt": "2026-10-01T00:00:00.000Z"
+  }
+]

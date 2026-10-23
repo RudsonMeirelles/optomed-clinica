@@ -1,0 +1,60 @@
+[
+  {
+    "id": "doc-1790434046034",
+    "encounterId": "bab5ae93-ba8a-4aab-bf95-483b5183a35e",
+    "patientId": "eb9bc25c-c436-4b7e-bcb2-19a57d274ace",
+    "clinicId": "megastar",
+    "type": "clinical_report",
+    "title": "Receituário Unificado (Óptico + Farmacológico) - Gabrieli Vitoria Araujo",
+    "content": "Documento emitido em formato a4_landscape_dual (ES).",
+    "structuredPayload": {
+      "prescription": {
+        "id": "1ab19f8a-083d-4f6e-8376-0f1ad752f477",
+        "encounterId": "bab5ae93-ba8a-4aab-bf95-483b5183a35e",
+        "patientId": "eb9bc25c-c436-4b7e-bcb2-19a57d274ace",
+        "patientName": "Gabrieli Vitoria Araujo",
+        "date": "2026-09-26T14:47:18.413Z",
+        "expirationDate": "2027-09-26T14:47:18.413Z",
+        "od": {
+          "sphere": 0,
+          "cylinder": -1.5,
+          "axis": 130,
+          "visualAcuity": "20/20"
+        },
+        "oe": {
+          "sphere": 0,
+          "cylinder": -1.25,
+          "axis": 50,
+          "visualAcuity": "20/20"
+        },
+        "pdDistanceMm": 62,
+        "lensType": "monofocal_longe",
+        "material": "resina",
+        "treatments": [
+          "Antirreflexo Digital",
+          "Filtro Luz Azul (BlueCut)"
+        ],
+        "returnInstructions": "Retorno em 1 ano para controle visual de rotina.",
+        "observations": "Adaptação progressiva."
+      },
+      "medications": [
+        {
+          "id": "item-1790434038437-0",
+          "commercialName": "Hyabak / Systane Ultra",
+          "activePrinciple": "Hialuronato de Sódio / Polietilenoglicol + Propilenoglicol",
+          "concentration": "0.15% / 0.4% + 0.3%",
+          "presentation": "Frasco conta-gotas 10 mL",
+          "route": "Uso Tópico Ocular",
+          "dosage": "Instilar 1 gota em ambos os olhos de 4 a 6 vezes ao dia, ou conforme necessidade e sintomas de ressecamento.",
+          "quantity": "1 frasco"
+        }
+      ],
+      "layoutMode": "a4_landscape_dual",
+      "language": "es"
+    },
+    "professionalId": "dr-meirelles",
+    "professionalName": "Dr. Rudson Meirelles",
+    "issuedAt": "2026-09-26T14:47:26.034Z",
+    "version": 1
+  }
+]

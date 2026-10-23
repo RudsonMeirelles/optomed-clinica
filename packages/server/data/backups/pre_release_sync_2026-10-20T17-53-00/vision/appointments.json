@@ -1,0 +1,21 @@
+[
+  {
+    "id": "apt-vis-1",
+    "patientId": "p3-vision",
+    "patientName": "Enzo Gabriel Silva (Menor)",
+    "patientNationality": "BR",
+    "patientPhone": "+55 (45) 97777-8888",
+    "patientDocument": "12.345.678-9",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "date": "2026-09-19",
+    "time": "10:00",
+    "durationMinutes": 30,
+    "type": "pediatrico",
+    "status": "scheduled",
+    "notes": "Acompanhado pela mãe.",
+    "room": "Consultório Visual",
+    "createdAt": "2026-09-19T20:50:43.056Z",
+    "updatedAt": "2026-09-19T20:50:43.056Z"
+  }
+]

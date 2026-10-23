@@ -167,24 +167,25 @@ class LicensingService {
     isExpired: boolean;
     message?: string;
   } {
-    const sub = this.getSubscription(clinicId);
-    const now = new Date().getTime();
-    const expiryDateStr = sub.expiresAt || sub.currentPeriodEnd || new Date().toISOString();
-    const expiryDate = new Date(expiryDateStr).getTime();
-    const diffMs = expiryDate - now;
-    const daysRemaining = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+    try {
+      const sub = this.getSubscription(clinicId);
+      const now = new Date().getTime();
+      const expiryDateStr = sub?.expiresAt || sub?.currentPeriodEnd || new Date().toISOString();
+      const expiryDate = new Date(expiryDateStr).getTime();
+      const diffMs = isNaN(expiryDate) ? 864000000 : (expiryDate - now);
+      const daysRemaining = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
 
-    if (sub.status === 'suspended' || sub.status === 'canceled') {
-      return {
-        hasAccess: false,
-        status: sub.status,
-        daysRemaining: 0,
-        isTrial: sub.plan === 'trial',
-        isGracePeriod: false,
-        isExpired: true,
-        message: 'A licença de uso da sua clínica está suspensa. Renove agora para continuar atendendo.'
-      };
-    }
+      if (sub?.status === 'suspended' || sub?.status === 'canceled') {
+        return {
+          hasAccess: false,
+          status: sub.status,
+          daysRemaining: 0,
+          isTrial: sub?.plan === 'trial',
+          isGracePeriod: false,
+          isExpired: true,
+          message: 'A licença de uso da sua clínica está suspensa. Renove agora para continuar atendendo.'
+        };
+      }
 
     if (daysRemaining <= 0) {
       // 3 dias de tolerância (grace period) antes de bloquear
@@ -211,17 +212,28 @@ class LicensingService {
       }
     }
 
-    return {
-      hasAccess: true,
-      status: sub.status,
-      daysRemaining,
-      isTrial: sub.plan === 'trial',
-      isGracePeriod: false,
-      isExpired: false,
-      message: sub.plan === 'trial' 
-        ? `Período de Teste Gratuito: ${daysRemaining} dias restantes.` 
-        : `Assinatura Ativa (${daysRemaining} dias restantes).`
-    };
+      return {
+        hasAccess: true,
+        status: sub?.status || 'active',
+        daysRemaining,
+        isTrial: sub?.plan === 'trial',
+        isGracePeriod: false,
+        isExpired: false,
+        message: sub?.plan === 'trial' 
+          ? `Período de Teste Gratuito: ${daysRemaining} dias restantes.` 
+          : `Assinatura Ativa (${daysRemaining} dias restantes).`
+      };
+    } catch {
+      return {
+        hasAccess: true,
+        status: 'active',
+        daysRemaining: 30,
+        isTrial: false,
+        isGracePeriod: false,
+        isExpired: false,
+        message: 'Acesso Ativo'
+      };
+    }
   }
 
   // Gera uma cobrança/fatura para a clínica
@@ -706,37 +718,43 @@ export class CalendarIntegrationService {
         ].join('\r\n'));
       };
 
-      // 1. Instituto (Segundas e Terças - Azul)
-      if (dow === 1 || dow === 2) {
+      // Segundas-feiras: Livre
+      if (dow === 1) {
+        // Segunda-feira livre (sem turno)
+      } else if (dow === 2) {
+        // 1. IVS (Terças: 13:00 às 18:00 Br - Azul)
         pushShift(
           'Instituto da Visão e Saúde (IVS)',
-          'Av. Jorge Schimmelpfeng, 500, Foz do Iguaçu',
-          8, 0, 18, 0,
-          'Turno de Atendimentos Clínicos do Examinador (08:00 às 18:00 Br)',
+          'Av. Jorge Schimmelpfeng, 500, Ponta Porã',
+          13, 0, 18, 0,
+          'Turno de Atendimentos Clínicos IVS (13:00 às 18:00 Br)',
           '🔵',
           '#2563EB',
-          '🔵 Instituto (08:00 às 18:00 Br)'
+          '🔵 IVS (13:00 às 18:00 Br)'
         );
       } else if (dow === 3) {
-        // 2. Clínica Central (Quartas Turno 1 - Ciano)
+        // 2. IVS (Quartas: 08:00 às 13:00 Br - Azul)
         pushShift(
-          'Clínica Central (PY)',
-          'Ciudad del Este, Paraguai',
-          13, 0, 15, 45,
-          'Turno Duplo PY: Atendimentos Clínica Central',
-          '🟦',
-          '#06B6D4',
-          '🟦 Clínica Central (13:00 às 15:45 Py)'
+          'Instituto da Visão e Saúde (IVS)',
+          'Av. Jorge Schimmelpfeng, 500, Ponta Porã',
+          8, 0, 13, 0,
+          'Turno de Atendimentos Clínicos IVS (08:00 às 13:00 Br)',
+          '🔵',
+          '#2563EB',
+          '🔵 IVS (08:00 às 13:00 Br)'
         );
-        // 3. Clínica Visual (Quartas Turno 2 - Rosa)
+      }
+
+      // 3. Stillo Itamarati (1º Sábado do Mês: 08:00 às 15:00 - Âmbar)
+      if (dow === 6 && d <= 7) {
         pushShift(
-          'Clínica Visual (PY)',
-          'Hernandarias, Paraguai',
-          16, 0, 17, 30,
-          'Turno Duplo PY: Atendimentos Clínica Visual',
-          '🌸',
-          '#F43F5E',
-          '🌸 Clínica Visual (16:00 às 17:30 Py)'
+          'Clínica Stillo Itamarati',
+          'Distrito Nova Itamarati, Ponta Porã',
+          8, 0, 15, 0,
+          'Turno de Atendimentos Clínicos Stillo Itamarati (08:00 às 15:00)',
+          '🟠',
+          '#D97706',
+          '🟠 Stillo Ita (08:00 às 15:00)'
         );
       }
 
@@ -758,25 +776,12 @@ export class CalendarIntegrationService {
       if ((m === 9 && d === 26) || (m === 10 && d === 31) || (m === 11 && d === 28) || (m === 12 && d === 19)) {
         pushShift(
           'Mega Star Consultório Oftalmológico',
-          'Shopping Mega Star, Piso 3, Ciudad del Este',
+          'Shopping Mega Star, Piso 3, Pedro Juan Caballero',
           7, 30, 14, 0,
           'Atendimentos Clínicos e Refração Visual Mega Star',
           '🟢',
           '#059669',
           '🟢 Mega Star (07:30 às 14:00)'
-        );
-      }
-
-      // 6. Visual Clínica dos Olhos (Verde)
-      if (dow === 5 && !((m === 9 && (d === 11 || d === 25)) || (m === 10 && d === 9))) {
-        pushShift(
-          'Visual Clínica dos Olhos',
-          'Av. Dr. Francia / Centro Médico Visual, Pedro Juan Caballero / Ciudad del Este',
-          8, 30, 17, 0,
-          'Atendimentos de Optometria e Contatologia Especializada - Visual',
-          '🟢',
-          '#10B981',
-          '🟢 Visual Clínica (08:30 às 17:00)'
         );
       }
     }

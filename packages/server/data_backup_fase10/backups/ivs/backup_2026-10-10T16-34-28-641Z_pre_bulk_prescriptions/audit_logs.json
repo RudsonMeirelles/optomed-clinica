@@ -1,0 +1,3252 @@
+[
+  {
+    "id": "cc11a8c2-2cf9-475b-a1af-9ee3014f3509",
+    "timestamp": "2026-10-10T16:31:45.145Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "304b1e03-636e-4ed3-963c-23cad60f6f13",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: 72a2c3c6-7e60-4c83-9f62-fddb2563852d)"
+  },
+  {
+    "id": "42cbb096-71a7-4c8e-92db-cdba1f67fb10",
+    "timestamp": "2026-10-10T16:31:44.731Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "9fafc4f0-e828-40c5-bb9f-4f4a225707ad",
+    "details": "[IVS] Status de agendamento alterado para completed"
+  },
+  {
+    "id": "d666bd95-93a6-49de-9e85-e04070086492",
+    "timestamp": "2026-10-10T16:31:44.724Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "304b1e03-636e-4ed3-963c-23cad60f6f13",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: 72a2c3c6-7e60-4c83-9f62-fddb2563852d)"
+  },
+  {
+    "id": "32dca56c-c93c-42e8-99ee-f0a6e5d4fa9f",
+    "timestamp": "2026-10-10T16:31:43.145Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "304b1e03-636e-4ed3-963c-23cad60f6f13",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: 72a2c3c6-7e60-4c83-9f62-fddb2563852d)"
+  },
+  {
+    "id": "fe690bc9-9d75-4ee6-ae6a-78e9f0d13df5",
+    "timestamp": "2026-10-10T16:31:34.830Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "304b1e03-636e-4ed3-963c-23cad60f6f13",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: 72a2c3c6-7e60-4c83-9f62-fddb2563852d)"
+  },
+  {
+    "id": "90383a06-d24c-4c88-b021-4f4e59588a4f",
+    "timestamp": "2026-10-10T16:31:29.974Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "304b1e03-636e-4ed3-963c-23cad60f6f13",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: 72a2c3c6-7e60-4c83-9f62-fddb2563852d)"
+  },
+  {
+    "id": "2b4b61a5-748b-48fe-8568-9733df975892",
+    "timestamp": "2026-10-10T16:31:27.450Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "304b1e03-636e-4ed3-963c-23cad60f6f13",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: 72a2c3c6-7e60-4c83-9f62-fddb2563852d)"
+  },
+  {
+    "id": "b0581e49-33b2-4dc1-8f28-dcda1a882d91",
+    "timestamp": "2026-10-10T16:30:52.153Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "304b1e03-636e-4ed3-963c-23cad60f6f13",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: 72a2c3c6-7e60-4c83-9f62-fddb2563852d)"
+  },
+  {
+    "id": "60953b85-7374-4bcf-9be2-083af69c7ab3",
+    "timestamp": "2026-10-10T16:30:51.730Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "9fafc4f0-e828-40c5-bb9f-4f4a225707ad",
+    "details": "[IVS] Status de agendamento alterado para completed"
+  },
+  {
+    "id": "e021a54f-20c4-456e-a707-8ad823cbd56c",
+    "timestamp": "2026-10-10T16:30:51.724Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "304b1e03-636e-4ed3-963c-23cad60f6f13",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: 72a2c3c6-7e60-4c83-9f62-fddb2563852d)"
+  },
+  {
+    "id": "356d62b0-2714-45f8-8ec1-31fa882bcb36",
+    "timestamp": "2026-10-10T16:30:46.062Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "304b1e03-636e-4ed3-963c-23cad60f6f13",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: 72a2c3c6-7e60-4c83-9f62-fddb2563852d)"
+  },
+  {
+    "id": "b7bbfb21-3434-4816-b05f-0cad71a4d7e1",
+    "timestamp": "2026-10-10T16:29:40.591Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "304b1e03-636e-4ed3-963c-23cad60f6f13",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 72a2c3c6-7e60-4c83-9f62-fddb2563852d)"
+  },
+  {
+    "id": "04978153-a0ca-4627-9d17-a891ddf104dd",
+    "timestamp": "2026-10-10T16:29:33.289Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "304b1e03-636e-4ed3-963c-23cad60f6f13",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 72a2c3c6-7e60-4c83-9f62-fddb2563852d)"
+  },
+  {
+    "id": "2908b3fb-022a-4bdd-9034-18b5ee5d37c8",
+    "timestamp": "2026-10-10T16:29:32.462Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "304b1e03-636e-4ed3-963c-23cad60f6f13",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 72a2c3c6-7e60-4c83-9f62-fddb2563852d)"
+  },
+  {
+    "id": "d79d1dcc-7e95-47f8-9930-02196e8b2d0e",
+    "timestamp": "2026-10-10T16:23:07.707Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "304b1e03-636e-4ed3-963c-23cad60f6f13",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 72a2c3c6-7e60-4c83-9f62-fddb2563852d)"
+  },
+  {
+    "id": "2e3a15e0-e8f2-4dd7-b8ce-24ba239f399f",
+    "timestamp": "2026-10-10T16:23:07.699Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "CREATE",
+    "resourceType": "EPISODE",
+    "resourceId": "72a2c3c6-7e60-4c83-9f62-fddb2563852d",
+    "details": "[IVS] Episódio clínico Atendimento Oftalmológico e Refração (ACTIVE)"
+  },
+  {
+    "id": "99249988-ec04-4695-950f-8eef7e6c7391",
+    "timestamp": "2026-10-10T16:23:07.458Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "9fafc4f0-e828-40c5-bb9f-4f4a225707ad",
+    "details": "[IVS] Agendamento para Sol Moraes Ramos às 12:23"
+  },
+  {
+    "id": "7c444ff3-7ab8-47b1-ae71-1931d7fa4835",
+    "timestamp": "2026-10-10T16:23:07.447Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "9fafc4f0-e828-40c5-bb9f-4f4a225707ad",
+    "details": "[IVS] Atualizado cadastro de Sol Moraes Ramos"
+  },
+  {
+    "id": "c02a8148-90e7-4676-9f9a-1f827c0691e4",
+    "timestamp": "2026-10-10T16:22:01.355Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "d7331129-f086-4897-85fe-6a2dbedc423d",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: 0b105158-1854-4996-b6d7-c93ce5c8fd50)"
+  },
+  {
+    "id": "f2ea4e5e-9dc1-4b0f-a9b5-217cb4808509",
+    "timestamp": "2026-10-10T16:22:00.941Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "2ba4f7c1-3693-46b1-b765-5e6e4c86a42b",
+    "details": "[IVS] Status de agendamento alterado para completed"
+  },
+  {
+    "id": "b968be74-12ab-464f-a1ec-45cc785b91ae",
+    "timestamp": "2026-10-10T16:22:00.936Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "d7331129-f086-4897-85fe-6a2dbedc423d",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: 0b105158-1854-4996-b6d7-c93ce5c8fd50)"
+  },
+  {
+    "id": "ce5461ee-45a4-4688-af7a-01c450982444",
+    "timestamp": "2026-10-10T16:21:17.597Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "d7331129-f086-4897-85fe-6a2dbedc423d",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0b105158-1854-4996-b6d7-c93ce5c8fd50)"
+  },
+  {
+    "id": "ef666b59-f396-4042-8998-94e523ec2fe2",
+    "timestamp": "2026-10-10T16:21:08.415Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "d7331129-f086-4897-85fe-6a2dbedc423d",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0b105158-1854-4996-b6d7-c93ce5c8fd50)"
+  },
+  {
+    "id": "67ebe654-a5d7-4c1c-9c3c-d122d2bed9bc",
+    "timestamp": "2026-10-10T16:21:06.461Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "d7331129-f086-4897-85fe-6a2dbedc423d",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0b105158-1854-4996-b6d7-c93ce5c8fd50)"
+  },
+  {
+    "id": "21c8b22d-bae9-49a4-814c-0ab3d2e44e0d",
+    "timestamp": "2026-10-10T16:21:05.129Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "d7331129-f086-4897-85fe-6a2dbedc423d",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0b105158-1854-4996-b6d7-c93ce5c8fd50)"
+  },
+  {
+    "id": "7a42551b-c8af-4106-9774-0c6ec689099e",
+    "timestamp": "2026-10-10T16:12:47.254Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "633cd454-e751-4393-807c-d8220819bbcc",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: 316fb34f-3185-4f54-8785-103819838d1f)"
+  },
+  {
+    "id": "25c3ac33-a0e6-4792-8120-ec9b9a71b193",
+    "timestamp": "2026-10-10T16:12:46.844Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "9ff9c19d-22de-40d3-aecf-5b38b4121ae0",
+    "details": "[IVS] Status de agendamento alterado para completed"
+  },
+  {
+    "id": "378c1ed8-54c2-436f-9d9e-8062765e0a81",
+    "timestamp": "2026-10-10T16:12:46.837Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "633cd454-e751-4393-807c-d8220819bbcc",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: 316fb34f-3185-4f54-8785-103819838d1f)"
+  },
+  {
+    "id": "8c6b861f-bbc4-4455-af40-9fee57709235",
+    "timestamp": "2026-10-10T16:12:25.108Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "9ff9c19d-22de-40d3-aecf-5b38b4121ae0",
+    "details": "[IVS] Status de agendamento alterado para completed"
+  },
+  {
+    "id": "6b67d6ba-007b-435c-bff0-8b50aef882ff",
+    "timestamp": "2026-10-10T16:12:25.102Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "CREATE",
+    "resourceType": "FINANCE",
+    "resourceId": "rem_apt_48d9b754-0adb-4e3c-a1e9-385bc0019eee",
+    "details": "[IVS] Remuneração gerada para Dr. Rudson Meirelles: R$ 1.00 (extraordinary)"
+  },
+  {
+    "id": "032d6395-54c2-4357-9d50-a9e7a9fc1a96",
+    "timestamp": "2026-10-10T16:12:25.097Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "CREATE",
+    "resourceType": "FINANCE",
+    "resourceId": "9423f84c-ff59-4e42-8bb5-29c677ddd034",
+    "details": "[IVS] Entrada de BRL 50.00 - Consulta Oftalmológica / Refração - Paciente: Delsy  Fabiola Benitez Golzales"
+  },
+  {
+    "id": "90fa17da-0cb7-4c5a-81ee-5e425c30e44b",
+    "timestamp": "2026-10-10T16:12:25.092Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "633cd454-e751-4393-807c-d8220819bbcc",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: 316fb34f-3185-4f54-8785-103819838d1f)"
+  },
+  {
+    "id": "20b8a32e-31c8-4d86-ab40-3c8250c06d59",
+    "timestamp": "2026-10-10T16:12:14.662Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "633cd454-e751-4393-807c-d8220819bbcc",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 316fb34f-3185-4f54-8785-103819838d1f)"
+  },
+  {
+    "id": "8fa20a06-476d-413f-8ed6-9bc29c7718df",
+    "timestamp": "2026-10-10T16:11:58.473Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "633cd454-e751-4393-807c-d8220819bbcc",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 316fb34f-3185-4f54-8785-103819838d1f)"
+  },
+  {
+    "id": "46e2e700-bbaf-4b3a-add5-e60ba80938a6",
+    "timestamp": "2026-10-10T16:11:55.264Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "633cd454-e751-4393-807c-d8220819bbcc",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 316fb34f-3185-4f54-8785-103819838d1f)"
+  },
+  {
+    "id": "329749dc-4790-4d82-8567-c120a3e2b820",
+    "timestamp": "2026-10-10T16:04:25.965Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "633cd454-e751-4393-807c-d8220819bbcc",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 316fb34f-3185-4f54-8785-103819838d1f)"
+  },
+  {
+    "id": "7703ba53-3610-47ca-85fe-788b62b4b6a3",
+    "timestamp": "2026-10-10T16:04:25.959Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "CREATE",
+    "resourceType": "EPISODE",
+    "resourceId": "316fb34f-3185-4f54-8785-103819838d1f",
+    "details": "[IVS] Episódio clínico Atendimento Oftalmológico e Refração (ACTIVE)"
+  },
+  {
+    "id": "1e5c12e3-dea7-407f-a649-8ac737841f74",
+    "timestamp": "2026-10-10T16:04:23.433Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "9ff9c19d-22de-40d3-aecf-5b38b4121ae0",
+    "details": "[IVS] Agendamento para Delsy  Fabiola Benitez Golzales às 12:04"
+  },
+  {
+    "id": "cf041700-3323-4632-98f2-189086b96ea8",
+    "timestamp": "2026-10-10T16:04:23.420Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "9ff9c19d-22de-40d3-aecf-5b38b4121ae0",
+    "details": "[IVS] Atualizado cadastro de Delsy  Fabiola Benitez Golzales"
+  },
+  {
+    "id": "01628192-5b56-4637-b0c3-7ba54eec2ff6",
+    "timestamp": "2026-10-10T16:02:33.925Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "c21b4778-8c19-431e-8b68-c931f5d15c14",
+    "details": "[IVS] Atualizado cadastro de ELPIDIO QUINHONEZ"
+  },
+  {
+    "id": "ab41a751-ed69-482d-816d-9b8edd87205e",
+    "timestamp": "2026-10-10T16:00:51.268Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "5f0ab8f2-3e9f-41c8-a600-eb5f57af1878",
+    "details": "[IVS] Agendamento para CINTIA RAQUEL às 14:10"
+  },
+  {
+    "id": "70daf43e-a473-4848-b1f4-926b0919ab73",
+    "timestamp": "2026-10-10T16:00:51.242Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "5f0ab8f2-3e9f-41c8-a600-eb5f57af1878",
+    "details": "[IVS] Atualizado cadastro de CINTIA RAQUEL"
+  },
+  {
+    "id": "819fd79d-7594-4d6d-8cc7-d68dec88d530",
+    "timestamp": "2026-10-10T16:00:42.013Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "442eef53-9540-422e-b4af-219b63498402",
+    "details": "[IVS] Atualizado cadastro de CINTIA RAQUEL"
+  },
+  {
+    "id": "414d1125-37a5-4c90-89b6-3e372ccd1fef",
+    "timestamp": "2026-10-10T15:59:09.400Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "5e6a0a9f-8c1e-42a8-a10e-7982c3ca97f1",
+    "details": "[IVS] Atualizado cadastro de NILSA ELIZBEHT"
+  },
+  {
+    "id": "aad141b0-0973-4b8e-b62a-08370f1dadce",
+    "timestamp": "2026-10-10T15:58:58.617Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "6b10722e-acec-4911-aed9-435697b6e212",
+    "details": "[IVS] Atualizado cadastro de NILSA ELIZBEHT"
+  },
+  {
+    "id": "82a50473-f9fa-48b2-99c5-cf6159370097",
+    "timestamp": "2026-10-10T15:58:41.570Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "3e9e6498-02f8-450b-8469-6f371129acf0",
+    "details": "[IVS] Atualizado cadastro de NILSA ELIZBEHT"
+  },
+  {
+    "id": "1365ca32-602e-471b-be95-97a0f1cb98d9",
+    "timestamp": "2026-10-10T15:58:38.852Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "cf23f231-ce95-4108-bcff-e2713ace6b85",
+    "details": "[IVS] Atualizado cadastro de NILSA ELIZBEHT"
+  },
+  {
+    "id": "74e72d4f-919a-4ebd-9a2e-dfb2b684e65a",
+    "timestamp": "2026-10-10T15:56:12.057Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "38d7f89e-29ff-4121-a880-f9b8c457eb62",
+    "details": "[IVS] Agendamento para GISELE ROCHA às 13:30"
+  },
+  {
+    "id": "73437fb8-eedd-41d0-b2c4-b4738b3374d2",
+    "timestamp": "2026-10-10T15:56:12.030Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "38d7f89e-29ff-4121-a880-f9b8c457eb62",
+    "details": "[IVS] Atualizado cadastro de GISELE ROCHA"
+  },
+  {
+    "id": "e1645e29-7ba0-41af-8e3c-f630efc1c79b",
+    "timestamp": "2026-10-10T15:55:24.686Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "284db7cd-8868-454e-9f92-e9b6270feaeb",
+    "details": "[IVS] Agendamento para 6799095983 às 10:30"
+  },
+  {
+    "id": "99fb22cf-f0ab-48da-979e-5937d45b2cbc",
+    "timestamp": "2026-10-10T15:55:24.646Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "284db7cd-8868-454e-9f92-e9b6270feaeb",
+    "details": "[IVS] Atualizado cadastro de 6799095983"
+  },
+  {
+    "id": "afb43488-906b-4b3c-9ff3-92bc241a0fe0",
+    "timestamp": "2026-10-10T14:57:36.300Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "CREATE",
+    "resourceType": "FINANCE",
+    "resourceId": "sess_ivs_20261010",
+    "details": "[IVS] Sessão de trabalho registrada: period_full_day para Dr. Rudson Meirelles"
+  },
+  {
+    "id": "e900e6da-9359-4b83-97b5-0ae54c994be1",
+    "timestamp": "2026-10-10T14:57:23.027Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "CREATE",
+    "resourceType": "FINANCE",
+    "resourceId": "esp_ivs_1791644243026",
+    "details": "[IVS] Período Extraordinário 2026-10-10 (08:00-18:00) salvo para Dr. Rudson Meirelles"
+  },
+  {
+    "id": "ef3dca44-4a04-4a44-907c-b0ea7e31cbbc",
+    "timestamp": "2026-10-10T14:56:58.799Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "DELETE",
+    "resourceType": "FINANCE",
+    "resourceId": "esp_ivs_mutirao_1010",
+    "details": "[IVS] Período Extraordinário removido"
+  },
+  {
+    "id": "c125c49e-7252-4f63-b404-a64c2a609e1a",
+    "timestamp": "2026-10-10T14:56:35.269Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "FINANCE",
+    "resourceId": "batch_1791644195269",
+    "details": "[IVS] Baixa em lote de 4 lançamentos até 2026-10-08 realizada"
+  },
+  {
+    "id": "22762328-3c5d-4a09-b87c-5b01defb1a0a",
+    "timestamp": "2026-10-10T14:36:33.529Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "d5a8df05-310b-40d9-bbb6-fc76ba5d8667",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: 796d6f5b-a748-4880-ab39-15bb280024de)"
+  },
+  {
+    "id": "d851030c-e713-46c1-83f6-891ff2a7c8b4",
+    "timestamp": "2026-10-10T14:36:33.121Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "14408d36-3442-4cd9-b065-43baa1bd7a0a",
+    "details": "[IVS] Status de agendamento alterado para completed"
+  },
+  {
+    "id": "8ca3bf85-dbb6-47ae-813d-e15ecbff1342",
+    "timestamp": "2026-10-10T14:36:33.115Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "d5a8df05-310b-40d9-bbb6-fc76ba5d8667",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: 796d6f5b-a748-4880-ab39-15bb280024de)"
+  },
+  {
+    "id": "529e8c4a-2975-4ea4-920b-9786be65bb51",
+    "timestamp": "2026-10-10T14:36:20.755Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "14408d36-3442-4cd9-b065-43baa1bd7a0a",
+    "details": "[IVS] Atualizado cadastro de Marcia Barros"
+  },
+  {
+    "id": "ba596eb7-913c-4e49-9e68-7bf98c6c004b",
+    "timestamp": "2026-10-10T14:32:23.246Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "CREATE",
+    "resourceType": "FINANCE",
+    "resourceId": "31accda7-f29c-4d64-a1cb-470a766c72d7",
+    "details": "[IVS] Entrada de BRL 50.00 - Consulta Oftalmológica / Refração - Paciente: MArcia Barros"
+  },
+  {
+    "id": "7cb02444-95d8-4ab9-a06c-fb05538abdfe",
+    "timestamp": "2026-10-10T14:32:23.240Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "d5a8df05-310b-40d9-bbb6-fc76ba5d8667",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: 796d6f5b-a748-4880-ab39-15bb280024de)"
+  },
+  {
+    "id": "16fbab83-4da6-4a42-88df-f3f5ea16bde8",
+    "timestamp": "2026-10-10T14:32:18.333Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "d5a8df05-310b-40d9-bbb6-fc76ba5d8667",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 796d6f5b-a748-4880-ab39-15bb280024de)"
+  },
+  {
+    "id": "014b4585-7b61-41c5-b037-378a8778fba0",
+    "timestamp": "2026-10-10T14:32:11.952Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "14408d36-3442-4cd9-b065-43baa1bd7a0a",
+    "details": "[IVS] Atualizado cadastro de MArcia Barros"
+  },
+  {
+    "id": "f7edbbfb-a3cf-47a4-911a-a4ad0bb599e4",
+    "timestamp": "2026-10-10T14:31:45.132Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "d5a8df05-310b-40d9-bbb6-fc76ba5d8667",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 796d6f5b-a748-4880-ab39-15bb280024de)"
+  },
+  {
+    "id": "2b763a5c-ad23-4689-934c-03b4ac1bd04c",
+    "timestamp": "2026-10-10T14:31:43.558Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "d5a8df05-310b-40d9-bbb6-fc76ba5d8667",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 796d6f5b-a748-4880-ab39-15bb280024de)"
+  },
+  {
+    "id": "fd4dc18c-4fc1-4b70-ba3e-4473462b4fc7",
+    "timestamp": "2026-10-10T14:31:40.360Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "d5a8df05-310b-40d9-bbb6-fc76ba5d8667",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 796d6f5b-a748-4880-ab39-15bb280024de)"
+  },
+  {
+    "id": "f751098f-f343-4e6d-97e0-6af71dcb3b66",
+    "timestamp": "2026-10-10T14:31:35.893Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "d5a8df05-310b-40d9-bbb6-fc76ba5d8667",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 796d6f5b-a748-4880-ab39-15bb280024de)"
+  },
+  {
+    "id": "d53ccabd-bcfe-4dbe-bdec-66247e5c78b1",
+    "timestamp": "2026-10-10T14:31:30.633Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "d5a8df05-310b-40d9-bbb6-fc76ba5d8667",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 796d6f5b-a748-4880-ab39-15bb280024de)"
+  },
+  {
+    "id": "e74246bd-cd20-4b5e-973c-d6645fd85741",
+    "timestamp": "2026-10-10T14:31:29.021Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "d5a8df05-310b-40d9-bbb6-fc76ba5d8667",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 796d6f5b-a748-4880-ab39-15bb280024de)"
+  },
+  {
+    "id": "c1b1746f-f69e-4ccf-a17a-7775190739b7",
+    "timestamp": "2026-10-10T14:28:58.608Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "d5a8df05-310b-40d9-bbb6-fc76ba5d8667",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 796d6f5b-a748-4880-ab39-15bb280024de)"
+  },
+  {
+    "id": "7fae932e-7625-4249-8ea3-6a8e6fa24bc2",
+    "timestamp": "2026-10-10T14:28:57.075Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "d5a8df05-310b-40d9-bbb6-fc76ba5d8667",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 796d6f5b-a748-4880-ab39-15bb280024de)"
+  },
+  {
+    "id": "c1f91738-8d1b-4ee9-891a-5970a957c32a",
+    "timestamp": "2026-10-10T14:28:39.813Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "d5a8df05-310b-40d9-bbb6-fc76ba5d8667",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 796d6f5b-a748-4880-ab39-15bb280024de)"
+  },
+  {
+    "id": "6fbec500-083e-4b21-8499-b4aa7e10c633",
+    "timestamp": "2026-10-10T14:28:36.865Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "d5a8df05-310b-40d9-bbb6-fc76ba5d8667",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 796d6f5b-a748-4880-ab39-15bb280024de)"
+  },
+  {
+    "id": "7252b3df-0727-4d9d-b6c2-533663f8691a",
+    "timestamp": "2026-10-10T14:28:29.543Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "d5a8df05-310b-40d9-bbb6-fc76ba5d8667",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 796d6f5b-a748-4880-ab39-15bb280024de)"
+  },
+  {
+    "id": "5965ce08-9cbb-48c6-ae54-ba342aa718c2",
+    "timestamp": "2026-10-10T14:28:25.889Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "d5a8df05-310b-40d9-bbb6-fc76ba5d8667",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 796d6f5b-a748-4880-ab39-15bb280024de)"
+  },
+  {
+    "id": "94d4108c-ae98-42d1-b61f-a21b2556eba6",
+    "timestamp": "2026-10-10T14:28:24.069Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "d5a8df05-310b-40d9-bbb6-fc76ba5d8667",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 796d6f5b-a748-4880-ab39-15bb280024de)"
+  },
+  {
+    "id": "d18bea33-69ba-4384-9196-dbdb58145446",
+    "timestamp": "2026-10-10T14:27:56.082Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "d5a8df05-310b-40d9-bbb6-fc76ba5d8667",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 796d6f5b-a748-4880-ab39-15bb280024de)"
+  },
+  {
+    "id": "ba525af7-b0ac-4465-9f95-811da30b97f6",
+    "timestamp": "2026-10-10T14:27:56.075Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "CREATE",
+    "resourceType": "EPISODE",
+    "resourceId": "796d6f5b-a748-4880-ab39-15bb280024de",
+    "details": "[IVS] Episódio clínico Atendimento Oftalmológico e Refração (ACTIVE)"
+  },
+  {
+    "id": "e62c58d8-26c2-43d8-80ed-61ddd776276b",
+    "timestamp": "2026-10-10T14:27:55.826Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "14408d36-3442-4cd9-b065-43baa1bd7a0a",
+    "details": "[IVS] Agendamento para MArcia Barros às 10:27"
+  },
+  {
+    "id": "188247c2-fc68-40d0-8d78-f6694408d309",
+    "timestamp": "2026-10-10T14:27:55.812Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "14408d36-3442-4cd9-b065-43baa1bd7a0a",
+    "details": "[IVS] Atualizado cadastro de MArcia Barros"
+  },
+  {
+    "id": "2390cb80-bb56-426d-9ca6-5f1d07387250",
+    "timestamp": "2026-10-10T14:27:18.321Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "f32cb09a-00f3-467c-8766-a11cc224a3d9",
+    "timestamp": "2026-10-10T14:27:17.906Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "573c9725-9796-43ac-821a-6fb790402de0",
+    "details": "[IVS] Status de agendamento alterado para completed"
+  },
+  {
+    "id": "b2bc62fb-c9fe-4f6d-b415-7090bf39d5c2",
+    "timestamp": "2026-10-10T14:27:17.898Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "f767c239-0ed0-4517-bd96-81bedc71703a",
+    "timestamp": "2026-10-10T14:26:45.975Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "377f3f94-7b28-4ea7-b208-f972f9a9e482",
+    "timestamp": "2026-10-10T14:26:45.561Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "573c9725-9796-43ac-821a-6fb790402de0",
+    "details": "[IVS] Status de agendamento alterado para completed"
+  },
+  {
+    "id": "5e53c8c5-2cdf-4a58-998e-c062f92403bf",
+    "timestamp": "2026-10-10T14:26:45.555Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "01150d18-55a6-4827-b2a1-780672258e6a",
+    "timestamp": "2026-10-10T14:25:48.346Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "10de9300-21db-4da2-aab4-6ad3cbbb4b7a",
+    "timestamp": "2026-10-10T14:25:47.937Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "573c9725-9796-43ac-821a-6fb790402de0",
+    "details": "[IVS] Status de agendamento alterado para completed"
+  },
+  {
+    "id": "9d2653be-aa2b-4560-8775-cd3a455f412b",
+    "timestamp": "2026-10-10T14:25:47.931Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "a10b1764-4349-4738-b8ea-fb2d79c13418",
+    "timestamp": "2026-10-10T14:25:23.217Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "724f8526-bfa4-4ec2-b1a3-fe47ddb19bac",
+    "timestamp": "2026-10-10T14:25:13.885Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "98131efb-4a87-4d7d-a17f-5976ef880ca9",
+    "timestamp": "2026-10-10T14:25:13.096Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "7d8841dc-b2ac-4aff-ba4a-0a3f191420e9",
+    "timestamp": "2026-10-10T14:25:12.442Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "c5fd551e-e975-43e3-a66d-f7f454299961",
+    "timestamp": "2026-10-10T14:25:11.529Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "08160588-5cde-421d-b09e-09cd2a08a4fd",
+    "timestamp": "2026-10-10T14:25:03.969Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "6ffeb2b6-e51a-4534-94aa-b9b6162df0ab",
+    "timestamp": "2026-10-10T14:25:03.214Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "063cd699-b47a-4342-92c7-5cb406d2a95a",
+    "timestamp": "2026-10-10T14:24:46.770Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "161ddef5-b564-4a19-a549-48272bd5abab",
+    "timestamp": "2026-10-10T14:24:34.950Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "b7a9438a-69c8-4a69-8764-3c51baeaf2f6",
+    "timestamp": "2026-10-10T14:24:18.647Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "CREATE",
+    "resourceType": "FINANCE",
+    "resourceId": "87fc51a4-1645-4396-9fb1-1b4b75dcc5fa",
+    "details": "[IVS] Entrada de BRL 50.00 - Consulta Oftalmológica / Refração - Paciente: Yasmin Aparecida Tenório"
+  },
+  {
+    "id": "0c663bb7-8e3b-4f63-99fd-8d4afa92f7fc",
+    "timestamp": "2026-10-10T14:24:18.640Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "f4f33f6d-f9c6-4ea5-a255-9bae985b03b0",
+    "timestamp": "2026-10-10T14:22:39.775Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "d3d41783-afc4-4fac-b345-11b2d8c75d3a",
+    "timestamp": "2026-10-10T14:22:29.802Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "cf3736e6-a75b-40c3-ae06-2f91de6850fa",
+    "timestamp": "2026-10-10T14:22:29.097Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "f8e7b467-2a71-4f09-9ef0-9fa4a001b668",
+    "timestamp": "2026-10-10T14:22:24.802Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "3ae5fe58-1119-4666-a176-d417dea48cec",
+    "timestamp": "2026-10-10T14:22:20.614Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "05a6a2bb-d721-4cd2-a2be-9f0db271e499",
+    "timestamp": "2026-10-10T14:22:19.279Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "bdd5e33f-da18-4382-945d-97bfc744ad9a",
+    "timestamp": "2026-10-10T14:22:13.534Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "d462c47e-deec-4130-93f8-be23526bae4e",
+    "timestamp": "2026-10-10T14:22:08.923Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "b724f5ee-63ef-47a9-9c59-0fcfe1016398",
+    "timestamp": "2026-10-10T14:22:04.516Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "4ee97fa7-228a-4a87-823a-3647fe416b44",
+    "timestamp": "2026-10-10T14:22:00.193Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "a9688689-9559-4b88-83fb-f9b50c3589ca",
+    "timestamp": "2026-10-10T14:21:57.583Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "b6c51f6d-39d8-4e50-adb7-1fbfd6f81abf",
+    "timestamp": "2026-10-10T14:21:54.716Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "2ce2b31c-4b1f-4021-aef2-3b658546ef6b",
+    "timestamp": "2026-10-10T14:11:59.567Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "e9d9dd0a-b2b4-413c-ba44-e367f921f61c",
+    "timestamp": "2026-10-10T14:11:54.341Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "8b1900f2-cbb1-4584-9207-17090317a21d",
+    "timestamp": "2026-10-10T14:11:52.711Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "17f9774c-a1f2-4272-b1b3-2bdb22b95900",
+    "timestamp": "2026-10-10T14:11:50.904Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "4a9926fb-8b14-493c-bc0f-9541212ea0f5",
+    "timestamp": "2026-10-10T14:11:47.101Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "5fbfedb4-d6c7-4f99-b3f1-b6200010577a",
+    "timestamp": "2026-10-10T14:11:43.274Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "8e8ffbf5-aeea-4b89-998d-6e3a36493359",
+    "timestamp": "2026-10-10T14:11:39.930Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "64a2dbd6-4548-48be-963b-c45b10118b39",
+    "timestamp": "2026-10-10T14:11:35.671Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "bcd1fee9-6d18-4fd0-a9bd-65e480174576",
+    "timestamp": "2026-10-10T14:11:08.330Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "224f0032-b11c-4f10-aa74-c97d531fbcbf",
+    "timestamp": "2026-10-10T14:11:06.460Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "9f3082ee-a04e-41e8-9106-1fb4f8963c4e",
+    "timestamp": "2026-10-10T14:11:04.736Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "14b41430-d39f-4a10-bf77-36d327e7ec4f",
+    "timestamp": "2026-10-10T14:11:03.924Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "77186bb8-700a-45e2-b880-d06cc747b358",
+    "timestamp": "2026-10-10T14:11:02.652Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "7f2e0b26-75c1-4af9-9791-1ba55af57abe",
+    "timestamp": "2026-10-10T14:11:00.976Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "31893703-14bb-40ee-8124-53a2996d687c",
+    "timestamp": "2026-10-10T14:11:00.126Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "70acc2b9-68ba-442c-890e-6b30165bc578",
+    "timestamp": "2026-10-10T14:10:59.105Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "7ae6cdb1-a5b7-43a5-942a-d8f62d94fed4",
+    "timestamp": "2026-10-10T14:10:57.828Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "8db6d414-f4da-4165-9464-d47f9c09a8c6",
+    "timestamp": "2026-10-10T14:10:55.345Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "275b7edb-e6fa-41d9-a90f-5f599c15603e",
+    "timestamp": "2026-10-10T14:10:00.428Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "15a62337-8630-46b6-bdc1-dae4890be4bf",
+    "timestamp": "2026-10-10T14:09:59.188Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "970902b8-1076-4f6f-8535-3218b209cdc7",
+    "timestamp": "2026-10-10T14:09:32.942Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "203349aa-eb18-4dd5-a3c6-95505fc5a601",
+    "timestamp": "2026-10-10T14:09:30.181Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "c72b6518-940c-4099-9464-be17b762d1f5",
+    "timestamp": "2026-10-10T14:09:29.208Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "42328d19-3e42-48ae-9d49-574301d9a991",
+    "timestamp": "2026-10-10T14:09:28.080Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "b8576772-70c0-49b9-b200-79609ef32828",
+    "timestamp": "2026-10-10T14:09:27.609Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "168f8f8d-9ec5-4f41-9436-4d464456b7a6",
+    "timestamp": "2026-10-10T14:09:23.672Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "f1ec22c2-f23b-47ad-a1e0-7a8070b27a71",
+    "timestamp": "2026-10-10T14:09:20.491Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "0ba98b2f-73b0-4b6a-bfec-ac9e88fa34d0",
+    "timestamp": "2026-10-10T14:09:19.545Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "9d82bb70-e44e-4735-bff1-ce22f8df4cc6",
+    "timestamp": "2026-10-10T14:09:13.544Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "8d8e4121-21d3-4758-b139-95e85b3f2d1c",
+    "timestamp": "2026-10-10T14:08:51.348Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "65a9f1aa-419f-4017-8542-5a516cab55a3",
+    "timestamp": "2026-10-10T14:08:41.427Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "77646395-6a69-4dcc-9f24-b13eb947052a",
+    "timestamp": "2026-10-10T14:08:39.081Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "a2d7c175-7010-4f78-ace4-842a344bdd3a",
+    "timestamp": "2026-10-10T14:08:38.425Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "24f84169-e218-462b-8143-dd3c3f187e1a",
+    "timestamp": "2026-10-10T14:07:29.568Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "f54d2d31-6a37-4812-bffd-69a938b6f8d1",
+    "timestamp": "2026-10-10T14:07:29.561Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "CREATE",
+    "resourceType": "EPISODE",
+    "resourceId": "ea1ed82e-2496-4a69-ace4-6f2bc03411af",
+    "details": "[IVS] Episódio clínico Atendimento Oftalmológico e Refração (ACTIVE)"
+  },
+  {
+    "id": "1b53b2cb-078f-4f15-8709-26a7f0ca1c4e",
+    "timestamp": "2026-10-10T14:07:29.461Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "573c9725-9796-43ac-821a-6fb790402de0",
+    "details": "[IVS] Agendamento para Yasmin Aparecida Tenório às 10:07"
+  },
+  {
+    "id": "6ec31ce6-bf92-45d1-ba25-8706197ea38b",
+    "timestamp": "2026-10-10T14:07:29.452Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "573c9725-9796-43ac-821a-6fb790402de0",
+    "details": "[IVS] Atualizado cadastro de Yasmin Aparecida Tenório"
+  },
+  {
+    "id": "f1f418b5-5d90-4bed-ad6f-91a5ab0fd531",
+    "timestamp": "2026-10-10T14:06:18.496Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "47c6fa1c-a4ac-4ac5-b94e-3a4cbb9f286e",
+    "details": "[IVS] Status de agendamento alterado para completed"
+  },
+  {
+    "id": "9b358092-a898-402d-b394-e9b37d94b714",
+    "timestamp": "2026-10-10T14:06:18.490Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "e463325e-4d53-4d08-a93f-2c52dcc65705",
+    "timestamp": "2026-10-10T14:04:44.378Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "47c6fa1c-a4ac-4ac5-b94e-3a4cbb9f286e",
+    "details": "[IVS] Status de agendamento alterado para completed"
+  },
+  {
+    "id": "a527a601-17c0-442c-b247-2f68489500d9",
+    "timestamp": "2026-10-10T14:04:44.375Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "CREATE",
+    "resourceType": "FINANCE",
+    "resourceId": "rem_apt_7e1c7d23-d287-4cbd-a0cd-c952df2948bf",
+    "details": "[IVS] Remuneração gerada para Dr. Rudson Meirelles: R$ 350.00 (extraordinary)"
+  },
+  {
+    "id": "ab5c654e-ac53-4ed4-baa3-5d089ea4e488",
+    "timestamp": "2026-10-10T14:04:44.372Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "CREATE",
+    "resourceType": "FINANCE",
+    "resourceId": "4c4888a9-1e81-4329-9bd8-1fea50131960",
+    "details": "[IVS] Entrada de BRL 50.00 - Consulta Oftalmológica / Refração - Paciente: Maiza Gabriele Araujo"
+  },
+  {
+    "id": "dc53d522-39d9-44dd-ade5-0500d7a22adf",
+    "timestamp": "2026-10-10T14:04:44.366Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "a86f3dbb-2ac2-41da-bfda-0522872d9813",
+    "timestamp": "2026-10-10T14:03:04.252Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "9664de39-1636-4e9f-9713-6030978581e5",
+    "timestamp": "2026-10-10T14:03:03.226Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "7e7b5426-6c6e-497f-902f-746896707283",
+    "timestamp": "2026-10-10T14:03:00.472Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "638f2ee4-1299-4722-9fe6-f67b8db8beaa",
+    "timestamp": "2026-10-10T14:02:59.055Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "f813f088-f2e1-48da-94dd-e05f8f0e58d7",
+    "timestamp": "2026-10-10T14:02:56.937Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "816e856e-92be-409a-9862-65a4f69125a7",
+    "timestamp": "2026-10-10T14:02:55.114Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "ba1a6b89-037c-4e9b-b8fd-2dbda7aa33e2",
+    "timestamp": "2026-10-10T14:02:53.653Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "12cfa388-f92e-4089-8c2d-5cb60cf3e762",
+    "timestamp": "2026-10-10T14:02:50.620Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "b79fa402-d4d5-46a5-bf65-301d5e41e456",
+    "timestamp": "2026-10-10T14:02:46.869Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "7c218825-fd66-4d7f-b39f-505e807c0dbc",
+    "timestamp": "2026-10-10T14:02:44.657Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "e48b060d-36be-44db-ae9a-1be3e9270777",
+    "timestamp": "2026-10-10T14:02:43.269Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "9f0ccee9-79c5-43ee-8d2f-3eaaa5d245fb",
+    "timestamp": "2026-10-10T14:02:37.009Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "5a22d154-330d-43ea-a782-79759ee01d56",
+    "timestamp": "2026-10-10T14:02:34.156Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "c640c6f9-ae48-4ad2-bb5a-05511cd4edf0",
+    "timestamp": "2026-10-10T14:02:31.486Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "aec37359-5db0-4fd9-8a92-923a4e7cc3f9",
+    "timestamp": "2026-10-10T14:02:28.950Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "acd54d77-9f64-428e-9e6e-4c7d10d71d56",
+    "timestamp": "2026-10-10T14:02:18.209Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "47c6fa1c-a4ac-4ac5-b94e-3a4cbb9f286e",
+    "details": "[IVS] Atualizado cadastro de Maiza Gabriele Araujo"
+  },
+  {
+    "id": "b08829a9-0275-415e-bc38-2ebe1b83fe78",
+    "timestamp": "2026-10-10T13:58:10.497Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "f84d4e17-456b-494b-bc88-f73cfd14218e",
+    "timestamp": "2026-10-10T13:58:09.568Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "89e98e02-f9e5-43ce-b7af-6108eb297c5f",
+    "timestamp": "2026-10-10T13:58:04.638Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "9c0d45ba-6e0d-42dc-b4f2-d3d99bd2cac9",
+    "timestamp": "2026-10-10T13:58:04.017Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "946632cd-f4b4-4259-96db-937e692c4715",
+    "timestamp": "2026-10-10T13:58:03.019Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "088d792e-9f04-4b30-abcc-2088ee0bee4a",
+    "timestamp": "2026-10-10T13:58:01.264Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "45f3b868-136f-4d45-a674-a34a4620b205",
+    "timestamp": "2026-10-10T13:58:00.851Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "b4ca3e6c-bdb9-4e26-9817-cbf6d8d06bf8",
+    "timestamp": "2026-10-10T13:57:58.870Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "1ef63bc4-61e5-46bd-8873-e94fbc85e02b",
+    "timestamp": "2026-10-10T13:57:58.114Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "a4e1cebe-0e15-419d-b5a5-2fd2df7168bc",
+    "timestamp": "2026-10-10T13:57:43.070Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "4e4d6805-6ea5-4e5c-9a5e-b7a6f29ab4fd",
+    "timestamp": "2026-10-10T13:57:36.445Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "048ebf18-d8e1-4574-97f3-23d7c367f55d",
+    "timestamp": "2026-10-10T13:57:34.536Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "6c3c9cd0-f66e-426c-b658-6c13294ebc67",
+    "timestamp": "2026-10-10T13:57:33.833Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "0f0a4d57-d2d3-4121-95c6-c4872f391679",
+    "timestamp": "2026-10-10T13:57:33.244Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "cd1c780e-1826-43f0-9df5-ad51ccffdaec",
+    "timestamp": "2026-10-10T13:57:31.712Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "09a39f87-b536-44ff-b63f-e95187bb2c55",
+    "timestamp": "2026-10-10T13:57:28.818Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "15f55705-58ef-4cfa-86e2-a9214bdd6c07",
+    "timestamp": "2026-10-10T13:57:27.828Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "f879be24-7fc2-4a3f-aefe-d5db3bd399c3",
+    "timestamp": "2026-10-10T13:57:26.630Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "8b8452ba-fd15-47ab-a5b5-93a68f87ae5f",
+    "timestamp": "2026-10-10T13:57:22.109Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "9cff3a3a-ac52-450d-9516-2aab3f99e4ce",
+    "timestamp": "2026-10-10T13:57:18.409Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "09f2a2f3-ee6f-4e34-a498-e100d4d61081",
+    "timestamp": "2026-10-10T13:57:11.291Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "3c86693f-2241-4933-a645-8334f8b734b2",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: a201ed16-ad5f-4dff-9458-b5d3cbfdab69)"
+  },
+  {
+    "id": "12e72cf8-caae-40cb-b5b3-5722974ff511",
+    "timestamp": "2026-10-10T13:57:11.283Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "CREATE",
+    "resourceType": "EPISODE",
+    "resourceId": "a201ed16-ad5f-4dff-9458-b5d3cbfdab69",
+    "details": "[IVS] Episódio clínico Atendimento Oftalmológico e Refração (ACTIVE)"
+  },
+  {
+    "id": "cd8b6c46-529e-4ff2-aa3e-1e1ed6ec6bbd",
+    "timestamp": "2026-10-10T13:57:11.182Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "47c6fa1c-a4ac-4ac5-b94e-3a4cbb9f286e",
+    "details": "[IVS] Agendamento para Maisa Gabriele Araujo às 09:57"
+  },
+  {
+    "id": "7a8a6143-127b-497e-81a8-245416224d63",
+    "timestamp": "2026-10-10T13:57:11.173Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "47c6fa1c-a4ac-4ac5-b94e-3a4cbb9f286e",
+    "details": "[IVS] Atualizado cadastro de Maisa Gabriele Araujo"
+  },
+  {
+    "id": "fecf8f65-30ba-4d68-aeb5-0e82d702bf69",
+    "timestamp": "2026-10-10T13:14:34.632Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "9c00c03b-30fa-4c1f-b242-7953600b7ea7",
+    "timestamp": "2026-10-10T13:14:34.221Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "993c1ec3-d262-4172-96ff-fdc9f9613bbf",
+    "details": "[IVS] Status de agendamento alterado para completed"
+  },
+  {
+    "id": "e4789ec7-4ff6-4936-ba99-9c28ad9f3351",
+    "timestamp": "2026-10-10T13:14:34.218Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "CREATE",
+    "resourceType": "FINANCE",
+    "resourceId": "rem_apt_25cb6daa-7b45-4223-83dd-c9eb18d31a86",
+    "details": "[IVS] Remuneração gerada para Dr. Rudson Meirelles: R$ 350.00 (extraordinary)"
+  },
+  {
+    "id": "f78f0846-dcce-43ab-9a25-ae806046b3c5",
+    "timestamp": "2026-10-10T13:14:34.213Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "CREATE",
+    "resourceType": "FINANCE",
+    "resourceId": "4cdf4e5f-b9e4-4fb9-8c17-6321702dd78c",
+    "details": "[IVS] Entrada de BRL 50.00 - Consulta Oftalmológica / Refração - Paciente: Cristina Cabreira"
+  },
+  {
+    "id": "8227763e-c45f-47cc-a023-2d52dd83992a",
+    "timestamp": "2026-10-10T13:14:34.205Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "4e430d9e-6a61-410e-ac37-1cfa9e967716",
+    "timestamp": "2026-10-10T13:12:33.016Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "b6516447-5f4a-4e91-81f3-fe42e2d0a873",
+    "timestamp": "2026-10-10T13:12:30.925Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "9601d436-9e04-46fd-a803-13eabe3847fb",
+    "timestamp": "2026-10-10T13:12:28.631Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "21fb570d-c1b8-4367-ac6b-6bfdf0892d43",
+    "timestamp": "2026-10-10T13:12:27.870Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "cc76de64-498c-4cab-8026-1c97c77c0f73",
+    "timestamp": "2026-10-10T13:12:26.442Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "a30e5b0d-6bdd-4d0c-bef6-a5e99d01a7b1",
+    "timestamp": "2026-10-10T13:12:25.470Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "611c784d-48ed-40b2-80d5-4d405c6a452c",
+    "timestamp": "2026-10-10T13:12:12.481Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "9ad9907d-355b-4386-a030-df9152e42a36",
+    "timestamp": "2026-10-10T13:12:11.501Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "baaf1e80-2398-4454-8c32-5a83e7cacca9",
+    "timestamp": "2026-10-10T13:12:10.834Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "3a2812f0-588f-4b6d-b56f-321c96702ff5",
+    "timestamp": "2026-10-10T13:12:09.780Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "09fd6ba9-f374-472d-9b8b-018ae6098469",
+    "timestamp": "2026-10-10T13:12:03.518Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "55b6a8eb-a414-4344-922a-1cc09c3bd634",
+    "timestamp": "2026-10-10T13:11:56.675Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "9881938a-0bb9-48ca-bc2c-5869f3272718",
+    "timestamp": "2026-10-10T13:11:55.010Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "662bb0b5-6581-42a2-afe1-9089fe927f79",
+    "timestamp": "2026-10-10T13:11:53.900Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "32785a97-f236-4840-941c-ba6124a179a3",
+    "timestamp": "2026-10-10T13:11:52.595Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "947d2ad4-509f-4c52-9e35-318ba2e2fcce",
+    "timestamp": "2026-10-10T13:11:51.493Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "aa31427c-3980-408a-b1c1-314decd9e3f3",
+    "timestamp": "2026-10-10T13:11:47.910Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "41e54bcf-d80e-42e1-afc7-595f336ee009",
+    "timestamp": "2026-10-10T13:11:45.972Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "8b1550a3-3850-4995-804f-579c3eea61f2",
+    "timestamp": "2026-10-10T13:11:45.380Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "6047e768-73cb-4d58-98c3-4c6c8b1db16d",
+    "timestamp": "2026-10-10T13:11:44.593Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "3f572427-5922-435b-83fd-d09c49c10a8f",
+    "timestamp": "2026-10-10T13:07:20.378Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "33d2ee1b-8f68-431c-8137-2ea03ae28adc",
+    "timestamp": "2026-10-10T13:07:15.896Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "3526ea76-3c85-4888-90b0-eedfd3627667",
+    "timestamp": "2026-10-10T13:07:14.625Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "0dba808a-7cb0-4926-94a5-60a81e08b162",
+    "timestamp": "2026-10-10T13:06:58.477Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "bbd01fd1-acf9-4d2c-af27-d1462296e34b",
+    "timestamp": "2026-10-10T13:06:57.499Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "a1726c6b-9f44-4438-93d3-e9782bda5f09",
+    "timestamp": "2026-10-10T13:06:56.502Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "d030cb4f-4a93-47a9-987b-135e0357f27d",
+    "timestamp": "2026-10-10T13:06:55.740Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "e0c7fd0e-2dc7-4110-a327-1dd20020e3a2",
+    "timestamp": "2026-10-10T13:06:54.585Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "807216dc-f6d4-4b84-92f5-f5bb84518ac0",
+    "timestamp": "2026-10-10T13:06:42.276Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "abad0aa4-1f58-491f-be2d-c2da2609f088",
+    "timestamp": "2026-10-10T13:06:40.515Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "159d4ef2-2428-4bf6-a14f-b09c704eee50",
+    "timestamp": "2026-10-10T13:06:37.165Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "064d661f-a2b7-4ae1-bc14-3d4ff5102ca5",
+    "timestamp": "2026-10-10T13:06:36.261Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "78874061-1be8-420e-9392-c18a608466d0",
+    "timestamp": "2026-10-10T13:06:12.256Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "51a827b7-36bb-49ed-9d59-f6851b1b8057",
+    "timestamp": "2026-10-10T13:06:07.206Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "6523a70c-6c16-47bd-ae23-ee517ab2418b",
+    "timestamp": "2026-10-10T13:06:05.809Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "778350dd-4f87-4569-9250-32022f2814fc",
+    "timestamp": "2026-10-10T13:05:59.538Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "0b9555a1-7476-4bfa-ad4b-949259898ebd",
+    "timestamp": "2026-10-10T13:05:59.534Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "CREATE",
+    "resourceType": "EPISODE",
+    "resourceId": "809938fe-9617-48be-b904-576e38b87a27",
+    "details": "[IVS] Episódio clínico Atendimento Oftalmológico e Refração (ACTIVE)"
+  },
+  {
+    "id": "3c3d8f20-1f1f-4444-9d71-4f0f52d7d02b",
+    "timestamp": "2026-10-10T13:05:59.221Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "993c1ec3-d262-4172-96ff-fdc9f9613bbf",
+    "details": "[IVS] Agendamento para Cristina Cabreira às 09:05"
+  },
+  {
+    "id": "b2f5a7f5-b68f-444d-9676-c339fd5dfe7d",
+    "timestamp": "2026-10-10T13:05:59.211Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "993c1ec3-d262-4172-96ff-fdc9f9613bbf",
+    "details": "[IVS] Atualizado cadastro de Cristina Cabreira"
+  },
+  {
+    "id": "d22d0170-730e-44a4-9f58-f7de7341626b",
+    "timestamp": "2026-10-09T21:24:27.327Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "30bf04db-53cc-4e25-8060-0177024b8ce7",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: d302dde0-ecbe-47dd-81f2-3bee1058ad3d)"
+  },
+  {
+    "id": "31e43f13-ba88-46e8-8b6c-8502d4192a76",
+    "timestamp": "2026-10-09T21:23:52.198Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "eb818771-8003-4b4d-a4cc-ec0af839cdeb",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: 0ec2553d-73cb-4ba0-85af-b108a31c8fa5)"
+  },
+  {
+    "id": "98e83904-da8a-493d-b111-2632c63a8eee",
+    "timestamp": "2026-10-09T21:11:19.024Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "eb818771-8003-4b4d-a4cc-ec0af839cdeb",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: 0ec2553d-73cb-4ba0-85af-b108a31c8fa5)"
+  },
+  {
+    "id": "4c2a55e4-1e47-46d7-9ff7-ce98e16079d6",
+    "timestamp": "2026-10-09T21:11:18.614Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "e1cc032c-ed22-4bef-bd06-79f36197749b",
+    "details": "[IVS] Status de agendamento alterado para completed"
+  },
+  {
+    "id": "eeb37220-3d12-4ae8-97db-0dd4972c346a",
+    "timestamp": "2026-10-09T21:11:18.610Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "eb818771-8003-4b4d-a4cc-ec0af839cdeb",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: 0ec2553d-73cb-4ba0-85af-b108a31c8fa5)"
+  },
+  {
+    "id": "d13bb39b-4ffd-4b6d-bbf9-29c59e2d14bc",
+    "timestamp": "2026-10-09T21:11:12.499Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "eb818771-8003-4b4d-a4cc-ec0af839cdeb",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: 0ec2553d-73cb-4ba0-85af-b108a31c8fa5)"
+  },
+  {
+    "id": "60fb55f6-2f94-4ca6-809e-2657aaa16fe9",
+    "timestamp": "2026-10-09T21:11:12.090Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "e1cc032c-ed22-4bef-bd06-79f36197749b",
+    "details": "[IVS] Status de agendamento alterado para completed"
+  },
+  {
+    "id": "35bb80d9-e554-4315-9662-8f0dd54e08e2",
+    "timestamp": "2026-10-09T21:11:12.088Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "CREATE",
+    "resourceType": "FINANCE",
+    "resourceId": "rem_apt_c746b770-1ae8-4433-83b8-e59a51c91704",
+    "details": "[IVS] Remuneração gerada para Dr. Rudson Meirelles: R$ 50.00 (avulso)"
+  },
+  {
+    "id": "8429d1f8-7616-437d-a18f-7be78d145e3e",
+    "timestamp": "2026-10-09T21:11:12.081Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "CREATE",
+    "resourceType": "FINANCE",
+    "resourceId": "8c8e1e60-dca6-4738-8632-20843352f6e1",
+    "details": "[IVS] Entrada de BRL 50.00 - Consulta Oftalmológica / Refração - Paciente: Antonio C. Duarte"
+  },
+  {
+    "id": "c635a43d-f71e-4ca0-8450-37944fb526e4",
+    "timestamp": "2026-10-09T21:11:12.076Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "eb818771-8003-4b4d-a4cc-ec0af839cdeb",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: 0ec2553d-73cb-4ba0-85af-b108a31c8fa5)"
+  },
+  {
+    "id": "17475646-82b1-4c52-b9a4-39f77cee5c86",
+    "timestamp": "2026-10-09T21:11:07.049Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "eb818771-8003-4b4d-a4cc-ec0af839cdeb",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0ec2553d-73cb-4ba0-85af-b108a31c8fa5)"
+  },
+  {
+    "id": "2f4765b2-4c19-457a-a8c3-18bd3f7f29bc",
+    "timestamp": "2026-10-09T21:10:59.217Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "eb818771-8003-4b4d-a4cc-ec0af839cdeb",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0ec2553d-73cb-4ba0-85af-b108a31c8fa5)"
+  },
+  {
+    "id": "7bd7fcad-d589-483a-a1b8-9d3ec268b4b5",
+    "timestamp": "2026-10-09T21:10:55.773Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "eb818771-8003-4b4d-a4cc-ec0af839cdeb",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0ec2553d-73cb-4ba0-85af-b108a31c8fa5)"
+  },
+  {
+    "id": "90c060b8-28a5-452f-bded-8a10579f25dc",
+    "timestamp": "2026-10-09T21:10:52.458Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "eb818771-8003-4b4d-a4cc-ec0af839cdeb",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0ec2553d-73cb-4ba0-85af-b108a31c8fa5)"
+  },
+  {
+    "id": "c20fae3d-23fb-49f4-9e0a-59c4e0621759",
+    "timestamp": "2026-10-09T21:10:28.354Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "eb818771-8003-4b4d-a4cc-ec0af839cdeb",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0ec2553d-73cb-4ba0-85af-b108a31c8fa5)"
+  },
+  {
+    "id": "ee0e7acc-33ca-4a19-b8f7-024be9f81d31",
+    "timestamp": "2026-10-09T21:10:27.765Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "eb818771-8003-4b4d-a4cc-ec0af839cdeb",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0ec2553d-73cb-4ba0-85af-b108a31c8fa5)"
+  },
+  {
+    "id": "4dde0e5d-6ee9-48e3-bf0a-6d644cd97973",
+    "timestamp": "2026-10-09T21:05:45.702Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "eb818771-8003-4b4d-a4cc-ec0af839cdeb",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0ec2553d-73cb-4ba0-85af-b108a31c8fa5)"
+  },
+  {
+    "id": "f18bb15e-a180-43d8-8334-70a58f9b2107",
+    "timestamp": "2026-10-09T21:05:45.245Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "eb818771-8003-4b4d-a4cc-ec0af839cdeb",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0ec2553d-73cb-4ba0-85af-b108a31c8fa5)"
+  },
+  {
+    "id": "69c8c18f-44eb-412d-92f6-e72d331eca9d",
+    "timestamp": "2026-10-09T21:05:42.038Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "eb818771-8003-4b4d-a4cc-ec0af839cdeb",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0ec2553d-73cb-4ba0-85af-b108a31c8fa5)"
+  },
+  {
+    "id": "9ba323ca-af07-4bb2-a9a1-12637047a427",
+    "timestamp": "2026-10-09T21:05:40.600Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "eb818771-8003-4b4d-a4cc-ec0af839cdeb",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0ec2553d-73cb-4ba0-85af-b108a31c8fa5)"
+  },
+  {
+    "id": "a9b3a7dc-5b94-453c-ac81-28d385af7820",
+    "timestamp": "2026-10-09T21:05:37.516Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "eb818771-8003-4b4d-a4cc-ec0af839cdeb",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0ec2553d-73cb-4ba0-85af-b108a31c8fa5)"
+  },
+  {
+    "id": "52e18663-2e5f-4658-9361-48ec866c676c",
+    "timestamp": "2026-10-09T21:05:36.287Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "eb818771-8003-4b4d-a4cc-ec0af839cdeb",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0ec2553d-73cb-4ba0-85af-b108a31c8fa5)"
+  },
+  {
+    "id": "141a7e4e-b617-4f43-86ed-e29e8dfb2457",
+    "timestamp": "2026-10-09T21:05:35.431Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "eb818771-8003-4b4d-a4cc-ec0af839cdeb",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0ec2553d-73cb-4ba0-85af-b108a31c8fa5)"
+  },
+  {
+    "id": "4ab6bbc5-870b-46c0-bcbb-dacbad3ad0d3",
+    "timestamp": "2026-10-09T21:05:34.596Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "eb818771-8003-4b4d-a4cc-ec0af839cdeb",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0ec2553d-73cb-4ba0-85af-b108a31c8fa5)"
+  },
+  {
+    "id": "d79250ef-36d8-459a-9130-a7a632570d29",
+    "timestamp": "2026-10-09T21:05:33.523Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "eb818771-8003-4b4d-a4cc-ec0af839cdeb",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0ec2553d-73cb-4ba0-85af-b108a31c8fa5)"
+  },
+  {
+    "id": "4429ddb6-9e0b-4792-93a3-6e078422568a",
+    "timestamp": "2026-10-09T21:05:32.746Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "eb818771-8003-4b4d-a4cc-ec0af839cdeb",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0ec2553d-73cb-4ba0-85af-b108a31c8fa5)"
+  },
+  {
+    "id": "2d52d40b-c2b6-45cb-8e0e-25bb6ff0d833",
+    "timestamp": "2026-10-09T21:05:30.915Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "eb818771-8003-4b4d-a4cc-ec0af839cdeb",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0ec2553d-73cb-4ba0-85af-b108a31c8fa5)"
+  },
+  {
+    "id": "fadd5d05-b0e0-4f68-94ed-336e508c11e8",
+    "timestamp": "2026-10-09T21:05:30.342Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "eb818771-8003-4b4d-a4cc-ec0af839cdeb",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0ec2553d-73cb-4ba0-85af-b108a31c8fa5)"
+  },
+  {
+    "id": "710f4fce-0fd7-4ec9-a96c-32ba3e55c892",
+    "timestamp": "2026-10-09T21:05:29.228Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "eb818771-8003-4b4d-a4cc-ec0af839cdeb",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0ec2553d-73cb-4ba0-85af-b108a31c8fa5)"
+  },
+  {
+    "id": "90c402f9-b247-4f83-b1a6-7260bc79f9e1",
+    "timestamp": "2026-10-09T21:05:28.318Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "eb818771-8003-4b4d-a4cc-ec0af839cdeb",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0ec2553d-73cb-4ba0-85af-b108a31c8fa5)"
+  },
+  {
+    "id": "14af75c7-e05d-41ef-84f9-2a14c2cddf66",
+    "timestamp": "2026-10-09T21:05:27.417Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "eb818771-8003-4b4d-a4cc-ec0af839cdeb",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0ec2553d-73cb-4ba0-85af-b108a31c8fa5)"
+  },
+  {
+    "id": "2fa45223-f9ec-4aeb-b186-31df06cd31fd",
+    "timestamp": "2026-10-09T21:05:26.525Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "eb818771-8003-4b4d-a4cc-ec0af839cdeb",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0ec2553d-73cb-4ba0-85af-b108a31c8fa5)"
+  },
+  {
+    "id": "f63b09a9-7bef-4484-96f3-7edb69287b6b",
+    "timestamp": "2026-10-09T21:05:24.915Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "eb818771-8003-4b4d-a4cc-ec0af839cdeb",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0ec2553d-73cb-4ba0-85af-b108a31c8fa5)"
+  },
+  {
+    "id": "03a25769-4e37-4e81-9ff8-b37367769495",
+    "timestamp": "2026-10-09T21:05:22.062Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "eb818771-8003-4b4d-a4cc-ec0af839cdeb",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0ec2553d-73cb-4ba0-85af-b108a31c8fa5)"
+  },
+  {
+    "id": "fafbfeef-e238-4a80-ac6d-3204d6974733",
+    "timestamp": "2026-10-09T21:05:21.234Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "eb818771-8003-4b4d-a4cc-ec0af839cdeb",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0ec2553d-73cb-4ba0-85af-b108a31c8fa5)"
+  },
+  {
+    "id": "d91be9f7-ed7d-406a-b4d5-475dbae69ca9",
+    "timestamp": "2026-10-09T21:05:18.738Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "eb818771-8003-4b4d-a4cc-ec0af839cdeb",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0ec2553d-73cb-4ba0-85af-b108a31c8fa5)"
+  },
+  {
+    "id": "62673d97-6835-4d14-9d7f-452279e6190a",
+    "timestamp": "2026-10-09T21:05:18.023Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "eb818771-8003-4b4d-a4cc-ec0af839cdeb",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0ec2553d-73cb-4ba0-85af-b108a31c8fa5)"
+  },
+  {
+    "id": "8ca45dd6-7df2-42a1-a641-ab4717610da6",
+    "timestamp": "2026-10-09T21:05:07.763Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "eb818771-8003-4b4d-a4cc-ec0af839cdeb",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0ec2553d-73cb-4ba0-85af-b108a31c8fa5)"
+  },
+  {
+    "id": "93f8b375-5312-475d-b2c2-1141127b805e",
+    "timestamp": "2026-10-09T21:04:59.584Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "eb818771-8003-4b4d-a4cc-ec0af839cdeb",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0ec2553d-73cb-4ba0-85af-b108a31c8fa5)"
+  },
+  {
+    "id": "0e385b60-b6f6-4897-942b-16ef4ff6dd86",
+    "timestamp": "2026-10-09T21:04:41.671Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "eb818771-8003-4b4d-a4cc-ec0af839cdeb",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0ec2553d-73cb-4ba0-85af-b108a31c8fa5)"
+  },
+  {
+    "id": "6bdc2965-c2cd-4661-bccb-5991b156498f",
+    "timestamp": "2026-10-09T21:04:41.668Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "CREATE",
+    "resourceType": "EPISODE",
+    "resourceId": "0ec2553d-73cb-4ba0-85af-b108a31c8fa5",
+    "details": "[IVS] Episódio clínico Atendimento Oftalmológico e Refração (ACTIVE)"
+  },
+  {
+    "id": "556bbcc0-be2f-4781-898b-0f111c10a0d2",
+    "timestamp": "2026-10-09T21:04:41.540Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "e1cc032c-ed22-4bef-bd06-79f36197749b",
+    "details": "[IVS] Agendamento para Antonio C. Duarte às 17:04"
+  },
+  {
+    "id": "9ee52240-0ff1-4ce0-b54b-400d34e2a650",
+    "timestamp": "2026-10-09T21:04:41.532Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "e1cc032c-ed22-4bef-bd06-79f36197749b",
+    "details": "[IVS] Atualizado cadastro de Antonio C. Duarte"
+  },
+  {
+    "id": "7415526f-abcc-4cde-b81f-78b99f029c67",
+    "timestamp": "2026-10-09T20:28:32.588Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "a483911c-07a3-430a-addf-9dc463333386",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: abfd9d16-b74e-4c1d-9720-cbc534797b08)"
+  },
+  {
+    "id": "cb9f46a6-7421-4516-9766-7fd9898933c9",
+    "timestamp": "2026-10-09T20:28:32.174Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "a483911c-07a3-430a-addf-9dc463333386",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: abfd9d16-b74e-4c1d-9720-cbc534797b08)"
+  },
+  {
+    "id": "9fc9b39e-e2d7-4243-a221-308b54c3762c",
+    "timestamp": "2026-10-09T20:28:29.957Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "a483911c-07a3-430a-addf-9dc463333386",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: abfd9d16-b74e-4c1d-9720-cbc534797b08)"
+  },
+  {
+    "id": "7d433186-1669-4546-a504-e6116a16e979",
+    "timestamp": "2026-10-09T20:28:29.041Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "a483911c-07a3-430a-addf-9dc463333386",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: abfd9d16-b74e-4c1d-9720-cbc534797b08)"
+  },
+  {
+    "id": "5c1c1747-2140-498e-b558-d1420c395573",
+    "timestamp": "2026-10-09T20:28:28.274Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "a483911c-07a3-430a-addf-9dc463333386",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: abfd9d16-b74e-4c1d-9720-cbc534797b08)"
+  },
+  {
+    "id": "addf5228-7167-47dd-b9e8-fb133ea45c30",
+    "timestamp": "2026-10-09T20:28:22.977Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "a483911c-07a3-430a-addf-9dc463333386",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: abfd9d16-b74e-4c1d-9720-cbc534797b08)"
+  },
+  {
+    "id": "1a4b6d51-bab5-4dc9-933d-e03dfcfa4a90",
+    "timestamp": "2026-10-09T20:28:12.577Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "a483911c-07a3-430a-addf-9dc463333386",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: abfd9d16-b74e-4c1d-9720-cbc534797b08)"
+  },
+  {
+    "id": "0947b220-40d8-4a11-979f-21a5e3cfefc4",
+    "timestamp": "2026-10-09T20:28:03.947Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "a483911c-07a3-430a-addf-9dc463333386",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: abfd9d16-b74e-4c1d-9720-cbc534797b08)"
+  },
+  {
+    "id": "b009be68-872b-4d1e-a6f1-31f28af83e7e",
+    "timestamp": "2026-10-09T20:28:03.941Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "CREATE",
+    "resourceType": "EPISODE",
+    "resourceId": "abfd9d16-b74e-4c1d-9720-cbc534797b08",
+    "details": "[IVS] Episódio clínico Atendimento Oftalmológico e Refração (ACTIVE)"
+  },
+  {
+    "id": "9abc654f-ecb0-4072-84f7-c7df8a8002ba",
+    "timestamp": "2026-10-09T20:28:03.776Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "584d5ec5-2bf2-4ee8-8ce2-0755b6ef2a80",
+    "details": "[IVS] Status de agendamento alterado para in_consultation"
+  },
+  {
+    "id": "c0844315-1dd1-4d9b-95d0-8fa7e88598c8",
+    "timestamp": "2026-10-09T20:23:34.574Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "584d5ec5-2bf2-4ee8-8ce2-0755b6ef2a80",
+    "details": "[IVS] Agendamento para Catalino Martinez às 16:23"
+  },
+  {
+    "id": "bb9e59a8-4a25-457d-9e0b-c6b7fbf267ec",
+    "timestamp": "2026-10-09T20:23:34.565Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "584d5ec5-2bf2-4ee8-8ce2-0755b6ef2a80",
+    "details": "[IVS] Atualizado cadastro de Catalino Martinez"
+  },
+  {
+    "id": "ffd51a77-d7ad-43e2-85c2-10ee1524403b",
+    "timestamp": "2026-10-09T20:07:43.245Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "SCHEDULE_SEED_12092026",
+    "details": "[IVS] Agenda oficial de 12/09/2026 cadastrada com 37 pacientes"
+  },
+  {
+    "id": "3bf24400-2383-4034-95fc-9ba2e1fa2b6b",
+    "timestamp": "2026-10-09T20:07:43.244Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "HISTORICAL_RECOVERY",
+    "details": "[IVS] Recuperados com sucesso 18 pacientes e prontuários históricos desde 25/08/2026"
+  },
+  {
+    "id": "78ca09c9-422c-41d8-8160-6f5490f018e2",
+    "timestamp": "2026-10-09T20:28:23.845Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "a483911c-07a3-430a-addf-9dc463333386",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: abfd9d16-b74e-4c1d-9720-cbc534797b08)"
+  },
+  {
+    "id": "c6f00592-343d-4bf3-bbe2-4a373eaf3590",
+    "timestamp": "2026-10-10T13:06:31.983Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "31e1750c-2c19-4e63-8c79-a36252ef0750",
+    "timestamp": "2026-10-10T13:12:39.022Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "bd379104-1855-40dd-a92a-77557c5ba915",
+    "timestamp": "2026-10-10T13:12:37.440Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "3dd7f9ff-7870-4484-994d-a66569973e09",
+    "timestamp": "2026-10-10T13:12:34.721Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "9a48200e-cb8a-43bf-8cea-cabe727a20f5",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 809938fe-9617-48be-b904-576e38b87a27)"
+  },
+  {
+    "id": "78b67687-72e5-46d9-baa3-fe9c68005510",
+    "timestamp": "2026-10-10T14:12:05.681Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "5295727f-0202-4f7e-a8bc-015fa379c34a",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: ea1ed82e-2496-4a69-ace4-6f2bc03411af)"
+  },
+  {
+    "id": "3e744eda-c284-4b9d-8a46-0bed0e9efc9f",
+    "timestamp": "2026-10-10T14:28:32.352Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "d5a8df05-310b-40d9-bbb6-fc76ba5d8667",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 796d6f5b-a748-4880-ab39-15bb280024de)"
+  },
+  {
+    "id": "99f50879-2047-4c7f-b921-4cf9a40b378c",
+    "timestamp": "2026-10-10T14:28:52.943Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "d5a8df05-310b-40d9-bbb6-fc76ba5d8667",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 796d6f5b-a748-4880-ab39-15bb280024de)"
+  },
+  {
+    "id": "8497b59c-133e-4d50-b25b-3f78a6dc6c14",
+    "timestamp": "2026-10-10T14:28:52.158Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "d5a8df05-310b-40d9-bbb6-fc76ba5d8667",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 796d6f5b-a748-4880-ab39-15bb280024de)"
+  },
+  {
+    "id": "56dbb0b0-8424-4e4a-8ca2-2d66cae0dd64",
+    "timestamp": "2026-10-10T14:28:48.068Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "d5a8df05-310b-40d9-bbb6-fc76ba5d8667",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 796d6f5b-a748-4880-ab39-15bb280024de)"
+  },
+  {
+    "id": "cadf25e4-b5c1-4afa-8463-9f22ee82ea13",
+    "timestamp": "2026-10-10T14:28:44.363Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "d5a8df05-310b-40d9-bbb6-fc76ba5d8667",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 796d6f5b-a748-4880-ab39-15bb280024de)"
+  },
+  {
+    "id": "51a12117-faf2-43bf-8045-e65848a1c9aa",
+    "timestamp": "2026-10-10T14:32:23.673Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "d5a8df05-310b-40d9-bbb6-fc76ba5d8667",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: 796d6f5b-a748-4880-ab39-15bb280024de)"
+  },
+  {
+    "id": "17c586f7-f50a-4e9f-8555-60c71666e24d",
+    "timestamp": "2026-10-10T14:32:23.254Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "14408d36-3442-4cd9-b065-43baa1bd7a0a",
+    "details": "[IVS] Status de agendamento alterado para completed"
+  },
+  {
+    "id": "c810842d-8019-4769-9a79-604ed97610ea",
+    "timestamp": "2026-10-10T14:32:23.251Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "CREATE",
+    "resourceType": "FINANCE",
+    "resourceId": "rem_apt_d5a7dd49-968d-40f8-829d-d6354498f536",
+    "details": "[IVS] Remuneração gerada para Dr. Rudson Meirelles: R$ 350.00 (extraordinary)"
+  },
+  {
+    "id": "648c323a-bf18-4686-9e83-5c399f9e4017",
+    "timestamp": "2026-10-10T14:34:31.621Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "d5a8df05-310b-40d9-bbb6-fc76ba5d8667",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: 796d6f5b-a748-4880-ab39-15bb280024de)"
+  },
+  {
+    "id": "6385268e-c068-4b2a-b26e-8a15dc3d99c6",
+    "timestamp": "2026-10-10T14:34:31.212Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "14408d36-3442-4cd9-b065-43baa1bd7a0a",
+    "details": "[IVS] Status de agendamento alterado para completed"
+  },
+  {
+    "id": "ae8a0726-d679-44b3-a5e0-1aedde8956a5",
+    "timestamp": "2026-10-10T14:34:31.206Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "d5a8df05-310b-40d9-bbb6-fc76ba5d8667",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: 796d6f5b-a748-4880-ab39-15bb280024de)"
+  },
+  {
+    "id": "81c379a8-87dc-4202-9bc4-6af16745f010",
+    "timestamp": "2026-10-10T15:57:39.133Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "d7860dd2-8511-427f-b4ae-b8c00a3e9ea0",
+    "details": "[IVS] Agendamento para VICTOR ALFONSO às 14:00"
+  },
+  {
+    "id": "d2a7a203-1d00-4b63-aef2-51293553eeee",
+    "timestamp": "2026-10-10T15:57:39.115Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "d7860dd2-8511-427f-b4ae-b8c00a3e9ea0",
+    "details": "[IVS] Atualizado cadastro de VICTOR ALFONSO"
+  },
+  {
+    "id": "6cc7b9bf-e9fd-4222-9a5b-3146b3db6b34",
+    "timestamp": "2026-10-10T16:19:31.497Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "d7331129-f086-4897-85fe-6a2dbedc423d",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0b105158-1854-4996-b6d7-c93ce5c8fd50)"
+  },
+  {
+    "id": "049afeb9-c6d1-4090-9ce9-564e98e5153c",
+    "timestamp": "2026-10-10T16:19:31.487Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "CREATE",
+    "resourceType": "EPISODE",
+    "resourceId": "0b105158-1854-4996-b6d7-c93ce5c8fd50",
+    "details": "[IVS] Episódio clínico Atendimento Oftalmológico e Refração (ACTIVE)"
+  },
+  {
+    "id": "f4a089f7-fcac-4e4c-8d9f-37426f14845a",
+    "timestamp": "2026-10-10T16:19:31.233Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "2ba4f7c1-3693-46b1-b765-5e6e4c86a42b",
+    "details": "[IVS] Agendamento para Fabiany Delsy Benitez Gonzales às 12:19"
+  },
+  {
+    "id": "2b7b85e1-34b3-4035-880d-af469920e478",
+    "timestamp": "2026-10-10T16:19:31.216Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "2ba4f7c1-3693-46b1-b765-5e6e4c86a42b",
+    "details": "[IVS] Atualizado cadastro de Fabiany Delsy Benitez Gonzales"
+  },
+  {
+    "id": "82215863-ae52-4897-b635-0b01dce1ca18",
+    "timestamp": "2026-10-10T16:21:10.745Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "d7331129-f086-4897-85fe-6a2dbedc423d",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0b105158-1854-4996-b6d7-c93ce5c8fd50)"
+  },
+  {
+    "id": "94a704b8-a62c-49b6-9345-f5a9e77c79d9",
+    "timestamp": "2026-10-10T16:21:20.489Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "CREATE",
+    "resourceType": "FINANCE",
+    "resourceId": "rem_apt_104ad68b-6e48-4897-af0d-d2430b297d34",
+    "details": "[IVS] Remuneração gerada para Dr. Rudson Meirelles: R$ 1.00 (extraordinary)"
+  },
+  {
+    "id": "95c6d2d6-76a1-4c62-9d38-ea65cf4e77cc",
+    "timestamp": "2026-10-10T16:21:20.483Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "CREATE",
+    "resourceType": "FINANCE",
+    "resourceId": "e1375157-590c-4713-aefa-062899b079db",
+    "details": "[IVS] Entrada de BRL 50.00 - Consulta Oftalmológica / Refração - Paciente: Fabiany Delsy Benitez Gonzales"
+  },
+  {
+    "id": "be5fd82c-76c0-4695-9ace-f4f850b26274",
+    "timestamp": "2026-10-10T16:21:20.478Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "d7331129-f086-4897-85fe-6a2dbedc423d",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: 0b105158-1854-4996-b6d7-c93ce5c8fd50)"
+  },
+  {
+    "id": "3be44026-e03d-42ea-8d4e-857f05edb7e5",
+    "timestamp": "2026-10-10T16:21:12.164Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "d7331129-f086-4897-85fe-6a2dbedc423d",
+    "details": "[IVS] Prontuário clínico atualizado (status: in_progress, ep: 0b105158-1854-4996-b6d7-c93ce5c8fd50)"
+  },
+  {
+    "id": "c286a961-cc15-43f6-b23c-621f6b2e8405",
+    "timestamp": "2026-10-10T16:31:28.982Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "ENCOUNTER",
+    "resourceId": "304b1e03-636e-4ed3-963c-23cad60f6f13",
+    "details": "[IVS] Prontuário clínico atualizado (status: completed, ep: 72a2c3c6-7e60-4c83-9f62-fddb2563852d)"
+  }
+]

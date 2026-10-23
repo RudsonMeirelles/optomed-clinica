@@ -1,6 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { SubjectiveRefraction, PatientAge } from '@optotipo/shared';
-import { Glasses, Sparkles, RefreshCw, Eye, Layers, ShieldCheck, Star } from 'lucide-react';
+import { 
+  SubjectiveRefraction, 
+  PatientAge,
+  calculateSphericalEquivalent,
+  transposeRefraction,
+  formatDiopter,
+  normalizeAxis
+} from '@optotipo/shared';
+import { Glasses, Sparkles, RefreshCw, Eye, Layers, ShieldCheck, Star, Compass, Tv } from 'lucide-react';
+import { lanController } from '../services/lanController';
 
 interface RefractionDialsProps {
   refraction: SubjectiveRefraction;
@@ -30,10 +38,15 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
   const [odAxis, setOdAxis] = useState<string>(() => axisToStr(refraction.od?.axis));
   const [odVA, setOdVA] = useState<string>(() => refraction.od?.visualAcuity || '');
 
+  const [odPrism, setOdPrism] = useState<string>(() => refraction.od?.prism ? String(refraction.od.prism) : '');
+  const [odPrismBase, setOdPrismBase] = useState<'in' | 'out' | 'up' | 'down' | ''>(() => refraction.od?.prismBase || '');
+
   const [oeSphere, setOeSphere] = useState<string>(() => numToStr(refraction.oe?.sphere));
   const [oeCylinder, setOeCylinder] = useState<string>(() => numToStr(refraction.oe?.cylinder));
   const [oeAxis, setOeAxis] = useState<string>(() => axisToStr(refraction.oe?.axis));
   const [oeVA, setOeVA] = useState<string>(() => refraction.oe?.visualAcuity || '');
+  const [oePrism, setOePrism] = useState<string>(() => refraction.oe?.prism ? String(refraction.oe.prism) : '');
+  const [oePrismBase, setOePrismBase] = useState<'in' | 'out' | 'up' | 'down' | ''>(() => refraction.oe?.prismBase || '');
 
   const [pdDistance, setPdDistance] = useState<string>(() => refraction.pdDistanceMm ? String(refraction.pdDistanceMm) : '');
   const [addition, setAddition] = useState<string>(() => numToStr(refraction.addition));
@@ -54,11 +67,15 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
       setOdCylinder(numToStr(refraction.od?.cylinder));
       setOdAxis(axisToStr(refraction.od?.axis));
       setOdVA(refraction.od?.visualAcuity || '');
+      setOdPrism(refraction.od?.prism ? String(refraction.od.prism) : '');
+      setOdPrismBase(refraction.od?.prismBase || '');
 
       setOeSphere(numToStr(refraction.oe?.sphere));
       setOeCylinder(numToStr(refraction.oe?.cylinder));
       setOeAxis(axisToStr(refraction.oe?.axis));
       setOeVA(refraction.oe?.visualAcuity || '');
+      setOePrism(refraction.oe?.prism ? String(refraction.oe.prism) : '');
+      setOePrismBase(refraction.oe?.prismBase || '');
 
       setPdDistance(refraction.pdDistanceMm ? String(refraction.pdDistanceMm) : '');
       setAddition(numToStr(refraction.addition));
@@ -77,9 +94,7 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
     const num = parseFloat(cleaned);
     if (isNaN(num)) return 0;
     if (isAxis) {
-      let axis = Math.round(num);
-      axis = ((axis % 180) + 180) % 180;
-      return axis === 0 ? 180 : axis;
+      return normalizeAxis(num) ?? 180;
     }
     return Math.round(num * 100) / 100;
   };
@@ -99,7 +114,11 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
     mat = material,
     treats = treatments,
     specLenses = specialLenses,
-    optInfo = additionalOpticalInfo
+    optInfo = additionalOpticalInfo,
+    prismOD = odPrism,
+    prismBaseOD = odPrismBase,
+    prismOE = oePrism,
+    prismBaseOE = oePrismBase
   ) => {
     onChange({
       ...refraction,
@@ -108,14 +127,18 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
         sphere: parseVal(sphOD),
         cylinder: parseVal(cylOD),
         axis: parseVal(axOD, true),
-        visualAcuity: vaOD
+        visualAcuity: vaOD,
+        prism: parseVal(prismOD) || undefined,
+        prismBase: (prismBaseOD as any) || undefined
       },
       oe: {
         ...refraction.oe,
         sphere: parseVal(sphOE),
         cylinder: parseVal(cylOE),
         axis: parseVal(axOE, true),
-        visualAcuity: vaOE
+        visualAcuity: vaOE,
+        prism: parseVal(prismOE) || undefined,
+        prismBase: (prismBaseOE as any) || undefined
       },
       pdDistanceMm: parseVal(pd) || undefined,
       addition: parseVal(add) || undefined,
@@ -214,7 +237,7 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
     }
   };
 
-  // Transposição Óptica
+  // Transposição Óptica (+ <-> -) com precisão matemática centralizada
   const handleTransposeCylinder = () => {
     const sphODNum = parseVal(odSphere);
     const cylODNum = parseVal(odCylinder);
@@ -225,14 +248,10 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
     let newAxOD = odAxis;
 
     if (cylODNum !== 0) {
-      const transSph = sphODNum + cylODNum;
-      const transCyl = -cylODNum;
-      let transAx = (axODNum + 90) % 180;
-      if (transAx === 0) transAx = 180;
-
-      newSphOD = numToStr(transSph) || '0.00';
-      newCylOD = numToStr(transCyl);
-      newAxOD = String(transAx);
+      const transposed = transposeRefraction({ sphere: sphODNum, cylinder: cylODNum, axis: axODNum });
+      newSphOD = numToStr(transposed.sphere) || '0.00';
+      newCylOD = numToStr(transposed.cylinder);
+      newAxOD = String(transposed.axis);
       setOdSphere(newSphOD);
       setOdCylinder(newCylOD);
       setOdAxis(newAxOD);
@@ -247,14 +266,10 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
     let newAxOE = oeAxis;
 
     if (cylOENum !== 0) {
-      const transSph = sphOENum + cylOENum;
-      const transCyl = -cylOENum;
-      let transAx = (axOENum + 90) % 180;
-      if (transAx === 0) transAx = 180;
-
-      newSphOE = numToStr(transSph) || '0.00';
-      newCylOE = numToStr(transCyl);
-      newAxOE = String(transAx);
+      const transposed = transposeRefraction({ sphere: sphOENum, cylinder: cylOENum, axis: axOENum });
+      newSphOE = numToStr(transposed.sphere) || '0.00';
+      newCylOE = numToStr(transposed.cylinder);
+      newAxOE = String(transposed.axis);
       setOeSphere(newSphOE);
       setOeCylinder(newCylOE);
       setOeAxis(newAxOE);
@@ -262,6 +277,10 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
 
     emitUpdate(newSphOD, newCylOD, newAxOD, undefined, newSphOE, newCylOE, newAxOE);
   };
+
+  // Cálculo reativo do Equivalente Esférico (SE)
+  const odSE = calculateSphericalEquivalent(parseVal(odSphere), parseVal(odCylinder));
+  const oeSE = calculateSphericalEquivalent(parseVal(oeSphere), parseVal(oeCylinder));
 
   const suggestedAdd = patientAge ? calculateSuggestedAddition(patientAge.years) : null;
 
@@ -354,28 +373,50 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
       {/* ================= OLHO DIREITO (OD) ================= */}
       <div className="p-4 bg-emerald-50/50 border border-emerald-200/70 rounded-3xl space-y-3 shadow-xs">
         <div className="flex items-center justify-between">
-          <span className="font-black text-emerald-950 text-xs flex items-center gap-2 tracking-wide">
-            <span className="w-3 h-3 rounded-full bg-emerald-500 ring-2 ring-emerald-200 shrink-0" />
-            OLHO DIREITO (OD)
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="font-black text-emerald-950 text-xs flex items-center gap-2 tracking-wide">
+              <span className="w-3 h-3 rounded-full bg-emerald-500 ring-2 ring-emerald-200 shrink-0" />
+              OLHO DIREITO (OD)
+            </span>
+            <button
+              type="button"
+              onClick={() => {
+                lanController.setEye('OD');
+                if (odVA) lanController.setAcuity(odVA);
+              }}
+              className="px-2 py-0.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 border border-emerald-300 rounded-md text-[10px] font-bold flex items-center gap-1 cursor-pointer transition-colors"
+              title="Sincronizar optotipo da Smart TV para o Olho Direito"
+            >
+              <Tv className="w-3 h-3 text-emerald-600" />
+              <span>TV OD</span>
+            </button>
+          </div>
 
-          <div className="flex items-center gap-1.5">
-            <span className="text-[10px] text-emerald-900 font-bold uppercase tracking-wider">AV:</span>
-            <div className="flex items-center bg-white border border-emerald-300 rounded-xl px-1.5 py-0.5 shadow-xs focus-within:ring-2 focus-within:ring-emerald-500">
-              <span className="text-[11px] font-mono font-black text-emerald-800 select-none">20/</span>
-              <input
-                type="text"
-                value={odVA.startsWith('20/') ? odVA.replace(/^20\//, '') : odVA}
-                onChange={(e) => {
-                  let val = e.target.value.trim();
-                  if (val.startsWith('20/')) val = val.replace(/^20\//, '');
-                  const formatted = val ? `20/${val}` : '';
-                  setOdVA(formatted);
-                  emitUpdate(undefined, undefined, undefined, formatted);
-                }}
-                placeholder="20"
-                className="w-8 bg-transparent text-xs font-mono font-black text-emerald-950 text-left focus:outline-none"
-              />
+          <div className="flex items-center gap-2">
+            {odSE !== null && (
+              <span className="text-[10px] font-mono font-bold bg-emerald-100 text-emerald-900 border border-emerald-300 px-2 py-0.5 rounded-lg shadow-2xs" title="Equivalente Esférico: Esf + Cil / 2">
+                SE: <b>{formatDiopter(odSE, { showPlus: true })} D</b>
+              </span>
+            )}
+
+            <div className="flex items-center gap-1.5">
+              <span className="text-[10px] text-emerald-900 font-bold uppercase tracking-wider">AV:</span>
+              <div className="flex items-center bg-white border border-emerald-300 rounded-xl px-1.5 py-0.5 shadow-xs focus-within:ring-2 focus-within:ring-emerald-500">
+                <span className="text-[11px] font-mono font-black text-emerald-800 select-none">20/</span>
+                <input
+                  type="text"
+                  value={odVA.startsWith('20/') ? odVA.replace(/^20\//, '') : odVA}
+                  onChange={(e) => {
+                    let val = e.target.value.trim();
+                    if (val.startsWith('20/')) val = val.replace(/^20\//, '');
+                    const formatted = val ? `20/${val}` : '';
+                    setOdVA(formatted);
+                    emitUpdate(undefined, undefined, undefined, formatted);
+                  }}
+                  placeholder="20"
+                  className="w-8 bg-transparent text-xs font-mono font-black text-emerald-950 text-left focus:outline-none"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -454,36 +495,101 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
             </div>
           </div>
         </div>
+
+        {/* Prisma OD (FASE 4.0) */}
+        <div className="flex items-center justify-between gap-2 p-2 bg-emerald-100/50 rounded-xl border border-emerald-200 text-xs">
+          <span className="text-[10px] font-extrabold text-emerald-950 uppercase flex items-center gap-1">
+            <Compass className="w-3.5 h-3.5 text-emerald-700" />
+            Prisma OD:
+          </span>
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
+              <input
+                type="text"
+                disabled={isReadOnly}
+                readOnly={isReadOnly}
+                value={odPrism}
+                onChange={(e) => {
+                  if (isReadOnly) return;
+                  setOdPrism(e.target.value);
+                  emitUpdate(undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, e.target.value);
+                }}
+                placeholder="0.0"
+                className="w-12 bg-white border border-emerald-300 rounded-lg px-1.5 py-0.5 text-xs font-mono font-bold text-center text-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+              />
+              <span className="text-[10px] font-mono text-emerald-800 font-bold">Δ</span>
+            </div>
+            <select
+              disabled={isReadOnly}
+              value={odPrismBase}
+              onChange={(e) => {
+                if (isReadOnly) return;
+                const val = e.target.value as any;
+                setOdPrismBase(val);
+                emitUpdate(undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, val);
+              }}
+              className="bg-white border border-emerald-300 rounded-lg px-2 py-0.5 text-xs font-bold text-slate-800 focus:outline-none focus:ring-1 focus:ring-emerald-500 cursor-pointer"
+            >
+              <option value="">Base: —</option>
+              <option value="in">Base Interna (IN)</option>
+              <option value="out">Base Externa (OUT)</option>
+              <option value="up">Base Superior (UP)</option>
+              <option value="down">Base Inferior (DOWN)</option>
+            </select>
+          </div>
+        </div>
       </div>
 
       {/* ================= OLHO ESQUERDO (OE) ================= */}
       <div className="p-4 bg-amber-50/50 border border-amber-200/70 rounded-3xl space-y-3 shadow-xs">
         <div className="flex items-center justify-between">
-          <span className="font-black text-amber-950 text-xs flex items-center gap-2 tracking-wide">
-            <span className="w-3 h-3 rounded-full bg-amber-500 ring-2 ring-amber-200 shrink-0" />
-            OLHO ESQUERDO (OE / OI)
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="font-black text-amber-950 text-xs flex items-center gap-2 tracking-wide">
+              <span className="w-3 h-3 rounded-full bg-amber-500 ring-2 ring-amber-200 shrink-0" />
+              OLHO ESQUERDO (OE / OI)
+            </span>
+            <button
+              type="button"
+              onClick={() => {
+                lanController.setEye('OE');
+                if (oeVA) lanController.setAcuity(oeVA);
+              }}
+              className="px-2 py-0.5 bg-amber-100 hover:bg-amber-200 text-amber-800 border border-amber-300 rounded-md text-[10px] font-bold flex items-center gap-1 cursor-pointer transition-colors"
+              title="Sincronizar optotipo da Smart TV para o Olho Esquerdo"
+            >
+              <Tv className="w-3 h-3 text-amber-600" />
+              <span>TV OE</span>
+            </button>
+          </div>
 
-          <div className="flex items-center gap-1.5">
-            <span className="text-[10px] text-amber-900 font-bold uppercase tracking-wider">AV:</span>
-            <div className="flex items-center bg-white border border-amber-300 rounded-xl px-1.5 py-0.5 shadow-xs focus-within:ring-2 focus-within:ring-amber-500">
-              <span className="text-[11px] font-mono font-black text-amber-800 select-none">20/</span>
-              <input
-                type="text"
-                disabled={isReadOnly}
-                readOnly={isReadOnly}
-                value={oeVA.startsWith('20/') ? oeVA.replace(/^20\//, '') : oeVA}
-                onChange={(e) => {
-                  if (isReadOnly) return;
-                  let val = e.target.value.trim();
-                  if (val.startsWith('20/')) val = val.replace(/^20\//, '');
-                  const formatted = val ? `20/${val}` : '';
-                  setOeVA(formatted);
-                  emitUpdate(undefined, undefined, undefined, undefined, undefined, undefined, undefined, formatted);
-                }}
-                placeholder="20"
-                className={`w-8 bg-transparent text-xs font-mono font-black text-amber-950 text-left focus:outline-none ${isReadOnly ? 'cursor-not-allowed text-slate-500' : ''}`}
-              />
+          <div className="flex items-center gap-2">
+            {oeSE !== null && (
+              <span className="text-[10px] font-mono font-bold bg-amber-100 text-amber-900 border border-amber-300 px-2 py-0.5 rounded-lg shadow-2xs" title="Equivalente Esférico: Esf + Cil / 2">
+                SE: <b>{formatDiopter(oeSE, { showPlus: true })} D</b>
+              </span>
+            )}
+
+            <div className="flex items-center gap-1.5">
+              <span className="text-[10px] text-amber-900 font-bold uppercase tracking-wider">AV:</span>
+              <div className="flex items-center bg-white border border-amber-300 rounded-xl px-1.5 py-0.5 shadow-xs focus-within:ring-2 focus-within:ring-amber-500">
+                <span className="text-[11px] font-mono font-black text-amber-800 select-none">20/</span>
+                <input
+                  type="text"
+                  disabled={isReadOnly}
+                  readOnly={isReadOnly}
+                  value={oeVA.startsWith('20/') ? oeVA.replace(/^20\//, '') : oeVA}
+                  onChange={(e) => {
+                    if (isReadOnly) return;
+                    let val = e.target.value.trim();
+                    if (val.startsWith('20/')) val = val.replace(/^20\//, '');
+                    const formatted = val ? `20/${val}` : '';
+                    setOeVA(formatted);
+                    emitUpdate(undefined, undefined, undefined, undefined, undefined, undefined, undefined, formatted);
+                  }}
+                  placeholder="20"
+                  className={`w-8 bg-transparent text-xs font-mono font-black text-amber-950 text-left focus:outline-none ${isReadOnly ? 'cursor-not-allowed text-slate-500' : ''}`}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -560,6 +666,49 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
                 className={`w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-1 font-mono font-black text-sm text-center focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500 text-slate-900 ${isReadOnly ? 'cursor-not-allowed bg-slate-100 text-slate-600' : ''}`}
               />
             </div>
+          </div>
+        </div>
+
+        {/* Prisma OE (FASE 4.0) */}
+        <div className="flex items-center justify-between gap-2 p-2 bg-amber-100/50 rounded-xl border border-amber-200 text-xs">
+          <span className="text-[10px] font-extrabold text-amber-950 uppercase flex items-center gap-1">
+            <Compass className="w-3.5 h-3.5 text-amber-700" />
+            Prisma OE:
+          </span>
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
+              <input
+                type="text"
+                disabled={isReadOnly}
+                readOnly={isReadOnly}
+                value={oePrism}
+                onChange={(e) => {
+                  if (isReadOnly) return;
+                  setOePrism(e.target.value);
+                  emitUpdate(undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, e.target.value);
+                }}
+                placeholder="0.0"
+                className="w-12 bg-white border border-amber-300 rounded-lg px-1.5 py-0.5 text-xs font-mono font-bold text-center text-slate-900 focus:outline-none focus:ring-1 focus:ring-amber-500"
+              />
+              <span className="text-[10px] font-mono text-amber-800 font-bold">Δ</span>
+            </div>
+            <select
+              disabled={isReadOnly}
+              value={oePrismBase}
+              onChange={(e) => {
+                if (isReadOnly) return;
+                const val = e.target.value as any;
+                setOePrismBase(val);
+                emitUpdate(undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, val);
+              }}
+              className="bg-white border border-amber-300 rounded-lg px-2 py-0.5 text-xs font-bold text-slate-800 focus:outline-none focus:ring-1 focus:ring-amber-500 cursor-pointer"
+            >
+              <option value="">Base: —</option>
+              <option value="in">Base Interna (IN)</option>
+              <option value="out">Base Externa (OUT)</option>
+              <option value="up">Base Superior (UP)</option>
+              <option value="down">Base Inferior (DOWN)</option>
+            </select>
           </div>
         </div>
       </div>

@@ -3,9 +3,12 @@ import {
   Patient, 
   ClinicalEncounter, 
   SubjectiveRefraction, 
+  FinalRefraction,
   Prescription,
   EyeTested,
-  calculateAge
+  calculateAge,
+  formatRefractionString,
+  calculateSphericalEquivalent
 } from '@optotipo/shared';
 import { 
   User, 
@@ -53,8 +56,11 @@ import {
   RotateCcw,
   Copy,
   FileCheck2,
-  CalendarClock
+  CalendarClock,
+  Trash2,
+  ChevronLeft
 } from 'lucide-react';
+import { SyncStatusBadge } from '../components/SyncStatusBadge';
 import { RemoteControlPanel } from '../components/RemoteControlPanel';
 import { RefractionDials } from '../components/RefractionDials';
 import { PrescriptionModal } from '../components/PrescriptionModal';
@@ -65,11 +71,13 @@ import { TherapeuticGuideModal } from '../components/TherapeuticGuideModal';
 import { TherapeuticPlanModal } from '../components/TherapeuticPlanModal';
 import { ClinicalGalleryModal } from '../components/gallery/ClinicalGalleryModal';
 import { PatientMedicalRecordModal } from '../components/PatientMedicalRecordModal';
+import { ClinicalDocumentIssuanceModal, StandardDocType } from '../components/ClinicalDocumentIssuanceModal';
 import { offlineDb, generateUUID } from '../services/offlineDb';
+import { lanController } from '../services/lanController';
 
 import { OphthalmicDrug } from '../services/ophthalmicDrugsDb';
 import { TherapeuticProtocol, ClinicalProtocolDrug } from '../services/therapeuticProtocolsDb';
-import { NationalityType, DocumentType } from '@optotipo/shared';
+import { NationalityType, DocumentType, DiagnosisEntry, DiagnosisEye, DiagnosisStatus } from '@optotipo/shared';
 
 interface ExaminationWorkspaceProps {
   patient: Patient;
@@ -107,6 +115,24 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
   const [patient, setPatient] = useState<Patient>(initialPatient);
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [activeTab, setActiveTab] = useState<TrailStep['tabKey']>('anamnesis');
+  const stepContainerRef = useRef<HTMLDivElement | null>(null);
+  const saveMessageTimeoutRef = useRef<any>(null);
+
+  // Limpeza de timers de feedback ao desmontar
+  useEffect(() => {
+    return () => {
+      if (saveMessageTimeoutRef.current) {
+        clearTimeout(saveMessageTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  // Garante que o scroll vá para o topo sempre que a etapa/aba mudar
+  useEffect(() => {
+    if (stepContainerRef.current) {
+      stepContainerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [activeTab]);
 
   // Estado para Modo do Controle Remoto (Inicia MINIMIZADO como Widget Flutuante para dar espaço total à tela do exame)
   const [remoteMode, setRemoteMode] = useState<'sidebar' | 'floating'>('floating');
@@ -122,7 +148,7 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
   const [editDocumentNumber, setEditDocumentNumber] = useState<string>(patient.documentNumber || '');
   const [editPhoneCountryCode, setEditPhoneCountryCode] = useState<string>(patient.phoneCountryCode || '+55');
   const [editPhone, setEditPhone] = useState<string>(patient.phone ? patient.phone.replace(/^\+\d+\s*/, '') : '');
-  const [editCity, setEditCity] = useState<string>(patient.city || 'Foz do Iguaçu');
+  const [editCity, setEditCity] = useState<string>(patient.city || 'Ponta Porã');
   const [editAddress, setEditAddress] = useState<string>(patient.address || '');
   const [editGuardianName, setEditGuardianName] = useState<string>(patient.guardianName || '');
   const [editNotes, setEditNotes] = useState<string>(patient.notes || '');
@@ -136,7 +162,7 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
     setEditDocumentNumber(patient.documentNumber || '');
     setEditPhoneCountryCode(patient.phoneCountryCode || (patient.nationality === 'PY' ? '+595' : '+55'));
     setEditPhone(patient.phone ? patient.phone.replace(/^\+\d+\s*/, '') : '');
-    setEditCity(patient.city || (patient.nationality === 'PY' ? 'Ciudad del Este' : 'Foz do Iguaçu'));
+    setEditCity(patient.city || (patient.nationality === 'PY' ? 'Pedro Juan Caballero' : 'Ponta Porã'));
     setEditAddress(patient.address || '');
     setEditGuardianName(patient.guardianName || '');
     setEditNotes(patient.notes || '');
@@ -148,11 +174,11 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
     if (nat === 'PY') {
       setEditDocumentType('CI_PY');
       setEditPhoneCountryCode('+595');
-      if (!editCity || editCity === 'Foz do Iguaçu') setEditCity('Ciudad del Este');
+      if (!editCity || editCity === 'Ponta Porã' || editCity === 'Foz do Iguaçu') setEditCity('Pedro Juan Caballero');
     } else {
       setEditDocumentType('CPF');
       setEditPhoneCountryCode('+55');
-      if (!editCity || editCity === 'Ciudad del Este') setEditCity('Foz do Iguaçu');
+      if (!editCity || editCity === 'Pedro Juan Caballero' || editCity === 'Ciudad del Este') setEditCity('Ponta Porã');
     }
   };
 
@@ -184,8 +210,14 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
       onPatientUpdated(updatedPatient);
     }
     setIsEditPatientModalOpen(false);
+    if (saveMessageTimeoutRef.current) {
+      clearTimeout(saveMessageTimeoutRef.current);
+    }
     setSaveMessage('Cadastro do paciente atualizado!');
-    setTimeout(() => setSaveMessage(null), 2500);
+    saveMessageTimeoutRef.current = setTimeout(() => {
+      setSaveMessage(null);
+      saveMessageTimeoutRef.current = null;
+    }, 2500);
   };
 
   // Recupera histórico de consultas anteriores do paciente para referência e comparativo
@@ -379,6 +411,15 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
   const [lensOeAxis, setLensOeAxis] = useState<string>(() => currentEncounter.lensometry?.oe?.axis !== undefined ? String(currentEncounter.lensometry.oe.axis) : '');
   const [lensAddition, setLensAddition] = useState<string>(() => formatDiopterStr(currentEncounter.lensometry?.addition));
 
+  // Estados locais em string para digitação fluida da Autorrefração Computadorizada (AR)
+  const [arOdSph, setArOdSph] = useState<string>(() => formatDiopterStr(currentEncounter.autorefraction?.od?.sphere));
+  const [arOdCyl, setArOdCyl] = useState<string>(() => formatDiopterStr(currentEncounter.autorefraction?.od?.cylinder));
+  const [arOdAxis, setArOdAxis] = useState<string>(() => currentEncounter.autorefraction?.od?.axis !== undefined ? String(currentEncounter.autorefraction.od.axis) : '');
+
+  const [arOeSph, setArOeSph] = useState<string>(() => formatDiopterStr(currentEncounter.autorefraction?.oe?.sphere));
+  const [arOeCyl, setArOeCyl] = useState<string>(() => formatDiopterStr(currentEncounter.autorefraction?.oe?.cylinder));
+  const [arOeAxis, setArOeAxis] = useState<string>(() => currentEncounter.autorefraction?.oe?.axis !== undefined ? String(currentEncounter.autorefraction.oe.axis) : '');
+
   // Sincroniza os estados locais se o encounter mudar externamente
   useEffect(() => {
     if (currentEncounter.lensometry) {
@@ -390,11 +431,27 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
       setLensOeAxis(currentEncounter.lensometry.oe?.axis !== undefined ? String(currentEncounter.lensometry.oe.axis) : '');
       setLensAddition(formatDiopterStr(currentEncounter.lensometry.addition));
     }
+    if (currentEncounter.autorefraction) {
+      setArOdSph(formatDiopterStr(currentEncounter.autorefraction.od?.sphere));
+      setArOdCyl(formatDiopterStr(currentEncounter.autorefraction.od?.cylinder));
+      setArOdAxis(currentEncounter.autorefraction.od?.axis !== undefined ? String(currentEncounter.autorefraction.od.axis) : '');
+      setArOeSph(formatDiopterStr(currentEncounter.autorefraction.oe?.sphere));
+      setArOeCyl(formatDiopterStr(currentEncounter.autorefraction.oe?.cylinder));
+      setArOeAxis(currentEncounter.autorefraction.oe?.axis !== undefined ? String(currentEncounter.autorefraction.oe.axis) : '');
+    } else {
+      setArOdSph('');
+      setArOdCyl('');
+      setArOdAxis('');
+      setArOeSph('');
+      setArOeCyl('');
+      setArOeAxis('');
+    }
   }, [currentEncounter.id]);
 
   const parseInputDiopter = (str: string): number | undefined => {
     if (!str || str.trim() === '' || str === '+' || str === '-') return undefined;
-    const cleaned = str.replace(',', '.').trim();
+    const cleaned = str.trim().toLowerCase().replace(',', '.');
+    if (cleaned === 'pl' || cleaned === 'plano') return 0;
     const num = parseFloat(cleaned);
     if (isNaN(num)) return undefined;
     return Math.round(num * 100) / 100;
@@ -402,7 +459,7 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
 
   const parseInputAxis = (str: string): number | undefined => {
     if (!str || str.trim() === '') return undefined;
-    const num = parseInt(str.trim());
+    const num = parseInt(str.trim(), 10);
     if (isNaN(num)) return undefined;
     let axis = ((num % 180) + 180) % 180;
     return axis === 0 ? 180 : axis;
@@ -417,10 +474,23 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
   const [isTherapeuticGuideOpen, setIsTherapeuticGuideOpen] = useState<boolean>(false);
   const [isTherapeuticPlanModalOpen, setIsTherapeuticPlanModalOpen] = useState<boolean>(false);
   const [isGalleryModalOpen, setIsGalleryModalOpen] = useState<boolean>(false);
+  const [isClinicalDocModalOpen, setIsClinicalDocModalOpen] = useState<boolean>(false);
+  const [clinicalDocModalType, setClinicalDocModalType] = useState<StandardDocType>('exam_request');
   const [activePrescription, setActivePrescription] = useState<Prescription | null>(null);
 
   const [pendingPrescriptionDrugs, setPendingPrescriptionDrugs] = useState<ClinicalProtocolDrug[]>([]);
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
+
+  const showSaveFeedback = (msg: string, durationMs: number = 2500) => {
+    if (saveMessageTimeoutRef.current) {
+      clearTimeout(saveMessageTimeoutRef.current);
+    }
+    setSaveMessage(msg);
+    saveMessageTimeoutRef.current = setTimeout(() => {
+      setSaveMessage(null);
+      saveMessageTimeoutRef.current = null;
+    }, durationMs);
+  };
 
   // Histórico completo de todas as consultas do paciente
   const allPatientEncounters = useMemo(() => {
@@ -540,10 +610,117 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
   const handleStepClick = (step: TrailStep) => {
     setCurrentStep(step.id);
     setActiveTab(step.tabKey);
+    if (stepContainerRef.current) {
+      stepContainerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
-  const handleAcuityRecorded = (eye: EyeTested, acuitySnellen: string, correct: boolean) => {
+  const handleNextStep = () => {
+    const nextIdx = currentStep; // id é 1-based, logo se currentStep=1, next item no array tem id 2
+    if (nextIdx < EXAM_TRAIL.length) {
+      const nextStep = EXAM_TRAIL[nextIdx];
+      handleStepClick(nextStep);
+    }
+  };
+
+  const handlePrevStep = () => {
+    const prevIdx = currentStep - 2;
+    if (prevIdx >= 0) {
+      const prevStep = EXAM_TRAIL[prevIdx];
+      handleStepClick(prevStep);
+    }
+  };
+
+  // FASE 29: Atalhos de Alta Produtividade no Consultório
+  // - Ctrl+S / Cmd+S: Salvar progresso do atendimento
+  // - Alt + 1..7: Pular diretamente para etapa correspondente da trilha de exame
+  // - Alt + Seta Direita / Esquerda: Avançar / Retroceder etapa
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Se algum modal estiver aberto ou o usuário estiver digitando em textarea/input, não intercepta atalhos de digitação
+      const target = e.target as HTMLElement | null;
+      const isInputFocused = target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable);
+
+      // Ctrl+S / Cmd+S para salvar prontuário
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+        e.preventDefault();
+        if (!isReadOnly) {
+          handleSaveEncounter('in_progress');
+        }
+        return;
+      }
+
+      // Atalhos com Alt para navegação entre etapas da trilha (não conflita com digitação)
+      if (e.altKey && !e.ctrlKey && !e.metaKey) {
+        if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          handleNextStep();
+        } else if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          handlePrevStep();
+        } else {
+          const num = parseInt(e.key, 10);
+          if (num >= 1 && num <= EXAM_TRAIL.length) {
+            e.preventDefault();
+            const targetStep = EXAM_TRAIL.find(s => s.id === num);
+            if (targetStep) {
+              handleStepClick(targetStep);
+            }
+          }
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [currentStep, isReadOnly, currentEncounter, patient]);
+
+  const handleAcuityRecorded = (
+    eye: EyeTested, 
+    acuitySnellen: string, 
+    correct: boolean, 
+    target: 'av_sc' | 'refraction' = activeTab === 'av_sc' ? 'av_sc' : 'refraction'
+  ) => {
     if (!correct) return;
+
+    if (target === 'av_sc') {
+      // Grava no VisualAcuityRecord (AVsc - Sem Correção)
+      const existingVa = currentEncounter.visualAcuity || {
+        id: generateUUID(),
+        encounterId: currentEncounter.id,
+        testedAt: new Date().toISOString(),
+        entries: []
+      };
+
+      const otherEntries = (existingVa.entries || []).filter(e => e.eye !== eye);
+      const currentEntry = (existingVa.entries || []).find(e => e.eye === eye) || {
+        eye,
+        optotypeType: 'snellen_letters',
+        distanceMeters: 6
+      };
+
+      const updatedVa = {
+        ...existingVa,
+        testedAt: new Date().toISOString(),
+        entries: [
+          ...otherEntries,
+          { ...currentEntry, uncorrected: acuitySnellen }
+        ]
+      };
+
+      const updated = {
+        ...currentEncounter,
+        visualAcuity: updatedVa
+      };
+
+      setCurrentEncounter(updated);
+      offlineDb.saveEncounter(updated);
+      setSaveMessage(`✓ AVsc ${eye} (${acuitySnellen}) gravada no prontuário!`);
+      setTimeout(() => setSaveMessage(null), 2500);
+      return;
+    }
+
+    // Grava na Refração Subjetiva (AVcc / Acuidade do Exame Refrativo)
     const ref = currentEncounter.subjectiveRefraction || {
       id: generateUUID(),
       encounterId: currentEncounter.id,
@@ -563,6 +740,8 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
     };
     setCurrentEncounter(updated);
     offlineDb.saveEncounter(updated);
+    setSaveMessage(`✓ AV Refração ${eye} (${acuitySnellen}) gravada no prontuário!`);
+    setTimeout(() => setSaveMessage(null), 2500);
   };
 
   const handleSaveEncounter = (status: 'in_progress' | 'completed' = 'in_progress') => {
@@ -603,17 +782,36 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
 
         offlineDb.saveTransaction(autoTx, activeClinicId);
       }
+
+      // Sincroniza status do agendamento correspondente para 'completed'
+      if (updated.appointmentId) {
+        try {
+          offlineDb.updateAppointmentStatus(updated.appointmentId, 'completed', activeClinicId);
+        } catch (e) {
+          console.warn('Erro ao atualizar agendamento após consulta:', e);
+        }
+      } else {
+        // Tenta localizar agendamento de hoje deste paciente
+        const todayStr = new Date().toISOString().split('T')[0];
+        const dayApts = offlineDb.getAppointments(activeClinicId);
+        const matchApt = dayApts.find(a => (a.patientId === patient.id || a.patientName.toLowerCase() === patient.fullName.toLowerCase()) && a.date === todayStr);
+        if (matchApt) {
+          try {
+            offlineDb.updateAppointmentStatus(matchApt.id, 'completed', activeClinicId);
+          } catch {}
+        }
+      }
     }
 
-
-    setSaveMessage(status === 'completed' ? 'Atendimento concluído e R$ 50,00 lançado no Financeiro!' : 'Progresso salvo!');
+    setSaveMessage(status === 'completed' ? '✓ Atendimento concluído, prontuário salvo e financeiro atualizado!' : '✓ Progresso salvo!');
     setTimeout(() => setSaveMessage(null), 2500);
   };
 
 
   // Prepara Objeto de Prescrição Óptica (Dioptria) - 100% segregada da conduta médica/farmacológica
   const prepareOpticalPrescription = (): Prescription => {
-    const ref = currentEncounter.subjectiveRefraction;
+    // FASE 26: A prescrição é derivada conscientemente da refração final homologada ou da refração subjetiva confirmada
+    const ref = currentEncounter.finalRefraction || currentEncounter.subjectiveRefraction;
     const specialLensesText = ref?.specialLenses?.trim() ? ` [Lentes Especiais: ${ref.specialLenses.trim()}]` : '';
     const opticalInfoText = ref?.additionalOpticalInfo?.trim() || '';
     
@@ -622,23 +820,50 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
       ? `${opticalInfoText}${specialLensesText}`
       : (specialLensesText ? specialLensesText.trim() : 'Adaptação progressiva.');
 
+    const activeClinic = offlineDb.getActiveClinic();
+    const existingEncounterRxs = offlineDb.getPrescriptionsByEncounter(currentEncounter.id);
+    const existingIssued = existingEncounterRxs.find(r => r.isIssued);
+
+    let rxId = generateUUID();
+    let version = 1;
+    let supersedesId: string | undefined = undefined;
+
+    if (existingIssued) {
+      // Já existe receita emitida para este encontro. Cria nova versão vinculada!
+      rxId = `rx-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
+      version = (existingIssued.version || 1) + 1;
+      supersedesId = existingIssued.id;
+    } else if (existingEncounterRxs.length > 0) {
+      // Reutiliza o ID do rascunho anterior ainda não emitido
+      rxId = existingEncounterRxs[0].id;
+      version = existingEncounterRxs[0].version || 1;
+    }
+
     const newRx: Prescription = {
-      id: generateUUID(),
+      id: rxId,
       encounterId: currentEncounter.id,
       patientId: patient.id,
       patientName: patient.fullName,
+      clinicId: currentEncounter.clinicId || activeClinic.id,
+      clinicName: activeClinic.name,
       date: new Date().toISOString(),
       expirationDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
       od: {
         sphere: ref?.od?.sphere || 0,
         cylinder: ref?.od?.cylinder || 0,
         axis: ref?.od?.axis || 0,
+        addition: ref?.od?.addition || ref?.addition,
+        prism: ref?.od?.prism,
+        prismBase: ref?.od?.prismBase,
         visualAcuity: ref?.od?.visualAcuity
       },
       oe: {
         sphere: ref?.oe?.sphere || 0,
         cylinder: ref?.oe?.cylinder || 0,
         axis: ref?.oe?.axis || 0,
+        addition: ref?.oe?.addition || ref?.addition,
+        prism: ref?.oe?.prism,
+        prismBase: ref?.oe?.prismBase,
         visualAcuity: ref?.oe?.visualAcuity
       },
       addition: ref?.addition,
@@ -648,11 +873,16 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
       treatments: ref?.treatments && ref.treatments.length > 0 ? ref.treatments : ['Antirreflexo Digital', 'Filtro Luz Azul (BlueCut)'],
       returnInstructions: currentEncounter.returnInstructions || (patient.nationality === 'PY' ? 'Control en 1 año para evaluación visual de rutina.' : 'Retorno em 1 ano para controle visual de rotina.'),
       additionalOpticalInfo: opticalInfoText || undefined,
-      observations: opticalNotes
+      observations: opticalNotes,
+      examinerName: currentEncounter.examinerName || 'Dr. Rudson Meirelles',
+      examinerRegistry: 'CRM/CROO 123456',
+      version,
+      supersedesId,
+      isIssued: false
     };
-    offlineDb.savePrescription(newRx);
-    setActivePrescription(newRx);
-    return newRx;
+    const saved = offlineDb.savePrescription(newRx, currentEncounter.clinicId || activeClinic.id);
+    setActivePrescription(saved);
+    return saved;
   };
 
   // Abertura da Central de Impressão Bilíngue (A4 Paisagem 2 em 1 / Individual)
@@ -704,7 +934,7 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
   };
 
   return (
-    <div className="flex flex-col h-screen bg-slate-100 text-slate-800 overflow-hidden font-sans">
+    <div className="flex flex-col h-full bg-slate-100 text-slate-800 overflow-hidden font-sans">
       
       {/* 1. Cabeçalho Principal do Atendimento */}
       <header className="bg-white border-b border-slate-200 px-4 sm:px-6 py-2.5 flex flex-wrap items-center justify-between shadow-sm shrink-0 gap-2 no-print">
@@ -764,6 +994,42 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
                 )}
                 {patient.phone && <span>Tel: {patient.phone}</span>}
               </div>
+
+              {/* Botões MUDADOS PARA O LADO ESQUERDO PARA VISIBILIDADE MÁXIMA */}
+              <div className="flex items-center gap-2 mt-2">
+                <button
+                  type="button"
+                  onClick={() => setIsPatientHistoryModalOpen(true)}
+                  className="px-3 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 hover:border-amber-400 rounded-xl font-black text-xs flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs active:scale-95"
+                  title="Ver todo o histórico do paciente"
+                >
+                  <History className="w-3.5 h-3.5 text-amber-600" />
+                  <span>📋 Histórico / Prontuário</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (allPatientEncounters.length === 0 && !isReturnMode && !(currentEncounter as any)?.isReturnEncounter) {
+                      if (confirm(`Este paciente ainda não possui consultas arquivadas no sistema.\nDeseja iniciar uma Consulta de Retorno avulsa?`)) {
+                        handleStartReturnSession();
+                      }
+                      return;
+                    }
+                    setIsConfirmReturnModalOpen(true);
+                  }}
+                  className={`px-3 py-1.5 rounded-xl font-black text-xs flex items-center gap-1.5 transition-all cursor-pointer shadow-xs active:scale-95 ${
+                    isReturnMode || (currentEncounter as any)?.isReturnEncounter
+                      ? 'bg-purple-700 text-white ring-2 ring-purple-400 shadow-purple-600/30'
+                      : 'bg-purple-50 hover:bg-purple-100 text-purple-800 border border-purple-300 hover:border-purple-400'
+                  }`}
+                  title="Registrar Consulta de Retorno: Cria um novo atendimento hoje, preservando a consulta anterior intacta e carregando as dioptrias de referência"
+                >
+                  <RotateCcw className={`w-3.5 h-3.5 ${isReturnMode || (currentEncounter as any)?.isReturnEncounter ? 'text-purple-200' : 'text-purple-600'}`} />
+                  <span>{isReturnMode || (currentEncounter as any)?.isReturnEncounter ? '✓ Consulta de Retorno' : '↩ Nova Consulta de Retorno'}</span>
+                </button>
+              </div>
+
             </div>
           </div>
         </div>
@@ -775,40 +1041,6 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
               {saveMessage}
             </span>
           )}
-
-          {/* Botão Prominente de Consulta de Retorno */}
-          <button
-            type="button"
-            onClick={() => {
-              if (allPatientEncounters.length === 0 && !isReturnMode && !(currentEncounter as any)?.isReturnEncounter) {
-                if (confirm(`Este paciente ainda não possui consultas arquivadas no sistema.\nDeseja iniciar uma Consulta de Retorno avulsa?`)) {
-                  handleStartReturnSession();
-                }
-                return;
-              }
-              setIsConfirmReturnModalOpen(true);
-            }}
-            className={`px-3 py-1.5 rounded-xl font-black text-xs flex items-center gap-1.5 transition-all cursor-pointer shadow-xs active:scale-95 ${
-              isReturnMode || (currentEncounter as any)?.isReturnEncounter
-                ? 'bg-purple-700 text-white ring-2 ring-purple-400 shadow-purple-600/30'
-                : 'bg-purple-50 hover:bg-purple-100 text-purple-800 border border-purple-300 hover:border-purple-400'
-            }`}
-            title="Registrar Consulta de Retorno: Cria um novo atendimento hoje, preservando a consulta anterior intacta e carregando as dioptrias de referência"
-          >
-            <RotateCcw className={`w-3.5 h-3.5 ${isReturnMode || (currentEncounter as any)?.isReturnEncounter ? 'text-purple-200' : 'text-purple-600'}`} />
-            <span>{isReturnMode || (currentEncounter as any)?.isReturnEncounter ? '✓ Consulta de Retorno' : '↩ Consulta de Retorno'}</span>
-          </button>
-
-          {/* Botão de Histórico / Prontuário Completo */}
-          <button
-            type="button"
-            onClick={() => setIsPatientHistoryModalOpen(true)}
-            className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 font-bold text-xs rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs active:scale-95"
-            title="Visualizar prontuário completo com todo o histórico clínico deste paciente"
-          >
-            <History className="w-3.5 h-3.5 text-blue-600" />
-            <span>Prontuário ({allPatientEncounters.length})</span>
-          </button>
 
           {/* Grupo de Botões de Impressão Direta por Ícone */}
           <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200">
@@ -874,20 +1106,57 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
               setIsReportModalOpen(true);
             }}
             className="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl flex items-center gap-1 transition-colors cursor-pointer"
+            title="Relatório clínico completo de avaliação visual"
           >
             <FileText className="w-4 h-4 text-indigo-600" /> 
             <span className="hidden sm:inline">Relatório</span>
           </button>
 
-          {/* Concluir Atendimento (Apenas examinador) */}
+          {/* FASE 26: Emissão Rápida de Documentos (Exames, Encaminhamentos, Atestados) */}
+          <button
+            type="button"
+            onClick={() => {
+              if (!isReadOnly) handleSaveEncounter('in_progress');
+              setClinicalDocModalType('exam_request');
+              setIsClinicalDocModalOpen(true);
+            }}
+            className="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl flex items-center gap-1 transition-colors cursor-pointer"
+            title="Emitir solicitação de exames, encaminhamento ou atestado clínico"
+          >
+            <FilePlus2 className="w-4 h-4 text-emerald-600" />
+            <span className="hidden sm:inline">Documentos</span>
+          </button>
+
+          {/* Indicador de Status Online / Offline / Sincronizado */}
+          <div className="hidden md:flex items-center">
+            <SyncStatusBadge />
+          </div>
+
+          {/* Ações de Salvamento e Conclusão (Apenas examinador) */}
           {!isReadOnly && (
-            <button
-              onClick={() => handleSaveEncounter('completed')}
-              className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl flex items-center gap-1.5 shadow-md shadow-emerald-600/20 active:scale-95 transition-transform cursor-pointer"
-            >
-              <CheckCircle2 className="w-4 h-4" /> 
-              <span>Concluir</span>
-            </button>
+            <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={() => handleSaveEncounter('in_progress')}
+                aria-label="Salvar rascunho do atendimento (Ctrl+S)"
+                className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl flex items-center gap-1.5 border border-slate-300 transition-all cursor-pointer active:scale-95"
+                title="Salvar rascunho do atendimento (Ctrl+S)"
+              >
+                <Save className="w-3.5 h-3.5 text-slate-500" />
+                <span>Salvar</span>
+                <kbd className="hidden md:inline-block px-1.5 py-0.5 text-[9px] font-mono text-slate-500 bg-white border border-slate-300 rounded shadow-2xs">Ctrl+S</kbd>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleSaveEncounter('completed')}
+                className="px-4 py-1.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs rounded-xl flex items-center gap-1.5 shadow-md shadow-emerald-600/30 active:scale-95 transition-transform cursor-pointer"
+                title="Concluir atendimento, arquivar prontuário e sincronizar financeiro"
+              >
+                <CheckCircle2 className="w-4 h-4" /> 
+                <span>Concluir Atendimento</span>
+              </button>
+            </div>
           )}
         </div>
       </header>
@@ -913,13 +1182,13 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
       )}
 
       {/* 2. Trilha de Exame Clínico Guiada (Stepper) */}
-      <div className="bg-slate-900 text-slate-100 px-6 py-2.5 flex items-center justify-between border-b border-slate-800 overflow-x-auto shadow-inner no-print">
+      <div className="bg-slate-900 text-slate-100 px-6 py-2.5 flex items-center justify-between border-b border-slate-800 overflow-x-auto shadow-inner no-print" role="navigation" aria-label="Trilha de Exame Clínico">
         <div className="flex items-center gap-1">
           <span className="text-[11px] font-black text-blue-400 uppercase tracking-wider mr-2 flex items-center gap-1">
             <Layers className="w-3.5 h-3.5" /> TRILHA DE EXAME:
           </span>
 
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5" role="tablist">
             {EXAM_TRAIL.map((step) => {
               const isActive = activeTab === step.tabKey;
               const isPast = step.id < currentStep;
@@ -928,6 +1197,9 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
                 <button
                   key={step.id}
                   onClick={() => handleStepClick(step)}
+                  role="tab"
+                  aria-selected={isActive}
+                  title={`Etapa ${step.id}: ${step.label} (Atalho: Alt+${step.id})`}
                   className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
                     isActive
                       ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30 scale-105'
@@ -937,6 +1209,7 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
                   }`}
                 >
                   <span>{step.label}</span>
+                  <span className="text-[9px] opacity-60 hidden xl:inline font-mono">Alt+{step.id}</span>
                 </button>
               );
             })}
@@ -973,7 +1246,7 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
       </div>
 
       {/* 3. Área Central do Exame */}
-      <div className="flex-1 w-full p-4 grid grid-cols-1 lg:grid-cols-12 gap-4 overflow-y-auto no-print">
+      <div ref={stepContainerRef} className="flex-1 w-full p-4 grid grid-cols-1 lg:grid-cols-12 gap-4 overflow-y-auto no-print">
         
         {/* Coluna Esquerda: Detalhes Clínicos da Etapa Ativa */}
         <div className={remoteMode === 'sidebar' ? "lg:col-span-5 flex flex-col gap-4" : "lg:col-span-6 flex flex-col gap-4"}>
@@ -1015,7 +1288,7 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
                   <div className="flex items-center gap-1.5 shrink-0">
                     <button
                       type="button"
-                      onClick={() => setActiveTab('conduct')}
+                      onClick={() => handleStepClick(EXAM_TRAIL[6])}
                       className="px-3 py-1.5 bg-white hover:bg-blue-50 text-blue-900 font-black rounded-xl text-[11px] shadow-sm transition-all cursor-pointer"
                     >
                       Ver Comparativo
@@ -1060,22 +1333,92 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
                     </div>
                   )}
 
-                  {/* QUEIXA PRINCIPAL */}
-                  <div>
-                    <label className="font-bold text-slate-800 block mb-1 flex items-center gap-1.5">
-                      <FileText className="w-3.5 h-3.5 text-blue-600" />
-                      <span>QUEIXA PRINCIPAL & MOTIVO DA CONSULTA:</span>
-                    </label>
-                    <textarea
-                      rows={2}
-                      value={currentEncounter.anamnesis?.chiefComplaint || ''}
-                      onChange={(e) => setCurrentEncounter({
-                        ...currentEncounter,
-                        anamnesis: { ...currentEncounter.anamnesis!, chiefComplaint: e.target.value }
-                      })}
-                      placeholder="Ex: Dificuldade para leitura de perto, cefaleia frontal após uso de telas, sensação de areia nos olhos..."
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs text-slate-900 focus:outline-none focus:border-blue-500 font-medium"
-                    />
+                  {/* QUEIXA PRINCIPAL & HDA */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                      <label className="font-bold text-slate-800 block mb-1 flex items-center gap-1.5">
+                        <FileText className="w-3.5 h-3.5 text-blue-600" />
+                        <span>QUEIXA PRINCIPAL (QP):</span>
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={currentEncounter.anamnesis?.chiefComplaint || ''}
+                        onChange={(e) => setCurrentEncounter({
+                          ...currentEncounter,
+                          anamnesis: { ...currentEncounter.anamnesis!, chiefComplaint: e.target.value }
+                        })}
+                        placeholder="Ex: Dificuldade para leitura de perto, cefaleia frontal após uso de telas..."
+                        className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs text-slate-900 focus:outline-none focus:border-blue-500 font-medium"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="font-bold text-slate-800 block mb-1 flex items-center gap-1.5">
+                        <Clock className="w-3.5 h-3.5 text-indigo-600" />
+                        <span>HISTÓRIA DA DOENÇA ATUAL (HDA):</span>
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={currentEncounter.anamnesis?.historyOfPresentIllness || ''}
+                        onChange={(e) => setCurrentEncounter({
+                          ...currentEncounter,
+                          anamnesis: { ...currentEncounter.anamnesis!, historyOfPresentIllness: e.target.value }
+                        })}
+                        placeholder="Início dos sintomas, evolução, fatores de melhora/piora, lateralidade..."
+                        className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs text-slate-900 focus:outline-none focus:border-blue-500 font-medium"
+                      />
+                    </div>
+                  </div>
+
+                  {/* ANTECEDENTES CIRÚRGICOS, TRAUMAS E ALERGIAS */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 space-y-1">
+                      <label className="text-[11px] font-bold text-slate-700 block uppercase">Cirurgias (Oculares/Gerais):</label>
+                      <textarea
+                        rows={2}
+                        value={currentEncounter.anamnesis?.surgicalHistory || currentEncounter.anamnesis?.previousSurgeries || ''}
+                        onChange={(e) => setCurrentEncounter({
+                          ...currentEncounter,
+                          anamnesis: { 
+                            ...currentEncounter.anamnesis!, 
+                            surgicalHistory: e.target.value,
+                            previousSurgeries: e.target.value 
+                          }
+                        })}
+                        placeholder="Ex: Facectomia OD (2023), Pterígio OE..."
+                        className="w-full bg-white border border-slate-300 rounded-xl p-2 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      />
+                    </div>
+
+                    <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 space-y-1">
+                      <label className="text-[11px] font-bold text-slate-700 block uppercase">Histórico de Traumatismos:</label>
+                      <textarea
+                        rows={2}
+                        value={currentEncounter.anamnesis?.traumaHistory || ''}
+                        onChange={(e) => setCurrentEncounter({
+                          ...currentEncounter,
+                          anamnesis: { ...currentEncounter.anamnesis!, traumaHistory: e.target.value }
+                        })}
+                        placeholder="Ex: Trauma perfurante na infância, contusão..."
+                        className="w-full bg-white border border-slate-300 rounded-xl p-2 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      />
+                    </div>
+
+                    <div className="p-3 bg-rose-50/40 rounded-2xl border border-rose-200/70 space-y-1">
+                      <label className="text-[11px] font-black text-rose-900 block uppercase flex items-center gap-1">
+                        <AlertTriangle className="w-3 h-3 text-rose-600" /> Alergias Conhecidas:
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={currentEncounter.anamnesis?.allergies || ''}
+                        onChange={(e) => setCurrentEncounter({
+                          ...currentEncounter,
+                          anamnesis: { ...currentEncounter.anamnesis!, allergies: e.target.value }
+                        })}
+                        placeholder="Ex: Nega alergias; ou: Dipirona, Colírios com conservantes..."
+                        className="w-full bg-white border border-rose-200 rounded-xl p-2 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-rose-500"
+                      />
+                    </div>
                   </div>
 
                   {/* MEDICAMENTOS EM USO CONTÍNUO */}
@@ -1089,10 +1432,14 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
                     </label>
                     <textarea
                       rows={2}
-                      value={currentEncounter.anamnesis?.medicationsInUse || ''}
+                      value={currentEncounter.anamnesis?.medicationsInUse || currentEncounter.anamnesis?.medications || ''}
                       onChange={(e) => setCurrentEncounter({
                         ...currentEncounter,
-                        anamnesis: { ...currentEncounter.anamnesis!, medicationsInUse: e.target.value }
+                        anamnesis: { 
+                          ...currentEncounter.anamnesis!, 
+                          medicationsInUse: e.target.value,
+                          medications: e.target.value
+                        }
                       })}
                       placeholder="Ex: Losartana 50mg (1x/dia), Metformina 850mg, Colírio Lubrificante Systane UL 3x/dia, Glaucoma: Timolol..."
                       className="w-full bg-white border border-blue-300 rounded-xl p-2.5 text-xs text-slate-900 focus:outline-none focus:border-blue-600 font-medium shadow-xs"
@@ -1120,7 +1467,11 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
                             const updated = cur.trim() ? `${cur.trim()}, ${med}` : med;
                             setCurrentEncounter({
                               ...currentEncounter,
-                              anamnesis: { ...currentEncounter.anamnesis!, medicationsInUse: updated }
+                              anamnesis: { 
+                                ...currentEncounter.anamnesis!, 
+                                medicationsInUse: updated,
+                                medications: updated
+                              }
                             });
                           }}
                           className="px-2 py-0.5 bg-white hover:bg-blue-100 border border-blue-200 rounded-lg text-[10px] font-bold text-blue-800 transition-colors cursor-pointer"
@@ -1138,14 +1489,18 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
                         <Activity className="w-3.5 h-3.5 text-indigo-600" />
                         HISTÓRICO PATOLÓGICO PREGRESSO (SISTÊMICO & OCULAR):
                       </span>
-                      <span className="text-[10px] text-indigo-700 font-normal">Patologias, cirurgias prévias e antecedentes</span>
+                      <span className="text-[10px] text-indigo-700 font-normal">Patologias, antecedentes familiares e sistêmicos</span>
                     </label>
                     <textarea
                       rows={2}
-                      value={currentEncounter.anamnesis?.pathologicalHistory || ''}
+                      value={currentEncounter.anamnesis?.pathologicalHistory || currentEncounter.anamnesis?.systemicHistory || ''}
                       onChange={(e) => setCurrentEncounter({
                         ...currentEncounter,
-                        anamnesis: { ...currentEncounter.anamnesis!, pathologicalHistory: e.target.value }
+                        anamnesis: { 
+                          ...currentEncounter.anamnesis!, 
+                          pathologicalHistory: e.target.value,
+                          systemicHistory: e.target.value
+                        }
                       })}
                       placeholder="Ex: Cirurgia refrativa PRK há 10 anos, facectomia com implante de LIO em OD (2022), histórico familiar de glaucoma paterno..."
                       className="w-full bg-white border border-indigo-300 rounded-xl p-2.5 text-xs text-slate-900 focus:outline-none focus:border-indigo-600 font-medium shadow-xs"
@@ -1174,7 +1529,11 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
                             const updated = cur.trim() ? `${cur.trim()}, ${pat}` : pat;
                             setCurrentEncounter({
                               ...currentEncounter,
-                              anamnesis: { ...currentEncounter.anamnesis!, pathologicalHistory: updated }
+                              anamnesis: { 
+                                ...currentEncounter.anamnesis!, 
+                                pathologicalHistory: updated,
+                                systemicHistory: updated
+                              }
                             });
                           }}
                           className="px-2 py-0.5 bg-white hover:bg-indigo-100 border border-indigo-200 rounded-lg text-[10px] font-bold text-indigo-800 transition-colors cursor-pointer"
@@ -1185,13 +1544,63 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
                     </div>
                   </div>
 
+                  {/* OCUPAÇÃO, EXPOSIÇÃO A TELAS E HÁBITOS */}
+                  <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 space-y-2.5">
+                    <span className="font-extrabold text-slate-900 text-xs uppercase tracking-wide block">
+                      PERFIL OCUPACIONAL, EXPOSIÇÃO A TELAS & HÁBITOS:
+                    </span>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                      <div>
+                        <label className="text-[10px] font-bold text-slate-500 block mb-1">Ocupação / Trabalho:</label>
+                        <input
+                          type="text"
+                          placeholder="Ex: Analista de TI, Motorista, Estudante..."
+                          value={currentEncounter.anamnesis?.occupationalHistory || ''}
+                          onChange={(e) => setCurrentEncounter({
+                            ...currentEncounter,
+                            anamnesis: { ...currentEncounter.anamnesis!, occupationalHistory: e.target.value }
+                          })}
+                          className="w-full bg-white border border-slate-300 rounded-xl px-2.5 py-1.5 text-xs text-slate-800"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-[10px] font-bold text-slate-500 block mb-1">Exposição a Telas (horas/dia):</label>
+                        <input
+                          type="text"
+                          placeholder="Ex: 8 a 10h/dia (computador + smartphone)"
+                          value={currentEncounter.anamnesis?.screenExposure || ''}
+                          onChange={(e) => setCurrentEncounter({
+                            ...currentEncounter,
+                            anamnesis: { ...currentEncounter.anamnesis!, screenExposure: e.target.value }
+                          })}
+                          className="w-full bg-white border border-slate-300 rounded-xl px-2.5 py-1.5 text-xs text-slate-800"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-[10px] font-bold text-slate-500 block mb-1">Hábitos & Atividades:</label>
+                        <input
+                          type="text"
+                          placeholder="Ex: Nega tabagismo; Leitura noturna..."
+                          value={currentEncounter.anamnesis?.habits || ''}
+                          onChange={(e) => setCurrentEncounter({
+                            ...currentEncounter,
+                            anamnesis: { ...currentEncounter.anamnesis!, habits: e.target.value }
+                          })}
+                          className="w-full bg-white border border-slate-300 rounded-xl px-2.5 py-1.5 text-xs text-slate-800"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
                   {/* DADOS CLÍNICOS GERAIS DO PACIENTE */}
                   <div className="p-3.5 bg-indigo-50/60 rounded-2xl border border-indigo-200/80 space-y-2.5">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Stethoscope className="w-4 h-4 text-indigo-600" />
                         <span className="font-extrabold text-indigo-950 text-xs uppercase tracking-wide">
-                          DADOS CLÍNICOS DO PACIENTE / HISTÓRICO GERAL:
+                          OBSERVAÇÕES CLÍNICAS GERAIS & ANTECEDENTES:
                         </span>
                       </div>
                       <span className="text-[10px] text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded-md font-bold">
@@ -1201,10 +1610,14 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
 
                     <textarea
                       rows={2}
-                      value={currentEncounter.anamnesis?.clinicalNotes || ''}
+                      value={currentEncounter.anamnesis?.observations || currentEncounter.anamnesis?.clinicalNotes || ''}
                       onChange={(e) => setCurrentEncounter({
                         ...currentEncounter,
-                        anamnesis: { ...currentEncounter.anamnesis!, clinicalNotes: e.target.value }
+                        anamnesis: { 
+                          ...currentEncounter.anamnesis!, 
+                          observations: e.target.value,
+                          clinicalNotes: e.target.value 
+                        }
                       })}
                       placeholder="Observações clínicas gerais do paciente: histórico de cefaleia, queixas astenópicas, cirurgias oculares prévias, histórico familiar ou outras condições clínicas relevantes..."
                       className="w-full bg-white border border-indigo-300/80 rounded-xl p-2 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-xs resize-none"
@@ -1231,11 +1644,15 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
                           key={chip}
                           type="button"
                           onClick={() => {
-                            const cur = currentEncounter.anamnesis?.clinicalNotes || '';
+                            const cur = currentEncounter.anamnesis?.observations || currentEncounter.anamnesis?.clinicalNotes || '';
                             const updated = cur.trim() ? `${cur.trim()}, ${chip}` : chip;
                             setCurrentEncounter({
                               ...currentEncounter,
-                              anamnesis: { ...currentEncounter.anamnesis!, clinicalNotes: updated }
+                              anamnesis: { 
+                                ...currentEncounter.anamnesis!, 
+                                observations: updated,
+                                clinicalNotes: updated 
+                              }
                             });
                           }}
                           className="px-2 py-0.5 bg-white hover:bg-indigo-100 border border-indigo-200 rounded-lg text-[10px] font-bold text-indigo-800 transition-colors cursor-pointer active:scale-95 shadow-2xs"
@@ -1266,7 +1683,11 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
                               checked={currentEncounter.anamnesis?.currentGlasses || false}
                               onChange={(e) => setCurrentEncounter({
                                 ...currentEncounter,
-                                anamnesis: { ...currentEncounter.anamnesis!, currentGlasses: e.target.checked }
+                                anamnesis: { 
+                                  ...currentEncounter.anamnesis!, 
+                                  currentGlasses: e.target.checked,
+                                  previousGlasses: e.target.checked
+                                }
                               })}
                               className="rounded text-blue-600 focus:ring-blue-500"
                             />
@@ -1417,14 +1838,27 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
               {activeTab === 'av_sc' && (
                 <div className="space-y-4">
                   <div className="p-4 bg-blue-50/70 border border-blue-200 rounded-2xl space-y-3">
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between flex-wrap gap-2">
                       <h3 className="font-black text-blue-950 text-xs uppercase tracking-wider flex items-center gap-1.5">
                         <Eye className="w-4 h-4 text-blue-600" />
                         AGUDEZA VISUAL SEM CORREÇÃO (AVsc):
                       </h3>
-                      <span className="text-[10px] text-blue-700 font-bold bg-blue-100 px-2 py-0.5 rounded-md">
-                        20/ fixado automaticamente
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setRemoteMode('floating');
+                            setIsFloatingRemoteOpen(true);
+                          }}
+                          className="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-[10px] font-bold flex items-center gap-1.5 shadow-sm active:scale-95 transition-all cursor-pointer"
+                        >
+                          <Tv className="w-3 h-3 text-indigo-200" />
+                          <span>Controle do Optotipo</span>
+                        </button>
+                        <span className="text-[10px] text-blue-700 font-bold bg-blue-100 px-2 py-0.5 rounded-md">
+                          20/ fixado automaticamente
+                        </span>
+                      </div>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1435,6 +1869,19 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
                             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
                             OD (Olho Direito - Longe)
                           </span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              lanController.setEye('OD');
+                              setRemoteMode('floating');
+                              setIsFloatingRemoteOpen(true);
+                            }}
+                            className="px-2 py-0.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-900 border border-emerald-300 rounded-md text-[10px] font-bold flex items-center gap-1 cursor-pointer transition-colors"
+                            title="Comandar TV para exibir teste de OD e abrir controle"
+                          >
+                            <Tv className="w-3 h-3 text-emerald-700" />
+                            <span>Testar OD na TV</span>
+                          </button>
                         </div>
                         <div className="flex items-center gap-2">
                           <div className="flex items-center bg-slate-50 border-2 border-emerald-400 rounded-xl px-2 py-1.5 w-full focus-within:ring-2 focus-within:ring-emerald-500 shadow-inner">
@@ -1512,6 +1959,19 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
                             <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
                             OE (Olho Esquerdo - Longe)
                           </span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              lanController.setEye('OE');
+                              setRemoteMode('floating');
+                              setIsFloatingRemoteOpen(true);
+                            }}
+                            className="px-2 py-0.5 bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 rounded-md text-[10px] font-bold flex items-center gap-1 cursor-pointer transition-colors"
+                            title="Comandar TV para exibir teste de OE e abrir controle"
+                          >
+                            <Tv className="w-3 h-3 text-amber-700" />
+                            <span>Testar OE na TV</span>
+                          </button>
                         </div>
                         <div className="flex items-center gap-2">
                           <div className="flex items-center bg-slate-50 border-2 border-amber-400 rounded-xl px-2 py-1.5 w-full focus-within:ring-2 focus-within:ring-amber-500 shadow-inner">
@@ -1959,34 +2419,56 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
                           <label className="text-[10px] font-bold text-slate-500 block">Esf (D)</label>
                           <input
                             type="text"
-                            placeholder="-1.25"
-                            value={currentEncounter.autorefraction?.od?.sphere !== undefined ? (currentEncounter.autorefraction.od.sphere > 0 ? `+${currentEncounter.autorefraction.od.sphere.toFixed(2)}` : currentEncounter.autorefraction.od.sphere.toFixed(2)) : ''}
+                            placeholder="+ / - 0.00"
+                            value={arOdSph}
                             onChange={(e) => {
-                              const val = parseFloat(e.target.value.replace(',', '.')) || undefined;
+                              const text = e.target.value;
+                              setArOdSph(text);
+                              const parsed = parseInputDiopter(text);
                               const curAR = currentEncounter.autorefraction || { id: generateUUID(), encounterId: currentEncounter.id, od: {}, oe: {} };
                               setCurrentEncounter({
                                 ...currentEncounter,
-                                autorefraction: { ...curAR, od: { ...curAR.od, sphere: val } }
+                                autorefraction: { ...curAR, od: { ...curAR.od, sphere: parsed } }
                               });
                             }}
-                            className="w-full bg-white border border-emerald-300 rounded-xl px-2 py-1 text-xs font-mono font-bold text-center"
+                            onBlur={() => {
+                              const parsed = parseInputDiopter(arOdSph);
+                              setArOdSph(formatDiopterStr(parsed));
+                              const curAR = currentEncounter.autorefraction || { id: generateUUID(), encounterId: currentEncounter.id, od: {}, oe: {} };
+                              setCurrentEncounter({
+                                ...currentEncounter,
+                                autorefraction: { ...curAR, od: { ...curAR.od, sphere: parsed } }
+                              });
+                            }}
+                            className="w-full bg-white border border-emerald-300 rounded-xl px-2 py-1 text-xs font-mono font-bold text-center text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-xs"
                           />
                         </div>
                         <div>
                           <label className="text-[10px] font-bold text-slate-500 block">Cil (D)</label>
                           <input
                             type="text"
-                            placeholder="-0.50"
-                            value={currentEncounter.autorefraction?.od?.cylinder !== undefined ? (currentEncounter.autorefraction.od.cylinder > 0 ? `+${currentEncounter.autorefraction.od.cylinder.toFixed(2)}` : currentEncounter.autorefraction.od.cylinder.toFixed(2)) : ''}
+                            placeholder="- 0.00"
+                            value={arOdCyl}
                             onChange={(e) => {
-                              const val = parseFloat(e.target.value.replace(',', '.')) || undefined;
+                              const text = e.target.value;
+                              setArOdCyl(text);
+                              const parsed = parseInputDiopter(text);
                               const curAR = currentEncounter.autorefraction || { id: generateUUID(), encounterId: currentEncounter.id, od: {}, oe: {} };
                               setCurrentEncounter({
                                 ...currentEncounter,
-                                autorefraction: { ...curAR, od: { ...curAR.od, cylinder: val } }
+                                autorefraction: { ...curAR, od: { ...curAR.od, cylinder: parsed } }
                               });
                             }}
-                            className="w-full bg-white border border-emerald-300 rounded-xl px-2 py-1 text-xs font-mono font-bold text-center"
+                            onBlur={() => {
+                              const parsed = parseInputDiopter(arOdCyl);
+                              setArOdCyl(formatDiopterStr(parsed));
+                              const curAR = currentEncounter.autorefraction || { id: generateUUID(), encounterId: currentEncounter.id, od: {}, oe: {} };
+                              setCurrentEncounter({
+                                ...currentEncounter,
+                                autorefraction: { ...curAR, od: { ...curAR.od, cylinder: parsed } }
+                              });
+                            }}
+                            className="w-full bg-white border border-emerald-300 rounded-xl px-2 py-1 text-xs font-mono font-bold text-center text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-xs"
                           />
                         </div>
                         <div>
@@ -1994,16 +2476,27 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
                           <input
                             type="text"
                             placeholder="180"
-                            value={currentEncounter.autorefraction?.od?.axis !== undefined ? String(currentEncounter.autorefraction.od.axis) : ''}
+                            value={arOdAxis}
                             onChange={(e) => {
-                              const val = parseInt(e.target.value) || undefined;
+                              const text = e.target.value;
+                              setArOdAxis(text);
+                              const parsed = parseInputAxis(text);
                               const curAR = currentEncounter.autorefraction || { id: generateUUID(), encounterId: currentEncounter.id, od: {}, oe: {} };
                               setCurrentEncounter({
                                 ...currentEncounter,
-                                autorefraction: { ...curAR, od: { ...curAR.od, axis: val } }
+                                autorefraction: { ...curAR, od: { ...curAR.od, axis: parsed } }
                               });
                             }}
-                            className="w-full bg-white border border-emerald-300 rounded-xl px-2 py-1 text-xs font-mono font-bold text-center"
+                            onBlur={() => {
+                              const parsed = parseInputAxis(arOdAxis);
+                              setArOdAxis(parsed !== undefined ? String(parsed) : '');
+                              const curAR = currentEncounter.autorefraction || { id: generateUUID(), encounterId: currentEncounter.id, od: {}, oe: {} };
+                              setCurrentEncounter({
+                                ...currentEncounter,
+                                autorefraction: { ...curAR, od: { ...curAR.od, axis: parsed } }
+                              });
+                            }}
+                            className="w-full bg-white border border-emerald-300 rounded-xl px-2 py-1 text-xs font-mono font-bold text-center text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-xs"
                           />
                         </div>
                       </div>
@@ -2020,34 +2513,56 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
                           <label className="text-[10px] font-bold text-slate-500 block">Esf (D)</label>
                           <input
                             type="text"
-                            placeholder="-1.00"
-                            value={currentEncounter.autorefraction?.oe?.sphere !== undefined ? (currentEncounter.autorefraction.oe.sphere > 0 ? `+${currentEncounter.autorefraction.oe.sphere.toFixed(2)}` : currentEncounter.autorefraction.oe.sphere.toFixed(2)) : ''}
+                            placeholder="+ / - 0.00"
+                            value={arOeSph}
                             onChange={(e) => {
-                              const val = parseFloat(e.target.value.replace(',', '.')) || undefined;
+                              const text = e.target.value;
+                              setArOeSph(text);
+                              const parsed = parseInputDiopter(text);
                               const curAR = currentEncounter.autorefraction || { id: generateUUID(), encounterId: currentEncounter.id, od: {}, oe: {} };
                               setCurrentEncounter({
                                 ...currentEncounter,
-                                autorefraction: { ...curAR, oe: { ...curAR.oe, sphere: val } }
+                                autorefraction: { ...curAR, oe: { ...curAR.oe, sphere: parsed } }
                               });
                             }}
-                            className="w-full bg-white border border-amber-300 rounded-xl px-2 py-1 text-xs font-mono font-bold text-center"
+                            onBlur={() => {
+                              const parsed = parseInputDiopter(arOeSph);
+                              setArOeSph(formatDiopterStr(parsed));
+                              const curAR = currentEncounter.autorefraction || { id: generateUUID(), encounterId: currentEncounter.id, od: {}, oe: {} };
+                              setCurrentEncounter({
+                                ...currentEncounter,
+                                autorefraction: { ...curAR, oe: { ...curAR.oe, sphere: parsed } }
+                              });
+                            }}
+                            className="w-full bg-white border border-amber-300 rounded-xl px-2 py-1 text-xs font-mono font-bold text-center text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 shadow-xs"
                           />
                         </div>
                         <div>
                           <label className="text-[10px] font-bold text-slate-500 block">Cil (D)</label>
                           <input
                             type="text"
-                            placeholder="-0.75"
-                            value={currentEncounter.autorefraction?.oe?.cylinder !== undefined ? (currentEncounter.autorefraction.oe.cylinder > 0 ? `+${currentEncounter.autorefraction.oe.cylinder.toFixed(2)}` : currentEncounter.autorefraction.oe.cylinder.toFixed(2)) : ''}
+                            placeholder="- 0.00"
+                            value={arOeCyl}
                             onChange={(e) => {
-                              const val = parseFloat(e.target.value.replace(',', '.')) || undefined;
+                              const text = e.target.value;
+                              setArOeCyl(text);
+                              const parsed = parseInputDiopter(text);
                               const curAR = currentEncounter.autorefraction || { id: generateUUID(), encounterId: currentEncounter.id, od: {}, oe: {} };
                               setCurrentEncounter({
                                 ...currentEncounter,
-                                autorefraction: { ...curAR, oe: { ...curAR.oe, cylinder: val } }
+                                autorefraction: { ...curAR, oe: { ...curAR.oe, cylinder: parsed } }
                               });
                             }}
-                            className="w-full bg-white border border-amber-300 rounded-xl px-2 py-1 text-xs font-mono font-bold text-center"
+                            onBlur={() => {
+                              const parsed = parseInputDiopter(arOeCyl);
+                              setArOeCyl(formatDiopterStr(parsed));
+                              const curAR = currentEncounter.autorefraction || { id: generateUUID(), encounterId: currentEncounter.id, od: {}, oe: {} };
+                              setCurrentEncounter({
+                                ...currentEncounter,
+                                autorefraction: { ...curAR, oe: { ...curAR.oe, cylinder: parsed } }
+                              });
+                            }}
+                            className="w-full bg-white border border-amber-300 rounded-xl px-2 py-1 text-xs font-mono font-bold text-center text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 shadow-xs"
                           />
                         </div>
                         <div>
@@ -2055,16 +2570,27 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
                           <input
                             type="text"
                             placeholder="175"
-                            value={currentEncounter.autorefraction?.oe?.axis !== undefined ? String(currentEncounter.autorefraction.oe.axis) : ''}
+                            value={arOeAxis}
                             onChange={(e) => {
-                              const val = parseInt(e.target.value) || undefined;
+                              const text = e.target.value;
+                              setArOeAxis(text);
+                              const parsed = parseInputAxis(text);
                               const curAR = currentEncounter.autorefraction || { id: generateUUID(), encounterId: currentEncounter.id, od: {}, oe: {} };
                               setCurrentEncounter({
                                 ...currentEncounter,
-                                autorefraction: { ...curAR, oe: { ...curAR.oe, axis: val } }
+                                autorefraction: { ...curAR, oe: { ...curAR.oe, axis: parsed } }
                               });
                             }}
-                            className="w-full bg-white border border-amber-300 rounded-xl px-2 py-1 text-xs font-mono font-bold text-center"
+                            onBlur={() => {
+                              const parsed = parseInputAxis(arOeAxis);
+                              setArOeAxis(parsed !== undefined ? String(parsed) : '');
+                              const curAR = currentEncounter.autorefraction || { id: generateUUID(), encounterId: currentEncounter.id, od: {}, oe: {} };
+                              setCurrentEncounter({
+                                ...currentEncounter,
+                                autorefraction: { ...curAR, oe: { ...curAR.oe, axis: parsed } }
+                              });
+                            }}
+                            className="w-full bg-white border border-amber-300 rounded-xl px-2 py-1 text-xs font-mono font-bold text-center text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 shadow-xs"
                           />
                         </div>
                       </div>
@@ -2128,6 +2654,242 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
                     </div>
                   )}
 
+                  {/* FASE 4.0: COMPARATIVO MULTI-MEDIÇÃO CLÍNICA & HOMOLOGAÇÃO DE REFRAÇÃO FINAL */}
+                  <div className="p-4 bg-white border border-slate-200 rounded-2xl space-y-3.5 shadow-sm">
+                    <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                      <div className="flex items-center gap-2">
+                        <div className="p-1.5 bg-blue-600 rounded-lg text-white">
+                          <Eye className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <span className="font-black text-xs uppercase tracking-wide text-slate-900 block">
+                            QUADRO COMPARATIVO DE MEDIÇÕES DO ENCONTRO
+                          </span>
+                          <span className="text-[10px] text-slate-500">
+                            Lensometria (Uso) &bull; Autorrefração (AR) &bull; Refração Subjetiva &bull; Refração Final
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Botões de Ação Segura: Copiar AR ou Copiar Óculos para Subjetiva */}
+                      {!isReadOnly && (
+                        <div className="flex items-center gap-1.5">
+                          {(currentEncounter.autorefraction?.od?.sphere !== undefined || currentEncounter.autorefraction?.oe?.sphere !== undefined || currentEncounter.autorefraction?.od?.cylinder !== undefined || currentEncounter.autorefraction?.oe?.cylinder !== undefined) && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const ar = currentEncounter.autorefraction;
+                                if (!ar) return;
+                                const curSub = currentEncounter.subjectiveRefraction || { id: generateUUID(), encounterId: currentEncounter.id, od: {}, oe: {} };
+                                setCurrentEncounter({
+                                  ...currentEncounter,
+                                  subjectiveRefraction: {
+                                    ...curSub,
+                                    od: { ...curSub.od, sphere: ar.od?.sphere, cylinder: ar.od?.cylinder, axis: ar.od?.axis },
+                                    oe: { ...curSub.oe, sphere: ar.oe?.sphere, cylinder: ar.oe?.cylinder, axis: ar.oe?.axis }
+                                  }
+                                });
+                                setSaveMessage('✓ Valores de Autorrefração copiados para Subjetiva!');
+                                setTimeout(() => setSaveMessage(null), 2500);
+                              }}
+                              className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[11px] rounded-lg border border-slate-300 flex items-center gap-1 cursor-pointer transition-colors"
+                              title="Copiar valores da Autorrefração para a Refração Subjetiva"
+                            >
+                              <Sliders className="w-3 h-3 text-indigo-600" />
+                              <span>Importar AR</span>
+                            </button>
+                          )}
+
+                          {currentEncounter.lensometry?.od?.sphere !== undefined && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const lens = currentEncounter.lensometry;
+                                if (!lens) return;
+                                const curSub = currentEncounter.subjectiveRefraction || { id: generateUUID(), encounterId: currentEncounter.id, od: {}, oe: {} };
+                                setCurrentEncounter({
+                                  ...currentEncounter,
+                                  subjectiveRefraction: {
+                                    ...curSub,
+                                    od: { ...curSub.od, sphere: lens.od?.sphere, cylinder: lens.od?.cylinder, axis: lens.od?.axis },
+                                    oe: { ...curSub.oe, sphere: lens.oe?.sphere, cylinder: lens.oe?.cylinder, axis: lens.oe?.axis },
+                                    addition: lens.addition
+                                  }
+                                });
+                                setSaveMessage('✓ Valores da Lensometria copiados para Subjetiva!');
+                                setTimeout(() => setSaveMessage(null), 2500);
+                              }}
+                              className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[11px] rounded-lg border border-slate-300 flex items-center gap-1 cursor-pointer transition-colors"
+                              title="Copiar valores do Óculos em Uso (Lensometria) para a Refração Subjetiva"
+                            >
+                              <Glasses className="w-3 h-3 text-emerald-600" />
+                              <span>Importar Óculos</span>
+                            </button>
+                          )}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Matriz Comparativa Paramétrica das 4 Medições */}
+                    <div className="overflow-x-auto rounded-xl border border-slate-200 shadow-2xs">
+                      <table className="w-full text-left text-xs border-collapse font-sans">
+                        <thead>
+                          <tr className="bg-slate-50 text-slate-700 border-b border-slate-200 font-black text-[10px] uppercase">
+                            <th className="p-2 border-r border-slate-200">Tipo de Medição</th>
+                            <th className="p-2 border-r border-slate-200 text-emerald-950 bg-emerald-50/50">Olho Direito (OD)</th>
+                            <th className="p-2 border-r border-slate-200 text-amber-950 bg-amber-50/50">Olho Esquerdo (OE)</th>
+                            <th className="p-2 text-indigo-950 bg-indigo-50/50">Adição / DP</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100 font-mono text-[11px]">
+                          {/* 1. Lensometria */}
+                          <tr>
+                            <td className="p-2 font-bold font-sans text-slate-600 bg-slate-50/60 border-r border-slate-200">
+                              Óculos em Uso (Lensometria)
+                            </td>
+                            <td className="p-2 border-r border-slate-200">
+                              {currentEncounter.lensometry?.od?.sphere !== undefined || currentEncounter.lensometry?.od?.cylinder !== undefined
+                                ? formatRefractionString(currentEncounter.lensometry.od, { showSE: true })
+                                : '—'}
+                            </td>
+                            <td className="p-2 border-r border-slate-200">
+                              {currentEncounter.lensometry?.oe?.sphere !== undefined || currentEncounter.lensometry?.oe?.cylinder !== undefined
+                                ? formatRefractionString(currentEncounter.lensometry.oe, { showSE: true })
+                                : '—'}
+                            </td>
+                            <td className="p-2">
+                              {currentEncounter.lensometry?.addition ? `+${currentEncounter.lensometry.addition.toFixed(2)} D` : '—'}
+                            </td>
+                          </tr>
+
+                          {/* 2. Autorrefração */}
+                          <tr>
+                            <td className="p-2 font-bold font-sans text-slate-600 bg-slate-50/60 border-r border-slate-200">
+                              Autorrefração (AR Computadorizada)
+                            </td>
+                            <td className="p-2 border-r border-slate-200">
+                              {currentEncounter.autorefraction?.od?.sphere !== undefined || currentEncounter.autorefraction?.od?.cylinder !== undefined
+                                ? formatRefractionString(currentEncounter.autorefraction.od, { showSE: true })
+                                : '—'}
+                            </td>
+                            <td className="p-2 border-r border-slate-200">
+                              {currentEncounter.autorefraction?.oe?.sphere !== undefined || currentEncounter.autorefraction?.oe?.cylinder !== undefined
+                                ? formatRefractionString(currentEncounter.autorefraction.oe, { showSE: true })
+                                : '—'}
+                            </td>
+                            <td className="p-2">
+                              {currentEncounter.autorefraction?.pdMm ? `${currentEncounter.autorefraction.pdMm} mm` : '—'}
+                            </td>
+                          </tr>
+
+                          {/* 3. Refração Subjetiva */}
+                          <tr className="bg-blue-50/30">
+                            <td className="p-2 font-bold font-sans text-blue-900 bg-blue-50/60 border-r border-slate-200">
+                              Refração Subjetiva (Em Teste)
+                            </td>
+                            <td className="p-2 border-r border-slate-200 font-bold text-slate-900">
+                              {currentEncounter.subjectiveRefraction?.od?.sphere !== undefined
+                                ? formatRefractionString(currentEncounter.subjectiveRefraction.od, { showSE: true, showVA: true })
+                                : '—'}
+                            </td>
+                            <td className="p-2 border-r border-slate-200 font-bold text-slate-900">
+                              {currentEncounter.subjectiveRefraction?.oe?.sphere !== undefined
+                                ? formatRefractionString(currentEncounter.subjectiveRefraction.oe, { showSE: true, showVA: true })
+                                : '—'}
+                            </td>
+                            <td className="p-2 font-bold text-indigo-900">
+                              {currentEncounter.subjectiveRefraction?.addition ? `+${currentEncounter.subjectiveRefraction.addition.toFixed(2)} D` : '—'}
+                            </td>
+                          </tr>
+
+                          {/* 4. Refração Final Homologada */}
+                          <tr className={currentEncounter.finalRefraction ? "bg-emerald-50/60 font-black text-emerald-950" : "bg-slate-50/30 text-slate-400"}>
+                            <td className="p-2 font-bold font-sans border-r border-slate-200 flex items-center gap-1.5">
+                              <CheckCircle2 className={`w-3.5 h-3.5 ${currentEncounter.finalRefraction ? "text-emerald-600" : "text-slate-400"}`} />
+                              <span>Refração Final Homologada</span>
+                            </td>
+                            <td className="p-2 border-r border-slate-200">
+                              {currentEncounter.finalRefraction?.od?.sphere !== undefined
+                                ? formatRefractionString(currentEncounter.finalRefraction.od, { showSE: true, showVA: true })
+                                : 'Pendente de homologação'}
+                            </td>
+                            <td className="p-2 border-r border-slate-200">
+                              {currentEncounter.finalRefraction?.oe?.sphere !== undefined
+                                ? formatRefractionString(currentEncounter.finalRefraction.oe, { showSE: true, showVA: true })
+                                : 'Pendente de homologação'}
+                            </td>
+                            <td className="p-2">
+                              {currentEncounter.finalRefraction?.addition ? `+${currentEncounter.finalRefraction.addition.toFixed(2)} D` : (currentEncounter.finalRefraction ? 'Plano perto' : '—')}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+
+                    {/* Botão de Homologação da Refração Final */}
+                    {!isReadOnly && (
+                      <div className="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-slate-100">
+                        <div className="text-[11px] text-slate-600 flex items-center gap-1.5">
+                          {currentEncounter.finalRefraction ? (
+                            <span className="text-emerald-700 font-bold flex items-center gap-1">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                              Refração Final homologada em {new Date(currentEncounter.finalRefraction.confirmedAt || currentEncounter.updatedAt || '').toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}.
+                            </span>
+                          ) : (
+                            <span className="text-slate-500 italic">
+                              A prescrição óptica utilizará os valores da refração final homologada.
+                            </span>
+                          )}
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          {currentEncounter.finalRefraction && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setCurrentEncounter({
+                                  ...currentEncounter,
+                                  finalRefraction: undefined
+                                });
+                                setSaveMessage('Refração Final desvinculada (reaberta para edição).');
+                                setTimeout(() => setSaveMessage(null), 2500);
+                              }}
+                              className="px-2.5 py-1 text-slate-500 hover:text-slate-800 text-[11px] font-bold cursor-pointer"
+                            >
+                              Reabrir Edição
+                            </button>
+                          )}
+
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const sub = currentEncounter.subjectiveRefraction;
+                              if (!sub) return;
+                              const finalRef: FinalRefraction = {
+                                ...sub,
+                                id: currentEncounter.finalRefraction?.id || generateUUID(),
+                                encounterId: currentEncounter.id,
+                                confirmedAt: new Date().toISOString(),
+                                confirmedBy: currentEncounter.examinerName
+                              };
+                              setCurrentEncounter({
+                                ...currentEncounter,
+                                finalRefraction: finalRef
+                              });
+                              setSaveMessage('✓ Refração Subjetiva HOMOLOGADA como Refração Final!');
+                              setTimeout(() => setSaveMessage(null), 3000);
+                            }}
+                            className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl flex items-center gap-1.5 shadow-sm active:scale-95 transition-all cursor-pointer"
+                            title="Homologar os valores atuais da refração subjetiva como Refração Final para emissão da prescrição"
+                          >
+                            <CheckCircle2 className="w-3.5 h-3.5" />
+                            <span>Definir como Refração Final</span>
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
                   <div className="p-3.5 bg-blue-50 border border-blue-200 rounded-xl text-blue-900 leading-relaxed">
                     <p className="font-bold text-xs mb-1">Painel de Refração & Dials:</p>
                     <p className="text-xs">
@@ -2177,16 +2939,82 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
 
               {/* Etapa 6: Binocular */}
               {activeTab === 'binocular' && (
-                <div className="space-y-3">
-                  <div>
-                    <label className="font-bold text-slate-700 block mb-1">TESTE DE ESTEREOPSIA (TITMUS / FLY):</label>
-                    <input type="text" placeholder="Ex: 40 segundos de arco" className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2 text-xs" />
+                <div className="space-y-4">
+                  <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                    <label className="font-bold text-slate-800 block mb-1.5 flex items-center justify-between">
+                      <span>TESTE DE ESTEREOPSIA (TITMUS / FLY):</span>
+                      <span className="text-[10px] text-slate-500 font-normal">Acuidade Estereoscópica</span>
+                    </label>
+                    <input 
+                      type="text" 
+                      disabled={isReadOnly}
+                      readOnly={isReadOnly}
+                      value={(currentEncounter as any).binocular?.stereopsis || ''}
+                      onChange={(e) => {
+                        if (isReadOnly) return;
+                        setCurrentEncounter({
+                          ...currentEncounter,
+                          binocular: {
+                            ...((currentEncounter as any).binocular || {}),
+                            stereopsis: e.target.value
+                          }
+                        } as any);
+                      }}
+                      placeholder="Ex: 40 segundos de arco (Normal) / Borboleta / Círculos 1 a 9" 
+                      className={`w-full bg-white border border-slate-300 rounded-xl p-2.5 text-xs font-semibold text-slate-800 focus:outline-none focus:border-blue-500 shadow-xs ${isReadOnly ? 'bg-slate-100 cursor-not-allowed' : ''}`} 
+                    />
                   </div>
-                  <div>
-                    <label className="font-bold text-slate-700 block mb-1">PONTO PRÓXIMO DE CONVERGÊNCIA (NPC):</label>
-                    <div className="grid grid-cols-2 gap-2">
-                      <input type="number" placeholder="Break (cm)" className="bg-slate-50 border border-slate-200 rounded-xl p-2 text-xs" />
-                      <input type="number" placeholder="Recovery (cm)" className="bg-slate-50 border border-slate-200 rounded-xl p-2 text-xs" />
+                  <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                    <label className="font-bold text-slate-800 block mb-1.5">PONTO PRÓXIMO DE CONVERGÊNCIA (NPC):</label>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <span className="text-[11px] font-bold text-slate-600 block mb-1">Ruptura (Break):</span>
+                        <div className="relative">
+                          <input 
+                            type="number" 
+                            disabled={isReadOnly}
+                            readOnly={isReadOnly}
+                            value={(currentEncounter as any).binocular?.npcBreak ?? ''}
+                            onChange={(e) => {
+                              if (isReadOnly) return;
+                              setCurrentEncounter({
+                                ...currentEncounter,
+                                binocular: {
+                                  ...((currentEncounter as any).binocular || {}),
+                                  npcBreak: e.target.value ? parseFloat(e.target.value) : undefined
+                                }
+                              } as any);
+                            }}
+                            placeholder="Ex: 6" 
+                            className={`w-full bg-white border border-slate-300 rounded-xl p-2.5 pr-8 text-xs font-semibold text-slate-800 focus:outline-none focus:border-blue-500 shadow-xs ${isReadOnly ? 'bg-slate-100 cursor-not-allowed' : ''}`} 
+                          />
+                          <span className="absolute right-2.5 top-2.5 text-xs text-slate-400 font-bold">cm</span>
+                        </div>
+                      </div>
+                      <div>
+                        <span className="text-[11px] font-bold text-slate-600 block mb-1">Recuperação (Recovery):</span>
+                        <div className="relative">
+                          <input 
+                            type="number" 
+                            disabled={isReadOnly}
+                            readOnly={isReadOnly}
+                            value={(currentEncounter as any).binocular?.npcRecovery ?? ''}
+                            onChange={(e) => {
+                              if (isReadOnly) return;
+                              setCurrentEncounter({
+                                ...currentEncounter,
+                                binocular: {
+                                  ...((currentEncounter as any).binocular || {}),
+                                  npcRecovery: e.target.value ? parseFloat(e.target.value) : undefined
+                                }
+                              } as any);
+                            }}
+                            placeholder="Ex: 8" 
+                            className={`w-full bg-white border border-slate-300 rounded-xl p-2.5 pr-8 text-xs font-semibold text-slate-800 focus:outline-none focus:border-blue-500 shadow-xs ${isReadOnly ? 'bg-slate-100 cursor-not-allowed' : ''}`} 
+                          />
+                          <span className="absolute right-2.5 top-2.5 text-xs text-slate-400 font-bold">cm</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -2286,8 +3114,236 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
                     </button>
                   </div>
 
-                  {/* Campo de Conduta Clínica */}
-                  <div>
+                  {/* FASE 3.7: Diagnósticos Clínicos Estruturados */}
+                  <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <div className="p-1.5 bg-blue-600 rounded-lg text-white">
+                          <Stethoscope className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <span className="font-black text-xs uppercase tracking-wide text-slate-900 block">
+                            DIAGNÓSTICOS CLÍNICOS ESTRUTURADOS (CID-10 / CID-11)
+                          </span>
+                          <span className="text-[10px] text-slate-500">
+                            Inserção manual pelo examinador (sem sugestão automatizada) com lateralidade e status clínico
+                          </span>
+                        </div>
+                      </div>
+                      <span className="text-[10px] bg-slate-200 text-slate-700 px-2 py-0.5 rounded-full font-mono font-bold">
+                        {currentEncounter.diagnoses?.length || 0} diagnósticos
+                      </span>
+                    </div>
+
+                    {/* Lista de Diagnósticos Registrados */}
+                    {currentEncounter.diagnoses && currentEncounter.diagnoses.length > 0 && (
+                      <div className="space-y-2">
+                        {currentEncounter.diagnoses.map((diag, idx) => (
+                          <div
+                            key={diag.id || idx}
+                            className={`p-3 rounded-xl border flex items-center justify-between gap-3 text-xs ${
+                              diag.primary
+                                ? 'bg-blue-50/80 border-blue-300 text-blue-950 font-medium'
+                                : 'bg-white border-slate-200 text-slate-800'
+                            }`}
+                          >
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const next = (currentEncounter.diagnoses || []).map((d, i) => ({
+                                      ...d,
+                                      primary: i === idx
+                                    }));
+                                    setCurrentEncounter({ ...currentEncounter, diagnoses: next });
+                                  }}
+                                  className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full cursor-pointer transition-colors ${
+                                    diag.primary ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-700 hover:bg-blue-100 hover:text-blue-800'
+                                  }`}
+                                  title="Clique para definir como diagnóstico principal"
+                                >
+                                  {diag.primary ? '★ Principal' : 'Secundário (Tornar Principal)'}
+                                </button>
+                                {diag.code && (
+                                  <span className="font-mono font-bold text-xs bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md border border-slate-200">
+                                    {diag.code}
+                                  </span>
+                                )}
+                                <span className="font-bold text-xs">{diag.description}</span>
+                                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
+                                  diag.eye === 'OD' ? 'bg-emerald-100 text-emerald-800' :
+                                  diag.eye === 'OE' ? 'bg-amber-100 text-amber-800' :
+                                  diag.eye === 'OU' ? 'bg-purple-100 text-purple-800' : 'bg-slate-100 text-slate-600'
+                                }`}>
+                                  Olho: {diag.eye}
+                                </span>
+                                <span className="text-[10px] font-medium bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md">
+                                  Status: {
+                                    diag.status === 'confirmed' ? 'Confirmado' :
+                                    diag.status === 'suspected' ? 'Suspeita' :
+                                    diag.status === 'historical' ? 'Histórico' : 'Resolvido'
+                                  }
+                                </span>
+                              </div>
+                              {diag.notes && (
+                                <p className="text-[11px] text-slate-600 bg-slate-50 p-1.5 rounded-lg border border-slate-100 mt-1.5 italic">
+                                  Obs: {diag.notes}
+                                </p>
+                              )}
+                            </div>
+
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const next = (currentEncounter.diagnoses || []).filter((_, i) => i !== idx);
+                                setCurrentEncounter({ ...currentEncounter, diagnoses: next });
+                              }}
+                              className="p-1 hover:bg-red-50 text-slate-400 hover:text-red-600 rounded-lg transition-colors cursor-pointer shrink-0"
+                              title="Remover diagnóstico"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Formulário Rápido para Adicionar Diagnóstico */}
+                    <div className="space-y-2 pt-1 border-t border-slate-200">
+                      <div className="grid grid-cols-1 sm:grid-cols-12 gap-2">
+                        <div className="sm:col-span-2">
+                          <input
+                            id="diag-code-input"
+                            type="text"
+                            placeholder="CID (ex: H52.1)"
+                            className="w-full bg-white border border-slate-300 rounded-xl px-2.5 py-1.5 text-xs font-mono font-bold text-slate-800 focus:outline-none focus:border-blue-500"
+                          />
+                        </div>
+                        <div className="sm:col-span-5">
+                          <input
+                            id="diag-desc-input"
+                            type="text"
+                            placeholder="Descrição do Diagnóstico (ex: Miopia, Astigmatismo...)"
+                            className="w-full bg-white border border-slate-300 rounded-xl px-2.5 py-1.5 text-xs text-slate-800 focus:outline-none focus:border-blue-500"
+                          />
+                        </div>
+                        <div className="sm:col-span-2">
+                          <select
+                            id="diag-eye-select"
+                            defaultValue="OU"
+                            className="w-full bg-white border border-slate-300 rounded-xl px-2 py-1.5 text-xs text-slate-800 focus:outline-none focus:border-blue-500"
+                          >
+                            <option value="OU">OU (Ambos)</option>
+                            <option value="OD">OD (Direito)</option>
+                            <option value="OE">OE (Esquerdo)</option>
+                            <option value="unspecified">Não especificado</option>
+                          </select>
+                        </div>
+                        <div className="sm:col-span-2">
+                          <select
+                            id="diag-status-select"
+                            defaultValue="confirmed"
+                            className="w-full bg-white border border-slate-300 rounded-xl px-2 py-1.5 text-xs text-slate-800 focus:outline-none focus:border-blue-500"
+                          >
+                            <option value="confirmed">Confirmado</option>
+                            <option value="suspected">Suspeita</option>
+                            <option value="historical">Histórico</option>
+                            <option value="resolved">Resolvido</option>
+                          </select>
+                        </div>
+                        <div className="sm:col-span-1 flex items-center justify-center">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const codeEl = document.getElementById('diag-code-input') as HTMLInputElement;
+                              const descEl = document.getElementById('diag-desc-input') as HTMLInputElement;
+                              const eyeEl = document.getElementById('diag-eye-select') as HTMLSelectElement;
+                              const statusEl = document.getElementById('diag-status-select') as HTMLSelectElement;
+                              const notesEl = document.getElementById('diag-notes-input') as HTMLInputElement;
+
+                              if (!descEl || !descEl.value.trim()) return;
+
+                              const existing = currentEncounter.diagnoses || [];
+                              const newDiag: DiagnosisEntry = {
+                                id: generateUUID(),
+                                encounterId: currentEncounter.id,
+                                code: codeEl?.value.trim() || undefined,
+                                codingSystem: codeEl?.value.trim() ? 'CID-10' : undefined,
+                                description: descEl.value.trim(),
+                                eye: (eyeEl?.value as DiagnosisEye) || 'OU',
+                                status: (statusEl?.value as DiagnosisStatus) || 'confirmed',
+                                primary: existing.length === 0,
+                                notes: notesEl?.value.trim() || undefined,
+                                createdAt: new Date().toISOString()
+                              };
+
+                              const next = [...existing, newDiag];
+                              setCurrentEncounter({ ...currentEncounter, diagnoses: next });
+                              descEl.value = '';
+                              if (codeEl) codeEl.value = '';
+                              if (notesEl) notesEl.value = '';
+                            }}
+                            className="w-full h-full min-h-[32px] bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center justify-center transition-colors cursor-pointer shadow-sm"
+                            title="Adicionar diagnóstico"
+                          >
+                            <Plus className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                      <div>
+                        <input
+                          id="diag-notes-input"
+                          type="text"
+                          placeholder="Observações complementares do diagnóstico (opcional)..."
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1 text-xs text-slate-700 focus:outline-none focus:border-blue-400 placeholder:italic"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Chips Rápidos de Diagnósticos Oftalmológicos Frequentes */}
+                    <div className="flex flex-wrap gap-1.5 pt-1">
+                      <span className="text-[10px] text-slate-400 font-bold uppercase self-center mr-1">Frequentes:</span>
+                      {[
+                        { code: 'H52.1', desc: 'Miopia' },
+                        { code: 'H52.0', desc: 'Hipermetropia' },
+                        { code: 'H52.2', desc: 'Astigmatismo' },
+                        { code: 'H52.4', desc: 'Presbiopia' },
+                        { code: 'H04.1', desc: 'Olho Seco (Ceratoconjuntivite Sicca)' },
+                        { code: 'H10.9', desc: 'Conjuntivite não especificada' },
+                        { code: 'H11.0', desc: 'Pterígio' },
+                        { code: 'H25.9', desc: 'Catarata Senil' }
+                      ].map(item => (
+                        <button
+                          key={item.code}
+                          type="button"
+                          onClick={() => {
+                            const existing = currentEncounter.diagnoses || [];
+                            if (existing.some(d => d.description.toLowerCase() === item.desc.toLowerCase())) return;
+                            const newDiag: DiagnosisEntry = {
+                              id: generateUUID(),
+                              encounterId: currentEncounter.id,
+                              code: item.code,
+                              codingSystem: 'CID-10',
+                              description: item.desc,
+                              eye: 'OU',
+                              status: 'confirmed',
+                              primary: existing.length === 0,
+                              createdAt: new Date().toISOString()
+                            };
+                            setCurrentEncounter({ ...currentEncounter, diagnoses: [...existing, newDiag] });
+                          }}
+                          className="px-2 py-0.5 bg-white hover:bg-blue-50 border border-slate-200 text-slate-700 rounded-lg text-[10px] font-bold transition-colors cursor-pointer flex items-center gap-1"
+                        >
+                          <span className="font-mono text-blue-600">{item.code}</span>
+                          <span>{item.desc}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Campo de Conduta Clínica & Estruturação */}
+                  <div className="space-y-2">
                     <div className="flex items-center justify-between mb-1">
                       <label className="font-bold text-slate-700 block">CONDUTA CLÍNICA & ORIENTAÇÕES AO PACIENTE:</label>
                       <div className="flex items-center gap-1.5">
@@ -2303,12 +3359,75 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
                     </div>
 
                     <textarea
-                      rows={5}
+                      rows={4}
                       value={currentEncounter.conduct || ''}
-                      onChange={(e) => setCurrentEncounter({ ...currentEncounter, conduct: e.target.value })}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setCurrentEncounter({
+                          ...currentEncounter,
+                          conduct: val,
+                          structuredConduct: {
+                            ...(currentEncounter.structuredConduct || { id: generateUUID(), encounterId: currentEncounter.id }),
+                            treatmentPlan: val
+                          }
+                        });
+                      }}
                       placeholder="Prescrição de lentes multifocais, regras ergonômicas, plano terapêutico com colírios..."
                       className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs text-slate-900 focus:outline-none focus:border-blue-500 font-medium"
                     />
+
+                    {/* Campos Clínicos Estruturados Adicionais */}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 text-xs">
+                      <div>
+                        <label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Orientações Específicas:</label>
+                        <input
+                          type="text"
+                          value={currentEncounter.structuredConduct?.orientations || ''}
+                          onChange={(e) => {
+                            const sc = currentEncounter.structuredConduct || { id: generateUUID(), encounterId: currentEncounter.id };
+                            setCurrentEncounter({
+                              ...currentEncounter,
+                              structuredConduct: { ...sc, orientations: e.target.value }
+                            });
+                          }}
+                          placeholder="Ex: Regra 20-20-20, higiene palpebral, pausas..."
+                          className="w-full bg-white border border-slate-300 rounded-xl px-2.5 py-1.5 text-xs text-slate-800 focus:outline-none focus:border-blue-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Encaminhamento / Especialista:</label>
+                        <input
+                          type="text"
+                          value={currentEncounter.structuredConduct?.referrals || ''}
+                          onChange={(e) => {
+                            const sc = currentEncounter.structuredConduct || { id: generateUUID(), encounterId: currentEncounter.id };
+                            setCurrentEncounter({
+                              ...currentEncounter,
+                              structuredConduct: { ...sc, referrals: e.target.value }
+                            });
+                          }}
+                          placeholder="Ex: Retinólogo, Cirurgião de Catarata, Neurologia..."
+                          className="w-full bg-white border border-slate-300 rounded-xl px-2.5 py-1.5 text-xs text-slate-800 focus:outline-none focus:border-blue-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Exames Solicitados (separar por vírgula):</label>
+                        <input
+                          type="text"
+                          value={currentEncounter.structuredConduct?.requestedExams?.join(', ') || ''}
+                          onChange={(e) => {
+                            const exams = e.target.value.split(',').map(s => s.trim()).filter(Boolean);
+                            const sc = currentEncounter.structuredConduct || { id: generateUUID(), encounterId: currentEncounter.id };
+                            setCurrentEncounter({
+                              ...currentEncounter,
+                              structuredConduct: { ...sc, requestedExams: exams }
+                            });
+                          }}
+                          placeholder="Ex: Campimetria, OCT Macular, Paquimetria..."
+                          className="w-full bg-white border border-slate-300 rounded-xl px-2.5 py-1.5 text-xs text-slate-800 focus:outline-none focus:border-blue-500"
+                        />
+                      </div>
+                    </div>
                   </div>
 
                   {/* Indicação de Retorno */}
@@ -2382,6 +3501,51 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
                   </div>
                 </div>
               )}
+
+              {/* Barra de Navegação Inferior Fluida da Esteira Clínica */}
+              <div className="pt-4 mt-6 border-t border-slate-200/80 flex items-center justify-between gap-3 select-none">
+                <button
+                  type="button"
+                  onClick={handlePrevStep}
+                  disabled={currentStep <= 1}
+                  className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all ${
+                    currentStep <= 1
+                      ? 'bg-slate-100 text-slate-300 border border-slate-200 cursor-not-allowed'
+                      : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 shadow-xs cursor-pointer active:scale-95'
+                  }`}
+                  title="Voltar para a etapa anterior"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                  <span>Etapa Anterior</span>
+                </button>
+
+                <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-500">
+                  <span>Passo {currentStep} de {EXAM_TRAIL.length}</span>
+                </div>
+
+                {currentStep < EXAM_TRAIL.length ? (
+                  <button
+                    type="button"
+                    onClick={handleNextStep}
+                    className="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-xl text-xs font-black flex items-center gap-1.5 shadow-md shadow-blue-600/20 cursor-pointer active:scale-95 transition-all"
+                    title="Avançar para a próxima etapa clínica"
+                  >
+                    <span>Próxima: {EXAM_TRAIL[currentStep]?.label.replace(/^\d+\.\s*/, '')}</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => handleSaveEncounter('completed')}
+                    disabled={isReadOnly}
+                    className="px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-xl text-xs font-black flex items-center gap-1.5 shadow-md shadow-emerald-600/20 cursor-pointer active:scale-95 transition-all"
+                    title="Finalizar consulta médica"
+                  >
+                    <CheckCircle2 className="w-4 h-4" />
+                    <span>Concluir Exame</span>
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -2424,7 +3588,10 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
                 <Minimize2 className="w-3 h-3" /> Flutuar
               </button>
             </div>
-            <RemoteControlPanel onAcuityRecorded={handleAcuityRecorded} />
+            <RemoteControlPanel 
+              onAcuityRecorded={handleAcuityRecorded} 
+              defaultRecordTarget={activeTab === 'av_sc' ? 'av_sc' : 'refraction'}
+            />
           </div>
         )}
       </div>
@@ -2456,7 +3623,10 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
                 </div>
               </div>
               <div className="p-1">
-                <RemoteControlPanel onAcuityRecorded={handleAcuityRecorded} />
+                <RemoteControlPanel 
+                  onAcuityRecorded={handleAcuityRecorded} 
+                  defaultRecordTarget={activeTab === 'av_sc' ? 'av_sc' : 'refraction'}
+                />
               </div>
             </div>
           )}
@@ -2499,6 +3669,15 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
         encounter={currentEncounter}
         patient={patient}
         onClose={() => setIsReportModalOpen(false)}
+      />
+
+      {/* FASE 26: Modal de Emissão de Documentos Clínicos (Exames, Encaminhamentos, Atestados) */}
+      <ClinicalDocumentIssuanceModal
+        isOpen={isClinicalDocModalOpen}
+        encounter={currentEncounter}
+        patient={patient}
+        initialType={clinicalDocModalType}
+        onClose={() => setIsClinicalDocModalOpen(false)}
       />
 
       {/* 3. Modal de Planos Terapêuticos Guiados por Diagnóstico */}
@@ -2577,7 +3756,7 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
                         : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
                     }`}
                   >
-                    <span>🇧🇷 Brasil (CPF / Foz do Iguaçu)</span>
+                    <span>🇧🇷 Brasil (CPF / Ponta Porã)</span>
                   </button>
 
                   <button
@@ -2589,7 +3768,7 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
                         : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
                     }`}
                   >
-                    <span>🇵🇾 Paraguai (C.I. / Ciudad del Este)</span>
+                    <span>🇵🇾 Paraguai (C.I. / Pedro Juan Caballero)</span>
                   </button>
                 </div>
               </div>

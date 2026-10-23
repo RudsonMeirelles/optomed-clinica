@@ -8,7 +8,9 @@ import {
   UserAccount, 
   ClinicConfig, 
   NationalityType,
-  calculateAge 
+  calculateAge,
+  mergeAppointmentStatuses,
+  isPatientInWaitingQueue
 } from '@optotipo/shared';
 import { 
   Users, 
@@ -43,6 +45,7 @@ import {
 import { offlineDb, generateUUID } from '../services/offlineDb';
 import { lanController } from '../services/lanController';
 import { calendarIntegrationService } from '../services/licensingService';
+import { PatientMedicalRecordModal } from '../components/PatientMedicalRecordModal';
 
 interface DoctorWorkspacePageProps {
   currentUser: UserAccount;
@@ -77,6 +80,8 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
   // Modal de Detalhes / Visualização Rápida do Paciente
   const [previewPatient, setPreviewPatient] = useState<Patient | null>(null);
   const [previewEncounterHistory, setPreviewEncounterHistory] = useState<ClinicalEncounter[]>([]);
+  const [isMedicalRecordModalOpen, setIsMedicalRecordModalOpen] = useState<boolean>(false);
+  const [recordPatient, setRecordPatient] = useState<Patient | null>(null);
 
   // Modal de Agendamento do Examinador (Criação e Edição com Sincronização em Tempo Real)
   const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState<boolean>(false);
@@ -122,7 +127,8 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
 
   useEffect(() => {
     loadData();
-    const interval = setInterval(loadData, 2000);
+    // Polling de fallback a cada 8 segundos (atualizações críticas chegam em tempo real via eventos)
+    const interval = setInterval(loadData, 8000);
 
     // Eventos customizados em tempo real de cadastro, agendamento e atendimento
     const handleRefresh = () => {
@@ -196,10 +202,7 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
     };
 
     const mergeStatus = (currentStatus: AppointmentStatus, newStatus: AppointmentStatus): AppointmentStatus => {
-      if (currentStatus === 'completed' || newStatus === 'completed') return 'completed';
-      if (currentStatus === 'in_consultation' || newStatus === 'in_consultation') return 'in_consultation';
-      if (currentStatus === 'waiting' || newStatus === 'waiting') return 'waiting';
-      return newStatus || currentStatus;
+      return mergeAppointmentStatuses(currentStatus, newStatus);
     };
 
     const matchesPeriod = (itemDate?: string): boolean => {
@@ -210,8 +213,6 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
         return dStr === selectedDate;
       }
       if (viewScope === 'this_week') {
-        // Mostra toda a semana de atendimento recente de setembro (05/09 a 18/09/2026)
-        if (dStr >= '2026-09-05' && dStr <= '2026-09-18') return true;
         const sel = new Date(selectedDate + 'T12:00:00');
         const curr = new Date(dStr + 'T12:00:00');
         const diffDays = Math.abs((curr.getTime() - sel.getTime()) / (1000 * 60 * 60 * 24));
@@ -282,50 +283,69 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
       }
     });
 
-    // 3. Inclui pacientes cadastrados que ainda não possuem atendimento ou agendamento explícito
-    const patSource = isGlobal 
-      ? patients 
-      : patients.filter(p => matchesPeriod(p.createdAt));
-
-    patSource.forEach((p, idx) => {
+    // 3. Atualiza dados de contato/documento dos pacientes cadastrados já presentes no mapa
+    patients.forEach(p => {
       const existingKey = findExistingKey(p.id, p.fullName);
       if (existingKey) {
         const existing = map.get(existingKey)!;
         if (!existing.patientPhone && p.phone) existing.patientPhone = p.phone;
         if (!existing.patientDocument && p.documentNumber) existing.patientDocument = p.documentNumber;
-      } else {
-        const patDate = getLocalDateStr(p.createdAt) || selectedDate;
-        setRecord(p.id, {
-          id: `apt-pat-${p.id}`,
-          patientId: p.id,
-          patientName: p.fullName,
-          patientNationality: p.nationality,
-          patientPhone: p.phone,
-          patientDocument: p.documentNumber,
-          examinerId: 'user-examinador',
-          examinerName: currentUser.fullName,
-          date: patDate,
-          time: p.createdAt ? new Date(p.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '08:00',
-          durationMinutes: 3,
-          type: 'refrativo',
-          status: 'waiting',
-          ticketNumber: `P-${String(idx + 1).padStart(2, '0')}`,
-          notes: p.notes || (isGlobal ? 'Paciente cadastrado no sistema.' : 'Paciente cadastrado na recepção hoje.'),
-          room: 'Consultório 1',
-          createdAt: p.createdAt || new Date().toISOString(),
-          updatedAt: p.updatedAt || new Date().toISOString()
-        });
       }
     });
 
-    // Ordenação: se for histórico geral, ordena por data decrescente e horário decrescente (mais recentes primeiro)
+    // Ordenação Inteligente de Fila Médica:
+    // 1. Se estiver no modo histórico ('all_history' ou 'this_week'), mais recentes primeiro (data decrescente)
+    // 2. Se for a fila do dia:
+    //    a) Em atendimento ('in_consultation') no topo
+    //    b) Chamados ('called')
+    //    c) Aguardando ('waiting' ou 'checked_in'): Prioridade Legal primeiro (Lei 10.048), depois horário de check-in / agendamento
+    //    d) Agendados / Confirmados futuros
+    //    e) Concluídos / Cancelados ao final
     return Array.from(map.values()).sort((a, b) => {
-      const dateA = a.date || '';
-      const dateB = b.date || '';
-      if (dateA !== dateB) {
-        return dateB.localeCompare(dateA);
+      if (isGlobal || viewScope !== 'day') {
+        const dateA = a.date || '';
+        const dateB = b.date || '';
+        if (dateA !== dateB) return dateB.localeCompare(dateA);
+        return (b.time || '').localeCompare(a.time || '');
       }
-      return (b.time || '').localeCompare(a.time || '');
+
+      // Ordem de status na fila diária
+      const statusWeight: Record<AppointmentStatus, number> = {
+        in_consultation: 1,
+        called: 2,
+        waiting: 3,
+        checked_in: 3,
+        scheduled: 4,
+        confirmed: 4,
+        rescheduled: 5,
+        completed: 6,
+        canceled: 7,
+        no_show: 8
+      };
+
+      const weightA = statusWeight[a.status] || 9;
+      const weightB = statusWeight[b.status] || 9;
+
+      if (weightA !== weightB) {
+        return weightA - weightB;
+      }
+
+      // Se ambos estão aguardando/chamados: Prioridade Legal tem precedência
+      if ((a.status === 'waiting' || a.status === 'checked_in' || a.status === 'called') &&
+          (b.status === 'waiting' || b.status === 'checked_in' || b.status === 'called')) {
+        const priorityA = a.isPriority ? 1 : 0;
+        const priorityB = b.isPriority ? 1 : 0;
+        if (priorityA !== priorityB) {
+          return priorityB - priorityA; // 1 (prioridade) vem antes de 0
+        }
+
+        // Critério cronológico de chegada (checkInAt ou time)
+        if (a.checkInAt && b.checkInAt) {
+          return a.checkInAt.localeCompare(b.checkInAt);
+        }
+      }
+
+      return (a.time || '').localeCompare(b.time || '');
     });
   };
 
@@ -337,15 +357,35 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
       apt.patientName.toLowerCase().includes(searchName.toLowerCase()) ||
       (apt.patientPhone && apt.patientPhone.includes(searchName));
     
-    const matchesStatus = statusFilter === 'ALL' || apt.status === statusFilter;
+    const matchesStatus = statusFilter === 'ALL' 
+      ? true 
+      : statusFilter === 'waiting'
+      ? (apt.status === 'waiting' || apt.status === 'checked_in' || apt.status === 'called')
+      : apt.status === statusFilter;
+
     return matchesName && matchesStatus;
   });
 
-  // Métricas do Dia do Profissional
-  const waitingList = dayAppointments.filter(a => a.status === 'waiting' || a.status === 'scheduled' || a.status === 'confirmed');
+  // Métricas do Profissional
+  // Na fila de espera, conta apenas pacientes com agendamento ativo aguardando atendimento
+  const waitingList = dayAppointments.filter(a => 
+    a.status === 'waiting' || a.status === 'checked_in' || a.status === 'called' || 
+    (viewScope === 'day' && (a.status === 'scheduled' || a.status === 'confirmed'))
+  );
   const inConsultationList = dayAppointments.filter(a => a.status === 'in_consultation');
   const completedList = dayAppointments.filter(a => a.status === 'completed');
   const totalDay = dayAppointments.length;
+
+  // Próximo Paciente da Fila ("O que preciso fazer agora?")
+  // Prioridade: se houver alguém chamado ou com check-in/espera prioritária, é o topo
+  const nextPatientToAttend = dayAppointments.find(a => 
+    a.status === 'called' || a.status === 'waiting' || a.status === 'checked_in' || (a.status === 'scheduled' && a.isPriority)
+  ) || (viewScope === 'day' ? dayAppointments.find(a => a.status === 'scheduled') : undefined);
+
+  // Paciente atualmente em exame (se houver e com atendimento realmente ativo)
+  const currentAttendingPatient = dayAppointments.find(a => 
+    a.status === 'in_consultation' && (!a.date || a.date === selectedDate || viewScope === 'day')
+  );
 
   // Cálculo do Tempo Médio de Atendimento por Paciente (baseado nos encounters concluídos)
   const calculateAverageConsultTime = (): number => {
@@ -362,6 +402,14 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
   // Ação: Chamar Paciente na TV
   const handleCallPatient = (apt: Appointment, e: React.MouseEvent) => {
     e.stopPropagation();
+
+    // Atualiza status do agendamento para 'called' e registra timestamp
+    try {
+      offlineDb.updateAppointmentStatus(apt.id, 'called', effectiveClinicId);
+    } catch (err) {
+      console.warn('Não foi possível transitar status:', err);
+    }
+
     lanController.callPatient({
       ticketNumber: apt.ticketNumber || 'P-01',
       patientName: apt.patientName,
@@ -369,24 +417,12 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
       examinerName: currentUser.fullName,
       priority: apt.isPriority
     });
+
+    loadData();
   };
 
   // Ação: Iniciar Atendimento
   const handleStartExam = (apt: Appointment) => {
-    // Atualiza status do agendamento para 'in_consultation'
-    apt.status = 'in_consultation';
-    offlineDb.saveAppointment(apt);
-    loadData();
-
-    // Emite chamada na TV
-    lanController.callPatient({
-      ticketNumber: apt.ticketNumber || 'P-01',
-      patientName: apt.patientName,
-      roomName: apt.room || 'Consultório 01',
-      examinerName: currentUser.fullName,
-      priority: apt.isPriority
-    });
-
     // Busca ou monta o objeto de paciente
     const patientObj: Patient = patients.find(p => p.id === apt.patientId) || {
       id: apt.patientId,
@@ -401,9 +437,42 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
       updatedAt: new Date().toISOString()
     };
 
+    // Verificação de Atendimento Concorrente / Simultâneo
+    const activeCheck = offlineDb.hasActiveEncounter(patientObj.id, patientObj.patientGlobalId, undefined, effectiveClinicId);
+    if (activeCheck.active && activeCheck.encounter) {
+      const proceed = window.confirm(
+        `⚠️ ATENÇÃO: O paciente "${patientObj.fullName}" já possui uma consulta em andamento (iniciada às ${new Date(activeCheck.encounter.date).toLocaleTimeString('pt-BR')}).\n\nDeseja retomar a consulta existente em vez de duplicar o atendimento?`
+      );
+      if (!proceed) return;
+    }
+
+    // Atualiza status do agendamento para 'in_consultation' via máquina de estados com lock
+    try {
+      offlineDb.updateAppointmentStatus(apt.id, 'in_consultation', effectiveClinicId);
+    } catch {
+      apt.status = 'in_consultation';
+      offlineDb.saveAppointment(apt, effectiveClinicId);
+    }
+    loadData();
+
+    // Emite chamada na TV
+    lanController.callPatient({
+      ticketNumber: apt.ticketNumber || 'P-01',
+      patientName: apt.patientName,
+      roomName: apt.room || 'Consultório 01',
+      examinerName: currentUser.fullName,
+      priority: apt.isPriority
+    });
+
     // Busca prontuário existente mais recente
-    const latestEncounter = encounters.find(e => e.patientId === patientObj.id && getLocalDateStr(e.date) === selectedDate) ||
+    const latestEncounter = activeCheck.encounter || 
+      encounters.find(e => e.patientId === patientObj.id && getLocalDateStr(e.date) === selectedDate) ||
       encounters.find(e => e.patientId === patientObj.id);
+
+    // Garante referência ao agendamento atual no encontro
+    if (latestEncounter && !latestEncounter.appointmentId) {
+      latestEncounter.appointmentId = apt.id;
+    }
 
     onStartEncounter(patientObj, latestEncounter);
   };
@@ -475,16 +544,19 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
     setQuickPatientNationality('BR');
 
     // Sugere o próximo horário vago em saltos de 3 minutos
+    const dayOfWeek = new Date(selectedDate + 'T12:00:00').getDay();
+    const defaultStartTime = dayOfWeek === 2 ? '13:00' : '08:00';
+
     const dayApts = appointments.filter(a => a.date === selectedDate && a.status !== 'canceled');
     if (dayApts.length > 0) {
       const sortedTimes = dayApts
-        .map(a => a.time || '08:00')
+        .map(a => a.time || defaultStartTime)
         .sort((a, b) => a.localeCompare(b));
       const lastTime = sortedTimes[sortedTimes.length - 1];
       const nextTime = adjustTimeByMinutes(lastTime, 3);
       setNewTime(nextTime);
     } else {
-      setNewTime('08:00');
+      setNewTime(defaultStartTime);
     }
 
     setNewDurationMinutes(3);
@@ -519,14 +591,9 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
     const targetClinic = effectiveClinicId || activeClinic.id;
     offlineDb.deleteAppointment(apt.id, targetClinic);
 
-    // Se for derivado de paciente ou tiver patientId
-    const realPatId = apt.id.startsWith('apt-pat-') 
-      ? apt.id.replace('apt-pat-', '') 
-      : apt.patientId;
-
-    if (realPatId) {
-      offlineDb.deletePatient(realPatId, targetClinic);
-    }
+    // NOTA: Cancelar agendamento NÃO apaga o paciente.
+    // O cadastro do paciente é preservado para histórico e futuros agendamentos.
+    // (Bug P0 Fase 22 corrigido: 'apt-pat-' extraía patientId e apagava o paciente por engano)
 
     if (apt.id.startsWith('apt-enc-')) {
       const encId = apt.id.replace('apt-enc-', '');
@@ -536,7 +603,7 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
 
     loadData();
     window.dispatchEvent(new CustomEvent('optomed_appointment_updated', { detail: { id: apt.id, clinicId: targetClinic, deleted: true } }));
-    window.dispatchEvent(new CustomEvent('optomed_patient_updated', { detail: { id: realPatId, clinicId: targetClinic, deleted: true } }));
+    window.dispatchEvent(new CustomEvent('optomed_patient_updated', { detail: { id: apt.patientId, clinicId: targetClinic } }));
   };
 
   const handleSaveAppointment = (e: React.FormEvent) => {
@@ -592,7 +659,7 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
           documentNumber: '',
           phoneCountryCode: quickPatientNationality === 'PY' ? '+595' : '+55',
           phone: quickPatientPhone.trim() ? `${quickPatientNationality === 'PY' ? '+595' : '+55'} ${quickPatientPhone.trim()}` : undefined,
-          city: quickPatientNationality === 'PY' ? 'Ciudad del Este' : 'Foz do Iguaçu',
+          city: quickPatientNationality === 'PY' ? 'Pedro Juan Caballero' : 'Ponta Porã',
           country: quickPatientNationality === 'PY' ? 'Paraguai' : 'Brasil',
           address: '',
           notes: newNotes.trim() || 'Agendamento rápido realizado via consultório do examinador',
@@ -712,7 +779,7 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
   };
 
   return (
-    <div className="p-4 sm:p-8 max-w-7xl mx-auto space-y-6 select-none animate-fadeIn">
+    <div className="p-4 sm:p-8 max-w-7xl mx-auto space-y-6 animate-fadeIn">
       
       {/* 1. CABEÇALHO DO PROFISSIONAL */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white/90 backdrop-blur-md p-6 rounded-3xl border border-slate-200/80 shadow-xs">
@@ -762,7 +829,7 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
                   ? 'bg-blue-600 text-white shadow-xs'
                   : 'text-blue-700 hover:bg-blue-50'
               }`}
-              title="Exibir todas as consultas e atendimentos desta semana (Setembro 2026)"
+              title="Exibir todas as consultas e atendimentos desta semana"
             >
               <span>⭐ Esta Semana</span>
             </button>
@@ -933,6 +1000,112 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
         </div>
       </div>
 
+      {/* 2.1 CARD DE AÇÃO IMEDIATA: "O QUE PRECISO FAZER AGORA?" */}
+      {currentAttendingPatient ? (
+        <div className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white p-5 rounded-3xl shadow-lg border border-emerald-400/50 flex flex-col md:flex-row items-center justify-between gap-4 animate-fadeIn">
+          <div className="flex items-center gap-4 w-full md:w-auto">
+            <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white shrink-0 shadow-inner">
+              <Activity className="w-7 h-7 animate-pulse text-emerald-200" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="px-2.5 py-0.5 rounded-full bg-emerald-950/60 text-emerald-200 text-[10px] font-black uppercase tracking-wider">
+                  CONSULTA EM ANDAMENTO
+                </span>
+                <span className="px-2 py-0.5 rounded-full bg-white/20 text-white font-mono text-xs font-bold">
+                  Senha {currentAttendingPatient.ticketNumber || 'P-01'}
+                </span>
+              </div>
+              <h3 className="text-xl font-black tracking-tight text-white mt-0.5">
+                {currentAttendingPatient.patientName}
+              </h3>
+              <p className="text-xs text-emerald-100 font-medium">
+                Paciente já está em atendimento. Clique para retomar o prontuário refrativo ou concluir.
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2.5 w-full md:w-auto justify-end shrink-0">
+            <button
+              type="button"
+              onClick={() => handleStartExam(currentAttendingPatient)}
+              className="px-6 py-3 bg-white hover:bg-slate-100 text-emerald-900 rounded-2xl text-xs font-black flex items-center gap-2 shadow-md transition-all active:scale-95 cursor-pointer"
+            >
+              <Play className="w-4 h-4 fill-emerald-800 text-emerald-800" />
+              <span>Retomar Prontuário Agora</span>
+            </button>
+          </div>
+        </div>
+      ) : nextPatientToAttend ? (
+        <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-950 text-white p-5 rounded-3xl shadow-lg border border-indigo-500/30 flex flex-col md:flex-row items-center justify-between gap-4 animate-fadeIn">
+          <div className="flex items-center gap-4 w-full md:w-auto">
+            <div className="w-14 h-14 rounded-2xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-400 shrink-0 shadow-inner">
+              <Sparkles className="w-7 h-7" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30 text-[10px] font-black uppercase tracking-wider">
+                  O QUE PRECISO FAZER AGORA?
+                </span>
+                <span className="px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-200 font-mono text-xs font-bold">
+                  Próximo: {nextPatientToAttend.ticketNumber || 'P-01'} • {nextPatientToAttend.time || '08:00'}
+                </span>
+                {nextPatientToAttend.isPriority && (
+                  <span className="px-2 py-0.5 rounded bg-rose-500/30 text-rose-300 text-[10px] font-black uppercase">
+                    Prioridade Legal
+                  </span>
+                )}
+              </div>
+              <h3 className="text-xl font-black tracking-tight text-white mt-0.5">
+                {nextPatientToAttend.patientName}
+              </h3>
+              <p className="text-xs text-slate-300 font-medium">
+                {nextPatientToAttend.status === 'called' 
+                  ? 'Paciente já foi chamado na TV. Pronto para iniciar o exame.'
+                  : nextPatientToAttend.status === 'waiting' || nextPatientToAttend.status === 'checked_in'
+                  ? 'Paciente aguardando na recepção. Você pode chamar na TV ou iniciar atendimento.'
+                  : 'Paciente agendado na fila do dia.'}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2.5 w-full md:w-auto justify-end shrink-0">
+            <button
+              type="button"
+              onClick={(e) => handleCallPatient(nextPatientToAttend, e)}
+              className="px-4 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-2xl text-xs font-black flex items-center gap-2 shadow-md transition-all active:scale-95 cursor-pointer"
+              title="Anunciar paciente no telão da recepção com aviso sonoro"
+            >
+              <Volume2 className="w-4 h-4 text-slate-950" />
+              <span>Chamar na TV</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleStartExam(nextPatientToAttend)}
+              className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white rounded-2xl text-xs font-black flex items-center gap-2 shadow-md shadow-emerald-500/30 transition-all active:scale-95 cursor-pointer"
+              title="Abrir o consultório de refração para este paciente"
+            >
+              <Play className="w-4 h-4 fill-white" />
+              <span>Atender Próximo</span>
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="bg-emerald-50/80 border border-emerald-200/80 text-emerald-900 px-6 py-3.5 rounded-2xl flex items-center justify-between text-xs font-semibold shadow-xs">
+          <div className="flex items-center gap-2.5">
+            <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+            <span>Fila livre no momento! Todos os pacientes agendados para esta data já foram atendidos ou não há pendências na recepção.</span>
+          </div>
+          <button
+            type="button"
+            onClick={openNewAppointmentModal}
+            className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-all cursor-pointer shadow-xs"
+          >
+            + Adicionar Paciente Avulso
+          </button>
+        </div>
+      )}
+
       {/* 3. BARRA DE PESQUISA & FILTROS RÁPIDOS */}
       <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-3">
         <div className="relative w-full sm:w-96">
@@ -1071,9 +1244,19 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
                         <span className="px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-900 border border-emerald-300 text-[10px] font-black uppercase tracking-wider flex items-center gap-1">
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" /> Atendimento
                         </span>
+                        {apt.status === 'checked_in' && (
+                          <span className="px-2.5 py-0.5 rounded-full bg-teal-50 text-teal-800 border border-teal-300 text-[10px] font-black uppercase flex items-center gap-1">
+                            <Clock className="w-3 h-3 text-teal-600" /> Check-in Realizado
+                          </span>
+                        )}
                         {apt.status === 'waiting' && (
                           <span className="px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-300 text-[10px] font-black uppercase flex items-center gap-1 animate-pulse">
                             <Clock className="w-3 h-3 text-amber-600" /> Aguardando
+                          </span>
+                        )}
+                        {apt.status === 'called' && (
+                          <span className="px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-900 border border-blue-400 text-[10px] font-black uppercase flex items-center gap-1 animate-bounce">
+                            <Volume2 className="w-3 h-3 text-blue-700" /> Chamado na TV
                           </span>
                         )}
                         {apt.status === 'in_consultation' && (
@@ -1185,6 +1368,35 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
                       <span className="hidden sm:inline">Cadastro</span>
                     </button>
 
+                    {/* Botão Histórico / Prontuário Longitudinal */}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const p = patients.find(p => p.id === apt.patientId) || {
+                          id: apt.patientId || apt.id,
+                          patientGlobalId: apt.patientGlobalId,
+                          fullName: apt.patientName,
+                          birthDate: '',
+                          nationality: apt.patientNationality || 'BR',
+                          documentType: (apt.patientDocument ? (apt.patientNationality === 'PY' ? 'CI_PY' : 'CPF') : 'OTHER') as any,
+                          documentNumber: apt.patientDocument,
+                          phoneCountryCode: apt.patientNationality === 'PY' ? '+595' : '+55',
+                          phone: apt.patientPhone,
+                          lgpdConsent: true,
+                          createdAt: new Date().toISOString(),
+                          updatedAt: new Date().toISOString()
+                        };
+                        setRecordPatient(p);
+                        setIsMedicalRecordModalOpen(true);
+                      }}
+                      className="px-3 py-2 bg-amber-50 hover:bg-amber-100 border border-amber-300 hover:border-amber-400 text-amber-900 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all shadow-xs cursor-pointer"
+                      title="Abrir Prontuário Clínico e Comparativo Longitudinal de Consultas Anteriores"
+                    >
+                      <History className="w-3.5 h-3.5 text-amber-600" />
+                      <span className="hidden sm:inline">Histórico</span>
+                    </button>
+
                     {/* Botão Iniciar Atendimento ou Ver Prontuário */}
                     {apt.status === 'completed' ? (
                       <div className="flex items-center gap-1.5">
@@ -1284,7 +1496,7 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
 
                 <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-200">
                   <span className="font-bold text-slate-400 uppercase text-[10px] block">Cidade / Endereço:</span>
-                  <span className="font-black text-slate-900 text-sm">{previewPatient?.city || 'Foz do Iguaçu'}</span>
+                  <span className="font-black text-slate-900 text-sm">{previewPatient?.city || 'Ponta Porã'}</span>
                 </div>
               </div>
 
@@ -1373,6 +1585,23 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
               </button>
 
               <div className="flex items-center gap-2">
+                {previewPatient && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const p = previewPatient;
+                      setPreviewPatient(null);
+                      setRecordPatient(p);
+                      setIsMedicalRecordModalOpen(true);
+                    }}
+                    className="px-4 py-2.5 bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-900 font-black rounded-xl text-xs shadow-xs transition-all flex items-center gap-1.5 cursor-pointer active:scale-95"
+                    title="Abrir o Prontuário Clínico Completo com visualização longitudinal e comparativa"
+                  >
+                    <History className="w-4 h-4 text-amber-600" />
+                    <span>Ver Prontuário Completo</span>
+                  </button>
+                )}
+
                 {previewEncounterHistory.length > 0 && (
                   <button
                     type="button"
@@ -1623,6 +1852,24 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
             </form>
           </div>
         </div>
+      )}
+
+      {/* Modal do Prontuário Clínico Completo com Histórico Longitudinal */}
+      {isMedicalRecordModalOpen && recordPatient && (
+        <PatientMedicalRecordModal
+          isOpen={isMedicalRecordModalOpen}
+          patient={recordPatient}
+          encounters={offlineDb.getEncounters().filter(e => e.patientId === recordPatient.id)}
+          onClose={() => {
+            setIsMedicalRecordModalOpen(false);
+            setRecordPatient(null);
+          }}
+          onStartReturn={(pat, prev) => {
+            setIsMedicalRecordModalOpen(false);
+            setRecordPatient(null);
+            onStartEncounter(pat, { isReturnEncounter: true, returnReferenceEncounterId: prev?.id } as any);
+          }}
+        />
       )}
     </div>
   );

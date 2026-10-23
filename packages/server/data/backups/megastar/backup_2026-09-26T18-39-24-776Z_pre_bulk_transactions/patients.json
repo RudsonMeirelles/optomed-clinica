@@ -1,0 +1,20 @@
+[
+  {
+    "id": "p2-megastar",
+    "fullName": "Juan Carlos Benítez",
+    "birthDate": "1978-08-22",
+    "sex": "M",
+    "nationality": "PY",
+    "documentType": "CI_PY",
+    "documentNumber": "4.892.120",
+    "phoneCountryCode": "+595",
+    "phone": "+595 981 456789",
+    "city": "Pedro Juan Caballero",
+    "country": "Paraguai",
+    "notes": "Presbiopia progressiva e necessidade de novos óculos multifocais.",
+    "lgpdConsent": true,
+    "lgpdConsentDate": "2026-09-26T15:16:45.319Z",
+    "createdAt": "2026-09-26T15:16:45.319Z",
+    "updatedAt": "2026-09-26T15:16:45.319Z"
+  }
+]

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "972f6226-41ee-4494-8100-1d4017d39b6b",
+    "patientId": "c6d79e1e-15dd-491a-ac3c-465f58af9ffb",
+    "patientName": "Jocicela Lescano",
+    "patientNationality": "PY",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "date": "2026-09-26",
+    "time": "16:32",
+    "durationMinutes": 3,
+    "type": "refrativo",
+    "status": "completed",
+    "ticketNumber": "P-01",
+    "notes": "Paciente cadastrado na recepção.",
+    "room": "Consultório 1",
+    "createdAt": "2026-09-26T20:32:18.218Z",
+    "updatedAt": "2026-09-26T20:40:36.426Z",
+    "startedAt": "2026-09-26T20:32:18.432Z",
+    "completedAt": "2026-09-26T20:39:21.987Z"
+  },
+  {
+    "id": "b49fdab0-d394-4ad7-94b1-499b5f542398",
+    "patientId": "8e7491f7-7ed7-4991-aa89-bcc200beddc1",
+    "patientName": "Lilian Regina Medeiro de Sena",
+    "patientNationality": "BR",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "date": "2026-09-26",
+    "time": "16:41",
+    "durationMinutes": 3,
+    "type": "refrativo",
+    "status": "completed",
+    "ticketNumber": "P-02",
+    "notes": "01 anos mesmo rx",
+    "room": "Consultório 1",
+    "createdAt": "2026-09-26T20:41:10.989Z",
+    "updatedAt": "2026-09-26T20:47:58.482Z",
+    "startedAt": "2026-09-26T20:41:11.059Z",
+    "completedAt": "2026-09-26T20:47:30.962Z"
+  }
+]

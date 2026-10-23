@@ -1,0 +1,3330 @@
+{
+  "op_1791647540753_3e571763-8778-45d6-924f-0c3b94acbbc8": {
+    "timestamp": 1791647630296,
+    "entity": "patients"
+  },
+  "op_1791647541194_00bd222a-c6cb-4d63-b93c-149ada1d0d28": {
+    "timestamp": 1791647630317,
+    "entity": "pos_items"
+  },
+  "op_1791647541063_0cd14164-1bea-4813-88f2-387570b1c2c3": {
+    "timestamp": 1791647630337,
+    "entity": "work_sessions"
+  },
+  "op_1791647540964_c8eb545f-df4b-46eb-adef-57edcd425cbc": {
+    "timestamp": 1791647630355,
+    "entity": "transactions"
+  },
+  "op_1791647587773_8d37402c-6627-4c74-a9a0-5db86e41b486": {
+    "timestamp": 1791647631449,
+    "entity": "work_sessions"
+  },
+  "op_1791647587677_c2fc2056-6c6f-442b-86af-a4506e5ef805": {
+    "timestamp": 1791647631470,
+    "entity": "transactions"
+  },
+  "op_1791647587465_127266d8-0614-4135-8adb-d45a234d4a23": {
+    "timestamp": 1791647631522,
+    "entity": "patients"
+  },
+  "op_1791647587868_6ac29bc8-b909-47f7-b63c-f06693efbf89": {
+    "timestamp": 1791647631850,
+    "entity": "pos_items"
+  },
+  "op_1791647724654_9f1wj": {
+    "timestamp": 1791647728324,
+    "entity": "patients"
+  },
+  "op_1791647724696_hihvn": {
+    "timestamp": 1791647728330,
+    "entity": "appointments"
+  },
+  "op_1791647772039_ny8kx": {
+    "timestamp": 1791647775611,
+    "entity": "patients"
+  },
+  "op_1791647772062_u4t8w": {
+    "timestamp": 1791647775621,
+    "entity": "appointments"
+  },
+  "op_1791647860629_b2b3149a-137a-4a8b-acaf-18218af55f93": {
+    "timestamp": 1791647869701,
+    "entity": "patients"
+  },
+  "op_1791647860662_4b13b2f9-558b-44c8-afb5-318ddfeb8bff": {
+    "timestamp": 1791647869820,
+    "entity": "patients"
+  },
+  "op_1791647861107_9599cd5d-37cc-4498-8581-d831c883c73d": {
+    "timestamp": 1791647869937,
+    "entity": "appointments"
+  },
+  "op_1791647861142_268366aa-634e-4bbc-9b6b-6ed44d7065dd": {
+    "timestamp": 1791647870119,
+    "entity": "appointments"
+  },
+  "op_1791647861139_d14b1542-d621-4297-806d-77155b1dcc18": {
+    "timestamp": 1791647870936,
+    "entity": "audit_logs"
+  },
+  "op_1791647918858_e5vjc": {
+    "timestamp": 1791647922454,
+    "entity": "patients"
+  },
+  "op_1791647921582_v02pj": {
+    "timestamp": 1791647925120,
+    "entity": "patients"
+  },
+  "op_1791647938632_76rwy": {
+    "timestamp": 1791647942196,
+    "entity": "patients"
+  },
+  "op_1791647949413_zcbuy": {
+    "timestamp": 1791647952975,
+    "entity": "patients"
+  },
+  "op_1791647949450_bwsj9": {
+    "timestamp": 1791647952982,
+    "entity": "appointments"
+  },
+  "op_1791648042025_73159": {
+    "timestamp": 1791648045556,
+    "entity": "patients"
+  },
+  "op_1791648051248_e96px": {
+    "timestamp": 1791648055145,
+    "entity": "patients"
+  },
+  "op_1791648051278_tcezv": {
+    "timestamp": 1791648055152,
+    "entity": "appointments"
+  },
+  "op_1791648153938_c7y0v": {
+    "timestamp": 1791648157497,
+    "entity": "patients"
+  },
+  "op_1791648153968_yjyi2": {
+    "timestamp": 1791648157505,
+    "entity": "appointments"
+  },
+  "op_1791648263425_cxlp9": {
+    "timestamp": 1791648263750,
+    "entity": "patients"
+  },
+  "op_1791648263436_7ghjz": {
+    "timestamp": 1791648263831,
+    "entity": "appointments"
+  },
+  "op_1791648273964_5fd3bd5c-a951-4524-8ee7-639e80523d0a": {
+    "timestamp": 1791648276348,
+    "entity": "encounters"
+  },
+  "op_1791648273980_766a4a29-0d0f-4f2a-a43a-bea4cf686a0e": {
+    "timestamp": 1791648294492,
+    "entity": "audit_logs"
+  },
+  "op_1791648745110_ft5vx": {
+    "timestamp": 1791648746069,
+    "entity": "appointments"
+  },
+  "op_1791648766845_dmlko": {
+    "timestamp": 1791648767466,
+    "entity": "appointments"
+  },
+  "op_1791649171220_na0as": {
+    "timestamp": 1791649171635,
+    "entity": "patients"
+  },
+  "op_1791649171236_19uq5": {
+    "timestamp": 1791649172026,
+    "entity": "appointments"
+  },
+  "op_1791649280495_w7ktv": {
+    "timestamp": 1791649281194,
+    "entity": "appointments"
+  },
+  "op_1791649320944_3mki2": {
+    "timestamp": 1791649321653,
+    "entity": "appointments"
+  },
+  "op_1791649387451_9c9r8": {
+    "timestamp": 1791649387683,
+    "entity": "patients"
+  },
+  "op_1791649387463_ei4cs": {
+    "timestamp": 1791649388318,
+    "entity": "appointments"
+  },
+  "op_1791649395451_3ceb5acd-f31c-4775-95e7-119c13d8a58c": {
+    "timestamp": 1791649404293,
+    "entity": "audit_logs"
+  },
+  "op_1791649395711_c1f46ebd-86af-4a12-a9e3-001c81efec06": {
+    "timestamp": 1791649432368,
+    "entity": "audit_logs"
+  },
+  "op_1791649395705_3aa23d21-12de-47fc-b1c4-932564f7f2e9": {
+    "timestamp": 1791649432464,
+    "entity": "encounters"
+  },
+  "op_1791649846081_snx37": {
+    "timestamp": 1791649846672,
+    "entity": "appointments"
+  },
+  "op_1791649851732_qef3t": {
+    "timestamp": 1791649851995,
+    "entity": "appointments"
+  },
+  "op_1791649904734_c0axh": {
+    "timestamp": 1791649905046,
+    "entity": "appointments"
+  },
+  "op_1791653282343_bf2hm": {
+    "timestamp": 1791653282514,
+    "entity": "patients"
+  },
+  "op_1791653657377_iwobn": {
+    "timestamp": 1791653657916,
+    "entity": "appointments"
+  },
+  "op_1791656527363_c3e9o": {
+    "timestamp": 1791656527787,
+    "entity": "appointments"
+  },
+  "op_1791656527351_8g7xe": {
+    "timestamp": 1791656527792,
+    "entity": "patients"
+  },
+  "op_1791656793093_a8884f39-4fe5-487f-8650-7c75569940df": {
+    "timestamp": 1791656801789,
+    "entity": "encounters"
+  },
+  "op_1791656798469_54b63b3c-5af9-465e-8ec5-dfbd670daf7b": {
+    "timestamp": 1791656806771,
+    "entity": "audit_logs"
+  },
+  "op_1791656801064_288f98b9-1693-483b-8876-c22b35a4f026": {
+    "timestamp": 1791656806798,
+    "entity": "encounters"
+  },
+  "op_1791656853107_2ehod": {
+    "timestamp": 1791656853927,
+    "entity": "appointments"
+  },
+  "op_1791656863201_kjjxg": {
+    "timestamp": 1791656863568,
+    "entity": "appointments"
+  },
+  "op_1791657424900_gcjri": {
+    "timestamp": 1791657425081,
+    "entity": "patients"
+  },
+  "op_1791657424910_g53j7": {
+    "timestamp": 1791657425092,
+    "entity": "appointments"
+  },
+  "op_1791657672524_04w2x": {
+    "timestamp": 1791657673466,
+    "entity": "appointments"
+  },
+  "op_1791657712812_l8v8f": {
+    "timestamp": 1791657713272,
+    "entity": "appointments"
+  },
+  "op_1791657784909_st2rg": {
+    "timestamp": 1791657785479,
+    "entity": "patients"
+  },
+  "op_1791657784919_zx65q": {
+    "timestamp": 1791657785671,
+    "entity": "appointments"
+  },
+  "op_1791658035538_4nq0k": {
+    "timestamp": 1791658036555,
+    "entity": "appointments"
+  },
+  "op_1791658433172_dtf0d": {
+    "timestamp": 1791658434995,
+    "entity": "appointments"
+  },
+  "op_1791658478473_eiyx2": {
+    "timestamp": 1791658478721,
+    "entity": "patients"
+  },
+  "op_1791658478485_dxox9": {
+    "timestamp": 1791658479131,
+    "entity": "appointments"
+  },
+  "op_1791658503546_ef5d818d-fb7d-4bd3-9b2a-07c8d0271119": {
+    "timestamp": 1791658512963,
+    "entity": "encounters"
+  },
+  "op_1791658510579_181c85b8-7a02-4429-932b-a023f7126d8c": {
+    "timestamp": 1791658525540,
+    "entity": "encounters"
+  },
+  "op_1791658509418_59b57207-8e8d-46be-bb95-13a24f7db18e": {
+    "timestamp": 1791658525570,
+    "entity": "audit_logs"
+  },
+  "op_1791658832685_uda3q": {
+    "timestamp": 1791658833235,
+    "entity": "appointments"
+  },
+  "op_1791658840667_184ad350-c1c3-4e35-8a3a-efbbc7162cf9": {
+    "timestamp": 1791658843721,
+    "entity": "encounters"
+  },
+  "op_1791658841093_fe237b59-b1cc-4cf4-8f93-dade19dadca7": {
+    "timestamp": 1791658855164,
+    "entity": "encounters"
+  },
+  "op_1791658841102_b2004672-7057-4537-8a59-4e4ff175a0d8": {
+    "timestamp": 1791658856194,
+    "entity": "audit_logs"
+  },
+  "op_1791658879506_srkql": {
+    "timestamp": 1791658879845,
+    "entity": "appointments"
+  },
+  "op_1791659015689_1ozup": {
+    "timestamp": 1791659016452,
+    "entity": "patients"
+  },
+  "op_1791659015700_d3uq9": {
+    "timestamp": 1791659016643,
+    "entity": "appointments"
+  },
+  "op_1791659026608_aefac0ca-7f25-4d74-9952-5be8f5600056": {
+    "timestamp": 1791659031337,
+    "entity": "encounters"
+  },
+  "op_1791659026588_552e961e-f147-4ff0-aa9a-fe82ef13807f": {
+    "timestamp": 1791659031455,
+    "entity": "audit_logs"
+  },
+  "op_1791659006007_54bacfc8-b7ca-4df7-9527-988b7d4341e9": {
+    "timestamp": 1791659034174,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791659005824_fb6764cb-64b1-452d-9d76-ebf60e1f681a": {
+    "timestamp": 1791659034203,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791659006232_778a39f3-cfc9-47f5-bcbe-c43d5eba099f": {
+    "timestamp": 1791659035337,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791658944902_02789382-4757-4c4d-a523-889e8af97779": {
+    "timestamp": 1791659064186,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791658944757_49041294-ec98-4d8c-b868-ae626bf6f0ec": {
+    "timestamp": 1791659064218,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791658945079_712faf08-b962-4290-89c4-cbfe9ddb0928": {
+    "timestamp": 1791659064270,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791659005468_f54c7c0a-f006-4b75-9932-7a90f8de78bb": {
+    "timestamp": 1791659064317,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791658832170_d0486271-dc05-4a2a-bb7d-847200e33906": {
+    "timestamp": 1791659072475,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791658831968_6bead255-c64c-4a9d-9940-f6511d6b8089": {
+    "timestamp": 1791659072577,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791658890348_cfc4e8ce-8fa5-4d77-b532-6272ac9d5fb1": {
+    "timestamp": 1791659072761,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791658890483_76830521-3ba5-4c22-aa4c-07fa51318c02": {
+    "timestamp": 1791659072784,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791658832390_26ddb165-42f5-4777-ba55-4c64cd5acc5d": {
+    "timestamp": 1791659072807,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791658949780_afef8487-41d9-4c61-85ef-60dd99fcde7d": {
+    "timestamp": 1791659072986,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791659009971_7bf09b94-d10b-4e97-ba47-4355d1b37553": {
+    "timestamp": 1791659073009,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791658890655_43761b3b-08a7-4d7c-91d3-2a9b5f0dc85c": {
+    "timestamp": 1791659073092,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791658950070_567cb414-34bf-46e1-96a8-66280e4c52d1": {
+    "timestamp": 1791659073144,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791658949966_f75ab6f5-42df-4735-9182-8e0cb19ead58": {
+    "timestamp": 1791659073178,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791659010159_ce41262f-7820-4d1b-93d9-45ac7c8e66df": {
+    "timestamp": 1791659073383,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791659010246_9a07a6c2-4f3f-42ed-b85a-a84657a32723": {
+    "timestamp": 1791659073410,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791658944432_cf8e9425-7006-4fcb-b2bf-c199ed840758": {
+    "timestamp": 1791659094166,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791659620108_42ul2": {
+    "timestamp": 1791659621513,
+    "entity": "appointments"
+  },
+  "op_1791659628108_9144f3d5-df1c-42c2-b00f-b271147a6f5a": {
+    "timestamp": 1791659630680,
+    "entity": "audit_logs"
+  },
+  "op_1791659628519_3aef323b-8106-4546-bfa6-202c7a6e29de": {
+    "timestamp": 1791659636895,
+    "entity": "audit_logs"
+  },
+  "op_1791659662882_0c9038ae-67ac-42a9-843a-488bd2a10cbc": {
+    "timestamp": 1791659670506,
+    "entity": "encounters"
+  },
+  "op_1791659680937_c631f77c-fe1e-45aa-991e-44686e318241": {
+    "timestamp": 1791659689534,
+    "entity": "encounters"
+  },
+  "op_1791659682030_6710d999-496f-4580-87ee-b4929d8e0dc0": {
+    "timestamp": 1791659689636,
+    "entity": "encounters"
+  },
+  "op_1791659692648_ec3f8f66-471c-4f44-bbee-06f7639415d1": {
+    "timestamp": 1791659701347,
+    "entity": "encounters"
+  },
+  "op_1791659701511_ravmv": {
+    "timestamp": 1791659702824,
+    "entity": "appointments"
+  },
+  "op_1791659709922_e8f3996b-4337-4012-b089-5aa6833ee163": {
+    "timestamp": 1791659727113,
+    "entity": "audit_logs"
+  },
+  "op_1791659701313_3c2ed270-0e7b-45d6-9087-ec0d23681ef9": {
+    "timestamp": 1791659729163,
+    "entity": "audit_logs"
+  },
+  "op_1791659704265_4a2b5456-2de0-4e17-83a0-b30ad5254a63": {
+    "timestamp": 1791659729309,
+    "entity": "encounters"
+  },
+  "op_1791659707265_7ec6a146-fde8-4a75-8f83-8f6a4505e2a1": {
+    "timestamp": 1791659730199,
+    "entity": "encounters"
+  },
+  "op_1791659829018_gi9c7": {
+    "timestamp": 1791659833182,
+    "entity": "appointments"
+  },
+  "op_1791659833019_9db8a98f-edd8-4218-9b89-c1ed5d4b6b6c": {
+    "timestamp": 1791659834722,
+    "entity": "appointments"
+  },
+  "op_1791656306486_47b6633b-385b-4c32-a0cc-6b9c1f7f46fc": {
+    "timestamp": 1791659872015,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791656306692_d5485f20-fb09-48e4-b301-a895162e9b07": {
+    "timestamp": 1791659872045,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791656306287_dbea0fd7-da11-4853-bd75-b28ff8d97c91": {
+    "timestamp": 1791659872076,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791656365500_18804560-d2d4-4466-b0e6-3a66ba8c61fb": {
+    "timestamp": 1791659872107,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791656365289_c3d1408d-c922-4b38-b761-5e2555ac2deb": {
+    "timestamp": 1791659872135,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791656425505_4d360667-69ce-4a68-9ed1-6e18dd2b78bd": {
+    "timestamp": 1791659872623,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791656365601_01aa670d-4e68-4370-9743-7760c588b259": {
+    "timestamp": 1791659872648,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791656425394_30d9b48c-d606-4e28-ae41-65942fbc7407": {
+    "timestamp": 1791659872672,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791656425193_6be81e42-ef13-4c0e-a06f-2da8e66ee486": {
+    "timestamp": 1791659872701,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791656365706_0903b0d7-ca92-4541-9fb7-bb67d1ceb296": {
+    "timestamp": 1791659872935,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791656480893_dd8dfd59-cc7c-4579-9889-408ed5f398f4": {
+    "timestamp": 1791659873553,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791656480695_379919d3-abad-4832-8940-a5342ac8ce4b": {
+    "timestamp": 1791659873587,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791656481004_e45cba4d-a7de-495f-9b4b-b717ca091ae2": {
+    "timestamp": 1791659873619,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791656481108_1126c86f-bb19-4afa-8d39-2e608162a896": {
+    "timestamp": 1791659873872,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791656425608_1b355602-d661-457c-a207-1c8175c701c3": {
+    "timestamp": 1791659873904,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791656485509_d9373c9a-4d5a-4e65-a22f-4015c26b019d": {
+    "timestamp": 1791659874494,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791656485819_cf306f17-c821-4063-981d-67c52258e9c8": {
+    "timestamp": 1791659874519,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791656485707_2a91fdc6-54ca-4c5a-95a1-4cffdfa25291": {
+    "timestamp": 1791659874547,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791656546109_f8a265a6-1e11-42f1-8d66-a33ffc743e9d": {
+    "timestamp": 1791659874591,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791656485928_3ba1f3bc-76a6-49a5-bfe6-b9619e869943": {
+    "timestamp": 1791659874681,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791656546416_734eea8c-7d96-4386-8958-73457adaee45": {
+    "timestamp": 1791659875080,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791656606037_93cd9f1d-ea47-46a4-97ca-2219529d4a74": {
+    "timestamp": 1791659875109,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791656605830_9d0bee4c-675c-475a-ac69-4596c8411596": {
+    "timestamp": 1791659875139,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791656546629_359c9234-103c-4a61-8ec4-b03e11379da9": {
+    "timestamp": 1791659875168,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791656547129_6b96d8b5-fb81-4e5c-8d80-7b55b8414b3a": {
+    "timestamp": 1791659875212,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791656606320_fd9bd0a7-c099-4234-b8bf-da7dc93e4a4c": {
+    "timestamp": 1791659875501,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791656666552_7e45d535-8aef-4c4a-866f-79c161bce389": {
+    "timestamp": 1791659875614,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791656665936_c7a26f7c-5b38-4a12-a65d-95ecb8cdffb4": {
+    "timestamp": 1791659875644,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791656666251_30087956-5404-4327-bb64-05a2abc6c91d": {
+    "timestamp": 1791659875762,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791656606443_f4606847-13a7-4dc2-8083-9372f7e54d37": {
+    "timestamp": 1791659875856,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791656726766_277bb591-59cc-4c30-805c-6ab8fdf96ff3": {
+    "timestamp": 1791659876332,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791656726149_24f471f3-e21e-46ed-9e7e-cbaab1208ad4": {
+    "timestamp": 1791659876474,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791656726445_ce264e77-4fe5-4763-b233-8070e9421208": {
+    "timestamp": 1791659876547,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791656727054_2769a217-d583-4987-955f-5f42d6541c92": {
+    "timestamp": 1791659876657,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791656666835_7ac349ff-f0dc-45d4-b653-705a31d2706e": {
+    "timestamp": 1791659876799,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791656801817_5c340c2e-3b7c-478d-a670-ca64b2944c59": {
+    "timestamp": 1791659877322,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791656803042_4ccb7c5f-1fb8-44fd-b7d9-d4f57552a031": {
+    "timestamp": 1791659877485,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791656802108_67f2221a-ef7b-4c1c-84dc-effb6a4a1648": {
+    "timestamp": 1791659877623,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791656804487_63a63876-e24d-4b3e-95b8-9452b795873a": {
+    "timestamp": 1791659877731,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791656846039_e7f1a302-4ea1-43d5-a774-ff2f9b049c76": {
+    "timestamp": 1791659878004,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791656846374_c1cfe4a2-43ef-46d8-b041-5fc294ea6b47": {
+    "timestamp": 1791659878382,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791656846674_07944e50-92db-4031-b359-bca169986f8a": {
+    "timestamp": 1791659878570,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791656854847_c88d5bb3-6354-4ff7-9296-e50b2c73aa19": {
+    "timestamp": 1791659878731,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791656875837_23132e37-57a2-4f07-9e9b-cd3570811f72": {
+    "timestamp": 1791659878859,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791656876070_d122aae7-693c-425f-a4f7-f7e2752515e3": {
+    "timestamp": 1791659879003,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791656876348_2ff0659c-df41-4a11-b938-416de2842745": {
+    "timestamp": 1791659879443,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791656906279_801dc943-552d-48cb-8c76-c6c4e63e9a68": {
+    "timestamp": 1791659879563,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791656905760_749c0201-6e03-40a2-804f-cb173bec21f6": {
+    "timestamp": 1791659879709,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791656906089_eb640871-c4b4-4087-8d39-12ab5ef627f0": {
+    "timestamp": 1791659879800,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791656876555_c4015079-023e-495e-a1fa-eabfa0f7ca75": {
+    "timestamp": 1791659879899,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791656966898_65afd0f5-a7ef-4ad5-95ff-9baa313cb59c": {
+    "timestamp": 1791659880549,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791656966692_0f48edb7-a6cf-4644-8c58-74aea8dd7a6a": {
+    "timestamp": 1791659880602,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791656906477_37ac3713-04b3-43fc-9b98-81d774315513": {
+    "timestamp": 1791659880661,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791656966382_5fb67218-c9e6-447d-8df1-980c8df1ac34": {
+    "timestamp": 1791659880720,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791656967184_1ab721e9-019f-4f9c-8b61-f51962659464": {
+    "timestamp": 1791659880852,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791657026283_f2661099-fdbf-40c6-966f-21908ac4ad30": {
+    "timestamp": 1791659881551,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791657086189_55daf963-17ec-4f22-95e6-b0f365125851": {
+    "timestamp": 1791659881583,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791657026498_60b8f7de-fd47-4ae4-97a1-d56c22a799fe": {
+    "timestamp": 1791659881614,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791657025954_939a1f16-5972-4be3-a5b2-ccfd4e68dd9b": {
+    "timestamp": 1791659881649,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791657026698_83d7c559-c7e5-4e5c-9235-5518bf76131e": {
+    "timestamp": 1791659882606,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791657086412_64a90196-1cac-4a5e-bbad-e8187f7173cf": {
+    "timestamp": 1791659882996,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791657086677_499ebf9d-39d6-4a7e-bbf1-6c1f12b78312": {
+    "timestamp": 1791659883044,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791657146211_cdcd6c1d-8e62-4d8e-9002-9befdc1c4ec4": {
+    "timestamp": 1791659883086,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791657145991_3ebfd8a1-98e6-44c7-904b-56aa8ab963c7": {
+    "timestamp": 1791659883125,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791657086810_aba8e115-5930-4328-a836-75401d6d658c": {
+    "timestamp": 1791659883220,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791657146486_fbacb61a-002a-4f7b-aebf-6e5a00b62552": {
+    "timestamp": 1791659883839,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791657206283_ffa3a715-5984-4fdd-88a6-41a03a4aa95d": {
+    "timestamp": 1791659883934,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791657207010_917b6bb0-5cc5-4a3d-8899-be0c4010df7f": {
+    "timestamp": 1791659884067,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791657146609_2fc140e4-3a5a-4443-8c46-78a8f26b85d7": {
+    "timestamp": 1791659884135,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791657206725_15bb4cd4-f0e4-459e-a3b5-8166cf012f68": {
+    "timestamp": 1791659884192,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791657266186_3d6efab3-05a0-4c6c-ad59-1b00f120a857": {
+    "timestamp": 1791659884744,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791657266506_250b4942-62fa-4859-bbd4-5a56069d8a87": {
+    "timestamp": 1791659884815,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791657266802_dbc97855-2aff-41af-a191-4cd73d4fcfb7": {
+    "timestamp": 1791659884852,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791657207232_c9a89e70-0f24-43ce-92f8-53afb32ed47a": {
+    "timestamp": 1791659884928,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791657267007_0551d9bd-bb83-4795-b31b-f4dc712dac1b": {
+    "timestamp": 1791659885349,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791657326708_de5b73e8-631f-459e-b636-94b229a5ca04": {
+    "timestamp": 1791659888714,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791657326504_3b2ecfa0-21e1-4781-bbed-e4ed6aa199c8": {
+    "timestamp": 1791659888828,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791657326193_8e33398e-e23d-4d9f-963e-cc9e782421ae": {
+    "timestamp": 1791659888863,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791657368103_275bf4ac-4012-4833-ae63-0ebd1d4b1d27": {
+    "timestamp": 1791659888902,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791657327116_81b2a3e3-6022-45e0-be75-e4d77a0829f8": {
+    "timestamp": 1791659889232,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791657368301_b0c2173f-c726-4bf4-8047-6ad375f1f3c7": {
+    "timestamp": 1791659889643,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791657385282_c2cda4f2-3b83-4574-9f18-690e422d99db": {
+    "timestamp": 1791659889855,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791657385536_764bbe6d-ffd1-4101-a47f-df64ea68e47d": {
+    "timestamp": 1791659889906,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791657368412_6dbf70a1-7856-4bb0-8794-934c9f7a9dc7": {
+    "timestamp": 1791659889954,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791657368633_b1bd40ee-ad8c-441f-a5d7-a1d7f990e5da": {
+    "timestamp": 1791659889982,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791657385693_860e8b51-c76b-4dfd-883c-c2bdcedd54d1": {
+    "timestamp": 1791659890562,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791657447565_579a8687-a3ef-4203-bf25-a7111775f4a8": {
+    "timestamp": 1791659890595,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791657447872_885c7ab5-43b5-4500-94f9-5d328fb6c6b3": {
+    "timestamp": 1791659890628,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791657448073_e94735eb-4070-4cf7-a5d0-91cd76ebd503": {
+    "timestamp": 1791659890658,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791657385831_77e32f76-a2f9-4c51-909e-4b4566c0c371": {
+    "timestamp": 1791659890693,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791657505616_9e4d1f9e-cb80-46b7-9b1e-8659701fcb2d": {
+    "timestamp": 1791659891179,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791657505398_a1955dc6-3132-40c1-87ce-367149c2b8b3": {
+    "timestamp": 1791659891227,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791657505732_0193a257-696e-4748-a92d-f321f0c09e54": {
+    "timestamp": 1791659891285,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791657448465_8f45c3ba-eb6e-4c69-b11b-b87fd1494cf0": {
+    "timestamp": 1791659891337,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791657505838_a5bf0115-ccef-4e68-a966-f50229297f06": {
+    "timestamp": 1791659891404,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791657565737_49bbf39d-599a-4fbd-841a-f837cf80e89f": {
+    "timestamp": 1791659891740,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791657565927_6b3163a8-fb60-4bc4-a087-3f137a4f8c69": {
+    "timestamp": 1791659891812,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791657566050_303757e5-4cb4-4740-a3ae-50429d964966": {
+    "timestamp": 1791659891876,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791657626765_d73efa13-4559-4d1d-8c4b-6ce4d611b891": {
+    "timestamp": 1791659891937,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791657566260_e36865e3-5840-41a6-8225-a84cd4854fd9": {
+    "timestamp": 1791659892011,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791657627460_a84b72a5-5772-414f-969c-b295d0f0399b": {
+    "timestamp": 1791659892329,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791657627160_472360bb-04bc-48d2-9ea1-565e756f571f": {
+    "timestamp": 1791659892394,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791657686159_032621df-9091-4e04-859a-6d292a2c63cb": {
+    "timestamp": 1791659892473,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791657627772_692ba229-a94e-448b-a16b-cb085e7a6c6a": {
+    "timestamp": 1791659892544,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791657674588_b429ce4f-6151-4104-9c87-512abee67762": {
+    "timestamp": 1791659892614,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791657686447_ffdee97a-a42b-4a2e-8e88-ce9200a88cd6": {
+    "timestamp": 1791659893029,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791657686647_b22fd658-c12e-480f-a611-17ca7f17bfb3": {
+    "timestamp": 1791659893115,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791657745939_69dba5c2-826f-42c5-aeb8-9bebb2a45a6c": {
+    "timestamp": 1791659893160,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791657746346_779f38ae-ad75-405b-bb85-77a11c89e7f2": {
+    "timestamp": 1791659893209,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791657686876_eff7e96d-3b45-4844-875d-6e207160efea": {
+    "timestamp": 1791659893271,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791657746551_37479c70-e892-4574-8b14-50c325a0f39b": {
+    "timestamp": 1791659893559,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791657805945_a807804c-2e15-4ffb-8ed5-cd6315689370": {
+    "timestamp": 1791659893624,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791657746864_51842e4e-8ad8-4dbe-a73f-e338b774997c": {
+    "timestamp": 1791659893663,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791657806568_3c303a86-3342-42be-bf97-79ab1bd70f7b": {
+    "timestamp": 1791659893708,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791657806275_c4b0f691-fa27-486b-9366-e2926fea25a5": {
+    "timestamp": 1791659893756,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791657806785_c7ddca00-1a0d-461b-b3b7-64426286a325": {
+    "timestamp": 1791659894155,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791657866263_1e42a2b5-be62-4d67-831c-bc1ad9d11def": {
+    "timestamp": 1791659894194,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791657866872_79d20408-a62e-4fd7-971b-f33940e4f337": {
+    "timestamp": 1791659894233,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791657866578_5c09f4b7-e530-4a37-9b5c-a21a7d8c3329": {
+    "timestamp": 1791659894265,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791657867203_25ab2856-3bf2-4c24-a57e-f2bf8531603f": {
+    "timestamp": 1791659894992,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791657926081_3c71a11c-cc56-4821-9271-61e8f329b53f": {
+    "timestamp": 1791659895667,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791657926503_f0a117f4-4aaa-46aa-9c64-e708aacd147d": {
+    "timestamp": 1791659895708,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791657926374_85895cdc-372b-462f-b827-c390c8ffee8d": {
+    "timestamp": 1791659895752,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791657988548_f826aeef-72af-4d23-9398-a4ddc751c23b": {
+    "timestamp": 1791659896376,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791657926878_044029d6-90c5-4c2e-8d39-6bf4ff6c97b9": {
+    "timestamp": 1791659896593,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791657988933_2c36222f-0dee-4b83-9464-2fad30e0d218": {
+    "timestamp": 1791659897009,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791657989068_f4db887d-6df1-4bae-8f4e-d3cff7d77e4f": {
+    "timestamp": 1791659897042,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791657989265_dfb3be77-347a-4043-9fc4-1549613403a8": {
+    "timestamp": 1791659897325,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791658046612_0b3043f1-c624-4851-bb15-fd7d16762aae": {
+    "timestamp": 1791659897641,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791658037269_62a1f83d-f44b-4aeb-ae21-cd40ed7d8f42": {
+    "timestamp": 1791659897710,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791658046818_ec94e3a2-a285-44dc-b5ed-c424625f613b": {
+    "timestamp": 1791659898092,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791658047022_134567c0-f256-4544-ac26-4a1f1cb0bf54": {
+    "timestamp": 1791659898176,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791658048941_028f5ca1-ffab-4ae5-8c0e-50d6032beead": {
+    "timestamp": 1791659898259,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791658141415_9dd4e325-5a2b-4a01-9f2a-b1d143435020": {
+    "timestamp": 1791659898317,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791658140997_7439d075-c5c1-4124-92d6-a00cf340abe7": {
+    "timestamp": 1791659898364,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791658141716_64c20f3b-bae3-42d8-b47f-5b34235ebd67": {
+    "timestamp": 1791659898758,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791658201621_b557a2e1-e233-418a-bafd-5946698dc44d": {
+    "timestamp": 1791659898826,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791658202242_fd02558d-d26c-464c-8635-1f148485db57": {
+    "timestamp": 1791659898908,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791658202030_bf04664b-d95a-41ce-8b4a-eeac30afafd2": {
+    "timestamp": 1791659898982,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791658142043_8982192c-74d3-4a79-9119-7accc0624f4e": {
+    "timestamp": 1791659899184,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791658202540_5226d487-9605-4af9-8e1e-5621c947eb82": {
+    "timestamp": 1791659899787,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791658261728_2cb694ea-c22c-41c4-94ee-fc11ab6101f2": {
+    "timestamp": 1791659899887,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791658261526_95724476-e432-40fa-b31f-a61ca9bb2622": {
+    "timestamp": 1791659899961,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791658261956_678c4cfb-ff91-4c4e-a902-9d60bcfe637a": {
+    "timestamp": 1791659900032,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791658261137_e6ce92d6-562d-4013-bd1c-cf16d01b29a6": {
+    "timestamp": 1791659900107,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791658321455_83a42eb2-5255-41a1-ac8c-2e380def4eae": {
+    "timestamp": 1791659900409,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791658321735_138f7cd3-3eec-4476-9a5e-adf6446e583b": {
+    "timestamp": 1791659900455,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791658322051_0b959577-02e5-4b07-90e9-d199c6cfd74f": {
+    "timestamp": 1791659900508,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791658322349_3fa7a1ee-bb89-408d-ac01-b94c7e79bab2": {
+    "timestamp": 1791659900615,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791658382361_e6cf853c-c95d-4217-b8db-f251d490c742": {
+    "timestamp": 1791659900659,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791658382665_07f5370c-3f15-4f6d-b116-9ebd3f5b43ac": {
+    "timestamp": 1791659901239,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791658428437_664e4ff9-cf4b-469a-b9e8-33d72dd7d52d": {
+    "timestamp": 1791659901286,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791658428751_4f1630d5-85a4-41a9-98d2-58cd24784f55": {
+    "timestamp": 1791659901341,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791658383278_22cbdf25-466b-4d68-844f-dcf92941f482": {
+    "timestamp": 1791659901409,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791658382803_245dca35-f8ea-4983-87d6-232d9ec3867e": {
+    "timestamp": 1791659901491,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791658428895_13d7863b-34ca-47a8-aac1-6300ae220cf6": {
+    "timestamp": 1791659902466,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791658466505_5c52897b-e907-498b-a1fa-2b33437aadfa": {
+    "timestamp": 1791659902672,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791658466044_76a107cb-8f86-4622-9242-5a2dea24d085": {
+    "timestamp": 1791659902769,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791658466781_3fe12fc9-d579-42aa-b440-165cf2e07d40": {
+    "timestamp": 1791659902853,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791658429179_7d1d0713-7877-4170-a1f7-0b5e4c9ddcf3": {
+    "timestamp": 1791659902949,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791658526749_42db532e-644a-4cd4-af82-3aa88ade89be": {
+    "timestamp": 1791659903465,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791658527193_be6178d1-1862-405d-8e6c-80bc224e4c11": {
+    "timestamp": 1791659903514,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791658527465_2fb8ac72-cab3-41f7-8075-013a9dcb4871": {
+    "timestamp": 1791659903573,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791658527665_6869aac5-4094-45ca-93b9-1614ff26cac5": {
+    "timestamp": 1791659903622,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791658466963_e6129f02-19fd-43c5-901c-0fefa3463c97": {
+    "timestamp": 1791659903682,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791659914811_ffc4e85d-dbd5-4d01-8af2-6f89305a009c": {
+    "timestamp": 1791659917890,
+    "entity": "episodes"
+  },
+  "op_1791659915710_3485af77-8802-48ea-a110-bacb023a1515": {
+    "timestamp": 1791659918507,
+    "entity": "appointments"
+  },
+  "op_1791658586057_b0aca268-7ce5-43d5-892c-1ab59f645e40": {
+    "timestamp": 1791659921692,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791658586445_f0009a7a-790d-49f4-86ea-a6f3dc8c2cea": {
+    "timestamp": 1791659921729,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791658586671_a455bec4-6626-47b8-bf4e-38d5ecaa6a55": {
+    "timestamp": 1791659922224,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791658586951_bc5b300f-9ff1-4afb-8e53-a5228e73bfd4": {
+    "timestamp": 1791659922517,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791658646269_6d9df53b-dd16-4ce6-b214-2a81d9891f9b": {
+    "timestamp": 1791659922545,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791658645730_7ae8d77c-1827-4bfb-a109-da3ed7ffcf96": {
+    "timestamp": 1791659922580,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791658646057_fc8b09ca-2d73-4a5c-ad0b-48889e375ba6": {
+    "timestamp": 1791659922611,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791658707912_00750d00-8e67-41ad-8c56-09be04f50adb": {
+    "timestamp": 1791659923768,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791658708521_1247465b-408b-43c1-8572-938bd7032f45": {
+    "timestamp": 1791659923802,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791658767186_b009890b-de18-472c-b879-84a2bcd46a5b": {
+    "timestamp": 1791659923839,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791658708734_17a7c8d9-8dac-4f16-8841-4134678a8736": {
+    "timestamp": 1791659923876,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791658646550_5a6c9ef2-ba6a-4518-af6e-130f68e20c7f": {
+    "timestamp": 1791659923920,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791658886487_a110047a-b3cd-45b1-99df-92c1391a4a02": {
+    "timestamp": 1791659924687,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791658886905_7979bbf2-1b3b-4707-a58e-4aa26576f8a3": {
+    "timestamp": 1791659924764,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791658887421_ceb87dfc-e15c-4d52-8b23-544a5ebd5862": {
+    "timestamp": 1791659925289,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791659913663_2e2a4ef8-ade0-442b-ac19-d509fa952fd9": {
+    "timestamp": 1791659925372,
+    "entity": "patients"
+  },
+  "op_1791659916531_cf2461b6-7dbc-4003-9b72-330316cd0b6e": {
+    "timestamp": 1791659931748,
+    "entity": "encounters"
+  },
+  "op_1791659917581_64a11c4a-8282-449b-8474-b7a141698650": {
+    "timestamp": 1791659932958,
+    "entity": "work_sessions"
+  },
+  "op_1791659916796_11d799e1-2803-483e-98ff-aa4564190499": {
+    "timestamp": 1791659933154,
+    "entity": "prescriptions"
+  },
+  "op_1791659917182_a063a3f7-fd7c-4b49-90cf-38ef513a0f27": {
+    "timestamp": 1791659933204,
+    "entity": "transactions"
+  },
+  "op_1791658766665_8151dd89-8d66-43c9-a057-af121fbe8f04": {
+    "timestamp": 1791659935100,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791658766979_c2f94451-91cb-42da-8b79-2b4b2fb59776": {
+    "timestamp": 1791659935182,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791658825879_18845b5d-2a02-46fa-a6ef-96b96668b431": {
+    "timestamp": 1791659935205,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791658709152_ee938451-e365-41b3-9d9f-5d21df2494ce": {
+    "timestamp": 1791659935289,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791658767485_baa5595c-dd31-4e81-b990-2045d0c2d6a8": {
+    "timestamp": 1791659935318,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791658826264_56008ff4-57f1-4c30-b564-594075b68621": {
+    "timestamp": 1791659935806,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791658826469_1a7ec9b6-55f8-44bc-bf3a-68679c20cde3": {
+    "timestamp": 1791659935843,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791658887119_b9d8718c-4546-4802-8c4f-427d8fffe1f3": {
+    "timestamp": 1791659936242,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791658835816_45fd1f82-692a-4977-9048-9de7ea0be820": {
+    "timestamp": 1791659936634,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791658826696_bff90e48-47dd-4a7c-9977-6fed6966ccbd": {
+    "timestamp": 1791659936667,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791659990429_tarl6": {
+    "timestamp": 1791659990789,
+    "entity": "patients"
+  },
+  "op_1791660016062_3a93b8fa-df89-4930-9c08-10b76c0c58bf": {
+    "timestamp": 1791660025610,
+    "entity": "audit_logs"
+  },
+  "op_1791660017291_c5ba1862-83fb-49c0-b814-96ed13c191c6": {
+    "timestamp": 1791660025723,
+    "entity": "encounters"
+  },
+  "op_1791660017496_87d125fc-d9e2-4146-a987-eb238d6e51c5": {
+    "timestamp": 1791660025812,
+    "entity": "audit_logs"
+  },
+  "op_1791660032552_63aae028-0457-4136-8ca1-cf8be6354988": {
+    "timestamp": 1791660084277,
+    "entity": "episodes"
+  },
+  "op_1791660035001_328154cd-d4cc-4075-bb7c-7b701c63a799": {
+    "timestamp": 1791660084697,
+    "entity": "appointments"
+  },
+  "op_1791660290831_7335da1b-86f9-4292-a0cb-654a4ab22582": {
+    "timestamp": 1791660308048,
+    "entity": "encounters"
+  },
+  "op_1791660299046_a4cf5658-8400-45da-828e-e7ee82f6ce57": {
+    "timestamp": 1791660308448,
+    "entity": "encounters"
+  },
+  "op_1791660304323_efa2a6b9-518e-41fa-bf27-6b549371eeb2": {
+    "timestamp": 1791660308751,
+    "entity": "audit_logs"
+  },
+  "op_1791660465757_ug3v8": {
+    "timestamp": 1791660467074,
+    "entity": "appointments"
+  },
+  "op_1791660473738_c5816838-87bc-40c0-ae13-1973e34a905e": {
+    "timestamp": 1791660479890,
+    "entity": "audit_logs"
+  },
+  "op_1791660497664_je959": {
+    "timestamp": 1791660498576,
+    "entity": "appointments"
+  },
+  "op_1791660474171_f2d8b04f-2849-44f4-b222-7d4891445be5": {
+    "timestamp": 1791660506714,
+    "entity": "audit_logs"
+  },
+  "op_1791660506078_058a7e40-d012-43ea-94f1-238a514beb8d": {
+    "timestamp": 1791660535264,
+    "entity": "audit_logs"
+  },
+  "op_1791660506075_1ebd636a-af83-4607-abb5-3a8fe6d1c01c": {
+    "timestamp": 1791660535314,
+    "entity": "encounters"
+  },
+  "op_1791660985161_12wmg": {
+    "timestamp": 1791660985396,
+    "entity": "patients"
+  },
+  "op_1791661177866_3463a733-704e-4e56-818d-8ae9631cb088": {
+    "timestamp": 1791661183602,
+    "entity": "encounters"
+  },
+  "op_1791661181426_b86064dd-2fd3-4230-8468-94765200c0fd": {
+    "timestamp": 1791661183799,
+    "entity": "encounters"
+  },
+  "op_1791661183070_c10ec7df-fe6d-4f04-9b2b-5b84ebde04d1": {
+    "timestamp": 1791661191475,
+    "entity": "audit_logs"
+  },
+  "op_1791661183066_4a5b1121-406b-4745-bd6f-23d5378410af": {
+    "timestamp": 1791661191508,
+    "entity": "encounters"
+  },
+  "op_1791661237923_dxclq": {
+    "timestamp": 1791661238435,
+    "entity": "appointments"
+  },
+  "op_1791661245901_bf3b4b3f-67b6-4ad1-bf0b-54c83429ff77": {
+    "timestamp": 1791661249836,
+    "entity": "encounters"
+  },
+  "op_1791661246332_7114fdd2-f606-4626-a6ab-1968629c3353": {
+    "timestamp": 1791661277376,
+    "entity": "encounters"
+  },
+  "op_1791661246335_a98570d9-8e47-43e3-8779-0e8c0c6c98e2": {
+    "timestamp": 1791661277433,
+    "entity": "audit_logs"
+  },
+  "op_1791663577816_91ffv": {
+    "timestamp": 1791663578311,
+    "entity": "patients"
+  },
+  "op_1791663577827_4acjy": {
+    "timestamp": 1791663578385,
+    "entity": "appointments"
+  },
+  "op_1791663582669_7yjno": {
+    "timestamp": 1791663583302,
+    "entity": "appointments"
+  },
+  "op_1791663585816_08b5dd41-093a-4b87-8de3-f772b073d118": {
+    "timestamp": 1791663588255,
+    "entity": "audit_logs"
+  },
+  "op_1791663586058_3c6f351b-24ac-4eab-85d5-9aac5a2d1389": {
+    "timestamp": 1791663617857,
+    "entity": "audit_logs"
+  },
+  "op_1791663884888_y1udp": {
+    "timestamp": 1791663885933,
+    "entity": "appointments"
+  },
+  "op_1791663892867_875b13e5-4739-407e-854d-3fb28b258d89": {
+    "timestamp": 1791663895135,
+    "entity": "encounters"
+  },
+  "op_1791663893301_95c16e36-8b4b-4cf4-9a79-08e4b01e25e6": {
+    "timestamp": 1791663919510,
+    "entity": "encounters"
+  },
+  "op_1791663893305_64960dcf-7328-4943-bc00-e221ba3acbb8": {
+    "timestamp": 1791663919617,
+    "entity": "audit_logs"
+  },
+  "op_1791663984375_c1has": {
+    "timestamp": 1791663984815,
+    "entity": "appointments"
+  },
+  "op_1791664043501_2pgjq": {
+    "timestamp": 1791664044207,
+    "entity": "appointments"
+  },
+  "op_1791664043490_df7zw": {
+    "timestamp": 1791664044220,
+    "entity": "patients"
+  },
+  "op_1791664069799_c77f2442-4c97-434d-8f45-9286f1a816f5": {
+    "timestamp": 1791664075672,
+    "entity": "encounters"
+  },
+  "op_1791664074374_cb793a50-4ce5-42c4-8cc7-e5ce3920a1e2": {
+    "timestamp": 1791664099648,
+    "entity": "audit_logs"
+  },
+  "op_1791664071500_48a6828f-313a-4064-b535-d816262a49d6": {
+    "timestamp": 1791664099736,
+    "entity": "encounters"
+  },
+  "op_1791664241249_22e6dc2c-530d-4039-af28-876b5ce68b34": {
+    "timestamp": 1791664245994,
+    "entity": "audit_logs"
+  },
+  "op_1791664244544_d7c8be52-4b76-4ee4-92b9-359488afec89": {
+    "timestamp": 1791664250574,
+    "entity": "encounters"
+  },
+  "op_1791664244547_6f3b9c24-4704-429b-b445-304970786cdd": {
+    "timestamp": 1791664250679,
+    "entity": "audit_logs"
+  },
+  "op_1791664297740_sdbwn": {
+    "timestamp": 1791664298264,
+    "entity": "appointments"
+  },
+  "op_1791664303592_l3zuz": {
+    "timestamp": 1791664303889,
+    "entity": "appointments"
+  },
+  "op_1791664305722_c07f020f-7c59-49e5-b457-a55526f6b296": {
+    "timestamp": 1791664311392,
+    "entity": "audit_logs"
+  },
+  "op_1791664306148_9c889958-fbf2-4b80-bebe-299e52074068": {
+    "timestamp": 1791664338539,
+    "entity": "encounters"
+  },
+  "op_1791664306152_4dbd4bd5-6b54-41c3-a10e-9b4f054f0109": {
+    "timestamp": 1791664338748,
+    "entity": "audit_logs"
+  },
+  "op_1791664433169_1tw3e": {
+    "timestamp": 1791664433457,
+    "entity": "patients"
+  },
+  "op_1791664433183_8q12f": {
+    "timestamp": 1791664433472,
+    "entity": "appointments"
+  },
+  "op_1791664435421_pzf10": {
+    "timestamp": 1791664435805,
+    "entity": "appointments"
+  },
+  "op_1791664601966_703ff4ec-e457-45db-a70c-0aa588874a89": {
+    "timestamp": 1791664605187,
+    "entity": "audit_logs"
+  },
+  "op_1791664603530_cfe4c024-0ec2-403a-af42-5bbb6ecc7265": {
+    "timestamp": 1791664607646,
+    "entity": "audit_logs"
+  },
+  "op_1791664681764_v54ug": {
+    "timestamp": 1791664682780,
+    "entity": "appointments"
+  },
+  "op_1791664689741_00adb608-f948-4654-b171-35e25eb7ed74": {
+    "timestamp": 1791664691521,
+    "entity": "encounters"
+  },
+  "op_1791664690192_86cb3b8a-7e2f-4898-9e0c-5df6a4f5fb28": {
+    "timestamp": 1791664697786,
+    "entity": "audit_logs"
+  },
+  "op_1791664928775_1iamx": {
+    "timestamp": 1791664929399,
+    "entity": "patients"
+  },
+  "op_1791664928789_pm50t": {
+    "timestamp": 1791664929470,
+    "entity": "appointments"
+  },
+  "op_1791664933868_8t61n": {
+    "timestamp": 1791664934391,
+    "entity": "appointments"
+  },
+  "op_1791664936775_8aa6d529-6a3f-45be-a733-d84708605fcb": {
+    "timestamp": 1791664943332,
+    "entity": "audit_logs"
+  },
+  "op_1791664948137_630117fc-066f-45a1-a6af-5d5ffeff288c": {
+    "timestamp": 1791664953771,
+    "entity": "encounters"
+  },
+  "op_1791664937026_1bc7fb4b-1c52-483b-a46e-4e1ec9077657": {
+    "timestamp": 1791664954305,
+    "entity": "audit_logs"
+  },
+  "op_1791664948148_e95f8aea-a3a6-4201-85a5-401af8f1ee6c": {
+    "timestamp": 1791664967582,
+    "entity": "audit_logs"
+  },
+  "op_1791665151132_yzwfj": {
+    "timestamp": 1791665153313,
+    "entity": "appointments"
+  },
+  "op_1791665159110_d037b885-da06-43e3-b4c5-0d20be124328": {
+    "timestamp": 1791665160096,
+    "entity": "encounters"
+  },
+  "op_1791665159542_e119581e-e3d1-433e-9286-02c81ad4cb03": {
+    "timestamp": 1791665178131,
+    "entity": "encounters"
+  },
+  "op_1791665159545_fcdddc19-8adc-4e41-b65a-ac0235d17da1": {
+    "timestamp": 1791665178187,
+    "entity": "audit_logs"
+  },
+  "op_1791665178351_3kk4v": {
+    "timestamp": 1791665179118,
+    "entity": "appointments"
+  },
+  "op_1791665186343_25618c20-449a-4ba1-a001-c9909026192d": {
+    "timestamp": 1791665189916,
+    "entity": "audit_logs"
+  },
+  "op_1791665186764_98b861ff-e5d1-4e7d-95c5-fd163870f910": {
+    "timestamp": 1791665208427,
+    "entity": "audit_logs"
+  },
+  "op_1791665186761_7d91fe2c-0a4c-4793-af97-0a135ccda107": {
+    "timestamp": 1791665208529,
+    "entity": "encounters"
+  },
+  "op_1791665275085_njzdl": {
+    "timestamp": 1791665275574,
+    "entity": "appointments"
+  },
+  "op_1791665367597_p5xon": {
+    "timestamp": 1791665368147,
+    "entity": "patients"
+  },
+  "op_1791665367607_fhzr8": {
+    "timestamp": 1791665369201,
+    "entity": "appointments"
+  },
+  "op_1791665376992_nsthp": {
+    "timestamp": 1791665377688,
+    "entity": "patients"
+  },
+  "op_1791665375607_f0daaf97-7463-405f-803b-80df30ad751b": {
+    "timestamp": 1791665385073,
+    "entity": "audit_logs"
+  },
+  "op_1791665384996_b51d3b94-00c9-4013-bfcc-a71ee6d20f69": {
+    "timestamp": 1791665392950,
+    "entity": "audit_logs"
+  },
+  "op_1791665397731_1kdfo": {
+    "timestamp": 1791665398389,
+    "entity": "appointments"
+  },
+  "op_1791665400300_950b22cd-4f30-40c7-9cd8-c49e1fe0f3e6": {
+    "timestamp": 1791665407709,
+    "entity": "encounters"
+  },
+  "op_1791665392757_ebf5992e-0ffa-4257-933f-c2d8db847c6c": {
+    "timestamp": 1791665407801,
+    "entity": "audit_logs"
+  },
+  "op_1791665388049_f6a6ff29-206b-47d8-b3d0-16397686b91b": {
+    "timestamp": 1791665411185,
+    "entity": "audit_logs"
+  },
+  "op_1791665401490_3f0590a8-803c-4e21-ab76-fc1817e6ff2d": {
+    "timestamp": 1791665420199,
+    "entity": "encounters"
+  },
+  "op_1791665412634_7990ca2b-4693-41db-aa51-a057807d9b51": {
+    "timestamp": 1791665421526,
+    "entity": "audit_logs"
+  },
+  "op_1791665421175_0be02a1c-a0c3-4901-8b3b-c6c2f3bf8259": {
+    "timestamp": 1791665430139,
+    "entity": "encounters"
+  },
+  "op_1791665432497_d1da039d-df81-4aa3-833b-0efbacc2577b": {
+    "timestamp": 1791665439376,
+    "entity": "encounters"
+  },
+  "op_1791665423304_1ff388cf-65da-4adf-8651-b902e2a2f2c6": {
+    "timestamp": 1791665440475,
+    "entity": "audit_logs"
+  },
+  "op_1791665438129_69a30345-5b33-41e7-9a77-b80f8056c88d": {
+    "timestamp": 1791665445798,
+    "entity": "encounters"
+  },
+  "op_1791665441313_ef4e2c42-a171-4334-b5ab-c34931f454d2": {
+    "timestamp": 1791665445900,
+    "entity": "audit_logs"
+  },
+  "op_1791665443198_c7da50d2-efdb-4a85-8872-8ee424398e69": {
+    "timestamp": 1791665452245,
+    "entity": "encounters"
+  },
+  "op_1791665443201_1daad193-b471-48b2-811c-347591261a30": {
+    "timestamp": 1791665453497,
+    "entity": "audit_logs"
+  },
+  "op_1791665455367_e07c0db1-5c1c-4fce-ba33-6a688cc8b63a": {
+    "timestamp": 1791665460478,
+    "entity": "encounters"
+  },
+  "op_1791665458495_f8cbe8b5-a6a0-4d61-8000-1e7a216b4ecf": {
+    "timestamp": 1791665478355,
+    "entity": "encounters"
+  },
+  "op_1791665460469_2ec88ad9-2b82-4d33-8c75-1e3519608b7b": {
+    "timestamp": 1791665478386,
+    "entity": "audit_logs"
+  },
+  "op_1791665651255_c97f4b35-d71b-4ec5-9289-4446e9a721a4": {
+    "timestamp": 1791665658687,
+    "entity": "audit_logs"
+  },
+  "op_1791665656571_78041994-1d28-4d87-af21-c1544c8804bc": {
+    "timestamp": 1791665672018,
+    "entity": "encounters"
+  },
+  "op_1791665665042_e407c52f-f47f-4b1e-82a6-e15c035fdbae": {
+    "timestamp": 1791665672738,
+    "entity": "audit_logs"
+  },
+  "op_1791665671797_8050019f-0de3-466c-8cf1-0fc391d170f6": {
+    "timestamp": 1791665678754,
+    "entity": "encounters"
+  },
+  "op_1791665673732_0a7d4194-c97b-4be8-be99-1cf05d7fd401": {
+    "timestamp": 1791665678973,
+    "entity": "audit_logs"
+  },
+  "op_1791665851456_shs8t": {
+    "timestamp": 1791665852299,
+    "entity": "appointments"
+  },
+  "op_1791665856751_6bmz6": {
+    "timestamp": 1791665857739,
+    "entity": "appointments"
+  },
+  "op_1791665859433_fc5a9966-f98b-4ec6-99d3-94d8e469f7b4": {
+    "timestamp": 1791665864867,
+    "entity": "encounters"
+  },
+  "op_1791665863282_72cd60d2-6f4a-480e-85ae-0470a01b7f53": {
+    "timestamp": 1791665867268,
+    "entity": "encounters"
+  },
+  "op_1791665859449_75cd8c83-c5ff-42ad-9f07-2271b4d5d52f": {
+    "timestamp": 1791665869529,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791665865165_9654d76e-cf10-4e4f-8bab-902cdf6dcaaf": {
+    "timestamp": 1791665871084,
+    "entity": "encounters"
+  },
+  "op_1791665865169_3956925a-f144-463b-89df-c9544c17cfb1": {
+    "timestamp": 1791665871167,
+    "entity": "audit_logs"
+  },
+  "op_1791666059087_885zx": {
+    "timestamp": 1791666061410,
+    "entity": "appointments"
+  },
+  "op_1791666067077_37ff96ae-c2ed-41e2-a827-a34594f2ffb3": {
+    "timestamp": 1791666067977,
+    "entity": "encounters"
+  },
+  "op_1791666067499_4dc7ccc8-94df-4f6e-9041-a1d29e5510c9": {
+    "timestamp": 1791666079064,
+    "entity": "audit_logs"
+  },
+  "op_1791666067495_6c8b39ee-0330-4f06-9781-78d9864d89b1": {
+    "timestamp": 1791666079101,
+    "entity": "encounters"
+  },
+  "op_1791669143415_mmqwp": {
+    "timestamp": 1791669143671,
+    "entity": "appointments"
+  },
+  "op_1791914859588_ffe3f4ca-5774-4805-ae0f-1cde6b5f3d93": {
+    "timestamp": 1791914896185,
+    "entity": "work_sessions"
+  },
+  "op_1791914859792_d30055a5-3754-4f3a-b748-214a7e4b6535": {
+    "timestamp": 1791914896247,
+    "entity": "work_sessions"
+  },
+  "op_1791914858685_996e9d4f-2993-41e2-9f66-64a656e81eb0": {
+    "timestamp": 1791914896278,
+    "entity": "transactions"
+  },
+  "op_1791914860303_e62fd3c9-4317-472b-95f9-acdc75596010": {
+    "timestamp": 1791914896309,
+    "entity": "pos_items"
+  },
+  "op_1791914858157_4836d03c-f8de-42b6-9a4f-5a84ca8138ba": {
+    "timestamp": 1791914896972,
+    "entity": "patients"
+  },
+  "op_1791914861639_30255a08-33d5-43d0-8193-e9a31222f515": {
+    "timestamp": 1791914897685,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791914862148_5fd60844-72b1-4c9e-beb4-098e51883e06": {
+    "timestamp": 1791914897710,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791914860307_c2282480-b041-4938-8a94-7f2f6ef55316": {
+    "timestamp": 1791914897785,
+    "entity": "pos_items"
+  },
+  "op_1791914861020_15fc475a-7ed9-4438-9928-548d83b4ca14": {
+    "timestamp": 1791914897813,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791991232777_bd4e83d4-b299-4895-95c4-268c2e4a2ab1": {
+    "timestamp": 1791991280762,
+    "entity": "clinical_documents"
+  },
+  "op_1791991233058_71f4cc26-40be-4216-99db-b65b82250a62": {
+    "timestamp": 1791991280810,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791991232458_5519704b-05bf-4979-a233-7173bc5d3b4f": {
+    "timestamp": 1791991280851,
+    "entity": "evolutions"
+  },
+  "op_1791991233363_e76c2c50-5b2a-4ad3-94a8-5e0803fe8e3a": {
+    "timestamp": 1791991280907,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791991232114_168c9fa3-db9e-4eee-833b-27bd3221b1a4": {
+    "timestamp": 1791991280944,
+    "entity": "audit_logs"
+  },
+  "op_1791991233823_6ed3997f-e710-48f6-ac9b-b620dd719a87": {
+    "timestamp": 1791991281542,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791991235072_52369958-53a7-493e-a382-e35af82ed9e8": {
+    "timestamp": 1791991281587,
+    "entity": "examiner_closures"
+  },
+  "op_1791991234696_764a441e-4ee0-4e57-97bb-bef09afbc6b9": {
+    "timestamp": 1791991281950,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791991270462_fe8fc62f-910c-46a6-aacd-615a823ad6a0": {
+    "timestamp": 1791991310194,
+    "entity": "episodes"
+  },
+  "op_1791991273091_9a4295d2-4c51-4703-9db0-070241d0d976": {
+    "timestamp": 1791991310225,
+    "entity": "prescriptions"
+  },
+  "op_1791991269620_efccff55-da17-4be0-843c-6f3cda11a69c": {
+    "timestamp": 1791991310400,
+    "entity": "patients"
+  },
+  "op_1791991271354_63356ad5-55ab-4e02-87d9-3f46a7ef3109": {
+    "timestamp": 1791991310809,
+    "entity": "appointments"
+  },
+  "op_1791991272709_f324c5bf-4dce-4875-a48d-d7b8beabd8eb": {
+    "timestamp": 1791991311444,
+    "entity": "encounters"
+  },
+  "op_1791991273508_cf460937-e27e-4ac7-8a29-a4a85106f340": {
+    "timestamp": 1791991311831,
+    "entity": "work_sessions"
+  },
+  "op_1791991273303_d9f43c07-4e0c-4e5f-a45a-f04930737758": {
+    "timestamp": 1791991311863,
+    "entity": "transactions"
+  },
+  "op_1791991274026_cd15d074-3ffe-4cda-86c8-87c5c8f8e2cf": {
+    "timestamp": 1791991311900,
+    "entity": "pos_items"
+  },
+  "op_1791991275267_6926e6b3-db1b-4317-ad87-83e57775cb21": {
+    "timestamp": 1791991311939,
+    "entity": "evolutions"
+  },
+  "op_1791991274856_e318e10b-c1ce-4b6f-aa27-904ff869b55c": {
+    "timestamp": 1791991312581,
+    "entity": "audit_logs"
+  },
+  "op_1791991275756_971927ef-b1fc-44d9-b3f5-74b472feaa96": {
+    "timestamp": 1791991312782,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791991275885_7b5c817a-eb70-45d0-8bbe-ba439644c318": {
+    "timestamp": 1791991312830,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791991276165_7a983e57-027b-476e-8fef-9049f7ffe03e": {
+    "timestamp": 1791991312880,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791991275553_670ae577-ea27-4d6d-8fbb-33c470c371d2": {
+    "timestamp": 1791991313062,
+    "entity": "clinical_documents"
+  },
+  "op_1791991276699_802225b1-53c4-40d4-976e-6bea724a5d43": {
+    "timestamp": 1791991313398,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791991221708_ca615318-23d7-4ebd-98ae-997d6b480039": {
+    "timestamp": 1791991313599,
+    "entity": "examiner_closures"
+  },
+  "op_1791991156687_d80931e3-ebf5-4c85-add6-cf21dde2935f": {
+    "timestamp": 1791991335799,
+    "entity": "patients"
+  },
+  "op_1791991160286_acf9e1c7-b493-444f-8290-4b68b4d97171": {
+    "timestamp": 1791991336203,
+    "entity": "prescriptions"
+  },
+  "op_1791991157013_82821fcd-4b42-4607-bb4d-0950b106ea9a": {
+    "timestamp": 1791991336246,
+    "entity": "episodes"
+  },
+  "op_1791991157487_bf9e5194-f50d-41de-acee-78840857a3c4": {
+    "timestamp": 1791991337056,
+    "entity": "appointments"
+  },
+  "op_1791991159663_0ad0c500-36a4-4341-85aa-a24d339829f0": {
+    "timestamp": 1791991337648,
+    "entity": "encounters"
+  },
+  "op_1791991160891_20df3efd-bee5-4725-91f0-bcb54ac1eeed": {
+    "timestamp": 1791991338051,
+    "entity": "transactions"
+  },
+  "op_1791991162307_ea3b9df6-673c-4904-ab11-7d6a9649435f": {
+    "timestamp": 1791991338083,
+    "entity": "evolutions"
+  },
+  "op_1791991161188_586c2dc5-4dc8-4329-a2ea-04ff0eea022f": {
+    "timestamp": 1791991338114,
+    "entity": "work_sessions"
+  },
+  "op_1791991161478_8069adcc-e048-48ea-bc61-767d735a9398": {
+    "timestamp": 1791991338152,
+    "entity": "pos_items"
+  },
+  "op_1791991162124_01b0ac4d-7d4d-4948-a01f-d3ac4541889c": {
+    "timestamp": 1791991338484,
+    "entity": "audit_logs"
+  },
+  "op_1791991162909_feecb047-b2dc-4d70-aa0a-37136492c41c": {
+    "timestamp": 1791991338789,
+    "entity": "examiner_special_periods"
+  },
+  "op_1791991163667_9827c8ad-d0bd-4e44-b091-b811fc45aebb": {
+    "timestamp": 1791991338869,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1791991162734_5cc8680f-eedb-4d96-a188-8aaef6da3b08": {
+    "timestamp": 1791991338912,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1791991162524_3280df88-1ed3-4266-a9ff-53bafa563d08": {
+    "timestamp": 1791991338946,
+    "entity": "clinical_documents"
+  },
+  "op_1791991164376_cd74c461-b1a6-48f9-bc7d-7b7b5762deb1": {
+    "timestamp": 1791991339404,
+    "entity": "examiner_remunerations"
+  },
+  "op_1791991164553_643fdfb3-1776-4a33-afe1-9f4badc9146b": {
+    "timestamp": 1791991339918,
+    "entity": "examiner_closures"
+  },
+  "op_1791991228067_4490768d-b2a8-4f69-8e01-867a7cec91ed": {
+    "timestamp": 1791991340629,
+    "entity": "episodes"
+  },
+  "op_1791991227218_aab1f3d5-ae6b-4b76-9f86-880988af6fb1": {
+    "timestamp": 1791991340743,
+    "entity": "patients"
+  },
+  "op_1791991228680_10f9eb33-cb31-4b0a-a9cc-0b5016cc9999": {
+    "timestamp": 1791991341260,
+    "entity": "appointments"
+  },
+  "op_1791991229986_c3e099ea-8408-4803-bd50-f41b15103f8f": {
+    "timestamp": 1791991341600,
+    "entity": "encounters"
+  },
+  "op_1791991230198_cd46f011-c86b-4724-8463-0fd781e55fe9": {
+    "timestamp": 1791991341957,
+    "entity": "prescriptions"
+  },
+  "op_1791991231212_064ae3ab-2586-48fd-9969-a44b7e59ef7e": {
+    "timestamp": 1791991341990,
+    "entity": "work_sessions"
+  },
+  "op_1791991231520_0adaf6a4-cdb1-4c06-8bb7-72b36b165a8d": {
+    "timestamp": 1791991342026,
+    "entity": "pos_items"
+  },
+  "op_1791991230933_b2eac73d-cc4f-4a64-b188-7c91595c915b": {
+    "timestamp": 1791991342079,
+    "entity": "transactions"
+  },
+  "op_1791992047223_926p1": {
+    "timestamp": 1791992047971,
+    "entity": "appointments"
+  },
+  "op_1791992047211_q4ulr": {
+    "timestamp": 1791992047983,
+    "entity": "patients"
+  },
+  "op_1791992142906_d18b8240-79f6-4b44-9a78-596bc8422edd": {
+    "timestamp": 1791992145098,
+    "entity": "encounters"
+  },
+  "op_1791992144198_3043a2fe-2c38-46be-af70-c1136174fcbd": {
+    "timestamp": 1791992151453,
+    "entity": "encounters"
+  },
+  "op_1791992319002_60449a1e-b88a-44bf-a2dc-8cc46e75440b": {
+    "timestamp": 1791992322339,
+    "entity": "encounters"
+  },
+  "op_1791992320185_11c533cf-5048-4318-ba48-229365461504": {
+    "timestamp": 1791992331865,
+    "entity": "encounters"
+  },
+  "op_1791992320189_a8767a31-533d-47c9-a039-8f4ca3f4e25e": {
+    "timestamp": 1791992331902,
+    "entity": "audit_logs"
+  },
+  "op_1791992486208_3sc3u": {
+    "timestamp": 1791992486880,
+    "entity": "appointments"
+  },
+  "op_1791992498386_gf2e8": {
+    "timestamp": 1791992499056,
+    "entity": "appointments"
+  },
+  "op_1791992620526_gr3th": {
+    "timestamp": 1791992621215,
+    "entity": "patients"
+  },
+  "op_1791992620538_0uowe": {
+    "timestamp": 1791992621223,
+    "entity": "appointments"
+  },
+  "op_1791992622788_jsmok": {
+    "timestamp": 1791992623139,
+    "entity": "appointments"
+  },
+  "op_1791992650350_b8bcf74e-39e3-4317-bdd1-0424fed062d8": {
+    "timestamp": 1791992657189,
+    "entity": "encounters"
+  },
+  "op_1791992655470_34d9275c-f554-4355-8f8c-4ba85382fc66": {
+    "timestamp": 1791992664648,
+    "entity": "audit_logs"
+  },
+  "op_1791992656230_4559ed7e-5038-4855-8cda-23627a841c9d": {
+    "timestamp": 1791992664727,
+    "entity": "encounters"
+  },
+  "op_1791992705039_02035aba-60e6-4e28-b271-f07986b670da": {
+    "timestamp": 1791992713085,
+    "entity": "audit_logs"
+  },
+  "op_1791992711791_75135083-a42d-4e92-a74e-f439280dbf4a": {
+    "timestamp": 1791992723466,
+    "entity": "audit_logs"
+  },
+  "op_1791992711789_a9c0575e-f898-435f-82bf-43a41a5a5aee": {
+    "timestamp": 1791992723506,
+    "entity": "encounters"
+  },
+  "op_1791992799273_b3322014-2e94-4d41-97cf-628f197bd071": {
+    "timestamp": 1791992806172,
+    "entity": "encounters"
+  },
+  "op_1791992805609_43b51e26-666c-42e4-9581-9673ce992962": {
+    "timestamp": 1791992814582,
+    "entity": "audit_logs"
+  },
+  "op_1791992805606_300efd57-154d-46f3-9a04-16b6daaba2fc": {
+    "timestamp": 1791992814676,
+    "entity": "encounters"
+  },
+  "op_1791992835356_b587ef5d-6533-4aea-afe8-dcf0087515cc": {
+    "timestamp": 1791992840095,
+    "entity": "encounters"
+  },
+  "op_1791992837311_193b7ea2-4354-4dab-83c8-f81a015674ee": {
+    "timestamp": 1791992871194,
+    "entity": "audit_logs"
+  },
+  "op_1791992837309_f53d29af-581e-463c-85ae-98ad5f5c867d": {
+    "timestamp": 1791992871235,
+    "entity": "encounters"
+  },
+  "op_1791993163786_xuiqj": {
+    "timestamp": 1791993164475,
+    "entity": "appointments"
+  },
+  "op_1791913798928_b6589df7-096b-4a50-82ef-6aba67a2a3c9": {
+    "timestamp": 1791994429090,
+    "entity": "patients"
+  },
+  "op_1791914299127_37df8b4e-0996-4dae-83d4-de8d5d2e7059": {
+    "timestamp": 1791994429100,
+    "entity": "appointments"
+  },
+  "op_1791914385453_19a340b5-8617-4429-b688-5c0fba7d4f24": {
+    "timestamp": 1791994429115,
+    "entity": "appointments"
+  },
+  "op_1791914385839_7863ef7f-d73e-4947-9694-8069dba070cc": {
+    "timestamp": 1791994429123,
+    "entity": "patients"
+  },
+  "op_1792008785396_ncbeb": {
+    "timestamp": 1792008785794,
+    "entity": "patients"
+  },
+  "op_1792008785410_5fdhb": {
+    "timestamp": 1792008785834,
+    "entity": "appointments"
+  },
+  "op_1792008789818_8f19i": {
+    "timestamp": 1792008790701,
+    "entity": "appointments"
+  },
+  "op_1792009027885_20ab58b3-bc4a-4ce1-8f93-04e98c8dc660": {
+    "timestamp": 1792009036406,
+    "entity": "encounters"
+  },
+  "op_1792009033649_855e929a-98e5-43d7-89ae-41c2d9d432b5": {
+    "timestamp": 1792009041419,
+    "entity": "audit_logs"
+  },
+  "op_1792009037183_6827e0b8-38db-4b5e-a4b6-1fe86ae2e572": {
+    "timestamp": 1792009041461,
+    "entity": "encounters"
+  },
+  "op_1792009039546_c78c566d-4fea-482e-9b82-354df6a1200a": {
+    "timestamp": 1792009051133,
+    "entity": "audit_logs"
+  },
+  "op_1792009039543_140820db-33b1-40fb-a41b-77dd05a167ff": {
+    "timestamp": 1792009051237,
+    "entity": "encounters"
+  },
+  "op_1792010157488_wqpzv": {
+    "timestamp": 1792010158060,
+    "entity": "appointments"
+  },
+  "op_1792010439503_45rss": {
+    "timestamp": 1792010440175,
+    "entity": "patients"
+  },
+  "op_1792010439519_ntf3b": {
+    "timestamp": 1792010441825,
+    "entity": "appointments"
+  },
+  "op_1792010462234_euhzq": {
+    "timestamp": 1792010462525,
+    "entity": "appointments"
+  },
+  "op_1792010542876_5ee9209d-8ccd-4790-b197-ca6321fb1f9d": {
+    "timestamp": 1792010549266,
+    "entity": "encounters"
+  },
+  "op_1792010543646_6e246e5a-bed8-4528-88af-b8dc32db5285": {
+    "timestamp": 1792010549305,
+    "entity": "encounters"
+  },
+  "op_1792010548356_39d03a15-684e-4c75-a2d3-80c27547b447": {
+    "timestamp": 1792010579825,
+    "entity": "audit_logs"
+  },
+  "op_1792010549426_722751fa-94e5-434b-82b1-cb41e722a0b5": {
+    "timestamp": 1792010579884,
+    "entity": "encounters"
+  },
+  "op_1792010945995_32493686-a7c9-432f-954a-0cd9808a84df": {
+    "timestamp": 1792010951937,
+    "entity": "encounters"
+  },
+  "op_1792010948939_9b7981c5-09bc-4eed-ba26-45bfbd7cc187": {
+    "timestamp": 1792010970863,
+    "entity": "audit_logs"
+  },
+  "op_1792010948936_d20b83a9-fc03-432d-950c-249b032ed8ef": {
+    "timestamp": 1792010970950,
+    "entity": "encounters"
+  },
+  "op_1792011079633_daac18d6-b984-4ab6-86fa-02ffe6a8557f": {
+    "timestamp": 1792011084538,
+    "entity": "encounters"
+  },
+  "op_1792011083495_34c7f93a-1622-417e-b7b6-140b9772a57e": {
+    "timestamp": 1792011085438,
+    "entity": "encounters"
+  },
+  "op_1792011083570_3ec03fd2-3671-40ea-a6b0-7f1abcb6df0e": {
+    "timestamp": 1792011091186,
+    "entity": "audit_logs"
+  },
+  "op_1792011083568_52c923b6-70a4-4e45-99c2-a373a039affc": {
+    "timestamp": 1792011091286,
+    "entity": "encounters"
+  },
+  "op_1792011099024_ewjyp": {
+    "timestamp": 1792011099972,
+    "entity": "appointments"
+  },
+  "op_1792011411942_ghtbg": {
+    "timestamp": 1792011412884,
+    "entity": "appointments"
+  },
+  "op_1792011419931_8c6598ac-c368-4744-95da-27a66dda45b2": {
+    "timestamp": 1792011422730,
+    "entity": "encounters"
+  },
+  "op_1792011419941_9048a3be-bf51-41d7-90f0-4d2230d44649": {
+    "timestamp": 1792011451607,
+    "entity": "appointments"
+  },
+  "op_1792011420367_88085e82-db8d-4ca4-af13-db0061e59e2e": {
+    "timestamp": 1792011453086,
+    "entity": "audit_logs"
+  },
+  "op_1792011420362_bd5f62fe-b139-47db-95b3-160d9d189be8": {
+    "timestamp": 1792011453157,
+    "entity": "encounters"
+  },
+  "op_1792014532732_oedo0": {
+    "timestamp": 1792014533581,
+    "entity": "patients"
+  },
+  "op_1792014532743_47wi1": {
+    "timestamp": 1792014533648,
+    "entity": "appointments"
+  },
+  "op_1792014535442_b8yrh": {
+    "timestamp": 1792014536101,
+    "entity": "appointments"
+  },
+  "op_1792014540749_2ec2ced1-7eea-4567-9ca2-4bad8e20ccc4": {
+    "timestamp": 1792014546375,
+    "entity": "audit_logs"
+  },
+  "op_1792014541059_a3361d2d-70e1-4f40-80dd-296ab5dcc871": {
+    "timestamp": 1792014558978,
+    "entity": "audit_logs"
+  },
+  "op_1792014541052_6ef95c07-5f97-490b-8538-cbbd0556943a": {
+    "timestamp": 1792014559074,
+    "entity": "encounters"
+  },
+  "op_1792014554693_728ba53a-cb8e-4738-a640-f6eae33b1024": {
+    "timestamp": 1792014584675,
+    "entity": "audit_logs"
+  },
+  "op_1792014554688_b00d7565-61b4-465b-ba9f-a76c964538b5": {
+    "timestamp": 1792014584718,
+    "entity": "encounters"
+  },
+  "op_1792014879255_tk7lb": {
+    "timestamp": 1792014880579,
+    "entity": "appointments"
+  },
+  "op_1792014887227_521788fc-d75a-4973-9e9f-3a4dbe497e07": {
+    "timestamp": 1792014889857,
+    "entity": "encounters"
+  },
+  "op_1792014887261_27e06ae6-935c-4066-bb9a-d9d1405925fe": {
+    "timestamp": 1792014914602,
+    "entity": "appointments"
+  },
+  "op_1792014887247_43a1830f-98fa-40ee-b86f-6b8643593cb8": {
+    "timestamp": 1792014914639,
+    "entity": "examiner_remunerations"
+  },
+  "op_1792014887680_cfe55535-f593-4ee4-914a-1cfdab840695": {
+    "timestamp": 1792014915628,
+    "entity": "audit_logs"
+  },
+  "op_1792014887675_d0d8ef72-2ab8-4000-a1f9-af3f91003bb3": {
+    "timestamp": 1792014915667,
+    "entity": "encounters"
+  },
+  "op_1792073205719_pbqkr": {
+    "timestamp": 1792073206118,
+    "entity": "patients"
+  },
+  "op_1792073205731_u1jzc": {
+    "timestamp": 1792073206132,
+    "entity": "appointments"
+  },
+  "op_1792073230581_nz5hu": {
+    "timestamp": 1792073230788,
+    "entity": "appointments"
+  },
+  "op_1792073294837_76453202-7788-4289-8d92-d2d66d4747a1": {
+    "timestamp": 1792073302871,
+    "entity": "encounters"
+  },
+  "op_1792073301676_1994e231-5e75-48e4-9e9b-68a3eafb1aa7": {
+    "timestamp": 1792073309497,
+    "entity": "audit_logs"
+  },
+  "op_1792073301672_c546ed19-9501-4efb-ae73-c8a73007b0af": {
+    "timestamp": 1792073309681,
+    "entity": "encounters"
+  },
+  "op_1792073838910_mmirx": {
+    "timestamp": 1792073839568,
+    "entity": "appointments"
+  },
+  "op_1792073892162_s3ydg": {
+    "timestamp": 1792073893454,
+    "entity": "appointments"
+  },
+  "op_1792073963077_7yrif": {
+    "timestamp": 1792073964597,
+    "entity": "patients"
+  },
+  "op_1792073963089_ndo9t": {
+    "timestamp": 1792073964620,
+    "entity": "appointments"
+  },
+  "op_1792073968878_c18os": {
+    "timestamp": 1792073969312,
+    "entity": "appointments"
+  },
+  "op_1792074003865_e1209b1f-5437-4249-8630-c6bf9198f0a9": {
+    "timestamp": 1792074007156,
+    "entity": "encounters"
+  },
+  "op_1792074004840_9afbef79-1cc9-49c7-bd19-f1958c05bbcb": {
+    "timestamp": 1792074028622,
+    "entity": "audit_logs"
+  },
+  "op_1792074005806_faa8a19e-2b95-49d9-abc2-9c53ae99456e": {
+    "timestamp": 1792074028719,
+    "entity": "encounters"
+  },
+  "op_1792074409316_hkzxv": {
+    "timestamp": 1792074409938,
+    "entity": "appointments"
+  },
+  "op_1792074414069_f41c510e-720d-4379-8982-71bc73f2ba5b": {
+    "timestamp": 1792074418486,
+    "entity": "encounters"
+  },
+  "op_1792074417759_172dd5b1-4e61-40f4-99cb-a7f438a1c62b": {
+    "timestamp": 1792074448879,
+    "entity": "audit_logs"
+  },
+  "op_1792074417750_c6994dc2-3023-4ea6-8cc5-e7029882dec3": {
+    "timestamp": 1792074448917,
+    "entity": "encounters"
+  },
+  "op_1792075724585_kv02v": {
+    "timestamp": 1792075725071,
+    "entity": "appointments"
+  },
+  "op_1792091507731_d3b81186-d7fc-490d-965f-c10315feed98": {
+    "timestamp": 1792091531090,
+    "entity": "patients"
+  },
+  "op_1792091507892_d1f48377-9a5c-44d8-bd1a-012cf9be30fe": {
+    "timestamp": 1792091531129,
+    "entity": "episodes"
+  },
+  "op_1792091508028_3e71e4bf-1c72-484a-9083-6c15bb928a07": {
+    "timestamp": 1792091531166,
+    "entity": "appointments"
+  },
+  "op_1792091508351_da8f95ef-f129-4dad-a7ec-794b69f42bab": {
+    "timestamp": 1792091531211,
+    "entity": "prescriptions"
+  },
+  "op_1792091508235_e9805610-2d57-41cb-8a0c-ec15ae1b2e7d": {
+    "timestamp": 1792091531261,
+    "entity": "encounters"
+  },
+  "op_1792091508462_76e72b3d-3c19-41f7-864c-18fd3f06681d": {
+    "timestamp": 1792091531450,
+    "entity": "transactions"
+  },
+  "op_1792091509010_063251f5-5ab4-49f4-b913-531fb9a48ff3": {
+    "timestamp": 1792091531487,
+    "entity": "evolutions"
+  },
+  "op_1792091508736_35e0dc38-39be-473f-980b-1ee7f89369e5": {
+    "timestamp": 1792091531521,
+    "entity": "pos_items"
+  },
+  "op_1792091508544_916c6a5d-c92c-4169-b899-ea7b3789ced5": {
+    "timestamp": 1792091531558,
+    "entity": "work_sessions"
+  },
+  "op_1792091508904_2fbfc21a-e89a-4ae3-b5d4-ae2542771286": {
+    "timestamp": 1792091531646,
+    "entity": "audit_logs"
+  },
+  "op_1792091509111_04b30d66-64b7-4aef-9c09-47f6b2ec8859": {
+    "timestamp": 1792091531792,
+    "entity": "clinical_documents"
+  },
+  "op_1792091509296_ca831ee5-abe2-4afb-bcde-6c496bd55694": {
+    "timestamp": 1792091531841,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1792091509530_509f43de-344c-4bff-8526-7197d7f5d883": {
+    "timestamp": 1792091531883,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1792091509446_ad590450-274a-4d7e-8f1c-e364ae7f0550": {
+    "timestamp": 1792091531926,
+    "entity": "examiner_special_periods"
+  },
+  "op_1792091509642_2a3f021d-7975-419f-8f95-c0f3c51ae6fe": {
+    "timestamp": 1792091531973,
+    "entity": "examiner_remunerations"
+  },
+  "op_1792091509831_7651600e-a710-4d6f-98c1-12a7bed0b901": {
+    "timestamp": 1792091532114,
+    "entity": "examiner_closures"
+  },
+  "op_1792091513926_d0a21840-0876-497f-af3a-44123d963c34": {
+    "timestamp": 1792091532158,
+    "entity": "patients"
+  },
+  "op_1792091514081_edb5442a-5ad1-40cd-8241-a556e975ca32": {
+    "timestamp": 1792091532196,
+    "entity": "episodes"
+  },
+  "op_1792091514191_7bbbc542-c1ec-4677-aa2c-8ad17320116e": {
+    "timestamp": 1792091532241,
+    "entity": "appointments"
+  },
+  "op_1792091514443_567e120b-3b61-4796-b9a9-e9351cd2c08d": {
+    "timestamp": 1792091532290,
+    "entity": "encounters"
+  },
+  "op_1792091514522_fdfb3e83-ce37-45f6-98cf-b804bb99fa68": {
+    "timestamp": 1792091532415,
+    "entity": "prescriptions"
+  },
+  "op_1792091514627_8e490a7a-dffe-484d-b784-415071442f13": {
+    "timestamp": 1792091532459,
+    "entity": "transactions"
+  },
+  "op_1792091514805_ba62c5db-99d7-46d6-bd9b-b1cc842c0488": {
+    "timestamp": 1792091532498,
+    "entity": "pos_items"
+  },
+  "op_1792091514723_002363f8-e3a2-4cd2-a285-a1f122635602": {
+    "timestamp": 1792091532533,
+    "entity": "work_sessions"
+  },
+  "op_1792091515145_7f68853f-51b0-433e-9fa1-2200662ceeb9": {
+    "timestamp": 1792091532576,
+    "entity": "audit_logs"
+  },
+  "op_1792091515446_2e0418e8-e18f-4e1d-98aa-67245760248f": {
+    "timestamp": 1792091532700,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1792091515245_0e3f2767-bc8d-4a19-9a6d-53d3ac9c0922": {
+    "timestamp": 1792091532752,
+    "entity": "evolutions"
+  },
+  "op_1792091515344_9a8eca46-fc09-469a-bbed-7e8225fa1a37": {
+    "timestamp": 1792091532800,
+    "entity": "clinical_documents"
+  },
+  "op_1792091515556_eb4f049a-00ec-4dc2-a01c-0144cb5d0f9a": {
+    "timestamp": 1792091532848,
+    "entity": "examiner_special_periods"
+  },
+  "op_1792091515641_e07ff6b6-4187-4e62-8bde-3c415c18850a": {
+    "timestamp": 1792091532894,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1792091516041_551f7e02-d194-420e-b988-26f697585f35": {
+    "timestamp": 1792091533021,
+    "entity": "examiner_closures"
+  },
+  "op_1792091515789_e3d3a73c-9097-4e9e-947f-6ac9ad31655b": {
+    "timestamp": 1792091533066,
+    "entity": "examiner_remunerations"
+  },
+  "op_1792091892472_2e3651d7-5b22-4e07-a45e-2c2a9cbe9f1e": {
+    "timestamp": 1792091896751,
+    "entity": "patients"
+  },
+  "op_1792091892627_3750f9e0-5270-4c6b-be19-afeb18eed3b9": {
+    "timestamp": 1792091896783,
+    "entity": "episodes"
+  },
+  "op_1792091893241_333c8a52-af53-471f-af43-cd95e76c9371": {
+    "timestamp": 1792091896816,
+    "entity": "prescriptions"
+  },
+  "op_1792091892785_482e0318-c060-467d-bebb-e2ed5005911e": {
+    "timestamp": 1792091896855,
+    "entity": "appointments"
+  },
+  "op_1792091893068_ed0c9e37-38f4-4d07-b7bb-5764bdddf2de": {
+    "timestamp": 1792091896895,
+    "entity": "encounters"
+  },
+  "op_1792091893587_f3ceab08-2c4b-4edd-9c61-76a49c9da8e8": {
+    "timestamp": 1792091897059,
+    "entity": "pos_items"
+  },
+  "op_1792091893359_e850d4a1-7ed7-483a-bac9-5e8868d536fa": {
+    "timestamp": 1792091897107,
+    "entity": "transactions"
+  },
+  "op_1792091893502_43c532a8-7d1b-429e-9b15-2de59d813e65": {
+    "timestamp": 1792091897171,
+    "entity": "work_sessions"
+  },
+  "op_1792091894164_e6cba1fb-cd7b-46ef-b300-0925e88679ed": {
+    "timestamp": 1792091897210,
+    "entity": "evolutions"
+  },
+  "op_1792091893992_51089f91-ca4d-42e5-9f39-b7469dae9e0a": {
+    "timestamp": 1792091897273,
+    "entity": "audit_logs"
+  },
+  "op_1792091894601_5f83bd7a-22fd-450c-9306-a0eebf925ba5": {
+    "timestamp": 1792091897389,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1792091894522_e8a05ea5-f2b4-497d-8272-0633b93e1c7d": {
+    "timestamp": 1792091897422,
+    "entity": "examiner_special_periods"
+  },
+  "op_1792091894275_934238f3-a29a-4e5e-bfa1-9aff889d3cd0": {
+    "timestamp": 1792091897454,
+    "entity": "clinical_documents"
+  },
+  "op_1792091894392_9e15a8a2-3ec3-47b6-87c3-80a91c7fb9f6": {
+    "timestamp": 1792091897499,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1792091894877_ed1c2966-b9ae-4a96-843b-9b3d289cfcca": {
+    "timestamp": 1792091897539,
+    "entity": "examiner_remunerations"
+  },
+  "op_1792091894974_e818a5a2-e270-44e4-8102-0a99484e8644": {
+    "timestamp": 1792091897651,
+    "entity": "examiner_closures"
+  },
+  "op_1792088653520_59971fe5-7ba5-416c-a139-ae63a26f8f81": {
+    "timestamp": 1792092313379,
+    "entity": "examiner_special_periods"
+  },
+  "op_1792088653618_87cb1e51-33b9-49cf-946c-093620405d30": {
+    "timestamp": 1792092313409,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1792088653423_793e6383-c845-47a1-8ae6-0bd8cd9825a2": {
+    "timestamp": 1792092313448,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1792088653324_0931b398-cad5-43af-a2f6-fddeefe18271": {
+    "timestamp": 1792092313475,
+    "entity": "clinical_documents"
+  },
+  "op_1792088652624_5c724de3-8e11-4320-9663-7c424755a717": {
+    "timestamp": 1792092313501,
+    "entity": "prescriptions"
+  },
+  "op_1792088652724_c3f2ec68-b1d5-45dc-a812-34b0f5393d19": {
+    "timestamp": 1792092313677,
+    "entity": "transactions"
+  },
+  "op_1792088652964_45ab955c-d25a-4e72-bc90-947a3b5ca5dd": {
+    "timestamp": 1792092313705,
+    "entity": "pos_items"
+  },
+  "op_1792088653101_1c77ab2e-e431-48a7-8f91-aaeb33ee1a04": {
+    "timestamp": 1792092313747,
+    "entity": "audit_logs"
+  },
+  "op_1792088653217_ae734cf6-6230-47b0-a0b8-89ce955d2b4f": {
+    "timestamp": 1792092313788,
+    "entity": "evolutions"
+  },
+  "op_1792088652058_55ae377c-2529-46e9-823a-c19dea721be4": {
+    "timestamp": 1792092313826,
+    "entity": "patients"
+  },
+  "op_1792088652259_e47e6128-ee00-4720-85c4-83d4d80bf060": {
+    "timestamp": 1792092314017,
+    "entity": "episodes"
+  },
+  "op_1792088652373_8a367ef9-57e8-4626-9bd8-52e3669eee75": {
+    "timestamp": 1792092314059,
+    "entity": "appointments"
+  },
+  "op_1792088653815_10f6cf48-f504-4017-987e-8fd9e71bd9de": {
+    "timestamp": 1792092314090,
+    "entity": "examiner_closures"
+  },
+  "op_1792088652863_d63670e3-fb77-4ff6-a2d2-b7e4f8f5557b": {
+    "timestamp": 1792092314121,
+    "entity": "work_sessions"
+  },
+  "op_1792088652522_65027ef8-106b-4a28-a3d5-70db430c14ad": {
+    "timestamp": 1792092314161,
+    "entity": "encounters"
+  },
+  "op_1791997694230_2e191cef-872f-4d45-9503-7a58cd2fc5a0": {
+    "timestamp": 1792092316420,
+    "entity": "patients"
+  },
+  "op_1792162175447_6b05b6db-9195-4513-a167-c4463d4167df": {
+    "timestamp": 1792162227548,
+    "entity": "patients"
+  },
+  "op_1792162175661_c3aa19a0-5cd2-4eac-a93e-d5056e4d3f79": {
+    "timestamp": 1792162227632,
+    "entity": "episodes"
+  },
+  "op_1792162176178_66f21610-2e88-4a5f-a42e-d55e638b528f": {
+    "timestamp": 1792162227701,
+    "entity": "prescriptions"
+  },
+  "op_1792162175849_099189b4-6a38-4e74-be3a-c3e3aeca9c21": {
+    "timestamp": 1792162227777,
+    "entity": "appointments"
+  },
+  "op_1792162176045_6c7a6eb8-89c5-4761-99f5-0df3d87799b7": {
+    "timestamp": 1792162227870,
+    "entity": "encounters"
+  },
+  "op_1792162176304_517cfce6-e910-4634-b016-3970428b6934": {
+    "timestamp": 1792162228085,
+    "entity": "transactions"
+  },
+  "op_1792162176546_797a796b-6591-4d6e-9ab4-0f8589d2b94f": {
+    "timestamp": 1792162228145,
+    "entity": "work_sessions"
+  },
+  "op_1792162176710_d5237019-8fa6-4427-8c4a-5f446c4d4e6e": {
+    "timestamp": 1792162228194,
+    "entity": "pos_items"
+  },
+  "op_1792162177190_de586fd9-a6e4-416d-a374-a378f03b77ae": {
+    "timestamp": 1792162228238,
+    "entity": "evolutions"
+  },
+  "op_1792162177017_eecaa591-0dec-4514-b4ed-385d00f0d84b": {
+    "timestamp": 1792162228314,
+    "entity": "audit_logs"
+  },
+  "op_1792162177336_44d6b24d-5bd0-4a5f-8eb7-c84ee200e8e6": {
+    "timestamp": 1792162228585,
+    "entity": "clinical_documents"
+  },
+  "op_1792162177492_bd7677f8-8dc6-4ac6-aab6-ec622e339d3a": {
+    "timestamp": 1792162228670,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1792162177761_5cab876c-ccee-461a-a477-bb3da21ede9c": {
+    "timestamp": 1792162228740,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1792162177626_3651d17d-bf99-49ca-8d43-01c1f62c8e65": {
+    "timestamp": 1792162228781,
+    "entity": "examiner_special_periods"
+  },
+  "op_1792162178045_31bdb6db-344c-476f-a6c1-01def015701f": {
+    "timestamp": 1792162228898,
+    "entity": "examiner_remunerations"
+  },
+  "op_1792162178249_05e5f37e-49f9-4232-8b22-683942ff0e04": {
+    "timestamp": 1792162229126,
+    "entity": "examiner_closures"
+  },
+  "op_1792101047655_cdd80239-28f1-4123-b125-92ac90ae6031": {
+    "timestamp": 1792162250752,
+    "entity": "episodes"
+  },
+  "op_1792101050316_e23696e7-b3f7-4009-b2ae-4ffa42a0553f": {
+    "timestamp": 1792162250800,
+    "entity": "prescriptions"
+  },
+  "op_1792101050809_9b4b5f90-e00e-45ad-bac9-2c64a64824ee": {
+    "timestamp": 1792162250836,
+    "entity": "transactions"
+  },
+  "op_1792101050009_c9954254-1411-4d7d-bfb3-f11320a5e5fd": {
+    "timestamp": 1792162250893,
+    "entity": "encounters"
+  },
+  "op_1792101048375_658f86df-063c-4d01-a773-4fe472b7f12e": {
+    "timestamp": 1792162250939,
+    "entity": "appointments"
+  },
+  "op_1792101051261_830050ce-e3ce-49c5-bc8e-d128c5e65d44": {
+    "timestamp": 1792162251203,
+    "entity": "work_sessions"
+  },
+  "op_1792101051649_575e9386-d453-4608-b63a-0c613a900d7b": {
+    "timestamp": 1792162251236,
+    "entity": "pos_items"
+  },
+  "op_1792101054131_e376c47f-6bd9-449b-957f-08d593b4fce0": {
+    "timestamp": 1792162251269,
+    "entity": "evolutions"
+  },
+  "op_1792101054415_1265eeec-c289-47f4-ae04-e0d0c3cd4fb1": {
+    "timestamp": 1792162251302,
+    "entity": "clinical_documents"
+  },
+  "op_1792101053712_f876c31a-bb49-4ec3-abff-a6acebce7f25": {
+    "timestamp": 1792162251343,
+    "entity": "audit_logs"
+  },
+  "op_1792101054720_74277d5f-be1c-4df4-b74a-eabf4fb9379e": {
+    "timestamp": 1792162251684,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1792101055343_6d1b0532-b5e1-4613-8e62-7172708a5ea3": {
+    "timestamp": 1792162251729,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1792101056698_a3bb350f-02b5-4396-b68f-f257ad8cc912": {
+    "timestamp": 1792162251793,
+    "entity": "examiner_closures"
+  },
+  "op_1792101055030_1ce4585d-78f8-4c72-8c1a-761dcbaf07c6": {
+    "timestamp": 1792162251836,
+    "entity": "examiner_special_periods"
+  },
+  "op_1792101056082_0a92c963-7155-4500-b36b-56c0d5165d9c": {
+    "timestamp": 1792162251913,
+    "entity": "examiner_remunerations"
+  },
+  "op_1792101097809_18c5c350-3279-44fd-be71-2165cda88943": {
+    "timestamp": 1792162252188,
+    "entity": "episodes"
+  },
+  "op_1792101095189_69d71919-3873-4a5a-a80b-d023469b7eb2": {
+    "timestamp": 1792162252236,
+    "entity": "patients"
+  },
+  "op_1792101098832_736fe104-2a83-4df8-be11-dd2962ef2395": {
+    "timestamp": 1792162252314,
+    "entity": "prescriptions"
+  },
+  "op_1792101098178_9497d733-fb39-4452-9ad1-f0299a26a29c": {
+    "timestamp": 1792162252371,
+    "entity": "appointments"
+  },
+  "op_1792101098622_e8953c14-cb0f-4f7f-9603-7dc5086d72c8": {
+    "timestamp": 1792162252442,
+    "entity": "encounters"
+  },
+  "op_1792101099022_cb9d9c51-ff96-4506-8c58-7a531f61e305": {
+    "timestamp": 1792162252711,
+    "entity": "transactions"
+  },
+  "op_1792101099290_408b1152-cda1-44e6-bf55-3828ba3d6c8c": {
+    "timestamp": 1792162252751,
+    "entity": "work_sessions"
+  },
+  "op_1792101099498_1b52fbeb-9ca7-436a-9f07-6648e5f9eb85": {
+    "timestamp": 1792162252789,
+    "entity": "pos_items"
+  },
+  "op_1792101099927_253caa69-63bb-45f1-8afd-24b7cc06bd0b": {
+    "timestamp": 1792162252832,
+    "entity": "evolutions"
+  },
+  "op_1792101099731_ba381550-5ae7-490c-8b5f-53f8fe6b0bb7": {
+    "timestamp": 1792162252872,
+    "entity": "audit_logs"
+  },
+  "op_1792101100069_ca1e26d6-e1c3-41e8-b4c6-936efb1ef68d": {
+    "timestamp": 1792162253134,
+    "entity": "clinical_documents"
+  },
+  "op_1792101100877_4dda0079-3eec-43c1-8114-312476482b61": {
+    "timestamp": 1792162253172,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1792101100497_abbbdde8-bc0b-4275-8bba-29a1a43548d9": {
+    "timestamp": 1792162253217,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1792101100667_40198323-6d73-4322-8022-df5016779731": {
+    "timestamp": 1792162253272,
+    "entity": "examiner_special_periods"
+  },
+  "op_1792101101353_0d2c7e97-a8fa-40b7-ba67-0a1f50bc3879": {
+    "timestamp": 1792162253331,
+    "entity": "examiner_remunerations"
+  },
+  "op_1792162132031_06da2136-3c36-40a4-b090-a2da68d2a61a": {
+    "timestamp": 1792162253638,
+    "entity": "patients"
+  },
+  "op_1792101104136_1b39e49c-a927-4b51-9c90-d4e1df9da99f": {
+    "timestamp": 1792162253704,
+    "entity": "examiner_closures"
+  },
+  "op_1792162132297_fbaf142b-58d9-47e9-9c72-2cb7d094b9a7": {
+    "timestamp": 1792162253770,
+    "entity": "episodes"
+  },
+  "op_1792162132642_d0e8264c-7b93-444f-8f8d-241e75171e88": {
+    "timestamp": 1792162253828,
+    "entity": "appointments"
+  },
+  "op_1792162133024_864aa894-119e-4eef-9a7a-a273a9d50600": {
+    "timestamp": 1792162253894,
+    "entity": "encounters"
+  },
+  "op_1792162133264_807fefc5-60b2-4dba-9860-47d41e48d2d1": {
+    "timestamp": 1792162254185,
+    "entity": "prescriptions"
+  },
+  "op_1792162133491_5a273c80-b088-472a-a57d-b478f7a5fb31": {
+    "timestamp": 1792162254248,
+    "entity": "transactions"
+  },
+  "op_1792162133980_861e7ed3-8cd9-428c-a1ea-8249b83ba5ad": {
+    "timestamp": 1792162254311,
+    "entity": "pos_items"
+  },
+  "op_1792162133716_8c9ef666-1eef-4e4c-b61b-106b57a33733": {
+    "timestamp": 1792162254365,
+    "entity": "work_sessions"
+  },
+  "op_1792162134328_e24d0ee0-28cc-4bc3-bb2c-7999a23eb5ad": {
+    "timestamp": 1792162254440,
+    "entity": "audit_logs"
+  },
+  "op_1792162134579_f47933e4-fec1-42d4-98a9-8363c3ae7fa6": {
+    "timestamp": 1792162254712,
+    "entity": "evolutions"
+  },
+  "op_1792162135233_c86887d9-3aeb-4d90-bdf6-b969d88068f2": {
+    "timestamp": 1792162254783,
+    "entity": "examiner_special_periods"
+  },
+  "op_1792162134743_e1fed070-0270-4208-9d5c-7ba96840865c": {
+    "timestamp": 1792162254827,
+    "entity": "clinical_documents"
+  },
+  "op_1792162135437_b33e2319-0802-423e-b009-53f14932f0e1": {
+    "timestamp": 1792162254868,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1792162134905_fbe569db-9918-4cfa-81bc-3cf316c2e1a2": {
+    "timestamp": 1792162254910,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1792162136071_02ad1a0c-f8e9-4cfa-b1bb-97b4f79ca3cf": {
+    "timestamp": 1792162255147,
+    "entity": "examiner_closures"
+  },
+  "op_1792162191352_8c8344ef-c5ef-4401-8bf8-e0bf547ee1fe": {
+    "timestamp": 1792162255185,
+    "entity": "patients"
+  },
+  "op_1792162191620_7e95b5c4-cffd-4d6a-b048-d4cdfda278ba": {
+    "timestamp": 1792162255274,
+    "entity": "episodes"
+  },
+  "op_1792162135760_f56f21f0-a470-4883-af40-8783eced0700": {
+    "timestamp": 1792162255318,
+    "entity": "examiner_remunerations"
+  },
+  "op_1792162191835_7a3d40a3-bc9a-42cc-8f42-e6e205eddbe4": {
+    "timestamp": 1792162255389,
+    "entity": "appointments"
+  },
+  "op_1792162192356_ab958585-be65-4a1e-9474-60d2e3a0dc0e": {
+    "timestamp": 1792162255786,
+    "entity": "prescriptions"
+  },
+  "op_1792162192527_797b1f24-00cc-4fdf-9c2d-65dd865bc906": {
+    "timestamp": 1792162255885,
+    "entity": "transactions"
+  },
+  "op_1792162193059_dadae42a-ea04-4eed-8672-9a6667734bf0": {
+    "timestamp": 1792162255920,
+    "entity": "pos_items"
+  },
+  "op_1792162192872_6ca40b54-cd45-4eb7-9bc1-86cd84c075ea": {
+    "timestamp": 1792162255964,
+    "entity": "work_sessions"
+  },
+  "op_1792162192138_13cd21b0-fe34-4eab-a714-e4e066678da1": {
+    "timestamp": 1792162256020,
+    "entity": "encounters"
+  },
+  "op_1792162193789_f3c12f11-9415-4358-9c7c-0ae07ced3065": {
+    "timestamp": 1792162256285,
+    "entity": "clinical_documents"
+  },
+  "op_1792162193593_f7f7d66f-0ddd-4fe3-b261-faba996f8c9c": {
+    "timestamp": 1792162256327,
+    "entity": "evolutions"
+  },
+  "op_1792162194107_6e1f4567-1d05-4cbb-8dac-b8cb1c5adab3": {
+    "timestamp": 1792162256374,
+    "entity": "examiner_special_periods"
+  },
+  "op_1792162193949_28d42bd9-fee5-49d5-8ef1-114894dbcda2": {
+    "timestamp": 1792162256431,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1792162193280_ebee6b6c-8a86-45d3-8a8d-88ddc1aa823b": {
+    "timestamp": 1792162256500,
+    "entity": "audit_logs"
+  },
+  "op_1792162194412_e646e391-dbeb-415e-8324-50f8e34931a2": {
+    "timestamp": 1792162256741,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1792162194884_0a2ddde0-c1d4-415a-9f9b-1e94b3f6f4eb": {
+    "timestamp": 1792162256809,
+    "entity": "examiner_closures"
+  },
+  "op_1792162194618_10cee923-00b7-4ca6-b16f-b3d586a46f72": {
+    "timestamp": 1792162256876,
+    "entity": "examiner_remunerations"
+  },
+  "op_1792181913461_6tlwy": {
+    "timestamp": 1792181913952,
+    "entity": "patients"
+  },
+  "op_1792181913472_danm5": {
+    "timestamp": 1792181913961,
+    "entity": "appointments"
+  },
+  "op_1792181917146_auelh": {
+    "timestamp": 1792181917326,
+    "entity": "appointments"
+  },
+  "op_1792182143364_b9163d15-472e-414b-bab0-3611e47ef065": {
+    "timestamp": 1792182145497,
+    "entity": "prescriptions"
+  },
+  "op_1792182144285_25118e7f-a1b8-4d59-90b1-e304cebe31b7": {
+    "timestamp": 1792182145525,
+    "entity": "pos_items"
+  },
+  "op_1792182144075_ffebf0fe-359a-4abc-b0c8-c8d84d41a27d": {
+    "timestamp": 1792182145549,
+    "entity": "work_sessions"
+  },
+  "op_1792182143893_3b60a7dc-5dc2-4929-a402-4dc2650966c5": {
+    "timestamp": 1792182145579,
+    "entity": "transactions"
+  },
+  "op_1792182143125_f422af92-664b-4dd0-98d9-a8eb037edf7c": {
+    "timestamp": 1792182145708,
+    "entity": "encounters"
+  },
+  "op_1792182144867_bfcd5089-ce13-499c-87ba-7b962777cfef": {
+    "timestamp": 1792182146009,
+    "entity": "examiner_special_periods"
+  },
+  "op_1792182144498_d31c8b80-d50b-4067-9a91-63913023d0d0": {
+    "timestamp": 1792182146046,
+    "entity": "audit_logs"
+  },
+  "op_1792182145071_84a917e9-98e8-47e3-86be-0b7540bcdc6c": {
+    "timestamp": 1792182146083,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1792182144661_59c9e671-df2b-4083-98e7-9daedd0452cb": {
+    "timestamp": 1792182146117,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1792182134046_3e8420f8-c2c1-44a3-b275-719c912abc2b": {
+    "timestamp": 1792182205213,
+    "entity": "transactions"
+  },
+  "op_1792182133838_81413120-72be-4d10-b819-1567b6155199": {
+    "timestamp": 1792182205265,
+    "entity": "prescriptions"
+  },
+  "op_1792182134678_ee904144-7472-4064-b106-167412e36b3c": {
+    "timestamp": 1792182205326,
+    "entity": "audit_logs"
+  },
+  "op_1792182134310_3648d9f3-2754-498a-86c3-b51a4c9c6e13": {
+    "timestamp": 1792182205375,
+    "entity": "work_sessions"
+  },
+  "op_1792182134511_bc344c8e-952e-418e-852e-5b5c5da30a6e": {
+    "timestamp": 1792182205417,
+    "entity": "pos_items"
+  },
+  "op_1792182135038_b57f1531-7bde-4d40-b198-22da0aeae0e6": {
+    "timestamp": 1792182205712,
+    "entity": "examiner_special_periods"
+  },
+  "op_1792182134833_6d59ce99-09e8-444e-b6f3-12b35f2177eb": {
+    "timestamp": 1792182205743,
+    "entity": "examiner_fixed_periods"
+  },
+  "op_1792182132705_e329bd13-b90f-4288-8714-4a0d5cce2735": {
+    "timestamp": 1792182205779,
+    "entity": "episodes"
+  },
+  "op_1792182135238_f3821b05-71a3-47d8-89dc-c371f5b0aed6": {
+    "timestamp": 1792182205814,
+    "entity": "examiner_avulso_rules"
+  },
+  "op_1792182132274_d2ecd362-e060-4a86-bbea-9314b28f331a": {
+    "timestamp": 1792182205846,
+    "entity": "patients"
+  },
+  "op_1792182132954_b630f991-cff1-4b28-9dc0-cd7824b15bc3": {
+    "timestamp": 1792182206117,
+    "entity": "appointments"
+  },
+  "op_1792182142565_e0847ee4-7c1b-4364-b9ee-5d3426549aec": {
+    "timestamp": 1792182206221,
+    "entity": "episodes"
+  },
+  "op_1792182142204_ed2730d3-fea2-4f62-a6f5-6afd92ef8f97": {
+    "timestamp": 1792182206255,
+    "entity": "patients"
+  },
+  "op_1792182142723_0b2d49cf-561b-4f42-acc9-2acf2c80ba17": {
+    "timestamp": 1792182206288,
+    "entity": "appointments"
+  },
+  "op_1792182133520_b63f81c4-724d-4bac-96d2-aabc4d2fd3c5": {
+    "timestamp": 1792182206544,
+    "entity": "encounters"
+  },
+  "op_1792182849917_3g0ec": {
+    "timestamp": 1792182850098,
+    "entity": "appointments"
+  },
+  "op_1792186098750_0i69k": {
+    "timestamp": 1792186099327,
+    "entity": "appointments"
+  },
+  "op_1792188124717_34vvt": {
+    "timestamp": 1792188125214,
+    "entity": "appointments"
+  },
+  "op_1792240721857_is62u": {
+    "timestamp": 1792240722015,
+    "entity": "appointments"
+  },
+  "op_1792240729111_jp4n6": {
+    "timestamp": 1792240729302,
+    "entity": "appointments"
+  },
+  "op_1792240767745_vie3i": {
+    "timestamp": 1792240767890,
+    "entity": "appointments"
+  },
+  "op_1792240775300_9mhfz": {
+    "timestamp": 1792240775471,
+    "entity": "appointments"
+  },
+  "op_1792242181861_2al4v": {
+    "timestamp": 1792242182033,
+    "entity": "appointments"
+  },
+  "op_1792242181848_h2r4x": {
+    "timestamp": 1792242182050,
+    "entity": "patients"
+  },
+  "op_1792242564659_nqqip": {
+    "timestamp": 1792242564918,
+    "entity": "appointments"
+  },
+  "op_1792242657136_7jyl0": {
+    "timestamp": 1792242657268,
+    "entity": "patients"
+  },
+  "op_1792242657152_bq9t5": {
+    "timestamp": 1792242657285,
+    "entity": "appointments"
+  },
+  "op_1792242708471_79b54695-6dc2-4091-8c04-109b715ce589": {
+    "timestamp": 1792242710270,
+    "entity": "encounters"
+  },
+  "op_1792242799778_1a995b0a-5ecc-4d04-bd28-f4532cf7bd27": {
+    "timestamp": 1792242809164,
+    "entity": "encounters"
+  },
+  "op_1792242801557_6e57cdd6-d47a-4a7d-8752-27db799ebf75": {
+    "timestamp": 1792242810490,
+    "entity": "encounters"
+  },
+  "op_1792242807697_dfac70cc-206c-4fda-9064-3bb4b493ed8c": {
+    "timestamp": 1792242812846,
+    "entity": "audit_logs"
+  },
+  "op_1792242809828_f9b2d976-88fb-4361-b71c-d6a239c765fa": {
+    "timestamp": 1792242813055,
+    "entity": "encounters"
+  },
+  "op_1792243171955_jmliy": {
+    "timestamp": 1792243172162,
+    "entity": "appointments"
+  },
+  "op_1792243176104_gf4ay": {
+    "timestamp": 1792243176328,
+    "entity": "appointments"
+  },
+  "op_1792243310448_zfdfk": {
+    "timestamp": 1792243310575,
+    "entity": "appointments"
+  },
+  "op_1792243310436_jab5r": {
+    "timestamp": 1792243310587,
+    "entity": "patients"
+  },
+  "op_1792243341619_df9df0d8-cd51-438b-a6e8-8933e213bdf4": {
+    "timestamp": 1792243345825,
+    "entity": "encounters"
+  },
+  "op_1792243343475_d28bbb7d-4fe6-4582-be12-0f18fd914e8e": {
+    "timestamp": 1792243365082,
+    "entity": "audit_logs"
+  },
+  "op_1792243333689_16cbfeca-575b-422c-9cbc-58f038a6f8e4": {
+    "timestamp": 1792243365900,
+    "entity": "encounters"
+  },
+  "op_1792243343471_f72265e3-37dc-459e-8095-c0443991d8a9": {
+    "timestamp": 1792243365939,
+    "entity": "encounters"
+  },
+  "op_1792243461625_a2ee0f8f-37df-4c7d-a214-bdb0d124b90e": {
+    "timestamp": 1792243487354,
+    "entity": "audit_logs"
+  },
+  "op_1792243472236_a56d4971-aeb9-44ce-9beb-83401faf4574": {
+    "timestamp": 1792243495031,
+    "entity": "audit_logs"
+  },
+  "op_1792243472231_845bc2ed-6fe5-4d8c-bf26-6068501a88bb": {
+    "timestamp": 1792243496161,
+    "entity": "encounters"
+  },
+  "op_1792243483089_d5bd0827-5dd2-49d3-bbd6-9a254413cf0e": {
+    "timestamp": 1792243496562,
+    "entity": "audit_logs"
+  },
+  "op_1792243461847_8a08ee30-8a8a-4ecd-88fa-537a3809afa0": {
+    "timestamp": 1792243514483,
+    "entity": "encounters"
+  },
+  "op_1792243485068_a98f99dd-f188-4f70-8225-9bb022d7ec09": {
+    "timestamp": 1792243517555,
+    "entity": "audit_logs"
+  },
+  "op_1792243483086_50075ab6-bae7-4153-9df2-a697f7489955": {
+    "timestamp": 1792243518381,
+    "entity": "encounters"
+  },
+  "op_1792243485062_e667cdae-55fb-483c-99a4-9d22c60d7f1d": {
+    "timestamp": 1792243518475,
+    "entity": "encounters"
+  },
+  "op_1792243553105_f46975d4-7b46-4b0a-8d04-88821af01959": {
+    "timestamp": 1792243559679,
+    "entity": "audit_logs"
+  },
+  "op_1792243555455_a2f4edaf-49a0-4c25-bcdb-d671210890b0": {
+    "timestamp": 1792243559777,
+    "entity": "encounters"
+  },
+  "op_1792243553101_a7482f7b-a398-4b27-882d-66ceb4054933": {
+    "timestamp": 1792243559883,
+    "entity": "encounters"
+  },
+  "op_1792243556546_b91c83ec-fcc6-4dcb-a6e6-37873c7c90d5": {
+    "timestamp": 1792243578605,
+    "entity": "audit_logs"
+  },
+  "op_1792243556532_da5b278f-ebd9-4f18-a74c-e759d8d6713a": {
+    "timestamp": 1792243579098,
+    "entity": "encounters"
+  },
+  "op_1792243827792_74d21c85-55b4-422a-a4d1-86c470e1a1dd": {
+    "timestamp": 1792243833558,
+    "entity": "encounters"
+  },
+  "op_1792243830346_fed870aa-d545-4dd6-a275-14e87240d95e": {
+    "timestamp": 1792243851520,
+    "entity": "encounters"
+  },
+  "op_1792243851044_a93007aa-06c7-4fba-9c25-310a9d075795": {
+    "timestamp": 1792243877598,
+    "entity": "audit_logs"
+  },
+  "op_1792243851036_9b5a9939-46f2-408d-8428-144a18120f0a": {
+    "timestamp": 1792243878621,
+    "entity": "encounters"
+  },
+  "op_1792243902288_xkcff": {
+    "timestamp": 1792243902793,
+    "entity": "appointments"
+  },
+  "op_1792244021486_mpivp": {
+    "timestamp": 1792244021637,
+    "entity": "appointments"
+  },
+  "op_1792244078660_8kty0": {
+    "timestamp": 1792244078777,
+    "entity": "patients"
+  },
+  "op_1792244078674_q6uy5": {
+    "timestamp": 1792244078841,
+    "entity": "appointments"
+  },
+  "op_1792244081557_s8a6n": {
+    "timestamp": 1792244081856,
+    "entity": "appointments"
+  },
+  "op_1792244684275_xgxbz": {
+    "timestamp": 1792244684469,
+    "entity": "appointments"
+  },
+  "op_1792244933484_ytqcp": {
+    "timestamp": 1792244933608,
+    "entity": "patients"
+  },
+  "op_1792244933498_h1wsp": {
+    "timestamp": 1792244933616,
+    "entity": "appointments"
+  },
+  "op_1792244938251_i5zf5": {
+    "timestamp": 1792244938525,
+    "entity": "appointments"
+  },
+  "op_1792244960335_21d29841-470a-4c99-af93-df45d0c39c75": {
+    "timestamp": 1792244969487,
+    "entity": "encounters"
+  },
+  "op_1792244966960_08d894ef-b107-44ba-91c6-f533f617c637": {
+    "timestamp": 1792244986914,
+    "entity": "audit_logs"
+  },
+  "op_1792244966957_a9252ba4-632b-4d0f-bc30-f27537102e5b": {
+    "timestamp": 1792244987334,
+    "entity": "encounters"
+  },
+  "op_1792245124311_31ceaf1d-a34f-4b2e-8a87-60d298211ea9": {
+    "timestamp": 1792245138340,
+    "entity": "audit_logs"
+  },
+  "op_1792245131021_22caa91c-a704-48f2-b419-deed88851a66": {
+    "timestamp": 1792245165379,
+    "entity": "audit_logs"
+  },
+  "op_1792245124308_a14fa7cd-d913-4292-a254-433f7d88a579": {
+    "timestamp": 1792245166086,
+    "entity": "encounters"
+  },
+  "op_1792245125828_360ac0c0-e342-4502-8dc4-85580ee85ed3": {
+    "timestamp": 1792245166133,
+    "entity": "encounters"
+  },
+  "op_1792245131017_e9e59918-339b-46b4-8843-f88199b6c840": {
+    "timestamp": 1792245166190,
+    "entity": "encounters"
+  },
+  "op_1792245393328_d46ac78a-9e0b-4113-b556-f54304311ae5": {
+    "timestamp": 1792245401516,
+    "entity": "encounters"
+  },
+  "op_1792245398025_74fc3b3d-603e-4433-95d0-690d2d7b341d": {
+    "timestamp": 1792245405724,
+    "entity": "audit_logs"
+  },
+  "op_1792245399611_c58baeaf-17f1-46c5-861f-94396b980cac": {
+    "timestamp": 1792245406139,
+    "entity": "encounters"
+  },
+  "op_1792245446822_ueyu6": {
+    "timestamp": 1792245447347,
+    "entity": "appointments"
+  },
+  "op_1792245662491_b3a7y": {
+    "timestamp": 1792245662590,
+    "entity": "patients"
+  },
+  "op_1792245662507_sph1k": {
+    "timestamp": 1792245662757,
+    "entity": "appointments"
+  },
+  "op_1792245664978_jx3s6": {
+    "timestamp": 1792245665251,
+    "entity": "appointments"
+  },
+  "op_1792246035158_9f8e9856-2aea-4a45-9f31-e9c1932a4bfa": {
+    "timestamp": 1792246042217,
+    "entity": "audit_logs"
+  },
+  "op_1792246035152_f5806304-e4ca-41a1-a30f-413a35a2fc35": {
+    "timestamp": 1792246042938,
+    "entity": "encounters"
+  },
+  "op_1792246037485_c6d7007a-32db-4be4-8ef5-02c64dd3c147": {
+    "timestamp": 1792246042991,
+    "entity": "encounters"
+  },
+  "op_1792246037512_8815b035-8d71-4f2e-9a8f-0c81f7cc3fc5": {
+    "timestamp": 1792246064029,
+    "entity": "audit_logs"
+  },
+  "op_1792246351394_vy5tp": {
+    "timestamp": 1792246351853,
+    "entity": "appointments"
+  },
+  "op_1792246395701_0lxof": {
+    "timestamp": 1792246395878,
+    "entity": "appointments"
+  },
+  "op_1792246416186_a39c6747-0ee6-4d33-9e76-118d90eea90a": {
+    "timestamp": 1792246419565,
+    "entity": "encounters"
+  },
+  "op_1792246416868_5799cfac-3cb2-4b1a-aea0-f738fbf37be3": {
+    "timestamp": 1792246428938,
+    "entity": "encounters"
+  },
+  "op_1792246434991_d5c50467-9943-4329-88da-b6a0558ea194": {
+    "timestamp": 1792246442292,
+    "entity": "encounters"
+  },
+  "op_1792246446677_59ac09c2-7495-44d2-8e7b-0a69e59600f0": {
+    "timestamp": 1792246457589,
+    "entity": "encounters"
+  },
+  "op_1792246456078_edfa1485-a6d2-47b1-b150-4e6c792533f1": {
+    "timestamp": 1792246468927,
+    "entity": "audit_logs"
+  },
+  "op_1792246462218_b8f993f1-08a7-44f1-8d06-5225d9f29ddb": {
+    "timestamp": 1792246469530,
+    "entity": "encounters"
+  },
+  "op_1792246456068_fa658197-6da3-4e6a-af47-cce7867db89e": {
+    "timestamp": 1792246469576,
+    "entity": "encounters"
+  },
+  "op_1792246461734_d5c51614-9219-471e-adeb-82b56f590d3d": {
+    "timestamp": 1792246469624,
+    "entity": "encounters"
+  },
+  "op_1792246462250_51465fa7-d009-46b6-8e33-a9bca0a7dd60": {
+    "timestamp": 1792246484281,
+    "entity": "audit_logs"
+  },
+  "op_1792246467079_6c4d0026-ee14-4c66-9e85-d2b65f8c1131": {
+    "timestamp": 1792246484897,
+    "entity": "encounters"
+  },
+  "op_1792246579812_utnb5": {
+    "timestamp": 1792246579993,
+    "entity": "appointments"
+  },
+  "op_1792246817191_qjc6y": {
+    "timestamp": 1792246817336,
+    "entity": "appointments"
+  },
+  "op_1792246933569_df7tm": {
+    "timestamp": 1792246933679,
+    "entity": "appointments"
+  },
+  "op_1792246933553_h1j6l": {
+    "timestamp": 1792246933692,
+    "entity": "patients"
+  },
+  "op_1792246997823_317d6e33-4fb6-4667-a316-2c798a4e19ed": {
+    "timestamp": 1792247004368,
+    "entity": "encounters"
+  },
+  "op_1792247008383_25936fe9-f612-4cb8-be53-528a5e5fff11": {
+    "timestamp": 1792247014720,
+    "entity": "encounters"
+  },
+  "op_1792247012614_f1926363-df11-4a63-a85a-1645a111a008": {
+    "timestamp": 1792247024120,
+    "entity": "encounters"
+  },
+  "op_1792247101646_97e73277-e141-4c4d-a5f7-80a4c76bee72": {
+    "timestamp": 1792247110249,
+    "entity": "encounters"
+  },
+  "op_1792247107835_6d954e72-9348-429e-bf70-c63b165096fd": {
+    "timestamp": 1792247116499,
+    "entity": "audit_logs"
+  },
+  "op_1792247110395_43749f4f-bded-41d6-b3ff-9fe92a3dd4e8": {
+    "timestamp": 1792247117142,
+    "entity": "encounters"
+  },
+  "op_1792247484997_532edbfd-8811-4592-b2fa-a8b5eb995819": {
+    "timestamp": 1792247490358,
+    "entity": "encounters"
+  },
+  "op_1792247487240_7aebc4c4-7cbd-4803-b9c9-37a4ae751013": {
+    "timestamp": 1792247504395,
+    "entity": "encounters"
+  },
+  "op_1792247610475_2bpp1": {
+    "timestamp": 1792247610641,
+    "entity": "appointments"
+  },
+  "op_1792247743257_6ltzz": {
+    "timestamp": 1792247743355,
+    "entity": "patients"
+  },
+  "op_1792247743269_xdvs6": {
+    "timestamp": 1792247743469,
+    "entity": "appointments"
+  },
+  "op_1792248098937_au14o": {
+    "timestamp": 1792248099092,
+    "entity": "appointments"
+  }
+}

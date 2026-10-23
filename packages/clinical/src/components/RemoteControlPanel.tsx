@@ -27,16 +27,31 @@ import {
   Compass as CompassIcon,
   Smile,
   Flame,
-  Smartphone
+  Smartphone,
+  Play,
+  Pause,
+  RotateCcw,
+  ArrowUp,
+  ArrowDown,
+  ArrowLeft,
+  ArrowRight,
+  Focus
 } from 'lucide-react';
 import { lanController } from '../services/lanController';
 import { FireTVPairingModal } from './FireTVPairingModal';
 
 interface RemoteControlPanelProps {
-  onAcuityRecorded?: (eye: EyeTested, acuitySnellen: string, correct: boolean) => void;
+  onAcuityRecorded?: (eye: EyeTested, acuitySnellen: string, correct: boolean, target?: 'av_sc' | 'refraction') => void;
+  defaultRecordTarget?: 'av_sc' | 'refraction';
+  isStandalone?: boolean;
 }
 
-export const RemoteControlPanel: React.FC<RemoteControlPanelProps> = ({ onAcuityRecorded }) => {
+export const RemoteControlPanel: React.FC<RemoteControlPanelProps> = ({ 
+  onAcuityRecorded,
+  defaultRecordTarget = 'refraction',
+  isStandalone = false
+}) => {
+  const [recordTarget, setRecordTarget] = useState<'av_sc' | 'refraction'>(defaultRecordTarget);
   const [activeEye, setActiveEye] = useState<EyeTested>('OD');
   const [selectedAcuity, setSelectedAcuity] = useState<string>('20/20');
   const [selectedOptotype, setSelectedOptotype] = useState<OptotypeType>('sloan');
@@ -44,6 +59,22 @@ export const RemoteControlPanel: React.FC<RemoteControlPanelProps> = ({ onAcuity
   const [activeModule, setActiveModule] = useState<ActiveModuleType | 'menu'>('av_distance');
   const [lastSentFeedback, setLastSentFeedback] = useState<string | null>(null);
   const [isPairingOpen, setIsPairingOpen] = useState<boolean>(false);
+  const [isTvOnline, setIsTvOnline] = useState<boolean>(lanController.isTvOnline());
+  const [pairedRoom, setPairedRoom] = useState<string>(lanController.getPairedRoom());
+  const [selectedDistance, setSelectedDistance] = useState<number>(3.5);
+
+  // Escuta status de conectividade e presença da TV na sala
+  React.useEffect(() => {
+    const handleStatus = (e: any) => {
+      if (e.detail) {
+        setIsTvOnline(e.detail.isTvOnline);
+        if (e.detail.pairedRoom) setPairedRoom(e.detail.pairedRoom);
+      }
+    };
+    window.addEventListener('optomed_tv_status_changed', handleStatus);
+    lanController.queryRoomDevices();
+    return () => window.removeEventListener('optomed_tv_status_changed', handleStatus);
+  }, []);
 
   // Atalhos Globais do Teclado para o Examinador no Consultório
   React.useEffect(() => {
@@ -115,6 +146,12 @@ export const RemoteControlPanel: React.FC<RemoteControlPanelProps> = ({ onAcuity
     showFeedback(`Olho: ${eye}`);
   };
 
+  const handleDistanceChange = (meters: number) => {
+    setSelectedDistance(meters);
+    lanController.setDistance(meters);
+    showFeedback(`Distância TV: ${meters.toFixed(1)}m`);
+  };
+
   const handleRandomize = () => {
     lanController.randomize();
     showFeedback('Randomizado');
@@ -129,9 +166,10 @@ export const RemoteControlPanel: React.FC<RemoteControlPanelProps> = ({ onAcuity
 
   const handleRecordResponse = (status: 'correct' | 'incorrect' | 'unsure') => {
     if (onAcuityRecorded) {
-      onAcuityRecorded(activeEye, selectedAcuity, status === 'correct');
+      onAcuityRecorded(activeEye, selectedAcuity, status === 'correct', recordTarget);
     }
-    showFeedback(`Gravado: ${activeEye} ${selectedAcuity} [${status.toUpperCase()}]`);
+    const targetLabel = recordTarget === 'av_sc' ? 'AVsc' : 'Refração';
+    showFeedback(`Gravado no prontuário [${targetLabel}]: ${activeEye} ${selectedAcuity} (${status.toUpperCase()})`);
   };
 
   const showFeedback = (text: string) => {
@@ -140,16 +178,53 @@ export const RemoteControlPanel: React.FC<RemoteControlPanelProps> = ({ onAcuity
   };
 
   return (
-    <div className="bg-slate-900 text-slate-100 rounded-2xl border border-slate-800 shadow-xl overflow-hidden flex flex-col select-none">
-      {/* 1. Header do Controle Remoto */}
-      <div className="bg-slate-950 px-3.5 py-2.5 border-b border-slate-800 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="font-black tracking-wider text-xs text-slate-100 flex items-center gap-1.5">
-            <Tv className="w-3.5 h-3.5 text-blue-400" />
-            CONTROLE DA TV
+    <div className={isStandalone ? "w-full min-h-screen bg-slate-950 text-slate-100 p-2 sm:p-4 overflow-y-auto" : "bg-slate-900 text-slate-100 rounded-2xl border border-slate-800 shadow-xl overflow-hidden flex flex-col select-none"}>
+      {isStandalone && (
+        <div className="max-w-md mx-auto mb-2 flex items-center justify-between pb-2 border-b border-slate-800">
+          <div className="flex items-center gap-2">
+            <div className="p-1.5 bg-blue-600 rounded-lg text-white">
+              <Smartphone className="w-4 h-4" />
+            </div>
+            <div>
+              <h2 className="text-xs font-black tracking-wide text-white">CONTROLE REMOTO MÓVEL</h2>
+              <span className="text-[10px] text-slate-400">Optotipo Meirelles • {pairedRoom}</span>
+            </div>
+          </div>
+          <span className={`text-[10px] font-black px-2 py-0.5 rounded-full border ${
+            isTvOnline 
+              ? 'bg-emerald-950 text-emerald-400 border-emerald-800' 
+              : 'bg-rose-950 text-rose-400 border-rose-800'
+          }`}>
+            {isTvOnline ? 'TV CONECTADA' : 'TV OFFLINE'}
           </span>
         </div>
+      )}
+      <div className={isStandalone ? "max-w-md mx-auto bg-slate-900 text-slate-100 rounded-2xl border border-slate-800 shadow-2xl overflow-hidden flex flex-col" : "contents"}>
+        {/* 1. Header do Controle Remoto */}
+        <div className="bg-slate-950 px-3.5 py-2.5 border-b border-slate-800 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className={`w-2.5 h-2.5 rounded-full ${isTvOnline ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`} />
+            <span className="font-black tracking-wider text-xs text-slate-100 flex items-center gap-1.5">
+              <Tv className={`w-3.5 h-3.5 ${isTvOnline ? 'text-blue-400' : 'text-slate-500'}`} />
+              CONTROLE DA TV
+            </span>
+            <button 
+              onClick={() => {
+                const nextRoom = pairedRoom === 'Consultório Meirelles' ? 'Consultório 1' : 'Consultório Meirelles';
+                setPairedRoom(nextRoom);
+                lanController.setPairedRoom(nextRoom);
+                lanController.queryRoomDevices();
+              }}
+              title="Clique para alternar sala (Consultório Meirelles / Consultório 1)"
+              className={`text-[9px] font-bold px-1.5 py-0.5 rounded-md border cursor-pointer hover:opacity-80 active:scale-95 transition-all ${
+                isTvOnline 
+                  ? 'bg-emerald-950/80 text-emerald-400 border-emerald-800/80' 
+                  : 'bg-rose-950/80 text-rose-400 border-rose-800/80'
+              }`}
+            >
+              {pairedRoom}: {isTvOnline ? 'ONLINE' : 'OFFLINE'}
+            </button>
+          </div>
 
         <div className="flex items-center gap-1.5">
           {lastSentFeedback && (
@@ -284,6 +359,34 @@ export const RemoteControlPanel: React.FC<RemoteControlPanelProps> = ({ onAcuity
           ))}
         </div>
 
+        {/* 3.1. Distância Clínica da Sala / TV (Metros) */}
+        <div className="bg-slate-950 p-1.5 rounded-xl border border-slate-800 flex items-center justify-between">
+          <div className="flex items-center gap-1.5">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+              Distância:
+            </span>
+            <span className="text-[10px] font-mono font-bold text-emerald-400">
+              {selectedDistance.toFixed(1)}m
+            </span>
+          </div>
+          <div className="flex items-center gap-1">
+            {[2.0, 2.5, 3.0, 3.5, 4.0, 5.0, 6.0].map((dist) => (
+              <button
+                key={dist}
+                type="button"
+                onClick={() => handleDistanceChange(dist)}
+                className={`px-1.5 py-0.5 rounded text-[9px] font-mono font-bold transition-all cursor-pointer ${
+                  selectedDistance === dist
+                    ? 'bg-blue-600 text-white shadow-xs'
+                    : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800'
+                }`}
+              >
+                {dist.toFixed(1)}m
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* 4. Grade de Linhas Snellen */}
         <div>
           <div className="flex items-center justify-between mb-1">
@@ -312,7 +415,7 @@ export const RemoteControlPanel: React.FC<RemoteControlPanelProps> = ({ onAcuity
           </div>
         </div>
 
-        {/* 5. Ações Rápidas de Navegação */}
+        {/* 5. Ações Rápidas de Navegação (Maior / Randomizar / Menor) */}
         <div className="grid grid-cols-3 gap-1.5">
           <button
             onClick={() => {
@@ -341,6 +444,101 @@ export const RemoteControlPanel: React.FC<RemoteControlPanelProps> = ({ onAcuity
             <ChevronDown className="w-3.5 h-3.5 text-blue-400" /> Menor
           </button>
         </div>
+
+        {/* 5.1. Controle de Execução (Iniciar / Pausar / Reiniciar / Isolar Optotipo) */}
+        <div className="grid grid-cols-4 gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 text-[10px]">
+          <button
+            onClick={() => {
+              lanController.resumeExam();
+              showFeedback('Exame Iniciado / Linha Aberta');
+            }}
+            className="py-1 px-1 bg-emerald-950 hover:bg-emerald-900 text-emerald-300 border border-emerald-800/80 rounded-lg font-bold flex items-center justify-center gap-1 active:scale-95 transition-all cursor-pointer"
+            title="Iniciar ou Retomar Exame com Linha Completa"
+          >
+            <Play className="w-3 h-3 text-emerald-400" /> Iniciar
+          </button>
+
+          <button
+            onClick={() => {
+              lanController.pauseExam();
+              showFeedback('Exame Pausado (Optotipo Isolado)');
+            }}
+            className="py-1 px-1 bg-amber-950 hover:bg-amber-900 text-amber-300 border border-amber-800/80 rounded-lg font-bold flex items-center justify-center gap-1 active:scale-95 transition-all cursor-pointer"
+            title="Pausar Exame"
+          >
+            <Pause className="w-3 h-3 text-amber-400" /> Pausar
+          </button>
+
+          <button
+            onClick={() => {
+              lanController.restartExam();
+              setSelectedAcuity('20/20');
+              showFeedback('Exame Reiniciado (20/20)');
+            }}
+            className="py-1 px-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg font-bold flex items-center justify-center gap-1 active:scale-95 transition-all cursor-pointer"
+            title="Reiniciar Teste (Volta para 20/20)"
+          >
+            <RotateCcw className="w-3 h-3 text-slate-400" /> Reiniciar
+          </button>
+
+          <button
+            onClick={() => {
+              lanController.toggleIsolated();
+              showFeedback('Alternado Isolar / Linha');
+            }}
+            className="py-1 px-1 bg-blue-950 hover:bg-blue-900 text-blue-300 border border-blue-800/80 rounded-lg font-bold flex items-center justify-center gap-1 active:scale-95 transition-all cursor-pointer"
+            title="Isolar Estímulo"
+          >
+            <Focus className="w-3 h-3 text-blue-400" /> Isolar
+          </button>
+        </div>
+
+        {/* 5.2. Direcionais Específicos para Tumbling E / Landolt C */}
+        {(selectedOptotype === 'tumbling_e' || selectedOptotype === 'landolt_c') && (
+          <div className="bg-slate-950 p-2 rounded-xl border border-slate-800 space-y-1.5">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+              Direção Obrigatória ({selectedOptotype === 'tumbling_e' ? 'Tumbling E' : 'Landolt C'}):
+            </span>
+            <div className="grid grid-cols-4 gap-1">
+              <button
+                onClick={() => {
+                  lanController.setDirection('up');
+                  showFeedback('Direção: CIMA (▲)');
+                }}
+                className="py-1 bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 rounded-lg font-bold text-[10px] flex items-center justify-center gap-1 active:scale-95 cursor-pointer"
+              >
+                <ArrowUp className="w-3 h-3 text-emerald-400" /> Cima
+              </button>
+              <button
+                onClick={() => {
+                  lanController.setDirection('down');
+                  showFeedback('Direção: BAIXO (▼)');
+                }}
+                className="py-1 bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 rounded-lg font-bold text-[10px] flex items-center justify-center gap-1 active:scale-95 cursor-pointer"
+              >
+                <ArrowDown className="w-3 h-3 text-amber-400" /> Baixo
+              </button>
+              <button
+                onClick={() => {
+                  lanController.setDirection('left');
+                  showFeedback('Direção: ESQUERDA (◄)');
+                }}
+                className="py-1 bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 rounded-lg font-bold text-[10px] flex items-center justify-center gap-1 active:scale-95 cursor-pointer"
+              >
+                <ArrowLeft className="w-3 h-3 text-blue-400" /> Esquerda
+              </button>
+              <button
+                onClick={() => {
+                  lanController.setDirection('right');
+                  showFeedback('Direção: DIREITA (►)');
+                }}
+                className="py-1 bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 rounded-lg font-bold text-[10px] flex items-center justify-center gap-1 active:scale-95 cursor-pointer"
+              >
+                <ArrowRight className="w-3 h-3 text-purple-400" /> Direita
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* 6. Testes Refrativos Especiais na TV */}
         <div>
@@ -416,12 +614,38 @@ export const RemoteControlPanel: React.FC<RemoteControlPanelProps> = ({ onAcuity
           </div>
         </div>
 
-        {/* 7. Registro Rápido da Resposta */}
-        <div className="bg-slate-950 border border-slate-800 rounded-xl p-2">
-          <div className="flex items-center justify-between mb-1">
+        {/* 7. Registro Rápido da Resposta no Prontuário */}
+        <div className="bg-slate-950 border border-slate-800 rounded-xl p-2 space-y-1.5">
+          <div className="flex items-center justify-between">
             <span className="text-[10px] font-bold text-slate-400 uppercase">
               Registrar Resposta ({activeEye} - {selectedAcuity}):
             </span>
+            <div className="flex items-center gap-1 bg-slate-900 p-0.5 rounded-lg border border-slate-800">
+              <button
+                type="button"
+                onClick={() => setRecordTarget('av_sc')}
+                className={`px-1.5 py-0.5 rounded text-[9px] font-bold transition-all cursor-pointer ${
+                  recordTarget === 'av_sc'
+                    ? 'bg-blue-600 text-white shadow-xs'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+                title="Gravar no módulo de Acuidade Visual Sem Correção (AVsc)"
+              >
+                AVsc
+              </button>
+              <button
+                type="button"
+                onClick={() => setRecordTarget('refraction')}
+                className={`px-1.5 py-0.5 rounded text-[9px] font-bold transition-all cursor-pointer ${
+                  recordTarget === 'refraction'
+                    ? 'bg-blue-600 text-white shadow-xs'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+                title="Gravar no exame de Refração Subjetiva"
+              >
+                Refração
+              </button>
+            </div>
           </div>
 
           <div className="grid grid-cols-3 gap-1.5">
@@ -448,6 +672,8 @@ export const RemoteControlPanel: React.FC<RemoteControlPanelProps> = ({ onAcuity
           </div>
         </div>
       </div>
+      </div>
     </div>
   );
 };
+
