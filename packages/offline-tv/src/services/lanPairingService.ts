@@ -47,6 +47,8 @@ class LanPairingService {
         // Se estiver em https://tv.optomed.app.br, conecta em wss://ws.optomed.app.br/tv
         if (window.location.hostname.includes('optomed.app.br')) {
           targetUrl = 'wss://ws.optomed.app.br/tv';
+        } else if (window.location.hostname.includes('onrender.com')) {
+          targetUrl = `wss://${window.location.hostname}/tv`;
         } else {
           targetUrl = `wss://${window.location.hostname}:8765/tv`;
         }
@@ -65,6 +67,16 @@ class LanPairingService {
       this.socket.onopen = () => {
         this.isConnected = true;
         this.startHeartbeat();
+        // Handshake de registro da TV no servidor
+        try {
+          const regMsg = {
+            type: 'REGISTER_DEVICE',
+            deviceType: 'tv',
+            clinicId: (settings as any).clinicId || 'ivs',
+            room: settings.roomName || 'Consultório 1'
+          };
+          this.socket?.send(JSON.stringify(regMsg));
+        } catch {}
       };
 
       this.socket.onmessage = (event) => {
