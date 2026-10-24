@@ -1427,7 +1427,7 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
   const filteredAppointments = dayAppointments.filter(a => {
     const matchesStatus = filterStatus === 'ALL' || a.status === filterStatus;
     const matchesQuery = !searchQuery || 
-      a.patientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (a.patientName || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
       (a.patientPhone && a.patientPhone.includes(searchQuery));
     
     // Filtro específico para consultas fora do período contratado
@@ -3189,7 +3189,8 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({ onStartEncounter, cu
                     const filteredList = patients.filter(p => {
                       if (!patientFilterQuery.trim()) return true;
                       const q = patientFilterQuery.toLowerCase();
-                      return p.fullName.toLowerCase().includes(q) ||
+                      const pName = (p.fullName || '').toLowerCase();
+                      return pName.includes(q) ||
                              (p.phone && p.phone.includes(q)) ||
                              (p.documentNumber && p.documentNumber.includes(q));
                     });

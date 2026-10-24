@@ -46,10 +46,12 @@ export const Dashboard: React.FC<DashboardProps> = ({ onStartEncounter, onNaviga
   const waitingEncounters = encounters.filter(e => e.status === 'waiting' || e.status === 'in_progress');
   const completedEncounters = encounters.filter(e => e.status === 'completed');
 
-  const filteredPatients = patients.filter(p => 
-    p.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    (p.phone && p.phone.includes(searchQuery))
-  );
+  const filteredPatients = patients.filter(p => {
+    if (!p) return false;
+    const name = (p.fullName || '').toLowerCase();
+    const q = (searchQuery || '').toLowerCase();
+    return name.includes(q) || (p.phone && p.phone.includes(searchQuery));
+  });
 
   const isExaminer = currentUser?.role === 'examiner';
   const isReception = currentUser?.role === 'reception';

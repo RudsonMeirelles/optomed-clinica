@@ -281,12 +281,16 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, onS
 
   const handleDeletePatient = (patient: Patient, e: React.MouseEvent) => {
     e.stopPropagation();
-    const confirmed = window.confirm(`Deseja realmente excluir o cadastro de "${patient.fullName}" e seus agendamentos?`);
+    const confirmed = window.confirm(`Deseja realmente excluir o cadastro de "${patient.fullName || 'Paciente'}" e seus agendamentos?`);
     if (!confirmed) return;
 
     offlineDb.deletePatient(patient.id, effectiveClinicId);
     // Remove também agendamentos deste paciente nesta clínica
-    const apts = offlineDb.getAppointments(effectiveClinicId).filter(a => a.patientId !== patient.id && a.patientName.toLowerCase().trim() !== patient.fullName.toLowerCase().trim());
+    const targetFullName = (patient.fullName || '').toLowerCase().trim();
+    const apts = offlineDb.getAppointments(effectiveClinicId).filter(a => {
+      const aptName = (a.patientName || '').toLowerCase().trim();
+      return a.patientId !== patient.id && (!targetFullName || aptName !== targetFullName);
+    });
     offlineDb.saveAppointments(apts, effectiveClinicId);
 
     setPatients(offlineDb.getPatients(effectiveClinicId));
@@ -399,9 +403,12 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, onS
   };
 
   const filtered = patients.filter(p => {
-    const matchesSearch = p.fullName.toLowerCase().includes(search.toLowerCase()) ||
-      (p.phone && p.phone.includes(search)) ||
-      (p.documentNumber && p.documentNumber.includes(search));
+    if (!p) return false;
+    const name = (p.fullName || '').toLowerCase();
+    const q = (search || '').toLowerCase();
+    const phone = p.phone || '';
+    const doc = p.documentNumber || '';
+    const matchesSearch = !q || name.includes(q) || phone.includes(q) || doc.includes(q);
     
     const matchesNat = nationalityFilter === 'ALL' || p.nationality === nationalityFilter;
     return matchesSearch && matchesNat;

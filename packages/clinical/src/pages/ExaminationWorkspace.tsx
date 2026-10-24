@@ -794,7 +794,8 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
         // Tenta localizar agendamento de hoje deste paciente
         const todayStr = new Date().toISOString().split('T')[0];
         const dayApts = offlineDb.getAppointments(activeClinicId);
-        const matchApt = dayApts.find(a => (a.patientId === patient.id || a.patientName.toLowerCase() === patient.fullName.toLowerCase()) && a.date === todayStr);
+        const pName = (patient.fullName || '').toLowerCase().trim();
+        const matchApt = dayApts.find(a => (a.patientId === patient.id || (pName && (a.patientName || '').toLowerCase().trim() === pName)) && a.date === todayStr);
         if (matchApt) {
           try {
             offlineDb.updateAppointmentStatus(matchApt.id, 'completed', activeClinicId);

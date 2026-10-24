@@ -153,8 +153,9 @@ export const CheckInModal: React.FC<CheckInModalProps> = ({
   const filteredPatients = searchQuery.trim().length > 1
     ? patients.filter(p => {
         const q = searchQuery.toLowerCase();
+        const pName = (p.fullName || '').toLowerCase();
         return (
-          p.fullName.toLowerCase().includes(q) ||
+          pName.includes(q) ||
           (p.documentNumber && p.documentNumber.includes(q)) ||
           (p.phone && p.phone.includes(q))
         );

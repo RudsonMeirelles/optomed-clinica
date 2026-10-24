@@ -115,8 +115,9 @@ class IndexedDbStorageService {
         const req = store.get(this.getCompositeKey(storeName, clinicId, id));
 
         req.onsuccess = () => {
-          if (req.result && req.result.data) {
-            resolve(req.result.data as T);
+          if (req.result) {
+            const unwrapped = (req.result.data !== undefined && req.result.data !== null) ? req.result.data : req.result;
+            resolve(unwrapped as T);
           } else {
             resolve(null);
           }
@@ -164,7 +165,10 @@ class IndexedDbStorageService {
           if (Array.isArray(req.result)) {
             const filtered = req.result
               .filter(item => item && item.clinicId === clinicId)
-              .map(item => item.data as T);
+              .map(item => {
+                const unwrapped = (item.data !== undefined && item.data !== null) ? item.data : item;
+                return unwrapped as T;
+              });
             resolve(filtered);
           } else {
             resolve([]);
