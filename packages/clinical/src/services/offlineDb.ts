@@ -202,6 +202,30 @@ const EVICTABLE_ENTITIES = ['audit_logs', 'work_sessions', 'pos_items'] as const
 // Chaves do localStorage que NUNCA devem ser evictadas (auth, config, flags)
 const PROTECTED_KEY_PREFIXES = ['optotipo_clinical_auth_', 'optotipo_active_clinic_', 'optotipo_clinics_config', 'optomed_'];
 
+/**
+ * Função global de sanitização e desempacotamento de registros (self-healing cache).
+ * Se um registro estiver envelopado ({ storageKey, clinicId, id, data: { ... } }),
+ * extrai os campos reais do objeto interno 'data' para a raiz.
+ */
+export function unwrapEntityRecord<T = any>(item: any): T {
+  if (!item || typeof item !== 'object') return item;
+  if (item.data && typeof item.data === 'object') {
+    const inner = item.data;
+    return {
+      ...inner,
+      id: inner.id || item.id,
+      clinicId: inner.clinicId || item.clinicId,
+      updatedAt: inner.updatedAt || item.updatedAt
+    } as T;
+  }
+  return item as T;
+}
+
+export function sanitizeEntityList<T = any>(list: any[]): T[] {
+  if (!Array.isArray(list)) return [];
+  return list.map(item => unwrapEntityRecord<T>(item));
+}
+
 class OfflineDatabaseService {
   private activeClinicId: string = 'ivs';
   private syncChannel: BroadcastChannel | null = null;
@@ -625,7 +649,22 @@ class OfflineDatabaseService {
         this.safeSetItem(this.getKey('patients', clinicId), JSON.stringify(initial));
         return initial;
       }
-      return JSON.parse(raw);
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        let hasWrapped = false;
+        const cleaned = parsed.map(item => {
+          if (item && item.data && typeof item.data === 'object') {
+            hasWrapped = true;
+            return unwrapEntityRecord<Patient>(item);
+          }
+          return item;
+        });
+        if (hasWrapped) {
+          this.safeSetItem(this.getKey('patients', clinicId), JSON.stringify(cleaned));
+        }
+        return cleaned;
+      }
+      return [];
     } catch {
       return [];
     }
@@ -973,15 +1012,24 @@ class OfflineDatabaseService {
     try {
       const raw = localStorage.getItem(this.getKey('encounters', clinicId));
       if (!raw) return [];
-      const parsed: ClinicalEncounter[] = JSON.parse(raw);
-      // Garantir retrocompatibilidade de episódios para dados legados
-      return parsed.map(enc => {
+      const parsed: any[] = JSON.parse(raw);
+      if (!Array.isArray(parsed)) return [];
+      let hasWrapped = false;
+      const cleaned = parsed.map(rawEnc => {
+        let enc = rawEnc;
+        if (enc && enc.data && typeof enc.data === 'object') {
+          hasWrapped = true;
+          enc = unwrapEntityRecord<ClinicalEncounter>(enc);
+        }
         if (!enc.episodeId) {
-          // Atribuição de episódio virtual/legado sem mutação destrutiva
           return { ...enc, episodeId: 'LEGACY_EPISODE' };
         }
         return enc;
       });
+      if (hasWrapped) {
+        this.safeSetItem(this.getKey('encounters', clinicId), JSON.stringify(cleaned));
+      }
+      return cleaned;
     } catch {
       return [];
     }
@@ -1176,7 +1224,22 @@ class OfflineDatabaseService {
     try {
       const raw = localStorage.getItem(this.getKey('prescriptions', clinicId));
       if (!raw) return [];
-      return JSON.parse(raw);
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        let hasWrapped = false;
+        const cleaned = parsed.map(item => {
+          if (item && item.data && typeof item.data === 'object') {
+            hasWrapped = true;
+            return unwrapEntityRecord<Prescription>(item);
+          }
+          return item;
+        });
+        if (hasWrapped) {
+          this.safeSetItem(this.getKey('prescriptions', clinicId), JSON.stringify(cleaned));
+        }
+        return cleaned;
+      }
+      return [];
     } catch {
       return [];
     }
@@ -1422,7 +1485,22 @@ class OfflineDatabaseService {
         this.safeSetItem(this.getKey('appointments', clinicId), JSON.stringify(initial));
         return initial;
       }
-      return JSON.parse(raw);
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        let hasWrapped = false;
+        const cleaned = parsed.map(item => {
+          if (item && item.data && typeof item.data === 'object') {
+            hasWrapped = true;
+            return unwrapEntityRecord<Appointment>(item);
+          }
+          return item;
+        });
+        if (hasWrapped) {
+          this.safeSetItem(this.getKey('appointments', clinicId), JSON.stringify(cleaned));
+        }
+        return cleaned;
+      }
+      return [];
     } catch {
       return [];
     }
@@ -2094,7 +2172,22 @@ class OfflineDatabaseService {
         this.saveTransactions(initial, clinicId);
         return initial;
       }
-      return JSON.parse(raw);
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        let hasWrapped = false;
+        const cleaned = parsed.map(item => {
+          if (item && item.data && typeof item.data === 'object') {
+            hasWrapped = true;
+            return unwrapEntityRecord<FinancialTransaction>(item);
+          }
+          return item;
+        });
+        if (hasWrapped) {
+          this.safeSetItem(this.getKey('financial_transactions', clinicId), JSON.stringify(cleaned));
+        }
+        return cleaned;
+      }
+      return [];
     } catch {
       return [];
     }

@@ -488,9 +488,16 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, onS
       {/* Tabela de Pacientes */}
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
         <div className="divide-y divide-slate-100">
-          {filtered.map((patient) => {
+          {filtered.map((rawPatient) => {
+            const patient = ((rawPatient as any)?.data && typeof (rawPatient as any).data === 'object')
+              ? { ...(rawPatient as any).data, id: (rawPatient as any).data.id || rawPatient.id }
+              : rawPatient;
+
             const patientEncounters = encounters
-              .filter(e => e.patientId === patient.id)
+              .filter(e => {
+                const ePatId = (e as any)?.data?.patientId || e.patientId;
+                return ePatId === patient.id;
+              })
               .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
             
             const lastEncounter = patientEncounters[0];
@@ -528,7 +535,9 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, onS
 
                     <div className="space-y-1 flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-bold text-sm text-slate-900 truncate">{patient.fullName}</span>
+                        <span className="font-bold text-sm text-slate-900 truncate">
+                          {patient.fullName || (patient as any).name || 'Paciente'}
+                        </span>
                         <span className="text-[10px] font-mono bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md border border-slate-200/80">
                           {patient.documentType || 'DOC'}: {patient.documentNumber || 'Sem número'}
                         </span>
