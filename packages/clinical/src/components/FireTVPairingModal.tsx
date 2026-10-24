@@ -12,9 +12,11 @@ import {
   Send, 
   BookOpen, 
   Eye, 
-  ExternalLink 
+  ExternalLink,
+  QrCode
 } from 'lucide-react';
 import { lanController } from '../services/lanController';
+import { RemoteControlQRCodeModal } from './RemoteControlQRCodeModal';
 
 interface FireTVPairingModalProps {
   isOpen: boolean;
@@ -27,6 +29,7 @@ export const FireTVPairingModal: React.FC<FireTVPairingModalProps> = ({ isOpen, 
   const [testSuccess, setTestSuccess] = useState<boolean>(false);
   const [currentRoom, setCurrentRoom] = useState<string>(lanController.getPairedRoom());
   const [isTvOnline, setIsTvOnline] = useState<boolean>(lanController.isTvOnline());
+  const [isQrModalOpen, setIsQrModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.location.hostname && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
@@ -232,6 +235,13 @@ export const FireTVPairingModal: React.FC<FireTVPairingModalProps> = ({ isOpen, 
               {copiedUrl === 'remote' ? <Check className="w-3.5 h-3.5 text-white" /> : <Copy className="w-3.5 h-3.5" />}
               <span>{copiedUrl === 'remote' ? 'Copiado' : 'Copiar'}</span>
             </button>
+            <button
+              onClick={() => setIsQrModalOpen(true)}
+              className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-emerald-600/50 font-bold rounded-lg text-[11px] flex items-center gap-1 shadow cursor-pointer active:scale-95"
+            >
+              <QrCode className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Ver QR Code</span>
+            </button>
           </div>
           <p className="text-[11px] text-slate-400">
             Abra este endereço no navegador do seu celular ou tablet para controlar todo o consultório sem fios na mão.
@@ -249,6 +259,12 @@ export const FireTVPairingModal: React.FC<FireTVPairingModalProps> = ({ isOpen, 
           </button>
         </div>
       </div>
+
+      <RemoteControlQRCodeModal
+        isOpen={isQrModalOpen}
+        onClose={() => setIsQrModalOpen(false)}
+        roomName={currentRoom}
+      />
     </div>
   );
 };

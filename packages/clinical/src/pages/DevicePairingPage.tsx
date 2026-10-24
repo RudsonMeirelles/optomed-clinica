@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Tv, Lock, CheckCircle2, RefreshCw, Wifi, ArrowRight } from 'lucide-react';
+import { Tv, Lock, CheckCircle2, RefreshCw, Wifi, ArrowRight, QrCode } from 'lucide-react';
 import { lanController } from '../services/lanController';
+import { RemoteControlQRCodeModal } from '../components/RemoteControlQRCodeModal';
 
 interface DevicePairingPageProps {
   onBack: () => void;
@@ -11,6 +12,7 @@ export const DevicePairingPage: React.FC<DevicePairingPageProps> = ({ onBack }) 
   const [roomName, setRoomName] = useState<string>('Consultório 1');
   const [isPairing, setIsPairing] = useState<boolean>(false);
   const [isPaired, setIsPaired] = useState<boolean>(true);
+  const [isQrOpen, setIsQrOpen] = useState<boolean>(false);
 
   const handlePair = (e: React.FormEvent) => {
     e.preventDefault();
@@ -97,16 +99,33 @@ export const DevicePairingPage: React.FC<DevicePairingPageProps> = ({ onBack }) 
               </div>
             </div>
 
-            <button
-              onClick={onBack}
-              className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-lg flex items-center gap-1"
-            >
-              <span>Ir para Consultas</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setIsQrOpen(true)}
+                className="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-lg flex items-center gap-1.5 shadow cursor-pointer active:scale-95 transition-all"
+              >
+                <QrCode className="w-4 h-4 text-emerald-400" />
+                <span>QR Code Celular</span>
+              </button>
+
+              <button
+                onClick={onBack}
+                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-lg flex items-center gap-1 cursor-pointer"
+              >
+                <span>Ir para Consultas</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
           </div>
         )}
       </div>
+
+      <RemoteControlQRCodeModal
+        isOpen={isQrOpen}
+        onClose={() => setIsQrOpen(false)}
+        roomName={roomName}
+      />
     </div>
   );
 };

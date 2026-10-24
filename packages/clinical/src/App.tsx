@@ -20,8 +20,10 @@ import {
   Crown,
   ExternalLink,
   Loader2,
-  UserPlus
+  UserPlus,
+  QrCode
 } from 'lucide-react';
+import { RemoteControlQRCodeModal } from './components/RemoteControlQRCodeModal';
 import { 
   SyncStatusBadge,
   OptomedBrandLogo,
@@ -72,6 +74,7 @@ export function App() {
   const [activeClinic, setActiveClinic] = useState<ClinicConfig>(offlineDb.getActiveClinic());
   const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
+  const [isQrModalOpen, setIsQrModalOpen] = useState<boolean>(false);
   const mainContentRef = useRef<HTMLElement | null>(null);
 
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(() => {
@@ -139,6 +142,35 @@ export function App() {
   const isTvOnlyMode = urlParams?.get('tv') === '1' || urlParams?.get('tela') === 'espera';
   const isOptotypeOnlyMode = urlParams?.get('optotype') === '1' || urlParams?.get('tela') === 'optotipo' || urlParams?.get('direct') === '1';
   const isRemoteOnlyMode = urlParams?.get('controle') === '1' || urlParams?.get('remote') === '1' || urlParams?.get('tela') === 'controle' || (typeof window !== 'undefined' && window.location.pathname.startsWith('/controle'));
+
+  // Pareamento por QR Code direto com token e sala
+  useEffect(() => {
+    if (!urlParams) return;
+    const authParam = urlParams.get('auth');
+    const roomParam = urlParams.get('room');
+    const clinicParam = urlParams.get('clinic');
+
+    if (roomParam) {
+      lanController.setPairedRoom(roomParam);
+    }
+    if (clinicParam && clinicParam !== 'all') {
+      offlineDb.setActiveClinicId(clinicParam);
+      setActiveClinic(offlineDb.getActiveClinic());
+    }
+
+    if (authParam) {
+      try {
+        const decoded = JSON.parse(decodeURIComponent(escape(atob(authParam))));
+        if (decoded && decoded.token && decoded.user) {
+          authService.loginWithToken(decoded.token, decoded.user);
+          setCurrentUser(decoded.user);
+          lanController.reconnect(decoded.user.clinicId || 'ivs', decoded.token);
+        }
+      } catch (e) {
+        console.warn('[QR Auth] Falha ao processar login automático via QR Code:', e);
+      }
+    }
+  }, []);
 
   // Função auxiliar para determinar a primeira tela conforme o princípio "O que preciso fazer agora?"
   const getDefaultPageForRole = (role?: string): 'schedule' | 'doctor_workspace' | 'master_admin' | 'finance' => {
@@ -764,6 +796,17 @@ export function App() {
               </div>
 
               <div className="flex items-center gap-2 sm:gap-3">
+                {/* Botão QR Code para Parear Controle Remoto no Celular */}
+                <button
+                  type="button"
+                  onClick={() => setIsQrModalOpen(true)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold shadow-sm active:scale-95 transition-all cursor-pointer"
+                  title="Parear Controle Remoto no Celular via QR Code"
+                >
+                  <QrCode className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Controle Celular</span>
+                </button>
+
                 <button
                   type="button"
                   onClick={() => {
@@ -886,6 +929,14 @@ export function App() {
           </main>
         </div>
       </div>
+
+      {/* Modal de Pareamento por QR Code para Celular */}
+      <RemoteControlQRCodeModal
+        isOpen={isQrModalOpen}
+        onClose={() => setIsQrModalOpen(false)}
+        clinicId={currentUser.clinicId !== 'all' ? currentUser.clinicId : activeClinic.id}
+        roomName={lanController.getPairedRoom()}
+      />
     </div>
   );
 }

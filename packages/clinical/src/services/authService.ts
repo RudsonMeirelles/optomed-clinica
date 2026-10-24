@@ -723,6 +723,15 @@ class AuthService {
     return { localCleared: true, serverRevoked };
   }
 
+  public loginWithToken(token: string, user: UserAccount): void {
+    this.currentUser = user;
+    localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
+    localStorage.setItem(AUTH_TOKEN_KEY, token);
+    if (user.clinicId && user.clinicId !== 'all') {
+      offlineDb.setActiveClinicId(user.clinicId);
+    }
+  }
+
   public getSessionToken(): string | null {
     return localStorage.getItem(AUTH_TOKEN_KEY);
   }
