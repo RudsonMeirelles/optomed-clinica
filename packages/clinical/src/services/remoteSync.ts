@@ -590,14 +590,20 @@ class RemoteSyncService {
     let hasLocalChanges = false;
 
     // 1. Carrega dados do servidor que não estão com tombstone
-    for (const item of serverData) {
+    for (const rawItem of serverData) {
+      const item = (rawItem && rawItem.data && typeof rawItem.data === 'object' && rawItem.storageKey)
+        ? { ...rawItem.data, id: rawItem.data.id || rawItem.id }
+        : rawItem;
       if (item && item.id && !tombstones[item.id] && !item._deleted) {
         map.set(item.id, item);
       }
     }
 
     // 2. Mescla dados locais
-    for (const item of localData) {
+    for (const rawItem of localData) {
+      const item = (rawItem && rawItem.data && typeof rawItem.data === 'object' && rawItem.storageKey)
+        ? { ...rawItem.data, id: rawItem.data.id || rawItem.id }
+        : rawItem;
       if (!item || !item.id) continue;
 
       // Se o item local foi deletado ou existe lápide no servidor
