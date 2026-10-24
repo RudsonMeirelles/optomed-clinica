@@ -43,6 +43,7 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, onS
   const effectiveClinicId = (clinicId && clinicId !== 'all') ? clinicId : offlineDb.getActiveClinicId();
   const [patients, setPatients] = useState<Patient[]>([]);
   const [encounters, setEncounters] = useState<ClinicalEncounter[]>([]);
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [search, setSearch] = useState<string>('');
   const [nationalityFilter, setNationalityFilter] = useState<'ALL' | 'BR' | 'PY'>('ALL');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -190,12 +191,14 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, onS
 
   useEffect(() => {
     const refreshPatients = () => {
-      // 1. Busca pacientes e prontuários EXCLUSIVAMENTE da clínica efetiva autorizada na sessão
+      // 1. Busca pacientes, agendamentos e prontuários EXCLUSIVAMENTE da clínica efetiva autorizada na sessão
       const clinicPatients = offlineDb.getPatients(effectiveClinicId);
       const clinicEncounters = offlineDb.getEncounters(effectiveClinicId);
+      const clinicAppointments = offlineDb.getAppointments(effectiveClinicId);
 
       setPatients(clinicPatients);
       setEncounters(clinicEncounters);
+      setAppointments(clinicAppointments);
     };
 
     const handleOpenNewPatientTrigger = () => {
@@ -207,6 +210,7 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, onS
     window.addEventListener('optomed_patient_updated', refreshPatients);
     window.addEventListener('optomed_new_patient_registered', refreshPatients);
     window.addEventListener('optomed_encounter_updated', refreshPatients);
+    window.addEventListener('optomed_appointment_updated', refreshPatients);
     window.addEventListener('optomed_clinic_changed', refreshPatients);
     window.addEventListener('optomed_open_new_patient_modal', handleOpenNewPatientTrigger);
 
@@ -215,6 +219,7 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, onS
       window.removeEventListener('optomed_patient_updated', refreshPatients);
       window.removeEventListener('optomed_new_patient_registered', refreshPatients);
       window.removeEventListener('optomed_encounter_updated', refreshPatients);
+      window.removeEventListener('optomed_appointment_updated', refreshPatients);
       window.removeEventListener('optomed_clinic_changed', refreshPatients);
       window.removeEventListener('optomed_open_new_patient_modal', handleOpenNewPatientTrigger);
     };
@@ -402,17 +407,41 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, onS
     }
   };
 
-  const filtered = patients.filter(p => {
-    if (!p) return false;
-    const name = (p.fullName || '').toLowerCase();
-    const q = (search || '').toLowerCase();
-    const phone = p.phone || '';
-    const doc = p.documentNumber || '';
-    const matchesSearch = !q || name.includes(q) || phone.includes(q) || doc.includes(q);
-    
-    const matchesNat = nationalityFilter === 'ALL' || p.nationality === nationalityFilter;
-    return matchesSearch && matchesNat;
-  });
+  const filtered = patients
+    .filter(p => {
+      if (!p) return false;
+      const name = (p.fullName || (p as any).name || '').toLowerCase();
+      const q = (search || '').toLowerCase();
+      const phone = p.phone || '';
+      const doc = p.documentNumber || '';
+      const matchesSearch = !q || name.includes(q) || phone.includes(q) || doc.includes(q);
+      
+      const matchesNat = nationalityFilter === 'ALL' || p.nationality === nationalityFilter;
+      return matchesSearch && matchesNat;
+    })
+    .sort((a, b) => {
+      // Ordenação inteligente: pacientes com atendimento ou agendamento mais recente aparecem primeiro
+      const pIdA = a.id;
+      const pIdB = b.id;
+
+      const encsA = encounters.filter(e => ((e as any)?.data?.patientId || e.patientId) === pIdA);
+      const encsB = encounters.filter(e => ((e as any)?.data?.patientId || e.patientId) === pIdB);
+      const latestEncA = encsA.reduce((max, e) => (e.date && e.date > max ? e.date : max), '');
+      const latestEncB = encsB.reduce((max, e) => (e.date && e.date > max ? e.date : max), '');
+
+      const aptsA = appointments.filter(apt => apt.patientId === pIdA);
+      const aptsB = appointments.filter(apt => apt.patientId === pIdB);
+      const latestAptA = aptsA.reduce((max, apt) => (apt.date && apt.date > max ? apt.date : max), '');
+      const latestAptB = aptsB.reduce((max, apt) => (apt.date && apt.date > max ? apt.date : max), '');
+
+      const timeA = latestEncA || latestAptA || a.createdAt || '';
+      const timeB = latestEncB || latestAptB || b.createdAt || '';
+
+      if (timeA && timeB && timeA !== timeB) {
+        return timeB.localeCompare(timeA);
+      }
+      return (a.fullName || '').localeCompare(b.fullName || '');
+    });
 
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-6">
