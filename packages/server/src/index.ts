@@ -332,6 +332,17 @@ function createServerBackup(clinicId: string, reason = 'auto'): void {
   }
 }
 
+function unwrapItem(raw: any): any {
+  if (raw && typeof raw === 'object' && raw.data && typeof raw.data === 'object' && raw.storageKey) {
+    return {
+      ...raw.data,
+      id: raw.data.id || raw.id,
+      updatedAt: raw.data.updatedAt || raw.updatedAt
+    };
+  }
+  return raw;
+}
+
 function readData(clinicId: string, entity: string): any[] {
   const cacheKey = `${clinicId}__${entity}`;
   const now = Date.now();
@@ -346,9 +357,10 @@ function readData(clinicId: string, entity: string): any[] {
       dataCache.set(cacheKey, { data: [], mtime: now });
       return [];
     }
-    const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-    dataCache.set(cacheKey, { data: Array.isArray(data) ? data : [], mtime: now });
-    return Array.isArray(data) ? JSON.parse(JSON.stringify(data)) : [];
+    const raw = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+    const data = Array.isArray(raw) ? raw.map(unwrapItem) : [];
+    dataCache.set(cacheKey, { data, mtime: now });
+    return JSON.parse(JSON.stringify(data));
   } catch { return []; }
 }
 

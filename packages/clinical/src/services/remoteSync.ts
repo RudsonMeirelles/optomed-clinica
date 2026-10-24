@@ -422,10 +422,11 @@ class RemoteSyncService {
       const lastDeltaKey = `optomed_${clinicId}_last_delta_sync`;
       const lastDeltaIso = typeof localStorage !== 'undefined' ? localStorage.getItem(lastDeltaKey) : null;
 
-      // Salvaguarda histórica: se a contagem local de pacientes for zero ou muito baixa,
+      // Salvaguarda histórica: se o cliente tiver menos registros que o esperado (ou encounters zerados),
       // invalida lastDeltaIso para forçar carga histórica completa não-destrutiva
       const localPatients = getLocal('patients') || [];
-      const isLocalHistorySparse = localPatients.length === 0;
+      const localEncounters = getLocal('encounters') || [];
+      const isLocalHistorySparse = localPatients.length < 100 || localEncounters.length < 100;
 
       try {
         const deltaUrl = `${getApiBase()}/api/sync/delta/${clinicId}${lastDeltaIso && !isLocalHistorySparse ? `?since=${encodeURIComponent(lastDeltaIso)}` : ''}`;
