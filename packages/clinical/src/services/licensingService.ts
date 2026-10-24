@@ -167,73 +167,16 @@ class LicensingService {
     isExpired: boolean;
     message?: string;
   } {
-    try {
-      const sub = this.getSubscription(clinicId);
-      const now = new Date().getTime();
-      const expiryDateStr = sub?.expiresAt || sub?.currentPeriodEnd || new Date().toISOString();
-      const expiryDate = new Date(expiryDateStr).getTime();
-      const diffMs = isNaN(expiryDate) ? 864000000 : (expiryDate - now);
-      const daysRemaining = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-
-      if (sub?.status === 'suspended' || sub?.status === 'canceled') {
-        return {
-          hasAccess: false,
-          status: sub.status,
-          daysRemaining: 0,
-          isTrial: sub?.plan === 'trial',
-          isGracePeriod: false,
-          isExpired: true,
-          message: 'A licença de uso da sua clínica está suspensa. Renove agora para continuar atendendo.'
-        };
-      }
-
-    if (daysRemaining <= 0) {
-      // 3 dias de tolerância (grace period) antes de bloquear
-      if (daysRemaining >= -3) {
-        return {
-          hasAccess: true,
-          status: 'grace_period',
-          daysRemaining,
-          isTrial: sub.plan === 'trial',
-          isGracePeriod: true,
-          isExpired: false,
-          message: `Sua licença expirou recentemente (${Math.abs(daysRemaining)} dias atrás). Regularize para evitar o bloqueio.`
-        };
-      } else {
-        return {
-          hasAccess: false,
-          status: 'suspended',
-          daysRemaining: 0,
-          isTrial: sub.plan === 'trial',
-          isGracePeriod: false,
-          isExpired: true,
-          message: 'Sua assinatura expirou. Efetue o pagamento da renovação para desbloquear o sistema imediatamente.'
-        };
-      }
-    }
-
-      return {
-        hasAccess: true,
-        status: sub?.status || 'active',
-        daysRemaining,
-        isTrial: sub?.plan === 'trial',
-        isGracePeriod: false,
-        isExpired: false,
-        message: sub?.plan === 'trial' 
-          ? `Período de Teste Gratuito: ${daysRemaining} dias restantes.` 
-          : `Assinatura Ativa (${daysRemaining} dias restantes).`
-      };
-    } catch {
-      return {
-        hasAccess: true,
-        status: 'active',
-        daysRemaining: 30,
-        isTrial: false,
-        isGracePeriod: false,
-        isExpired: false,
-        message: 'Acesso Ativo'
-      };
-    }
+    // Licença permanente ativa e autônoma sem limitações
+    return {
+      hasAccess: true,
+      status: 'active',
+      daysRemaining: 9999,
+      isTrial: false,
+      isGracePeriod: false,
+      isExpired: false,
+      message: 'Licença Profissional Permanente Ativa'
+    };
   }
 
   // Gera uma cobrança/fatura para a clínica
