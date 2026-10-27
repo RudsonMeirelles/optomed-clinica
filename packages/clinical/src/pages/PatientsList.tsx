@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Patient, Appointment, NationalityType, DocumentType, calculateAge } from '@optotipo/shared';
 import { 
   Users, 
@@ -407,41 +407,72 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, onS
     }
   };
 
-  const filtered = patients
-    .filter(p => {
-      if (!p) return false;
-      const name = (p.fullName || (p as any).name || '').toLowerCase();
-      const q = (search || '').toLowerCase();
-      const phone = p.phone || '';
-      const doc = p.documentNumber || '';
-      const matchesSearch = !q || name.includes(q) || phone.includes(q) || doc.includes(q);
-      
-      const matchesNat = nationalityFilter === 'ALL' || p.nationality === nationalityFilter;
-      return matchesSearch && matchesNat;
-    })
-    .sort((a, b) => {
-      // Ordenação inteligente: pacientes com atendimento ou agendamento mais recente aparecem primeiro
-      const pIdA = a.id;
-      const pIdB = b.id;
+  // 1. Pré-indexação otimizada O(N) dos prontuários e agendamentos por ID de paciente
+  const encountersByPatient = useMemo(() => {
+    const map = new Map<string, ClinicalEncounter[]>();
+    for (const e of encounters) {
+      const pId = (e as any)?.data?.patientId || e.patientId;
+      if (!pId) continue;
+      const list = map.get(pId);
+      if (!list) map.set(pId, [e]);
+      else list.push(e);
+    }
+    for (const list of map.values()) {
+      list.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    }
+    return map;
+  }, [encounters]);
 
-      const encsA = encounters.filter(e => ((e as any)?.data?.patientId || e.patientId) === pIdA);
-      const encsB = encounters.filter(e => ((e as any)?.data?.patientId || e.patientId) === pIdB);
-      const latestEncA = encsA.reduce((max, e) => (e.date && e.date > max ? e.date : max), '');
-      const latestEncB = encsB.reduce((max, e) => (e.date && e.date > max ? e.date : max), '');
+  const appointmentsByPatient = useMemo(() => {
+    const map = new Map<string, Appointment[]>();
+    for (const a of appointments) {
+      if (!a.patientId) continue;
+      const list = map.get(a.patientId);
+      if (!list) map.set(a.patientId, [a]);
+      else list.push(a);
+    }
+    for (const list of map.values()) {
+      list.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+    }
+    return map;
+  }, [appointments]);
 
-      const aptsA = appointments.filter(apt => apt.patientId === pIdA);
-      const aptsB = appointments.filter(apt => apt.patientId === pIdB);
-      const latestAptA = aptsA.reduce((max, apt) => (apt.date && apt.date > max ? apt.date : max), '');
-      const latestAptB = aptsB.reduce((max, apt) => (apt.date && apt.date > max ? apt.date : max), '');
+  // 2. Pré-calcula a data de atividade mais recente de cada paciente para ordenação O(P)
+  const patientActivityTimestampMap = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const p of patients) {
+      const pId = p.id;
+      const pEncs = encountersByPatient.get(pId);
+      const pApts = appointmentsByPatient.get(pId);
+      const latestEnc = pEncs?.[0]?.date || '';
+      const latestApt = pApts?.[0]?.date || '';
+      const actTime = latestEnc || latestApt || p.createdAt || '';
+      map.set(pId, actTime);
+    }
+    return map;
+  }, [patients, encountersByPatient, appointmentsByPatient]);
 
-      const timeA = latestEncA || latestAptA || a.createdAt || '';
-      const timeB = latestEncB || latestAptB || b.createdAt || '';
-
-      if (timeA && timeB && timeA !== timeB) {
-        return timeB.localeCompare(timeA);
-      }
-      return (a.fullName || '').localeCompare(b.fullName || '');
-    });
+  const filtered = useMemo(() => {
+    const q = (search || '').toLowerCase().trim();
+    return patients
+      .filter(p => {
+        if (!p) return false;
+        const name = (p.fullName || (p as any).name || '').toLowerCase();
+        const phone = p.phone || '';
+        const doc = p.documentNumber || '';
+        const matchesSearch = !q || name.includes(q) || phone.includes(q) || doc.includes(q);
+        const matchesNat = nationalityFilter === 'ALL' || p.nationality === nationalityFilter;
+        return matchesSearch && matchesNat;
+      })
+      .sort((a, b) => {
+        const timeA = patientActivityTimestampMap.get(a.id) || '';
+        const timeB = patientActivityTimestampMap.get(b.id) || '';
+        if (timeA && timeB && timeA !== timeB) {
+          return timeB.localeCompare(timeA);
+        }
+        return (a.fullName || '').localeCompare(b.fullName || '');
+      });
+  }, [patients, search, nationalityFilter, patientActivityTimestampMap]);
 
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-6">
@@ -522,13 +553,7 @@ export const PatientsList: React.FC<PatientsListProps> = ({ onSelectPatient, onS
               ? { ...(rawPatient as any).data, id: (rawPatient as any).data.id || rawPatient.id }
               : rawPatient;
 
-            const patientEncounters = encounters
-              .filter(e => {
-                const ePatId = (e as any)?.data?.patientId || e.patientId;
-                return ePatId === patient.id;
-              })
-              .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-            
+            const patientEncounters = encountersByPatient.get(patient.id) || [];
             const lastEncounter = patientEncounters[0];
             const isExpanded = expandedPatientId === patient.id;
 
