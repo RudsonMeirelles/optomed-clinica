@@ -769,6 +769,7 @@ export interface ClinicalEncounter {
   prescription?: Prescription;
   clinicalNotes?: string;
   conduct?: string;
+  internalConductNotes?: string; // Observação interna de conduta (diálogo clínico confidencial, não sai no receituário)
   returnInWeeks?: number;
   returnInstructions?: string; // Indicação de retorno em texto livre
   isReturnEncounter?: boolean; // Indica se este atendimento é uma consulta de retorno
@@ -825,6 +826,7 @@ export interface ClinicalConduct {
   returnTargetDate?: string; // YYYY-MM-DD
   referrals?: string; // Encaminhamentos
   requestedExams?: string[]; // Exames complementares solicitados
+  internalNotes?: string; // Observação interna confidencial (não sai na receita)
   notes?: string;
 }
 

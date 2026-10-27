@@ -667,6 +667,7 @@ export interface ClinicalEncounter {
     prescription?: Prescription;
     clinicalNotes?: string;
     conduct?: string;
+    internalConductNotes?: string;
     returnInWeeks?: number;
     returnInstructions?: string;
     isReturnEncounter?: boolean;
@@ -706,6 +707,7 @@ export interface ClinicalConduct {
     returnTargetDate?: string;
     referrals?: string;
     requestedExams?: string[];
+    internalNotes?: string;
     notes?: string;
 }
 export type EvolutionType = 'evolution' | 'amendment' | 'correction' | 'addendum' | 'clinical_note';

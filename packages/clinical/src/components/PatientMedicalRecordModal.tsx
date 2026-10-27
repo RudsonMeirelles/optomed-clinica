@@ -27,7 +27,8 @@ import {
   FileBadge,
   ExternalLink,
   Pill,
-  Eye
+  Eye,
+  Lock
 } from 'lucide-react';
 import { offlineDb } from '../services/offlineDb';
 
@@ -1238,11 +1239,29 @@ export const PatientMedicalRecordModal: React.FC<PatientMedicalRecordModalProps>
 
                   {/* Conduta Geral */}
                   <div className="bg-white p-3 rounded-xl border border-blue-100 space-y-1">
-                    <span className="text-[10px] font-bold text-slate-500 uppercase block">Conduta Realizada:</span>
+                    <span className="text-[10px] font-bold text-slate-500 uppercase block">Conduta Realizada (Orientações ao Paciente):</span>
                     <p className="text-xs text-slate-900 font-medium whitespace-pre-wrap">
                       {activeEncounter.conduct || 'Prescrição óptica de rotina emitida. Orientações de ergonomia visual.'}
                     </p>
                   </div>
+
+                  {/* Observação Interna da Conduta (Sigilo Clínico) */}
+                  {(activeEncounter.internalConductNotes || activeEncounter.structuredConduct?.internalNotes) && (
+                    <div className="bg-amber-50/90 p-3 rounded-xl border border-amber-200/90 space-y-1">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-black text-amber-900 uppercase flex items-center gap-1">
+                          <Lock className="w-3 h-3 text-amber-700" />
+                          <span>Observação Interna de Conduta (Sigilo Clínico / Uso Interno):</span>
+                        </span>
+                        <span className="text-[8px] font-bold bg-amber-200/80 text-amber-800 px-1.5 py-0.2 rounded">
+                          Não emitido na receita
+                        </span>
+                      </div>
+                      <p className="text-xs text-amber-950 font-medium whitespace-pre-wrap">
+                        {activeEncounter.internalConductNotes || activeEncounter.structuredConduct?.internalNotes}
+                      </p>
+                    </div>
+                  )}
 
                   {/* Campos Estruturados (Plano Terapêutico, Orientações, Encaminhamentos, Exames) */}
                   {activeEncounter.structuredConduct && (

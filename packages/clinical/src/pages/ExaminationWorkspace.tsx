@@ -58,7 +58,8 @@ import {
   FileCheck2,
   CalendarClock,
   Trash2,
-  ChevronLeft
+  ChevronLeft,
+  Lock
 } from 'lucide-react';
 import { SyncStatusBadge } from '../components/SyncStatusBadge';
 import { RemoteControlPanel } from '../components/RemoteControlPanel';
@@ -3360,7 +3361,7 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
                     </div>
 
                     <textarea
-                      rows={4}
+                      rows={3}
                       value={currentEncounter.conduct || ''}
                       onChange={(e) => {
                         const val = e.target.value;
@@ -3376,6 +3377,37 @@ export const ExaminationWorkspace: React.FC<ExaminationWorkspaceProps> = ({
                       placeholder="Prescrição de lentes multifocais, regras ergonômicas, plano terapêutico com colírios..."
                       className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs text-slate-900 focus:outline-none focus:border-blue-500 font-medium"
                     />
+
+                    {/* Observação Interna de Conduta (Sigilo Clínico - Não transcrito no Receituário) */}
+                    <div className="p-3 bg-amber-50/70 border border-amber-200/90 rounded-xl space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <label className="text-[10px] font-black uppercase tracking-wider text-amber-900 flex items-center gap-1.5">
+                          <Lock className="w-3 h-3 text-amber-700" />
+                          <span>Observação Interna de Conduta (Sigilo Clínico - Não transcrito no Receituário):</span>
+                        </label>
+                        <span className="text-[9px] font-bold text-amber-700 bg-amber-100/80 px-2 py-0.5 rounded-md border border-amber-300/80">
+                          Uso Interno Confidencial
+                        </span>
+                      </div>
+                      <textarea
+                        rows={2}
+                        value={currentEncounter.internalConductNotes || currentEncounter.structuredConduct?.internalNotes || ''}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          const sc = currentEncounter.structuredConduct || { id: generateUUID(), encounterId: currentEncounter.id };
+                          setCurrentEncounter({
+                            ...currentEncounter,
+                            internalConductNotes: val,
+                            structuredConduct: {
+                              ...sc,
+                              internalNotes: val
+                            }
+                          });
+                        }}
+                        placeholder="Descreva observações internas, diálogos específicos com o paciente/acompanhante, impressões confidenciais ou notas que NÃO devem aparecer na receita..."
+                        className="w-full bg-white border border-amber-200 rounded-lg p-2 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-amber-500 font-medium"
+                      />
+                    </div>
 
                     {/* Campos Clínicos Estruturados Adicionais */}
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 text-xs">
