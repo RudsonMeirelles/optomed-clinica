@@ -17,7 +17,10 @@ import {
   Check,
   RefreshCw,
   Sparkles,
-  History
+  History,
+  Edit3,
+  X,
+  Key
 } from 'lucide-react';
 import { offlineDb, DEFAULT_CLINICS, generateUUID } from '../services/offlineDb';
 import { authService } from '../services/authService';
@@ -57,6 +60,14 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ currentUser, onClini
   const [newUserClinicId, setNewUserClinicId] = useState<string>('ivs');
   const [newUserPassword, setNewUserPassword] = useState<string>('123456');
   const [newUserRegistry, setNewUserRegistry] = useState<string>('');
+
+  // Edição de Usuário Existente (Administrador / Superadmin)
+  const [editingUser, setEditingUser] = useState<(UserAccount & { passwordHash?: string }) | null>(null);
+  const [editFullName, setEditFullName] = useState<string>('');
+  const [editRole, setEditRole] = useState<UserRole>('examiner');
+  const [editClinicId, setEditClinicId] = useState<string>('ivs');
+  const [editRegistry, setEditRegistry] = useState<string>('');
+  const [editPassword, setEditPassword] = useState<string>('');
 
   const loadData = () => {
     const list = offlineDb.getClinics();
@@ -160,11 +171,49 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ currentUser, onClini
     setNewUserRegistry('');
   };
 
+  // Abertura do modal de edição de usuário
+  const handleStartEditUser = (user: UserAccount & { passwordHash?: string }) => {
+    setEditingUser(user);
+    setEditFullName(user.fullName || '');
+    setEditRole(user.role || 'examiner');
+    setEditClinicId(user.clinicId || 'ivs');
+    setEditRegistry(user.registryNumber || '');
+    setEditPassword(user.passwordHash || '');
+  };
+
+  // Salvar alterações de usuário existente
+  const handleSaveEditUser = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingUser) return;
+
+    const clinic = clinics.find(c => c.id === editClinicId);
+    const updatedUser: UserAccount & { passwordHash?: string } = {
+      ...editingUser,
+      fullName: editFullName.trim(),
+      role: editRole,
+      clinicId: editClinicId,
+      clinicName: editClinicId === 'all' ? 'Todas as Unidades' : (clinic ? clinic.name : editingUser.clinicName),
+      registryNumber: editRegistry.trim(),
+      passwordHash: editPassword.trim() || editingUser.passwordHash || '123456'
+    };
+
+    authService.saveUser(updatedUser);
+    loadData();
+    setEditingUser(null);
+    showNotification(`Usuário "${updatedUser.username}" atualizado com sucesso!`);
+  };
+
   const handleDeleteUser = (id: string) => {
-    if (confirm('Deseja realmente remover este usuário?')) {
+    const target = users.find(u => u.id === id);
+    if (!target) return;
+    if (target.username === 'superadmin' || (target.username === 'admin' && currentUser.role !== 'superadmin')) {
+      alert('Este usuário master do sistema não pode ser excluído.');
+      return;
+    }
+    if (confirm(`Deseja realmente remover o usuário "${target.fullName || target.username}"?`)) {
       authService.deleteUser(id);
       loadData();
-      showNotification('Usuário removido.');
+      showNotification('Usuário removido com sucesso.');
     }
   };
 
@@ -603,15 +652,24 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ currentUser, onClini
                         {u.clinicId === 'all' ? '🌐 Todos os Consultórios' : clinics.find(c => c.id === u.clinicId)?.code || u.clinicId}
                       </td>
                       <td className="p-2.5 text-right">
-                        {u.username !== 'admin' && u.username !== 'superadmin' && (
+                        <div className="flex items-center justify-end gap-1">
                           <button
-                            onClick={() => handleDeleteUser(u.id)}
-                            className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
-                            title="Remover usuário"
+                            onClick={() => handleStartEditUser(u)}
+                            className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer"
+                            title="Editar usuário e senha"
                           >
-                            <Trash2 className="w-4 h-4" />
+                            <Edit3 className="w-4 h-4" />
                           </button>
-                        )}
+                          {(u.username !== 'superadmin' && (currentUser.role === 'superadmin' || u.username !== 'admin')) && (
+                            <button
+                              onClick={() => handleDeleteUser(u.id)}
+                              className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+                              title="Remover usuário"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -620,6 +678,122 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ currentUser, onClini
             </div>
           </div>
 
+        </div>
+      )}
+
+      {/* Modal de Edição de Usuário & Senha (Admin / Superadmin) */}
+      {editingUser && (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-md w-full overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+            <div className="px-5 py-4 bg-slate-900 text-white flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold">
+                  <Edit3 className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-black tracking-tight">ALTERAR LOGIN & USUÁRIO</h3>
+                  <p className="text-[10px] text-slate-300 font-mono">@{editingUser.username}</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setEditingUser(null)}
+                className="text-slate-400 hover:text-white p-1 rounded-lg transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveEditUser} className="p-5 space-y-3.5">
+              <div>
+                <label className="text-[11px] font-bold text-slate-700 block mb-1">NOME COMPLETO *</label>
+                <input
+                  type="text"
+                  required
+                  value={editFullName}
+                  onChange={(e) => setEditFullName(e.target.value)}
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold focus:bg-white focus:border-blue-500 focus:outline-none"
+                  placeholder="Nome do usuário"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="text-[11px] font-bold text-slate-700 block mb-1">PERFIL DE ACESSO</label>
+                  <select
+                    value={editRole}
+                    onChange={(e) => setEditRole(e.target.value as UserRole)}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 text-xs font-bold focus:bg-white focus:border-blue-500 focus:outline-none"
+                  >
+                    <option value="examiner">Examinador (Médico/Opto)</option>
+                    <option value="reception">Recepção</option>
+                    <option value="admin">Administrador</option>
+                    {currentUser.role === 'superadmin' && (
+                      <option value="superadmin">Superadmin SaaS</option>
+                    )}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-[11px] font-bold text-slate-700 block mb-1">CONSULTÓRIO</label>
+                  <select
+                    value={editClinicId}
+                    onChange={(e) => setEditClinicId(e.target.value)}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 text-xs font-bold focus:bg-white focus:border-blue-500 focus:outline-none"
+                  >
+                    <option value="all">🌐 Todos (Global)</option>
+                    {clinics.map(c => (
+                      <option key={c.id} value={c.id}>{c.code} - {c.name}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="text-[11px] font-bold text-slate-700 block mb-1">REGISTRO PROFISSIONAL (CRM / CROO)</label>
+                <input
+                  type="text"
+                  value={editRegistry}
+                  onChange={(e) => setEditRegistry(e.target.value)}
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-mono focus:bg-white focus:border-blue-500 focus:outline-none"
+                  placeholder="Ex: CRM 123456 ou CROO 789"
+                />
+              </div>
+
+              <div>
+                <label className="text-[11px] font-bold text-slate-700 block mb-1 flex items-center justify-between">
+                  <span>SENHA DE ACESSO</span>
+                  <span className="text-[10px] text-blue-600 font-semibold flex items-center gap-1">
+                    <Key className="w-3 h-3" /> Alterar para nova senha
+                  </span>
+                </label>
+                <input
+                  type="text"
+                  value={editPassword}
+                  onChange={(e) => setEditPassword(e.target.value)}
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-mono font-bold text-slate-800 focus:bg-white focus:border-blue-500 focus:outline-none"
+                  placeholder="Nova senha do usuário"
+                />
+                <p className="text-[10px] text-slate-400 mt-1">A senha é exibida diretamente para fácil configuração e entrega ao usuário.</p>
+              </div>
+
+              <div className="pt-2 flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setEditingUser(null)}
+                  className="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold shadow-md active:scale-95 transition-transform flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Save className="w-4 h-4" /> Salvar Alterações
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
 
