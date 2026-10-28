@@ -41,6 +41,16 @@ class LanControllerService {
           const data = event.data;
           if (data && data.type === 'DEVICE_PRESENCE_CHANGED' && data.device) {
             this.handlePresenceChange(data.device);
+          } else if (data && data.type === 'CALL_PATIENT' && data.ticket) {
+            if (typeof window !== 'undefined') {
+              window.dispatchEvent(new CustomEvent('optomed_patient_called', { detail: data.ticket }));
+              localStorage.setItem('optomed_latest_ticket_call', JSON.stringify(data.ticket));
+            }
+          } else if (data && data.type === 'CLEAR_PATIENT_CALL') {
+            if (typeof window !== 'undefined') {
+              window.dispatchEvent(new CustomEvent('optomed_patient_cleared'));
+              localStorage.removeItem('optomed_latest_ticket_call');
+            }
           }
         } catch {}
       };
@@ -359,6 +369,19 @@ class LanControllerService {
               }
             }
           }
+
+          // Notificação de chamada de paciente enviada por outro terminal clínico (ex: Consultório -> Recepção/TV)
+          if (msg.type === 'CALL_PATIENT' && msg.ticket) {
+            if (typeof window !== 'undefined') {
+              window.dispatchEvent(new CustomEvent('optomed_patient_called', { detail: msg.ticket }));
+              localStorage.setItem('optomed_latest_ticket_call', JSON.stringify(msg.ticket));
+            }
+          } else if (msg.type === 'CLEAR_PATIENT_CALL') {
+            if (typeof window !== 'undefined') {
+              window.dispatchEvent(new CustomEvent('optomed_patient_cleared'));
+              localStorage.removeItem('optomed_latest_ticket_call');
+            }
+          }
         } catch {}
       };
       this.socket.onclose = () => {
@@ -494,10 +517,11 @@ class LanControllerService {
 
   public sendCommand(msg: ClientMessage): void {
     const activeClinicId = getCurrentActiveClinicId();
+    const isCallMsg = (msg as any).type === 'CALL_PATIENT' || (msg as any).type === 'CLEAR_PATIENT_CALL';
     const enriched = {
       ...msg,
       clinicId: (msg as any).clinicId || activeClinicId,
-      room: (msg as any).room || this.pairedTvRoom
+      room: isCallMsg ? 'all' : ((msg as any).room || this.pairedTvRoom)
     };
     if (this.socket && this.socket.readyState === WebSocket.OPEN) {
       this.socket.send(JSON.stringify(enriched));

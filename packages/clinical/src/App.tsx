@@ -36,6 +36,7 @@ import {
   IconDoorLogout
 } from './components/SyncStatusBadge';
 import { DoctorNotificationToast } from './components/DoctorNotificationToast';
+import { ReceptionCallToast } from './components/ReceptionCallToast';
 import { ConnectivityIndicator } from './components/ConnectivityIndicator';
 import { LoginPage } from './pages/LoginPage';
 import { SubscriptionBannerModal } from './components/SubscriptionBannerModal';
@@ -839,6 +840,9 @@ export function App() {
               onOpenPatientView={handleSelectPatientFromList}
               clinicId={currentUser.clinicId !== 'all' ? currentUser.clinicId : activeClinic.id}
             />
+
+            {/* Toast e Alerta Sonoro/Voz de Chamada de Paciente na Recepção quando o Consultório Chamar */}
+            <ReceptionCallToast />
 
             <Suspense fallback={<PageSuspenseFallback />}>
               {currentPage === 'master_admin' && (
