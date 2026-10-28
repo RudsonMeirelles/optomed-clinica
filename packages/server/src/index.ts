@@ -849,7 +849,10 @@ app.post('/api/auth/login', (req, res) => {
   }
 
   const { identifier, username, email, password, selectedClinicId } = req.body || {};
-  const cleanInput = String(identifier || username || email || '').toLowerCase().trim();
+  let cleanInput = String(identifier || username || email || '').toLowerCase().trim();
+  if (cleanInput.startsWith('@')) {
+    cleanInput = cleanInput.substring(1).trim();
+  }
   const rawPassword = String(password || '');
 
   if (!cleanInput || !rawPassword) {

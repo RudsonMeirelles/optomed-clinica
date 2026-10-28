@@ -399,7 +399,11 @@ class AuthService {
     selectedClinicId?: string
   ): Promise<{ success: boolean; error?: string; user?: UserAccount }> {
     try {
-      const cleanInput = (emailOrUsername || '').toLowerCase().trim();
+      // Remove @ inicial caso o usuário digite @recepcao.ivs ou @dr.meirelles
+      let cleanInput = (emailOrUsername || '').toLowerCase().trim();
+      if (cleanInput.startsWith('@')) {
+        cleanInput = cleanInput.substring(1).trim();
+      }
       const rawPassword = password || '';
 
       if (!cleanInput || !rawPassword) {
