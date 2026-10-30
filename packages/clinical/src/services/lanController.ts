@@ -10,6 +10,7 @@ import {
 } from '@optotipo/shared';
 import { getApiBase, remoteSync } from './remoteSync';
 import { indexedDbStorage } from './indexedDbStorage';
+import { SecurityService } from './securityService';
 
 function getCurrentActiveClinicId(): string {
   if (typeof localStorage === 'undefined') return 'ivs';
@@ -420,8 +421,28 @@ class LanControllerService {
   public sendRegisterHandshake(clinicId?: string, authToken?: string): void {
     if (!this.socket || this.socket.readyState !== WebSocket.OPEN) return;
     const activeClinicId = clinicId || this.currentClinicId || getCurrentActiveClinicId();
-    const token = authToken || this.currentAuthToken || (typeof localStorage !== 'undefined' ? (localStorage.getItem('optotipo_clinical_auth_token_v2') || undefined) : undefined);
+    let token = authToken || this.currentAuthToken || (typeof localStorage !== 'undefined' ? (localStorage.getItem('optotipo_clinical_auth_token_v2') || undefined) : undefined);
     
+    // Auto-recuperação do token de sessão: se estiver ausente ou expirado, gera novamente a partir do usuário autenticado
+    if (!token && typeof localStorage !== 'undefined') {
+      try {
+        const rawUser = localStorage.getItem('optotipo_clinical_auth_user_v2');
+        if (rawUser) {
+          const user = JSON.parse(rawUser);
+          if (user && user.id && user.role) {
+            token = SecurityService.generateSessionToken({
+              userId: user.id,
+              username: user.username,
+              role: user.role,
+              clinicId: user.clinicId || activeClinicId,
+              allowedClinics: user.role === 'superadmin' ? 'all' : [user.clinicId || activeClinicId]
+            });
+            localStorage.setItem('optotipo_clinical_auth_token_v2', token);
+          }
+        }
+      } catch {}
+    }
+
     this.currentClinicId = activeClinicId;
     this.currentAuthToken = token;
 

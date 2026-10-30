@@ -1641,6 +1641,11 @@ class OfflineDatabaseService {
     await remoteSync.forceUploadAll(clinicId, this.getSyncGetLocal(clinicId) as any);
   }
 
+  // Limpa a fila de sincronização pendente se houver mutações órfãs acumuladas
+  public clearSyncQueue(): void {
+    remoteSync.clearQueue();
+  }
+
   // Dados iniciais específicos por consultório (IVS inicia 100% limpo, apenas dados reais cadastrados pelo usuário)
   private getInitialPatientsForClinic(clinicId: string): Patient[] {
     if (clinicId === 'ivs') {

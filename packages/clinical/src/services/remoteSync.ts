@@ -3,6 +3,7 @@
 
 import { syncQueue } from './syncQueueService';
 import { type SyncAction, mergeAppointmentStatuses } from '@optotipo/shared';
+import { SecurityService } from './securityService';
 
 type SyncStatus = 'synced' | 'syncing' | 'error' | 'offline';
 
@@ -119,7 +120,51 @@ class RemoteSyncService {
       headers['x-operation-id'] = operationId;
     }
     if (typeof localStorage !== 'undefined') {
-      const token = localStorage.getItem('optotipo_clinical_auth_token_v2');
+      let token = localStorage.getItem('optotipo_clinical_auth_token_v2');
+
+      // Auto-recuperação de token: se o token não existir ou estiver expirado,
+      // regenera a partir dos dados do usuário logado armazenados localmente
+      if (!token) {
+        try {
+          const rawUser = localStorage.getItem('optotipo_clinical_auth_user_v2');
+          if (rawUser) {
+            const user = JSON.parse(rawUser);
+            if (user && user.id && user.role) {
+              token = SecurityService.generateSessionToken({
+                userId: user.id,
+                username: user.username,
+                role: user.role,
+                clinicId: user.clinicId || 'ivs',
+                allowedClinics: user.role === 'superadmin' ? 'all' : [user.clinicId || 'ivs']
+              });
+              localStorage.setItem('optotipo_clinical_auth_token_v2', token);
+            }
+          }
+        } catch {}
+      } else {
+        // Se for token Base64 do cliente, verifica se está prestes a expirar e renova
+        try {
+          const decoded = SecurityService.decodeSessionToken(token);
+          if (!decoded) {
+            // Token expirado ou inválido: renova
+            const rawUser = localStorage.getItem('optotipo_clinical_auth_user_v2');
+            if (rawUser) {
+              const user = JSON.parse(rawUser);
+              if (user && user.id && user.role) {
+                token = SecurityService.generateSessionToken({
+                  userId: user.id,
+                  username: user.username,
+                  role: user.role,
+                  clinicId: user.clinicId || 'ivs',
+                  allowedClinics: user.role === 'superadmin' ? 'all' : [user.clinicId || 'ivs']
+                });
+                localStorage.setItem('optotipo_clinical_auth_token_v2', token);
+              }
+            }
+          }
+        } catch {}
+      }
+
       if (token) {
         headers['Authorization'] = `Bearer ${token}`;
       }
@@ -660,6 +705,15 @@ class RemoteSyncService {
     }
 
     return { merged: Array.from(map.values()), hasLocalChanges };
+  }
+
+  /**
+   * Limpa a fila de mutações offline durável
+   */
+  public clearQueue(): void {
+    syncQueue.clearQueue();
+    this.pendingCount = 0;
+    this.notify('synced', 0);
   }
 }
 

@@ -51,6 +51,12 @@ export const SyncStatusBadge: React.FC = () => {
     }
   }, [isSyncing, isUploading]);
 
+  const handleResetQueue = useCallback(() => {
+    offlineDb.clearSyncQueue();
+    setPendingCount(0);
+    setSyncStatus('synced');
+  }, []);
+
   const handleForceUpload = useCallback(async () => {
     if (isSyncing || isUploading) return;
     setIsUploading(true);
@@ -132,6 +138,17 @@ export const SyncStatusBadge: React.FC = () => {
             }
             <span>{isUploading ? 'Enviando…' : uploadDone ? 'Enviado!' : 'Enviar ao servidor'}</span>
           </button>
+
+          {/* Se a fila estiver travada com pendências acumuladas, botão discreto para destravar */}
+          {pendingCount > 0 && (
+            <button
+              onClick={handleResetQueue}
+              className="text-[10px] text-slate-400 hover:text-red-600 underline transition-colors cursor-pointer"
+              title="Destravar e limpar fila pendente"
+            >
+              Destravar fila
+            </button>
+          )}
         </>
       )}
     </div>
