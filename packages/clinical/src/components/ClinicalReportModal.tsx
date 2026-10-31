@@ -140,10 +140,6 @@ export const ClinicalReportModal: React.FC<ClinicalReportModalProps> = ({
                 <span className="text-slate-500 block">Documento:</span>
                 <strong className="text-slate-900">{patient.documentType}: {patient.documentNumber || '-'}</strong>
               </div>
-              <div>
-                <span className="text-slate-500 block">Examinador:</span>
-                <strong className="text-slate-900">{encounter.examinerName || 'Dr. Rudson Meirelles'}</strong>
-              </div>
               {patient.city && (
                 <div>
                   <span className="text-slate-500 block">Cidade:</span>
@@ -303,10 +299,10 @@ export const ClinicalReportModal: React.FC<ClinicalReportModalProps> = ({
 
             {/* Assinatura Manual */}
             <div className="pt-16 flex justify-end items-end border-t border-slate-300 mt-8">
-              <div className="text-center">
-                <div className="w-64 border-b-2 border-slate-900 mb-1.5" />
-                <div className="text-xs font-bold text-slate-900">{encounter.examinerName || 'Dr. Rudson Meirelles'}</div>
-                <div className="text-[10px] text-slate-500">Assinatura & Carimbo do Profissional</div>
+              <div className="text-center w-64">
+                <div className="w-full border-b-2 border-slate-900 mb-1.5 h-8" />
+                <div className="text-[10px] font-bold text-slate-700 uppercase tracking-wider">Assinatura & Carimbo</div>
+                <div className="text-[9px] text-slate-400 font-mono">Assinatura &bull; Carimbo do Profissional</div>
               </div>
             </div>
           </div>

@@ -293,25 +293,21 @@ export const ClinicalDocumentIssuanceModal: React.FC<ClinicalDocumentIssuanceMod
               </div>
             </div>
 
-            {/* Rodapé e Assinatura */}
+            {/* Rodapé e Assinatura Manual */}
             <div className="pt-8 border-t border-slate-200 mt-auto">
               <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
                 <div className="text-[10px] text-slate-400">
                   <p>OptoMed Sistema de Gestão Oftalmológica Integrada</p>
-                  <p>Documento emitido eletronicamente e arquivado no prontuário.</p>
+                  <p>Documento emitido para assinatura e carimbo manual.</p>
                 </div>
 
                 <div className="text-center w-64">
-                  <div className="border-b border-slate-900 pb-1 mb-1">
-                    <span className="font-serif italic font-bold text-slate-800 text-sm block">
-                      {examinerName}
-                    </span>
-                  </div>
-                  <span className="text-[10px] font-bold text-slate-700 block uppercase">
-                    {examinerName}
+                  <div className="border-b-2 border-slate-900 pb-1 mb-1.5 h-8" />
+                  <span className="text-[10px] font-bold text-slate-700 block uppercase tracking-wider">
+                    Assinatura &bull; Carimbo
                   </span>
-                  <span className="text-[9px] text-slate-500 block">
-                    {examinerRegistry}
+                  <span className="text-[9px] text-slate-400 block font-mono">
+                    Data: {currentDate}
                   </span>
                 </div>
               </div>
