@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Sparkles, Compass, Check, ArrowRight, Pill, Calendar, ShieldCheck, HeartPulse, Search, X, BookOpen, AlertCircle } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Sparkles, Compass, Check, ArrowRight, Pill, Calendar, ShieldCheck, HeartPulse, Search, X, BookOpen, AlertCircle, Trash2, Plus, CheckSquare, Square, RotateCcw } from 'lucide-react';
 import { THERAPEUTIC_PROTOCOLS_DATABASE, TherapeuticProtocol, ClinicalProtocolDrug } from '../services/therapeuticProtocolsDb';
+import { OPHTHALMIC_DRUGS_DATABASE, OphthalmicDrug } from '../services/ophthalmicDrugsDb';
 
 interface TherapeuticPlanModalProps {
   isOpen: boolean;
@@ -26,7 +27,21 @@ export const TherapeuticPlanModal: React.FC<TherapeuticPlanModalProps> = ({
 }) => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedProtocol, setSelectedProtocol] = useState<TherapeuticProtocol>(THERAPEUTIC_PROTOCOLS_DATABASE[0]);
+  const [currentDrugs, setCurrentDrugs] = useState<ClinicalProtocolDrug[]>(THERAPEUTIC_PROTOCOLS_DATABASE[0].suggestedDrugs);
+  const [selectedDrugIndices, setSelectedDrugIndices] = useState<Set<number>>(
+    new Set(THERAPEUTIC_PROTOCOLS_DATABASE[0].suggestedDrugs.map((_, i) => i))
+  );
   const [appliedId, setAppliedId] = useState<string | null>(null);
+
+  // Modal interno para adicionar outro fármaco do banco
+  const [isAddDrugModalOpen, setIsAddDrugModalOpen] = useState<boolean>(false);
+  const [drugSearchQuery, setDrugSearchQuery] = useState<string>('');
+
+  // Ao trocar de protocolo, reseta a lista de medicamentos e seleções
+  useEffect(() => {
+    setCurrentDrugs([...selectedProtocol.suggestedDrugs]);
+    setSelectedDrugIndices(new Set(selectedProtocol.suggestedDrugs.map((_, i) => i)));
+  }, [selectedProtocol]);
 
   if (!isOpen) return null;
 
@@ -40,8 +55,71 @@ export const TherapeuticPlanModal: React.FC<TherapeuticPlanModalProps> = ({
     );
   });
 
+  // Alterna seleção individual de um fármaco (checkbox)
+  const handleToggleDrug = (index: number) => {
+    setSelectedDrugIndices(prev => {
+      const next = new Set(prev);
+      if (next.has(index)) {
+        next.delete(index);
+      } else {
+        next.add(index);
+      }
+      return next;
+    });
+  };
+
+  // Excluir definitivamente o fármaco do tratamento sugerido
+  const handleDeleteDrug = (index: number) => {
+    const updated = currentDrugs.filter((_, i) => i !== index);
+    setCurrentDrugs(updated);
+    // Reajusta os índices selecionados
+    setSelectedDrugIndices(prev => {
+      const next = new Set<number>();
+      Array.from(prev).forEach(idx => {
+        if (idx < index) next.add(idx);
+        else if (idx > index) next.add(idx - 1);
+      });
+      return next;
+    });
+  };
+
+  // Restaurar fármacos padrão do protocolo original
+  const handleResetDrugs = () => {
+    setCurrentDrugs([...selectedProtocol.suggestedDrugs]);
+    setSelectedDrugIndices(new Set(selectedProtocol.suggestedDrugs.map((_, i) => i)));
+  };
+
+  // Adicionar fármaco do catálogo oftálmico ao protocolo
+  const handleAddDrugFromDatabase = (drug: OphthalmicDrug) => {
+    const newDrug: ClinicalProtocolDrug = {
+      commercialName: drug.commercialName,
+      activePrinciple: drug.activePrinciple,
+      concentration: drug.concentration,
+      presentation: drug.presentation,
+      dosage: drug.defaultPosology,
+      route: drug.category === 'SUPLEMENTO' ? 'Uso Oral' : 'Uso Tópico Ocular',
+      quantity: '1 frasco'
+    };
+    setCurrentDrugs(prev => {
+      const updated = [...prev, newDrug];
+      setSelectedDrugIndices(curr => new Set([...Array.from(curr), updated.length - 1]));
+      return updated;
+    });
+    setIsAddDrugModalOpen(false);
+    setDrugSearchQuery('');
+  };
+
+  // Obter apenas os fármacos que estão selecionados pelo examinador
+  const getActiveDrugs = (): ClinicalProtocolDrug[] => {
+    return currentDrugs.filter((_, idx) => selectedDrugIndices.has(idx));
+  };
+
   const handleApply = (proto: TherapeuticProtocol) => {
-    onApplyPlan(proto);
+    const effectiveProtocol: TherapeuticProtocol = {
+      ...proto,
+      suggestedDrugs: getActiveDrugs()
+    };
+    onApplyPlan(effectiveProtocol);
     setAppliedId(proto.id);
     setTimeout(() => {
       setAppliedId(null);
@@ -175,34 +253,126 @@ export const TherapeuticPlanModal: React.FC<TherapeuticPlanModalProps> = ({
 
               {/* 2. Prescrição Farmacológica Sugerida */}
               <div className="p-4 bg-indigo-50/70 border border-indigo-200 rounded-2xl space-y-3">
-                <div className="flex items-center justify-between">
-                  <h4 className="font-black text-indigo-950 uppercase text-xs flex items-center gap-1.5">
-                    <Pill className="w-4 h-4 text-indigo-600" /> 2. Prescrição Farmacológica Sugerida (Doses & Posologia):
-                  </h4>
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div>
+                    <h4 className="font-black text-indigo-950 uppercase text-xs flex items-center gap-1.5">
+                      <Pill className="w-4 h-4 text-indigo-600" /> 2. Prescrição Farmacológica Sugerida ({getActiveDrugs().length} de {currentDrugs.length} selecionado{currentDrugs.length === 1 ? '' : 's'}):
+                    </h4>
+                    <p className="text-[11px] text-indigo-700 mt-0.5">
+                      Marque/desmarque os fármacos desejados ou exclua os que não deseja prescrever.
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setIsAddDrugModalOpen(true)}
+                      className="px-2.5 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-bold flex items-center gap-1 shadow-xs transition-colors cursor-pointer"
+                      title="Adicionar medicamento do catálogo oftálmico"
+                    >
+                      <Plus className="w-3.5 h-3.5" /> Adicionar Fármaco
+                    </button>
+                    {currentDrugs.length !== selectedProtocol.suggestedDrugs.length || selectedDrugIndices.size !== currentDrugs.length ? (
+                      <button
+                        type="button"
+                        onClick={handleResetDrugs}
+                        className="px-2.5 py-1.5 bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 rounded-lg text-xs font-medium flex items-center gap-1 transition-colors cursor-pointer"
+                        title="Restaurar lista original do protocolo"
+                      >
+                        <RotateCcw className="w-3.5 h-3.5 text-slate-500" /> Restaurar Padrão
+                      </button>
+                    ) : null}
+                  </div>
                 </div>
 
-                <div className="space-y-2.5">
-                  {selectedProtocol.suggestedDrugs.map((drug, i) => (
-                    <div key={i} className="bg-white p-3 rounded-xl border border-indigo-200 shadow-xs space-y-1">
-                      <div className="flex flex-wrap items-center justify-between gap-1">
-                        <div className="font-black text-slate-900 text-xs flex items-center gap-1.5">
-                          <span className="w-5 h-5 rounded-full bg-indigo-100 text-indigo-700 font-bold text-[11px] flex items-center justify-center">
-                            {i + 1}
-                          </span>
-                          <span>{drug.commercialName}</span>
-                          <span className="text-slate-500 font-normal text-[11px]">({drug.activePrinciple})</span>
-                        </div>
-                        <span className="text-[10px] font-bold px-2 py-0.5 bg-indigo-50 text-indigo-700 border border-indigo-200 rounded">
-                          {drug.route} &bull; Qtd: {drug.quantity}
-                        </span>
-                      </div>
-
-                      <div className="pl-6 pt-1 text-slate-700 leading-relaxed font-medium">
-                        <b>Posologia:</b> {drug.dosage}
-                      </div>
+                {currentDrugs.length === 0 ? (
+                  <div className="p-4 bg-white/80 border border-dashed border-indigo-300 rounded-xl text-center space-y-2">
+                    <p className="text-xs text-indigo-900 font-medium">Nenhum fármaco na lista deste tratamento.</p>
+                    <div className="flex justify-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setIsAddDrugModalOpen(true)}
+                        className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-lg cursor-pointer"
+                      >
+                        Adicionar Medicamento
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleResetDrugs}
+                        className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-medium rounded-lg cursor-pointer"
+                      >
+                        Restaurar Padrão
+                      </button>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ) : (
+                  <div className="space-y-2.5">
+                    {currentDrugs.map((drug, i) => {
+                      const isChecked = selectedDrugIndices.has(i);
+
+                      return (
+                        <div
+                          key={i}
+                          className={`p-3 rounded-xl border transition-all ${
+                            isChecked
+                              ? 'bg-white border-indigo-200 shadow-xs'
+                              : 'bg-slate-50/80 border-slate-200 opacity-60'
+                          }`}
+                        >
+                          <div className="flex items-start justify-between gap-2">
+                            {/* Checkbox para selecionar/desmarcar */}
+                            <button
+                              type="button"
+                              onClick={() => handleToggleDrug(i)}
+                              className="flex items-start gap-2.5 text-left flex-1 cursor-pointer group"
+                            >
+                              <div className="mt-0.5 shrink-0 text-indigo-600 group-hover:scale-110 transition-transform">
+                                {isChecked ? (
+                                  <CheckSquare className="w-4 h-4 text-indigo-600" />
+                                ) : (
+                                  <Square className="w-4 h-4 text-slate-400" />
+                                )}
+                              </div>
+                              <div className="flex-1">
+                                <div className="flex flex-wrap items-center gap-1.5">
+                                  <span className={`font-black text-xs ${isChecked ? 'text-slate-900' : 'text-slate-500 line-through'}`}>
+                                    {drug.commercialName}
+                                  </span>
+                                  <span className="text-slate-500 font-normal text-[11px]">
+                                    ({drug.activePrinciple})
+                                  </span>
+                                  {drug.presentation && (
+                                    <span className="text-[10px] text-slate-400 font-medium">
+                                      &bull; {drug.presentation}
+                                    </span>
+                                  )}
+                                </div>
+                                <div className="mt-1 text-slate-700 leading-relaxed font-medium text-xs">
+                                  <b>Posologia:</b> {drug.dosage}
+                                </div>
+                              </div>
+                            </button>
+
+                            {/* Badge e Botão de Excluir */}
+                            <div className="flex items-center gap-1.5 shrink-0">
+                              <span className="text-[10px] font-bold px-2 py-0.5 bg-indigo-50 text-indigo-700 border border-indigo-200 rounded">
+                                {drug.route} &bull; Qtd: {drug.quantity}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteDrug(i)}
+                                className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+                                title="Excluir este fármaco do tratamento sugerido"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
 
               {/* 3. Tempo e Indicação de Retorno */}
@@ -242,14 +412,22 @@ export const TherapeuticPlanModal: React.FC<TherapeuticPlanModalProps> = ({
                 {/* Botão 1: Gerar Receita Farmacológica Direta */}
                 <button
                   type="button"
+                  disabled={getActiveDrugs().length === 0}
                   onClick={() => {
-                    onGenerateMedicalPrescription(selectedProtocol.suggestedDrugs);
+                    const active = getActiveDrugs();
+                    if (active.length === 0) return;
+                    onGenerateMedicalPrescription(active);
                     onClose();
                   }}
-                  className="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-xl text-xs flex items-center gap-1.5 shadow-md shadow-rose-600/20 active:scale-95 transition-all cursor-pointer"
+                  className={`px-4 py-2 font-bold rounded-xl text-xs flex items-center gap-1.5 transition-all cursor-pointer ${
+                    getActiveDrugs().length === 0
+                      ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                      : 'bg-rose-600 hover:bg-rose-500 text-white shadow-md shadow-rose-600/20 active:scale-95'
+                  }`}
+                  title={getActiveDrugs().length === 0 ? 'Nenhum medicamento selecionado' : 'Gerar receita com os medicamentos selecionados'}
                 >
                   <Pill className="w-4 h-4" />
-                  <span>Emitir Receita de Medicamentos</span>
+                  <span>Emitir Receita ({getActiveDrugs().length})</span>
                 </button>
 
                 {/* Botão 2: Aplicar Plano Terapêutico no Prontuário */}
@@ -277,6 +455,95 @@ export const TherapeuticPlanModal: React.FC<TherapeuticPlanModalProps> = ({
 
           </div>
         </div>
+
+        {/* Modal Interno para Adicionar Fármaco do Catálogo Oftálmico */}
+        {isAddDrugModalOpen && (
+          <div className="fixed inset-0 z-60 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 animate-fadeIn">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-xl w-full border border-slate-200 overflow-hidden flex flex-col max-h-[85vh]">
+              {/* Cabeçalho */}
+              <div className="px-5 py-3.5 bg-slate-900 text-white flex items-center justify-between shrink-0">
+                <div className="flex items-center gap-2">
+                  <Pill className="w-4 h-4 text-indigo-400" />
+                  <h3 className="font-bold text-sm">Adicionar Medicamento ao Tratamento</h3>
+                </div>
+                <button
+                  onClick={() => setIsAddDrugModalOpen(false)}
+                  className="p-1 text-slate-400 hover:text-white rounded-lg transition-colors cursor-pointer"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Busca */}
+              <div className="p-3 border-b border-slate-200 bg-slate-50 shrink-0">
+                <div className="relative">
+                  <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <input
+                    type="text"
+                    value={drugSearchQuery}
+                    onChange={(e) => setDrugSearchQuery(e.target.value)}
+                    placeholder="Buscar por nome comercial, princípio ativo ou indicação..."
+                    className="w-full bg-white border border-slate-300 rounded-xl pl-9 pr-3 py-2 text-xs font-medium text-slate-900 focus:outline-none focus:border-indigo-500"
+                    autoFocus
+                  />
+                </div>
+              </div>
+
+              {/* Lista de Fármacos Disponíveis */}
+              <div className="flex-1 overflow-y-auto p-3 space-y-2">
+                {OPHTHALMIC_DRUGS_DATABASE.filter(d => {
+                  const q = drugSearchQuery.toLowerCase().trim();
+                  if (!q) return true;
+                  return (
+                    d.commercialName.toLowerCase().includes(q) ||
+                    d.activePrinciple.toLowerCase().includes(q) ||
+                    d.indication.toLowerCase().includes(q)
+                  );
+                }).map(drug => (
+                  <div
+                    key={drug.id}
+                    className="p-3 border border-slate-200 hover:border-indigo-300 rounded-xl hover:bg-indigo-50/40 transition-colors flex items-start justify-between gap-3 text-xs"
+                  >
+                    <div className="flex-1">
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        <span className="font-black text-slate-900">{drug.commercialName}</span>
+                        <span className="text-slate-500 text-[11px]">({drug.activePrinciple})</span>
+                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200">
+                          {drug.category}
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-slate-600 mt-1">
+                        <b>Apresentação:</b> {drug.presentation} &bull; {drug.concentration}
+                      </p>
+                      <p className="text-[11px] text-slate-600">
+                        <b>Posologia Padrão:</b> {drug.defaultPosology}
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => handleAddDrugFromDatabase(drug)}
+                      className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg font-bold text-xs shrink-0 flex items-center gap-1 cursor-pointer transition-colors"
+                    >
+                      <Plus className="w-3.5 h-3.5" /> Adicionar
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              {/* Rodapé */}
+              <div className="p-3 bg-slate-50 border-t border-slate-200 flex justify-end shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setIsAddDrugModalOpen(false)}
+                  className="px-4 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-xl text-xs font-semibold cursor-pointer transition-colors"
+                >
+                  Fechar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
       </div>
     </div>
