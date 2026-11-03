@@ -51,8 +51,11 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
   const [pdDistance, setPdDistance] = useState<string>(() => refraction.pdDistanceMm ? String(refraction.pdDistanceMm) : '');
   const [addition, setAddition] = useState<string>(() => numToStr(refraction.addition));
 
-  // Lentes, Tratamentos e Lentes Especiais Prescritas
-  const [lensType, setLensType] = useState<string>(() => refraction.lensType || 'multifocal');
+  // Lentes, Tratamentos e Lentes Especiais Prescritas: Se houver adição, padrão Multifocal/Bifocal; se não houver adição, padrão Monofocal
+  const [lensType, setLensType] = useState<string>(() => {
+    if (refraction.lensType) return refraction.lensType;
+    return refraction.addition ? 'multifocal' : 'monofocal_longe';
+  });
   const [material, setMaterial] = useState<string>(() => refraction.material || 'resina');
   const [treatments, setTreatments] = useState<string[]>(() => refraction.treatments || ['Antirreflexo Digital', 'Filtro Luz Azul (BlueCut)']);
   const [specialLenses, setSpecialLenses] = useState<string>(() => refraction.specialLenses || '');
@@ -80,7 +83,8 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
       setPdDistance(refraction.pdDistanceMm ? String(refraction.pdDistanceMm) : '');
       setAddition(numToStr(refraction.addition));
 
-      setLensType(refraction.lensType || 'multifocal');
+      const defaultLType = refraction.lensType || (refraction.addition ? 'multifocal' : 'monofocal_longe');
+      setLensType(defaultLType);
       setMaterial(refraction.material || 'resina');
       setTreatments(refraction.treatments || ['Antirreflexo Digital', 'Filtro Luz Azul (BlueCut)']);
       setSpecialLenses(refraction.specialLenses || '');
@@ -233,7 +237,13 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
     if (suggested !== null) {
       const formatted = `+${suggested.toFixed(2)}`;
       setAddition(formatted);
-      emitUpdate(undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, formatted);
+      // Se a lente atual for monofocal, ajusta automaticamente para multifocal
+      let nextLensType = lensType;
+      if (!lensType || lensType.startsWith('monofocal')) {
+        nextLensType = 'multifocal';
+        setLensType('multifocal');
+      }
+      emitUpdate(undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, formatted, nextLensType);
     }
   };
 
@@ -332,8 +342,29 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
               readOnly={isReadOnly}
               onChange={(e) => {
                 if (isReadOnly) return;
-                setAddition(e.target.value);
-                emitUpdate(undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, e.target.value);
+                const newAddition = e.target.value;
+                setAddition(newAddition);
+
+                // Regra Clínica: se adição for informada (> 0), sugere Multifocal ou Bifocal;
+                // Se adição não for informada ou for apagada, sugere Monofocal (Longe).
+                const addNum = parseVal(newAddition);
+                let nextLensType = lensType;
+
+                if (addNum > 0) {
+                  // Se estava em monofocal, ajusta para multifocal
+                  if (!lensType || lensType.startsWith('monofocal')) {
+                    nextLensType = 'multifocal';
+                    setLensType('multifocal');
+                  }
+                } else if (!newAddition || newAddition.trim() === '') {
+                  // Se limpou a adição e estava em multifocal/bifocal, reverte para monofocal
+                  if (lensType === 'multifocal' || lensType === 'bifocal') {
+                    nextLensType = 'monofocal_longe';
+                    setLensType('monofocal_longe');
+                  }
+                }
+
+                emitUpdate(undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, newAddition, nextLensType);
               }}
               placeholder="+2.00"
               className={`w-14 bg-white border border-slate-300 rounded-xl px-1 py-0.5 font-mono text-center font-black text-xs text-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-xs ${isReadOnly ? 'cursor-not-allowed bg-slate-100 text-slate-500' : ''}`}
@@ -728,9 +759,18 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
         {/* Tipo de Lente e Material */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label className="text-[10px] font-extrabold text-slate-600 block mb-1 uppercase tracking-wider">
-              Tipo de Lente Prescrita
-            </label>
+            <div className="flex items-center justify-between mb-1">
+              <label className="text-[10px] font-extrabold text-slate-600 block uppercase tracking-wider">
+                Tipo de Lente Prescrita
+              </label>
+              <span className={`text-[9px] font-bold px-1.5 py-0.2 rounded ${
+                parseVal(addition) > 0 
+                  ? 'bg-indigo-100 text-indigo-700' 
+                  : 'bg-emerald-100 text-emerald-700'
+              }`}>
+                {parseVal(addition) > 0 ? 'Com Adição (Multifocal / Bifocal)' : 'Sem Adição (Monofocal)'}
+              </span>
+            </div>
             <select
               value={lensType}
               disabled={isReadOnly}
@@ -742,13 +782,27 @@ export const RefractionDials: React.FC<RefractionDialsProps> = ({
               }}
               className={`w-full bg-white border border-slate-300 rounded-xl px-2.5 py-1.5 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-xs ${isReadOnly ? 'cursor-not-allowed bg-slate-100 text-slate-500' : 'cursor-pointer'}`}
             >
-              <option value="multifocal">Multifocal / Progressivo Digital</option>
-              <option value="monofocal_longe">Monofocal (Visão de Longe)</option>
-              <option value="monofocal_perto">Monofocal (Visão de Perto / Leitura)</option>
-              <option value="bifocal">Bifocal (Topo Reto / Ultex)</option>
-              <option value="ocupacional">Ocupacional (Intermediário & Perto)</option>
-              <option value="contato">Lentes de Contato Gelatinosas</option>
-              <option value="contato_rgp">Lentes RGP / Esclerais</option>
+              {parseVal(addition) > 0 ? (
+                <>
+                  <option value="multifocal">Multifocal / Progressivo Digital (Recomendado)</option>
+                  <option value="bifocal">Bifocal (Topo Reto / Ultex)</option>
+                  <option value="ocupacional">Ocupacional (Intermediário & Perto)</option>
+                  <option value="monofocal_perto">Monofocal (Visão de Perto / Leitura Exclusiva)</option>
+                  <option value="monofocal_longe">Monofocal (Visão de Longe)</option>
+                  <option value="contato">Lentes de Contato Gelatinosas</option>
+                  <option value="contato_rgp">Lentes RGP / Esclerais</option>
+                </>
+              ) : (
+                <>
+                  <option value="monofocal_longe">Monofocal (Visão de Longe - Padrão)</option>
+                  <option value="monofocal_perto">Monofocal (Visão de Perto)</option>
+                  <option value="contato">Lentes de Contato Gelatinosas</option>
+                  <option value="contato_rgp">Lentes RGP / Esclerais</option>
+                  <option value="multifocal">Multifocal / Progressivo Digital</option>
+                  <option value="bifocal">Bifocal (Topo Reto / Ultex)</option>
+                  <option value="ocupacional">Ocupacional (Intermediário & Perto)</option>
+                </>
+              )}
             </select>
           </div>
 

@@ -78,6 +78,20 @@ export const PrescriptionModal: React.FC<PrescriptionModalProps> = ({
     officialDoc: isEs ? 'Documento Clínico Oficial' : 'Documento Clínico Oficial'
   };
 
+  // Determina rótulo do tipo de lente formatado
+  const getFormattedLensType = () => {
+    const lType = (prescription.lensType as string) || '';
+    if (lType) {
+      if (lType === 'bifocal') return 'Bifocal';
+      if (lType === 'multifocal') return isEs ? 'Multifocal Digital' : 'Multifocal Digital';
+      if (lType === 'monofocal' || lType === 'monofocal_longe') return isEs ? 'Monofocal (Lejos)' : 'Monofocal (Longe)';
+      if (lType === 'monofocal_perto') return isEs ? 'Monofocal (Cerca)' : 'Monofocal (Perto)';
+      if (lType === 'ocupacional') return isEs ? 'Ocupacional' : 'Ocupacional';
+      return lType.replace('_', ' ');
+    }
+    return prescription.addition ? 'Multifocal Digital' : (isEs ? 'Monofocal (Lejos)' : 'Monofocal (Longe)');
+  };
+
   const handlePrint = () => {
     // FASE 26: Rastreabilidade, auditoria e imutabilidade de documentos emitidos
     try {
@@ -350,7 +364,7 @@ export const PrescriptionModal: React.FC<PrescriptionModalProps> = ({
               <div className="grid grid-cols-2 gap-4 text-xs font-medium text-slate-700 bg-slate-50/50 p-3 rounded-lg border border-slate-200">
                 <div>
                   <span>{t.suggestedLens} </span>
-                  <strong className="text-slate-900 capitalize">{prescription.lensType || 'Multifocal Digital'}</strong>
+                  <strong className="text-slate-900 capitalize">{getFormattedLensType()}</strong>
                 </div>
                 <div>
                   <span>{t.pd} </span>
@@ -487,7 +501,7 @@ export const PrescriptionModal: React.FC<PrescriptionModalProps> = ({
 
                       {/* Detalhes & Retorno */}
                       <div className="text-[11px] space-y-1 bg-slate-50 p-2 rounded-lg border border-slate-200 mt-3">
-                        <div><b>{isEs ? 'Lentes:' : 'Lentes:'}</b> {prescription.lensType || (isEs ? 'Multifocal Digital' : 'Multifocal Digital')} &bull; <b>DP:</b> {prescription.pdDistanceMm || 62} mm</div>
+                        <div><b>{isEs ? 'Lentes:' : 'Lentes:'}</b> {getFormattedLensType()} &bull; <b>DP:</b> {prescription.pdDistanceMm || 62} mm</div>
                         <div><b>{isEs ? 'Control:' : 'Retorno:'}</b> {prescription.returnInstructions || t.defaultReturn}</div>
                         {prescription.observations && <div><b>Obs:</b> {prescription.observations}</div>}
                       </div>
@@ -599,7 +613,7 @@ export const PrescriptionModal: React.FC<PrescriptionModalProps> = ({
 
                       {/* Detalhes & Retorno */}
                       <div className="text-[11px] space-y-1 bg-slate-50 p-2 rounded-lg border border-slate-200 mt-3">
-                        <div><b>{isEs ? 'Lentes:' : 'Lentes:'}</b> {prescription.lensType || (isEs ? 'Multifocal Digital' : 'Multifocal Digital')} &bull; <b>DP:</b> {prescription.pdDistanceMm || 62} mm</div>
+                        <div><b>{isEs ? 'Lentes:' : 'Lentes:'}</b> {getFormattedLensType()} &bull; <b>DP:</b> {prescription.pdDistanceMm || 62} mm</div>
                         <div><b>{isEs ? 'Control:' : 'Retorno:'}</b> {prescription.returnInstructions || t.defaultReturn}</div>
                         {prescription.observations && <div><b>Obs:</b> {prescription.observations}</div>}
                       </div>
@@ -696,7 +710,7 @@ export const PrescriptionModal: React.FC<PrescriptionModalProps> = ({
               </div>
 
               <div className="py-1 border-t border-dashed border-slate-400 space-y-0.5 text-[10px]">
-                <div><b>{isEs ? 'Lente:' : 'Lente:'}</b> {prescription.lensType || 'Multifocal'}</div>
+                <div><b>{isEs ? 'Lente:' : 'Lente:'}</b> {getFormattedLensType()}</div>
                 <div><b>DP:</b> {prescription.pdDistanceMm || 62} mm</div>
                 <div><b>{isEs ? 'Control:' : 'Retorno:'}</b> {prescription.returnInstructions || t.defaultReturn}</div>
                 {prescription.observations && <div><b>Obs:</b> {prescription.observations}</div>}

@@ -470,7 +470,9 @@ export const UnifiedPrintCenterModal: React.FC<UnifiedPrintCenterModalProps> = (
           <div>
             <span className="text-slate-500 font-semibold">{t.lensTypeLabel}:</span>{' '}
             <b className="text-slate-900 block truncate">
-              {prescription.lensType ? prescription.lensType.replace('_', ' ').toUpperCase() : 'MULTIFOCAL'}
+              {prescription.lensType 
+                ? (prescription.lensType === 'bifocal' ? 'BIFOCAL' : prescription.lensType.replace('_', ' ').toUpperCase())
+                : (prescription.addition ? 'MULTIFOCAL DIGITAL' : 'MONOFOCAL')}
             </b>
           </div>
           <div>
