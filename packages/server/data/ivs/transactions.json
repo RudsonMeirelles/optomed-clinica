@@ -19,7 +19,7 @@
     "cashRegisterId": "b3c89c0b-2d03-47c1-8b1e-50cabea39e8c",
     "updatedAt": "2026-10-15T20:44:26.413Z",
     "isSettled": true,
-    "settledAt": "2026-10-15T20:44:26.413Z"
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "f50e3738-f3f5-4277-b246-964d13a30aa3",
@@ -41,7 +41,7 @@
     "cashRegisterId": "b3c89c0b-2d03-47c1-8b1e-50cabea39e8c",
     "updatedAt": "2026-10-15T20:44:27.215Z",
     "isSettled": true,
-    "settledAt": "2026-10-15T20:44:27.215Z"
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "5401da05-1a7e-4401-89c7-4bdf5b03b3e9",
@@ -63,7 +63,7 @@
     "cashRegisterId": "b3c89c0b-2d03-47c1-8b1e-50cabea39e8c",
     "updatedAt": "2026-10-15T20:44:27.829Z",
     "isSettled": true,
-    "settledAt": "2026-10-15T20:44:27.829Z"
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "16cf0e89-1f12-4d91-863b-895a961458ee",
@@ -85,7 +85,7 @@
     "cashRegisterId": "b3c89c0b-2d03-47c1-8b1e-50cabea39e8c",
     "updatedAt": "2026-10-15T20:44:28.246Z",
     "isSettled": true,
-    "settledAt": "2026-10-15T20:44:28.246Z"
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "a817d5e7-a97d-46ce-b5de-279baed75d4f",
@@ -107,7 +107,7 @@
     "cashRegisterId": "b3c89c0b-2d03-47c1-8b1e-50cabea39e8c",
     "updatedAt": "2026-10-15T20:44:28.613Z",
     "isSettled": true,
-    "settledAt": "2026-10-15T20:44:28.613Z"
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "e1375157-590c-4713-aefa-062899b079db",
@@ -129,7 +129,7 @@
     "cashRegisterId": "b3c89c0b-2d03-47c1-8b1e-50cabea39e8c",
     "updatedAt": "2026-10-15T20:44:28.996Z",
     "isSettled": true,
-    "settledAt": "2026-10-15T20:44:28.996Z"
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "9423f84c-ff59-4e42-8bb5-29c677ddd034",
@@ -151,7 +151,7 @@
     "cashRegisterId": "b3c89c0b-2d03-47c1-8b1e-50cabea39e8c",
     "updatedAt": "2026-10-15T20:44:29.393Z",
     "isSettled": true,
-    "settledAt": "2026-10-15T20:44:29.393Z"
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "tx_ivs_1",
@@ -168,7 +168,7 @@
     "createdBy": "Recepção",
     "createdAt": "2026-10-13T18:07:38.158Z",
     "isSettled": true,
-    "settledAt": "2026-10-15T20:44:29.729Z",
+    "settledAt": "2026-10-26T00:00:00.000Z",
     "updatedAt": "2026-10-15T20:44:29.729Z"
   },
   {
@@ -186,7 +186,7 @@
     "createdBy": "Recepção",
     "createdAt": "2026-10-13T18:07:38.158Z",
     "isSettled": true,
-    "settledAt": "2026-10-15T20:44:30.089Z",
+    "settledAt": "2026-10-26T00:00:00.000Z",
     "updatedAt": "2026-10-15T20:44:30.089Z"
   },
   {
@@ -204,7 +204,7 @@
     "createdBy": "Recepção",
     "createdAt": "2026-10-13T18:07:38.158Z",
     "isSettled": true,
-    "settledAt": "2026-10-15T20:44:30.398Z",
+    "settledAt": "2026-10-26T00:00:00.000Z",
     "updatedAt": "2026-10-15T20:44:30.398Z"
   },
   {
@@ -221,7 +221,7 @@
     "createdBy": "Recepção",
     "createdAt": "2026-09-03T18:00:00Z",
     "isSettled": true,
-    "settledAt": "2026-10-08T23:59:59.000Z",
+    "settledAt": "2026-10-26T00:00:00.000Z",
     "updatedAt": "2026-10-16T21:28:22.307Z"
   },
   {
@@ -238,7 +238,7 @@
     "createdBy": "Recepção",
     "createdAt": "2026-09-04T18:00:00Z",
     "isSettled": true,
-    "settledAt": "2026-10-08T23:59:59.000Z",
+    "settledAt": "2026-10-26T00:00:00.000Z",
     "updatedAt": "2026-10-16T21:28:22.307Z"
   },
   {
@@ -255,7 +255,7 @@
     "createdBy": "Administração",
     "createdAt": "2026-10-13T18:07:38.158Z",
     "isSettled": true,
-    "settledAt": "2026-10-14T21:05:40.150Z",
+    "settledAt": "2026-10-26T00:00:00.000Z",
     "updatedAt": "2026-10-14T21:05:40.150Z"
   },
   {
@@ -272,7 +272,7 @@
     "receiptNumber": "REP-2026-3009",
     "status": "completed",
     "isSettled": true,
-    "settledAt": "2026-09-30T23:59:59.000Z",
+    "settledAt": "2026-10-26T00:00:00.000Z",
     "createdBy": "Direção Administrativa / Financeiro",
     "createdAt": "2026-09-30T20:00:00.000Z"
   },
@@ -296,7 +296,7 @@
     "cashRegisterId": "b3c89c0b-2d03-47c1-8b1e-50cabea39e8c",
     "updatedAt": "2026-10-15T20:44:30.761Z",
     "isSettled": true,
-    "settledAt": "2026-10-15T20:44:30.761Z"
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "621adbf6-d838-49ef-84b1-3e755432a43f",
@@ -317,7 +317,7 @@
     "currency": "BRL",
     "updatedAt": "2026-10-15T20:44:31.093Z",
     "isSettled": true,
-    "settledAt": "2026-10-15T20:44:31.093Z"
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "6de2c3a2-5822-4b58-a969-6ee86dbcc7a3",
@@ -338,7 +338,7 @@
     "currency": "BRL",
     "updatedAt": "2026-10-15T20:44:31.443Z",
     "isSettled": true,
-    "settledAt": "2026-10-15T20:44:31.443Z"
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "c0478c85-793a-442d-b0df-564b6c31f061",
@@ -359,7 +359,7 @@
     "currency": "BRL",
     "updatedAt": "2026-10-15T20:44:31.776Z",
     "isSettled": true,
-    "settledAt": "2026-10-15T20:44:31.776Z"
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "d387c907-de5f-400e-b8a1-e9db152e572c",
@@ -380,7 +380,7 @@
     "currency": "BRL",
     "updatedAt": "2026-10-15T20:44:32.095Z",
     "isSettled": true,
-    "settledAt": "2026-10-15T20:44:32.095Z"
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "e23cffc9-5ee0-46c8-8259-eef6227e9541",
@@ -401,7 +401,7 @@
     "currency": "BRL",
     "updatedAt": "2026-10-15T20:44:32.553Z",
     "isSettled": true,
-    "settledAt": "2026-10-15T20:44:32.553Z"
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "02b1cad7-7b69-4e6f-bd78-7b36e6da2f10",
@@ -422,7 +422,7 @@
     "currency": "BRL",
     "updatedAt": "2026-10-15T20:44:32.826Z",
     "isSettled": true,
-    "settledAt": "2026-10-15T20:44:32.826Z"
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "99aae8ae-5780-474f-93ae-d89e1298bd1e",
@@ -443,7 +443,7 @@
     "currency": "BRL",
     "updatedAt": "2026-10-15T20:44:33.068Z",
     "isSettled": true,
-    "settledAt": "2026-10-15T20:44:33.068Z"
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "71ad3548-f4c5-4218-8ff5-51810a9178d7",
@@ -464,7 +464,7 @@
     "currency": "BRL",
     "updatedAt": "2026-10-15T20:44:33.297Z",
     "isSettled": true,
-    "settledAt": "2026-10-15T20:44:33.297Z"
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "fab7f05d-3d1b-4dad-adae-4c6b4805ba1e",
@@ -486,7 +486,7 @@
     "cashRegisterId": "7dbc3216-f1b3-447d-9a62-f7eda597327b",
     "updatedAt": "2026-10-15T20:44:33.495Z",
     "isSettled": true,
-    "settledAt": "2026-10-15T20:44:33.495Z"
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "548c97ed-5851-4ea3-b5ff-1b0ce87aecbe",
@@ -507,7 +507,7 @@
     "currency": "BRL",
     "updatedAt": "2026-10-15T20:44:33.687Z",
     "isSettled": true,
-    "settledAt": "2026-10-15T20:44:33.687Z"
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "7d49f5bd-09f0-44a6-b289-b34946021678",
@@ -528,7 +528,7 @@
     "currency": "BRL",
     "updatedAt": "2026-10-15T20:44:33.891Z",
     "isSettled": true,
-    "settledAt": "2026-10-15T20:44:33.891Z"
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "859df727-f200-4be0-b353-81a7d4c44d1a",
@@ -549,7 +549,7 @@
     "currency": "BRL",
     "updatedAt": "2026-10-15T20:44:34.081Z",
     "isSettled": true,
-    "settledAt": "2026-10-15T20:44:34.081Z"
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "dc786a4f-f511-4f22-9dcf-0aa2197bcda9",
@@ -570,7 +570,7 @@
     "currency": "BRL",
     "updatedAt": "2026-10-15T20:44:34.236Z",
     "isSettled": true,
-    "settledAt": "2026-10-15T20:44:34.236Z"
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "7157d1a0-ebca-4907-88dd-443603a3ca3c",
@@ -591,7 +591,7 @@
     "currency": "BRL",
     "updatedAt": "2026-10-15T20:44:34.428Z",
     "isSettled": true,
-    "settledAt": "2026-10-15T20:44:34.428Z"
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "4c5f0793-5d18-485b-9511-a412c114388a",
@@ -613,7 +613,7 @@
     "cashRegisterId": "7dbc3216-f1b3-447d-9a62-f7eda597327b",
     "updatedAt": "2026-10-15T20:44:34.650Z",
     "isSettled": true,
-    "settledAt": "2026-10-15T20:44:34.650Z"
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "19326889-fbbd-4a72-8c07-0be02e7eee80",
@@ -635,7 +635,7 @@
     "cashRegisterId": "7dbc3216-f1b3-447d-9a62-f7eda597327b",
     "updatedAt": "2026-10-15T20:44:34.857Z",
     "isSettled": true,
-    "settledAt": "2026-10-15T20:44:34.857Z"
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "9119d3ad-39f9-44f4-b18c-bb957d545a2d",
@@ -657,7 +657,7 @@
     "cashRegisterId": "7dbc3216-f1b3-447d-9a62-f7eda597327b",
     "updatedAt": "2026-10-15T20:44:37.407Z",
     "isSettled": true,
-    "settledAt": "2026-10-15T20:44:37.407Z"
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "d1c314a9-0784-4d30-a78d-eeff2db8eca2",
@@ -679,7 +679,7 @@
     "cashRegisterId": "7dbc3216-f1b3-447d-9a62-f7eda597327b",
     "updatedAt": "2026-10-15T20:44:39.494Z",
     "isSettled": true,
-    "settledAt": "2026-10-15T20:44:39.494Z"
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "cdd0d64b-dac1-4fd8-9f7e-9dfcc450980c",
@@ -701,7 +701,7 @@
     "cashRegisterId": "7dbc3216-f1b3-447d-9a62-f7eda597327b",
     "updatedAt": "2026-10-15T20:44:20.734Z",
     "isSettled": true,
-    "settledAt": "2026-10-15T20:44:20.734Z"
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "93f4aaff-bf54-4b7f-8189-6fe14cd20b62",
@@ -723,7 +723,7 @@
     "cashRegisterId": "7dbc3216-f1b3-447d-9a62-f7eda597327b",
     "updatedAt": "2026-10-15T21:50:09.612Z",
     "isSettled": true,
-    "settledAt": "2026-10-15T21:50:09.612Z"
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "ab45f38d-f20d-49ad-8691-1794a16402dc",
@@ -745,7 +745,7 @@
     "cashRegisterId": "7dbc3216-f1b3-447d-9a62-f7eda597327b",
     "updatedAt": "2026-10-15T21:50:10.640Z",
     "isSettled": true,
-    "settledAt": "2026-10-15T21:50:10.640Z"
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "2421b512-6ba9-4572-8006-1d5b6e1a9c64",
@@ -767,7 +767,7 @@
     "cashRegisterId": "7dbc3216-f1b3-447d-9a62-f7eda597327b",
     "updatedAt": "2026-10-15T21:50:07.279Z",
     "isSettled": true,
-    "settledAt": "2026-10-15T21:50:07.279Z"
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "ed5ba597-631a-42f9-85b5-efd791702765",
@@ -786,7 +786,7 @@
     "receiptNumber": "REC-948330",
     "status": "completed",
     "isSettled": true,
-    "settledAt": "2026-10-10T15:09:08.317Z",
+    "settledAt": "2026-10-26T00:00:00.000Z",
     "createdBy": "Recepção (Check-in)",
     "createdAt": "2026-10-10T15:09:08.317Z",
     "updatedAt": "2026-10-10T15:09:08.330Z"
@@ -809,7 +809,9 @@
     "amountCents": 5000,
     "currency": "BRL",
     "cashRegisterId": "7dbc3216-f1b3-447d-9a62-f7eda597327b",
-    "updatedAt": "2026-10-16T20:34:09.902Z"
+    "updatedAt": "2026-10-16T20:34:09.902Z",
+    "isSettled": true,
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "19824037-f03d-4aaf-b50b-42a20f699384",
@@ -829,7 +831,9 @@
     "amountCents": 5000,
     "currency": "BRL",
     "cashRegisterId": "37aff986-ab61-4ece-aec3-923f94477f38",
-    "updatedAt": "2026-10-17T13:00:31.339Z"
+    "updatedAt": "2026-10-17T13:00:31.339Z",
+    "isSettled": true,
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "aab19d5b-3389-4757-a9e6-0066f37534f4",
@@ -849,7 +853,9 @@
     "amountCents": 5000,
     "currency": "BRL",
     "cashRegisterId": "37aff986-ab61-4ece-aec3-923f94477f38",
-    "updatedAt": "2026-10-17T13:09:24.638Z"
+    "updatedAt": "2026-10-17T13:09:24.638Z",
+    "isSettled": true,
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "11999d3d-9e67-4aee-a9bf-71a05e617419",
@@ -869,7 +875,9 @@
     "amountCents": 5000,
     "currency": "BRL",
     "cashRegisterId": "37aff986-ab61-4ece-aec3-923f94477f38",
-    "updatedAt": "2026-10-17T13:19:31.941Z"
+    "updatedAt": "2026-10-17T13:19:31.941Z",
+    "isSettled": true,
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "ea4c4fa9-c407-49b6-b0dc-9a2b19c1621d",
@@ -889,7 +897,9 @@
     "amountCents": 5000,
     "currency": "BRL",
     "cashRegisterId": "37aff986-ab61-4ece-aec3-923f94477f38",
-    "updatedAt": "2026-10-17T13:31:42.275Z"
+    "updatedAt": "2026-10-17T13:31:42.275Z",
+    "isSettled": true,
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "8ddec7e9-a285-4595-bbb8-de5db1844669",
@@ -909,7 +919,9 @@
     "amountCents": 5000,
     "currency": "BRL",
     "cashRegisterId": "37aff986-ab61-4ece-aec3-923f94477f38",
-    "updatedAt": "2026-10-17T13:44:44.252Z"
+    "updatedAt": "2026-10-17T13:44:44.252Z",
+    "isSettled": true,
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "9744e58c-b0db-4ccf-850a-ad4c9a976d95",
@@ -929,7 +941,9 @@
     "amountCents": 5000,
     "currency": "BRL",
     "cashRegisterId": "37aff986-ab61-4ece-aec3-923f94477f38",
-    "updatedAt": "2026-10-17T13:57:26.802Z"
+    "updatedAt": "2026-10-17T13:57:26.802Z",
+    "isSettled": true,
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "c79d6fac-8c46-4207-961b-3bbb613645e1",
@@ -949,7 +963,9 @@
     "amountCents": 5000,
     "currency": "BRL",
     "cashRegisterId": "37aff986-ab61-4ece-aec3-923f94477f38",
-    "updatedAt": "2026-10-17T14:12:31.373Z"
+    "updatedAt": "2026-10-17T14:12:31.373Z",
+    "isSettled": true,
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "e499fd04-66dd-4bc6-b73b-ca65c1497b8d",
@@ -969,7 +985,9 @@
     "amountCents": 5000,
     "currency": "BRL",
     "cashRegisterId": "37aff986-ab61-4ece-aec3-923f94477f38",
-    "updatedAt": "2026-10-17T14:33:30.456Z"
+    "updatedAt": "2026-10-17T14:33:30.456Z",
+    "isSettled": true,
+    "settledAt": "2026-10-26T00:00:00.000Z"
   },
   {
     "id": "6bcfff6d-0840-4c4e-aada-4291c727d6f8",
@@ -989,6 +1007,768 @@
     "amountCents": 5000,
     "currency": "BRL",
     "cashRegisterId": "37aff986-ab61-4ece-aec3-923f94477f38",
-    "updatedAt": "2026-10-17T14:41:38.920Z"
+    "updatedAt": "2026-10-17T14:41:38.920Z",
+    "isSettled": true,
+    "settledAt": "2026-10-26T00:00:00.000Z"
+  },
+  {
+    "id": "tx_auto_1d070c65-d75d-4ed1-aba7-dd2c1f29953c",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente: SADY VILLAR",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-10-31",
+    "paymentMethod": "cash",
+    "patientId": "6f53700d-c95f-42ae-837f-86783bd01c81",
+    "patientName": "SADY VILLAR",
+    "encounterId": "1d070c65-d75d-4ed1-aba7-dd2c1f29953c",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-10-31T20:29:46.720Z",
+    "updatedAt": "2026-11-04T18:13:59.685Z"
+  },
+  {
+    "id": "tx_auto_c0eda3fa-ec51-4b5b-bfd2-93153e7eb48b",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente: JUAN CARLOS",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-10-31",
+    "paymentMethod": "cash",
+    "patientId": "3a1eff01-aa2e-4865-8bfa-e0ad6c4f80e0",
+    "patientName": "JUAN CARLOS",
+    "encounterId": "c0eda3fa-ec51-4b5b-bfd2-93153e7eb48b",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-10-31T20:28:24.479Z",
+    "updatedAt": "2026-11-04T18:13:59.685Z"
+  },
+  {
+    "id": "tx_auto_049163f4-7416-43a4-8113-03a29c11d567",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente: GEOVANNA DE ARAUJO",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-10-31",
+    "paymentMethod": "cash",
+    "patientId": "8701ab21-75a0-4d4f-a161-c04eebb1b2ab",
+    "patientName": "GEOVANNA DE ARAUJO",
+    "encounterId": "049163f4-7416-43a4-8113-03a29c11d567",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-10-31T19:55:27.320Z",
+    "updatedAt": "2026-11-04T18:13:59.685Z"
+  },
+  {
+    "id": "tx_auto_96e58617-c263-4544-bb12-7ebb3f95bc9d",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente: RUBIA SILVA",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-10-31",
+    "paymentMethod": "cash",
+    "patientId": "e8132359-b1d1-4ec3-af74-6f9434676d5e",
+    "patientName": "RUBIA SILVA",
+    "encounterId": "96e58617-c263-4544-bb12-7ebb3f95bc9d",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-10-31T19:54:43.064Z",
+    "updatedAt": "2026-11-04T18:13:59.685Z"
+  },
+  {
+    "id": "tx_auto_73a6ff70-57c9-49c1-a5b7-1bf89dc63852",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente: DALMY DELEON",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-10-31",
+    "paymentMethod": "cash",
+    "patientId": "41d09ceb-ad68-46bb-8e2b-daeeb75a5dbe",
+    "patientName": "DALMY DELEON",
+    "encounterId": "73a6ff70-57c9-49c1-a5b7-1bf89dc63852",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-10-31T19:15:43.247Z",
+    "updatedAt": "2026-11-04T18:13:59.685Z"
+  },
+  {
+    "id": "tx_auto_15b64f1d-4f90-4fe7-8011-fea217cc32ab",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente: TANIA VASQUEZ",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-10-31",
+    "paymentMethod": "cash",
+    "patientId": "0aa2c045-8be2-4175-8dfb-ee44ede8f994",
+    "patientName": "TANIA VASQUEZ",
+    "encounterId": "15b64f1d-4f90-4fe7-8011-fea217cc32ab",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-10-31T17:57:09.056Z",
+    "updatedAt": "2026-11-04T18:13:59.685Z"
+  },
+  {
+    "id": "tx_auto_2c0b5888-9705-4444-9f43-d226dc83c26b",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente: NILDA DUARTE",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-10-31",
+    "paymentMethod": "cash",
+    "patientId": "8cb85fa8-22ae-438b-9844-f2844b44a886",
+    "patientName": "NILDA DUARTE",
+    "encounterId": "2c0b5888-9705-4444-9f43-d226dc83c26b",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-10-31T17:47:47.910Z",
+    "updatedAt": "2026-11-04T18:13:59.685Z"
+  },
+  {
+    "id": "tx_auto_apt-ivs-20261031-extra-1",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente: Paciente Atendido 8 (31/10)",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-10-31",
+    "paymentMethod": "cash",
+    "patientId": "pat-ivs-extra-31-1",
+    "patientName": "Paciente Atendido 8 (31/10)",
+    "encounterId": "apt-ivs-20261031-extra-1",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-10-31T16:45:00.000Z",
+    "updatedAt": "2026-11-04T18:13:59.685Z"
+  },
+  {
+    "id": "tx_auto_apt-ivs-20261031-extra-2",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente: Paciente Atendido 9 (31/10)",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-10-31",
+    "paymentMethod": "cash",
+    "patientId": "pat-ivs-extra-31-2",
+    "patientName": "Paciente Atendido 9 (31/10)",
+    "encounterId": "apt-ivs-20261031-extra-2",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-10-31T17:00:00.000Z",
+    "updatedAt": "2026-11-04T18:13:59.685Z"
+  },
+  {
+    "id": "tx_auto_c64d2ae3-1068-463e-aab8-392ba00b039a",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente: JESSICA ORTIZ",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-11-03",
+    "paymentMethod": "cash",
+    "patientId": "3607b025-53fd-4653-944d-78d2dbda47ae",
+    "patientName": "JESSICA ORTIZ",
+    "encounterId": "c64d2ae3-1068-463e-aab8-392ba00b039a",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-11-03T19:36:36.554Z",
+    "updatedAt": "2026-11-04T18:13:59.685Z"
+  },
+  {
+    "id": "tx_auto_11663a69-c8bb-4703-b160-636ccab47bba",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente: ANDREA MARECO ACOSTA",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-11-03",
+    "paymentMethod": "cash",
+    "patientId": "913c76ce-eaf1-4d78-85d2-53648befff47",
+    "patientName": "ANDREA MARECO ACOSTA",
+    "encounterId": "11663a69-c8bb-4703-b160-636ccab47bba",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-11-03T19:02:15.583Z",
+    "updatedAt": "2026-11-04T18:13:59.685Z"
+  },
+  {
+    "id": "tx_auto_apt-ivs-20261103-extra-1",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente: Paciente Atendido 3 (03/11)",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-11-03",
+    "paymentMethod": "cash",
+    "patientId": "pat-ivs-extra-03-1",
+    "patientName": "Paciente Atendido 3 (03/11)",
+    "encounterId": "apt-ivs-20261103-extra-1",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-11-03T16:00:00.000Z",
+    "updatedAt": "2026-11-04T18:13:59.685Z"
+  },
+  {
+    "id": "tx_auto_apt-ivs-20261103-extra-2",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente: Paciente Atendido 4 (03/11)",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-11-03",
+    "paymentMethod": "cash",
+    "patientId": "pat-ivs-extra-03-2",
+    "patientName": "Paciente Atendido 4 (03/11)",
+    "encounterId": "apt-ivs-20261103-extra-2",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-11-03T16:30:00.000Z",
+    "updatedAt": "2026-11-04T18:13:59.685Z"
+  },
+  {
+    "id": "tx_auto_8325b29a-d525-409c-a4ff-008b6fa51f78",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente: DIGNO CARNEIRO",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-11-04",
+    "paymentMethod": "cash",
+    "patientId": "b197ca71-59a6-495a-b78c-766fc70dc2ae",
+    "patientName": "DIGNO CARNEIRO",
+    "encounterId": "8325b29a-d525-409c-a4ff-008b6fa51f78",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-11-04T09:30:00.000Z",
+    "updatedAt": "2026-11-04T18:13:59.685Z"
+  },
+  {
+    "id": "tx_auto_47044c0c-011c-453e-8c73-3c604b9a6f57",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente: VANDA REIS",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-11-04",
+    "paymentMethod": "cash",
+    "patientId": "31aecc7c-3486-4b6b-918b-b6aa99530e58",
+    "patientName": "VANDA REIS",
+    "encounterId": "47044c0c-011c-453e-8c73-3c604b9a6f57",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-11-04T10:00:00.000Z",
+    "updatedAt": "2026-11-04T18:13:59.685Z"
+  },
+  {
+    "id": "tx_auto_699c295f-fa7c-446a-93b7-c73ec85b18e4",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente: Sindy Aguillar",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-11-04",
+    "paymentMethod": "cash",
+    "patientId": "97b9afad-5c1d-4871-b87c-98c59f1eeb66",
+    "patientName": "Sindy Aguillar",
+    "encounterId": "699c295f-fa7c-446a-93b7-c73ec85b18e4",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-11-04T10:30:00.000Z",
+    "updatedAt": "2026-11-04T18:13:59.685Z"
+  },
+  {
+    "id": "tx_auto_apt-ivs-20261027-01",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente 1 (27/10)",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-10-27",
+    "paymentMethod": "cash",
+    "patientId": "pat-ivs-27-1",
+    "patientName": "Paciente 1 (27/10)",
+    "encounterId": "apt-ivs-20261027-01",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-10-27T14:00:00.000Z",
+    "updatedAt": "2026-11-04T18:14:55.038Z"
+  },
+  {
+    "id": "tx_auto_apt-ivs-20261027-02",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente 2 (27/10)",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-10-27",
+    "paymentMethod": "cash",
+    "patientId": "pat-ivs-27-2",
+    "patientName": "Paciente 2 (27/10)",
+    "encounterId": "apt-ivs-20261027-02",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-10-27T14:00:00.000Z",
+    "updatedAt": "2026-11-04T18:14:55.038Z"
+  },
+  {
+    "id": "tx_auto_apt-ivs-20261027-03",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente 3 (27/10)",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-10-27",
+    "paymentMethod": "cash",
+    "patientId": "pat-ivs-27-3",
+    "patientName": "Paciente 3 (27/10)",
+    "encounterId": "apt-ivs-20261027-03",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-10-27T14:00:00.000Z",
+    "updatedAt": "2026-11-04T18:14:55.038Z"
+  },
+  {
+    "id": "tx_auto_apt-ivs-20261027-04",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente 4 (27/10)",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-10-27",
+    "paymentMethod": "cash",
+    "patientId": "pat-ivs-27-4",
+    "patientName": "Paciente 4 (27/10)",
+    "encounterId": "apt-ivs-20261027-04",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-10-27T14:00:00.000Z",
+    "updatedAt": "2026-11-04T18:14:55.038Z"
+  },
+  {
+    "id": "tx_auto_apt-ivs-20261027-05",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente 5 (27/10)",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-10-27",
+    "paymentMethod": "cash",
+    "patientId": "pat-ivs-27-5",
+    "patientName": "Paciente 5 (27/10)",
+    "encounterId": "apt-ivs-20261027-05",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-10-27T14:00:00.000Z",
+    "updatedAt": "2026-11-04T18:14:55.038Z"
+  },
+  {
+    "id": "tx_auto_apt-ivs-20261027-06",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente 6 (27/10)",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-10-27",
+    "paymentMethod": "cash",
+    "patientId": "pat-ivs-27-6",
+    "patientName": "Paciente 6 (27/10)",
+    "encounterId": "apt-ivs-20261027-06",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-10-27T14:00:00.000Z",
+    "updatedAt": "2026-11-04T18:14:55.038Z"
+  },
+  {
+    "id": "tx_auto_apt-ivs-20261027-07",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente 7 (27/10)",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-10-27",
+    "paymentMethod": "cash",
+    "patientId": "pat-ivs-27-7",
+    "patientName": "Paciente 7 (27/10)",
+    "encounterId": "apt-ivs-20261027-07",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-10-27T14:00:00.000Z",
+    "updatedAt": "2026-11-04T18:14:55.038Z"
+  },
+  {
+    "id": "tx_auto_apt-ivs-20261027-08",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente 8 (27/10)",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-10-27",
+    "paymentMethod": "cash",
+    "patientId": "pat-ivs-27-8",
+    "patientName": "Paciente 8 (27/10)",
+    "encounterId": "apt-ivs-20261027-08",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-10-27T14:00:00.000Z",
+    "updatedAt": "2026-11-04T18:14:55.038Z"
+  },
+  {
+    "id": "tx_auto_apt-ivs-20261027-09",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente 9 (27/10)",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-10-27",
+    "paymentMethod": "cash",
+    "patientId": "pat-ivs-27-9",
+    "patientName": "Paciente 9 (27/10)",
+    "encounterId": "apt-ivs-20261027-09",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-10-27T14:00:00.000Z",
+    "updatedAt": "2026-11-04T18:14:55.038Z"
+  },
+  {
+    "id": "tx_auto_apt-ivs-20261027-10",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente 10 (27/10)",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-10-27",
+    "paymentMethod": "cash",
+    "patientId": "pat-ivs-27-10",
+    "patientName": "Paciente 10 (27/10)",
+    "encounterId": "apt-ivs-20261027-10",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-10-27T14:00:00.000Z",
+    "updatedAt": "2026-11-04T18:14:55.038Z"
+  },
+  {
+    "id": "tx_auto_apt-ivs-20261027-11",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente 11 (27/10)",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-10-27",
+    "paymentMethod": "cash",
+    "patientId": "pat-ivs-27-11",
+    "patientName": "Paciente 11 (27/10)",
+    "encounterId": "apt-ivs-20261027-11",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-10-27T14:00:00.000Z",
+    "updatedAt": "2026-11-04T18:14:55.038Z"
+  },
+  {
+    "id": "tx_auto_apt-ivs-20261027-12",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente 12 (27/10)",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-10-27",
+    "paymentMethod": "cash",
+    "patientId": "pat-ivs-27-12",
+    "patientName": "Paciente 12 (27/10)",
+    "encounterId": "apt-ivs-20261027-12",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-10-27T14:00:00.000Z",
+    "updatedAt": "2026-11-04T18:14:55.038Z"
+  },
+  {
+    "id": "tx_auto_apt-ivs-20261028-in-1",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente Contratado 1 (28/10)",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-10-28",
+    "paymentMethod": "cash",
+    "patientId": "pat-ivs-28-in-1",
+    "patientName": "Paciente Contratado 1 (28/10)",
+    "encounterId": "apt-ivs-20261028-in-1",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-10-28T09:30:00.000Z",
+    "updatedAt": "2026-11-04T18:14:55.038Z"
+  },
+  {
+    "id": "tx_auto_apt-ivs-20261028-in-2",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente Contratado 2 (28/10)",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-10-28",
+    "paymentMethod": "cash",
+    "patientId": "pat-ivs-28-in-2",
+    "patientName": "Paciente Contratado 2 (28/10)",
+    "encounterId": "apt-ivs-20261028-in-2",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-10-28T09:30:00.000Z",
+    "updatedAt": "2026-11-04T18:14:55.038Z"
+  },
+  {
+    "id": "tx_auto_apt-ivs-20261028-in-3",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente Contratado 3 (28/10)",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-10-28",
+    "paymentMethod": "cash",
+    "patientId": "pat-ivs-28-in-3",
+    "patientName": "Paciente Contratado 3 (28/10)",
+    "encounterId": "apt-ivs-20261028-in-3",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-10-28T09:30:00.000Z",
+    "updatedAt": "2026-11-04T18:14:55.038Z"
+  },
+  {
+    "id": "tx_auto_apt-ivs-20261028-out-1",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente Avulso 1 (28/10)",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-10-28",
+    "paymentMethod": "cash",
+    "patientId": "pat-ivs-28-out-1",
+    "patientName": "Paciente Avulso 1 (28/10)",
+    "encounterId": "apt-ivs-20261028-out-1",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-10-28T14:30:00.000Z",
+    "updatedAt": "2026-11-04T18:14:55.038Z"
+  },
+  {
+    "id": "tx_auto_apt-ivs-20261028-out-2",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente Avulso 2 (28/10)",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-10-28",
+    "paymentMethod": "cash",
+    "patientId": "pat-ivs-28-out-2",
+    "patientName": "Paciente Avulso 2 (28/10)",
+    "encounterId": "apt-ivs-20261028-out-2",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-10-28T14:30:00.000Z",
+    "updatedAt": "2026-11-04T18:14:55.038Z"
+  },
+  {
+    "id": "tx_auto_apt-ivs-20261028-out-3",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente Avulso 3 (28/10)",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-10-28",
+    "paymentMethod": "cash",
+    "patientId": "pat-ivs-28-out-3",
+    "patientName": "Paciente Avulso 3 (28/10)",
+    "encounterId": "apt-ivs-20261028-out-3",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-10-28T14:30:00.000Z",
+    "updatedAt": "2026-11-04T18:14:55.038Z"
+  },
+  {
+    "id": "tx_auto_apt-ivs-20261028-out-4",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente Avulso 4 (28/10)",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-10-28",
+    "paymentMethod": "cash",
+    "patientId": "pat-ivs-28-out-4",
+    "patientName": "Paciente Avulso 4 (28/10)",
+    "encounterId": "apt-ivs-20261028-out-4",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-10-28T14:30:00.000Z",
+    "updatedAt": "2026-11-04T18:14:55.038Z"
+  },
+  {
+    "id": "tx_auto_apt-ivs-20261030-1",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente 1 (30/10)",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-10-30",
+    "paymentMethod": "cash",
+    "patientId": "pat-ivs-30-1",
+    "patientName": "Paciente 1 (30/10)",
+    "encounterId": "apt-ivs-20261030-1",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-10-30T10:30:00.000Z",
+    "updatedAt": "2026-11-04T18:14:55.038Z"
+  },
+  {
+    "id": "tx_auto_apt-ivs-20261030-2",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente 2 (30/10)",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-10-30",
+    "paymentMethod": "cash",
+    "patientId": "pat-ivs-30-2",
+    "patientName": "Paciente 2 (30/10)",
+    "encounterId": "apt-ivs-20261030-2",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-10-30T10:30:00.000Z",
+    "updatedAt": "2026-11-04T18:14:55.038Z"
+  },
+  {
+    "id": "tx_auto_apt-ivs-20261030-3",
+    "clinicId": "ivs",
+    "type": "income",
+    "category": "consulta",
+    "description": "Consulta Oftalmológica / Refração - Paciente 3 (30/10)",
+    "amount": 50,
+    "amountCents": 5000,
+    "currency": "BRL",
+    "date": "2026-10-30",
+    "paymentMethod": "cash",
+    "patientId": "pat-ivs-30-3",
+    "patientName": "Paciente 3 (30/10)",
+    "encounterId": "apt-ivs-20261030-3",
+    "status": "completed",
+    "isSettled": false,
+    "createdBy": "Dr. Rudson Meirelles",
+    "createdAt": "2026-10-30T10:30:00.000Z",
+    "updatedAt": "2026-11-04T18:14:55.038Z"
   }
 ]

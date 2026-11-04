@@ -82,5 +82,41 @@
     "notes": "Diária Completa de Atendimento - R$ 1.000,00",
     "status": "active",
     "createdAt": "2026-10-17T12:31:57.765Z"
+  },
+  {
+    "id": "sess_ivs_20261031",
+    "clinicId": "ivs",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "date": "2026-10-31",
+    "contractType": "period_half_day",
+    "baseAmount": 500,
+    "notes": "Atendimento por Período de 5h (Meia Diária) - R$ 500,00",
+    "status": "active",
+    "createdAt": "2026-10-31T08:00:00.000Z"
+  },
+  {
+    "id": "sess_ivs_20261103",
+    "clinicId": "ivs",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "date": "2026-11-03",
+    "contractType": "period_half_day",
+    "baseAmount": 500,
+    "notes": "Atendimento por Período de 5h (Meia Diária) - R$ 500,00",
+    "status": "active",
+    "createdAt": "2026-11-03T08:00:00.000Z"
+  },
+  {
+    "id": "sess_ivs_20261104",
+    "clinicId": "ivs",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "date": "2026-11-04",
+    "contractType": "period_half_day",
+    "baseAmount": 500,
+    "notes": "Atendimento por Período de 5h (Meia Diária) - R$ 500,00",
+    "status": "active",
+    "createdAt": "2026-11-04T08:00:00.000Z"
   }
 ]
