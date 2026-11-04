@@ -437,6 +437,50 @@ class RemoteSyncService {
     this.notify(pending > 0 ? 'syncing' : 'synced', pending);
   }
 
+  /**
+   * Baixa forçadamente todos os dados atualizados do servidor,
+   * substituindo os dados do cache local e expurgando registros dummy/residuais.
+   */
+  async forceDownloadAll(
+    clinicId: string,
+    setLocal: (entity: SyncEntity, data: any[]) => void
+  ): Promise<void> {
+    if (typeof navigator !== 'undefined' && !navigator.onLine) return;
+    const available = await this.checkApiAvailable();
+    if (!available) return;
+    this.notify('syncing', 0);
+
+    try {
+      // Limpa timestamp do delta sync para garantir carga limpa
+      if (typeof localStorage !== 'undefined') {
+        localStorage.removeItem(`optomed_${clinicId}_last_delta_sync`);
+      }
+
+      for (const entity of SYNC_ENTITIES) {
+        try {
+          const res = await this.pull(clinicId, entity);
+          if (res && res.data && Array.isArray(res.data)) {
+            // Filtra registros dummy na chegada
+            const cleanedData = res.data.filter((item: any) => {
+              const name = (item.fullName || item.patientName || item.description || '').toLowerCase();
+              return !/paciente\s*\d/i.test(name) && !/paciente\s*avulso/i.test(name);
+            });
+            setLocal(entity, cleanedData);
+            console.log(`[Sync] forceDownload ${entity}: ${cleanedData.length} registros atualizados do servidor`);
+          }
+        } catch (err) {
+          console.warn(`[Sync] forceDownload ${entity} erro:`, err);
+        }
+      }
+
+      // Notifica atualização completa
+      this.notify('synced', 0);
+    } catch (err) {
+      console.warn('[Sync] forceDownloadAll erro:', err);
+      this.notify('error', 0);
+    }
+  }
+
   async fullSync(
     clinicId: string,
     getLocal: (entity: SyncEntity) => any[],
@@ -651,6 +695,12 @@ class RemoteSyncService {
         ? { ...rawItem.data, id: rawItem.data.id || rawItem.id }
         : rawItem;
       if (!item || !item.id) continue;
+
+      // Expurga registros dummy residuais no cliente
+      const itemName = (item.fullName || item.patientName || item.description || '').toLowerCase();
+      if (/paciente\s*\d/i.test(itemName) || /paciente\s*avulso/i.test(itemName)) {
+        continue;
+      }
 
       // Se o item local foi deletado ou existe lápide no servidor
       if (tombstones[item.id]) {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Wifi, WifiOff, RefreshCw, CheckCircle2, AlertCircle, Loader2, Upload } from 'lucide-react';
+import { Wifi, WifiOff, RefreshCw, CheckCircle2, AlertCircle, Loader2, Upload, DownloadCloud } from 'lucide-react';
 import { offlineDb } from '../services/offlineDb';
 
 export const SyncStatusBadge: React.FC = () => {
@@ -7,8 +7,10 @@ export const SyncStatusBadge: React.FC = () => {
   const [pendingCount, setPendingCount] = useState<number>(() => offlineDb.getPendingSyncCount());
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
   const [isUploading, setIsUploading] = useState<boolean>(false);
+  const [isDownloading, setIsDownloading] = useState<boolean>(false);
   const [isOnline, setIsOnline] = useState<boolean>(navigator.onLine);
   const [uploadDone, setUploadDone] = useState<boolean>(false);
+  const [downloadDone, setDownloadDone] = useState<boolean>(false);
 
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
@@ -70,6 +72,19 @@ export const SyncStatusBadge: React.FC = () => {
     }
   }, [isSyncing, isUploading]);
 
+  const handleForceDownload = useCallback(async () => {
+    if (isSyncing || isUploading || isDownloading) return;
+    setIsDownloading(true);
+    try {
+      await offlineDb.forceDownloadAll();
+      setPendingCount(offlineDb.getPendingSyncCount());
+      setDownloadDone(true);
+      setTimeout(() => setDownloadDone(false), 4000);
+    } finally {
+      setIsDownloading(false);
+    }
+  }, [isSyncing, isUploading, isDownloading]);
+
   const badgeStyle = (() => {
     if (!isOnline) return 'bg-amber-50 text-amber-700 border border-amber-200 animate-pulse';
     if (syncStatus === 'synced') return 'bg-emerald-50 text-emerald-700 border border-emerald-200';
@@ -98,7 +113,7 @@ export const SyncStatusBadge: React.FC = () => {
     return Wifi;
   })();
 
-  const busy = isSyncing || isUploading;
+  const busy = isSyncing || isUploading || isDownloading;
 
   return (
     <div className="flex items-center gap-2 text-xs">
@@ -117,6 +132,26 @@ export const SyncStatusBadge: React.FC = () => {
             title="Sincronizar agora com o servidor"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin text-blue-600' : ''}`} />
+          </button>
+
+          {/* Botão de baixar do servidor — recupera dados reais e limpa cache desatualizado */}
+          <button
+            onClick={handleForceDownload}
+            disabled={busy}
+            className={`flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-semibold transition-all disabled:opacity-50 ${
+              downloadDone
+                ? 'bg-emerald-100 text-emerald-700 border border-emerald-300'
+                : 'bg-blue-100 text-blue-700 border border-blue-300 hover:bg-blue-200'
+            }`}
+            title="Baixar dados atualizados do servidor e atualizar a tela"
+          >
+            {isDownloading
+              ? <Loader2 className="w-3 h-3 animate-spin" />
+              : downloadDone
+                ? <CheckCircle2 className="w-3 h-3" />
+                : <DownloadCloud className="w-3 h-3" />
+            }
+            <span>{isDownloading ? 'Baixando…' : downloadDone ? 'Atualizado!' : 'Baixar do Servidor'}</span>
           </button>
 
           {/* Botão de migração forçada — sempre visível para facilitar o envio de dados locais */}

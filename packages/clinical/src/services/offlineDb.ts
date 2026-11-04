@@ -369,6 +369,9 @@ class OfflineDatabaseService {
           this.cleanupVisionContamination();
           this.safeSetItem(scheduleFlagKey, 'true');
         }
+
+        // Limpeza automática de registros dummy e quitação retroativa até 30/10/2026
+        this.cleanupDummyAndLegacyRecords();
       }
 
       // Sincronização inicial com o servidor — busca dados remotos e mescla
@@ -379,6 +382,59 @@ class OfflineDatabaseService {
     } catch (err) {
       console.warn('[OfflineDb] Aviso na inicialização do storage:', err);
       this.activeClinicId = 'ivs';
+    }
+  }
+
+  /**
+   * Limpeza e saneamento retroativo de registros dummy e marcação de quitação até 30/10/2026.
+   */
+  private cleanupDummyAndLegacyRecords(): void {
+    if (typeof localStorage === 'undefined') return;
+    try {
+      const clinicId = 'ivs';
+      // 1. Limpa appointments dummy
+      const aptKey = this.getKey('appointments', clinicId);
+      const rawApts = localStorage.getItem(aptKey);
+      if (rawApts) {
+        const apts = JSON.parse(rawApts);
+        if (Array.isArray(apts)) {
+          const cleanedApts = apts.filter(a => {
+            const name = (a.patientName || '').toLowerCase();
+            return !/paciente\s*\d/i.test(name) && !/paciente\s*avulso/i.test(name);
+          });
+          if (cleanedApts.length !== apts.length) {
+            this.safeSetItem(aptKey, JSON.stringify(cleanedApts));
+          }
+        }
+      }
+
+      // 2. Limpa transactions dummy e quita as anteriores a 31/10/2026
+      const txKey = this.getKey('financial_transactions', clinicId);
+      const rawTxs = localStorage.getItem(txKey);
+      if (rawTxs) {
+        const txs = JSON.parse(rawTxs);
+        if (Array.isArray(txs)) {
+          let modified = false;
+          const cleanedTxs = txs
+            .filter(t => {
+              const name = (t.patientName || t.description || '').toLowerCase();
+              return !/paciente\s*\d/i.test(name) && !/paciente\s*avulso/i.test(name);
+            })
+            .map(t => {
+              const d = t.date || (t.createdAt ? t.createdAt.slice(0, 10) : '');
+              if (d < '2026-10-31' && !t.isSettled) {
+                modified = true;
+                return { ...t, isSettled: true };
+              }
+              return t;
+            });
+          if (modified || cleanedTxs.length !== txs.length) {
+            this.safeSetItem(txKey, JSON.stringify(cleanedTxs));
+          }
+        }
+      }
+    } catch (e) {
+      console.warn('[OfflineDb] cleanupDummyAndLegacyRecords erro:', e);
     }
   }
 
@@ -506,6 +562,13 @@ class OfflineDatabaseService {
         this.syncChannel.postMessage({ type, detail });
       } catch {}
     }
+  }
+
+  /**
+   * Baixa forçadamente todos os dados atualizados do servidor para o armazenamento local.
+   */
+  public async forceDownloadAll(clinicId = this.activeClinicId): Promise<void> {
+    await remoteSync.forceDownloadAll(clinicId, this.getSyncSetLocal(clinicId) as any);
   }
 
   // --- GERENCIAMENTO MULTI-CLÍNICA (BANCOS ISOLADOS) ---
@@ -2582,6 +2645,26 @@ class OfflineDatabaseService {
       };
     }
 
+    // Sábado 31/10/2026: Meio período (Fixo R$ 500,00)
+    if (dateStr === '2026-10-31') {
+      return {
+        contractType: 'period_half_day',
+        baseAmount: 500.00,
+        description: 'Sábado (31/10/2026) - Meio Período - Fixo R$ 500,00',
+        isFixedTurn: true
+      };
+    }
+
+    // Segunda-feira 03/11/2026 e Terça-feira 04/11/2026: Meio período (Fixo R$ 500,00 cada)
+    if (dateStr === '2026-11-03' || dateStr === '2026-11-04') {
+      return {
+        contractType: 'period_half_day',
+        baseAmount: 500.00,
+        description: `${dateStr === '2026-11-03' ? 'Segunda-feira (03/11/2026)' : 'Terça-feira (04/11/2026)'} - Meio Período - Fixo R$ 500,00`,
+        isFixedTurn: true
+      };
+    }
+
     if (dayOfWeek === 2) {
       // Terça-feira (13h às 18h) - Fixo R$ 500,00 (Meia Diária / Turno 5h)
       return {
@@ -2647,9 +2730,9 @@ class OfflineDatabaseService {
       const allTransactions = this.getTransactions(clinicId);
       const allAppointments = this.getAppointments(clinicId);
 
-      // Transações em aberto a partir de 01/10/2026 (excluindo deletadas e já quitadas)
-      // Apenas receitas efetivamente de consultas/atendimentos clínicos que geram repasse
-      const CUTOFF_DATE = '2026-10-01';
+      // Transações em aberto a partir de 31/10/2026 (excluindo deletadas e já quitadas)
+      // Conforme diretriz clínica: em aberto APENAS do dia 31/10/2026 à presente data (todos os anteriores quitados)
+      const CUTOFF_DATE = '2026-10-31';
       const openTransactions = allTransactions.filter(t => {
         const txDate = t.date || (t.createdAt ? t.createdAt.slice(0, 10) : '');
         const isConsultationCategory = !t.category || t.category === 'consulta' || t.description.toLowerCase().includes('consulta') || t.description.toLowerCase().includes('refração') || t.description.toLowerCase().includes('atendimento');
@@ -2854,7 +2937,7 @@ class OfflineDatabaseService {
 
         const totalProductionAmount = dailyEntries.reduce((acc, e) => acc + e.totalAmount, 0);
 
-        let periodDescription = 'A partir de 01/10/2026';
+        let periodDescription = 'A partir de 31/10/2026';
         if (dailyEntries.length > 0) {
           const firstDate = dailyEntries[0].date;
           const lastDate = dailyEntries[dailyEntries.length - 1].date;
