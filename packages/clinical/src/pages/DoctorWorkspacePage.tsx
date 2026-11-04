@@ -353,9 +353,13 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
 
   // Filtragem Dinâmica por Nome, Telefone e Status
   const filteredAppointments = dayAppointments.filter(apt => {
+    const patientObj = patients.find(p => p.id === apt.patientId);
+    const resolvedName = patientObj?.fullName || apt.patientName || '';
+    const resolvedPhone = patientObj?.phone || apt.patientPhone || '';
+
     const matchesName = !searchName.trim() || 
-      apt.patientName.toLowerCase().includes(searchName.toLowerCase()) ||
-      (apt.patientPhone && apt.patientPhone.includes(searchName));
+      resolvedName.toLowerCase().includes(searchName.toLowerCase()) ||
+      (resolvedPhone && resolvedPhone.includes(searchName));
     
     const matchesStatus = statusFilter === 'ALL' 
       ? true 
@@ -1217,6 +1221,7 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
             {filteredAppointments.map((apt) => {
               const patientObj = patients.find(p => p.id === apt.patientId);
               const age = patientObj?.birthDate ? calculateAge(patientObj.birthDate) : null;
+              const patientDisplayName = patientObj?.fullName || apt.patientName || 'Paciente sem nome';
 
               return (
                 <div 
@@ -1237,7 +1242,7 @@ export const DoctorWorkspacePage: React.FC<DoctorWorkspacePageProps> = ({
                     <div className="space-y-1">
                       <div className="flex items-center gap-2.5 flex-wrap">
                         <h4 className="font-black text-base text-slate-900 capitalize tracking-tight">
-                          {apt.patientName}
+                          {patientDisplayName}
                         </h4>
 
                         {/* Demarcação como Atendimento */}
