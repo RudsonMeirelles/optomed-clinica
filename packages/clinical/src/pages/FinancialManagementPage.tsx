@@ -96,7 +96,7 @@ export const FinancialManagementPage: React.FC<FinancialManagementPageProps> = (
   const [filterPeriodKind, setFilterPeriodKind] = useState<string>('all');
   const [filterRemStatus, setFilterRemStatus] = useState<string>('all');
   const [filterDateStart, setFilterDateStart] = useState<string>('2026-10-01');
-  const [filterDateEnd, setFilterDateEnd] = useState<string>('2026-10-31');
+  const [filterDateEnd, setFilterDateEnd] = useState<string>(new Date().toISOString().slice(0, 10));
 
   // Modais de Remuneração & Períodos
   const [selectedRemRecord, setSelectedRemRecord] = useState<ExaminerRemunerationRecord | null>(null);

@@ -2661,8 +2661,52 @@ class OfflineDatabaseService {
           && isConsultationCategory;
       });
 
-      // Se houver transações em outubro em aberto OU se as transações de setembro já foram verificadas
-      const hasOctoberOpen = openTransactions.length > 0;
+      // --- FALLBACK: usar appointments com status 'completed' quando não há transações ---
+      // Isso resolve o caso em que o sistema é acessado via Render.com sem LocalStorage histórico
+      const completedAppointments = allAppointments.filter(a => {
+        const aptDate = a.date || '';
+        const aptAny = a as any;
+        return aptDate >= CUTOFF_DATE
+          && (a.status === 'completed' || aptAny.status === 'atendido')
+          && !aptAny._deleted
+          && (!a.examinerId || a.examinerId === 'user-examinador')
+          && (!a.examinerName || a.examinerName.toLowerCase().includes('rudson') || a.examinerName.toLowerCase().includes('meirelles'));
+      });
+
+      // Verificar quais datas têm appointments mas não têm transações (lacunas)
+      const datesWithTransactions = new Set(openTransactions.map(t => t.date || (t.createdAt ? t.createdAt.slice(0, 10) : '')));
+      const datesWithAppointmentsOnly = new Set(
+        completedAppointments
+          .map(a => a.date || '')
+          .filter(d => d && !datesWithTransactions.has(d))
+      );
+
+      // Sintetizar transações a partir de appointments para datas sem transações
+      const syntheticTransactions = completedAppointments
+        .filter(a => datesWithAppointmentsOnly.has(a.date || ''))
+        .map(a => ({
+          id: `tx_synth_${a.id}`,
+          clinicId,
+          type: 'income' as const,
+          category: 'consulta' as const,
+          description: `Consulta Oftalmológica / Refração - ${a.patientName || 'Paciente'}`,
+          amount: 50.00,
+          amountCents: 5000,
+          currency: 'BRL' as const,
+          date: a.date || '',
+          paymentMethod: 'cash' as const,
+          patientId: a.patientId,
+          patientName: a.patientName,
+          encounterId: a.id,
+          status: 'completed' as const,
+          isSettled: false,
+          createdBy: a.examinerName || examinerName,
+          createdAt: a.completedAt || a.updatedAt || `${a.date}T12:00:00.000Z`
+        }));
+
+      // Mesclar transações reais + sintéticas
+      const allOpenTransactions = [...openTransactions, ...syntheticTransactions];
+      const hasData = allOpenTransactions.length > 0;
 
       // Verifica se houve lançamento de pagamento de repasse ao examinador
       const isPaidTx = allTransactions.some(
@@ -2670,11 +2714,12 @@ class OfflineDatabaseService {
       );
       const isFlagSettled = typeof localStorage !== 'undefined' && localStorage.getItem('optomed_ivs_repasse_settled_sept2026') === 'true';
 
-      // Se há transações a partir de 01/10/2026 em aberto, calcula dinamicamente o novo período
-      if (hasOctoberOpen) {
+      // Se há dados (transações ou appointments completados) a partir de 01/10/2026, calcula dinamicamente
+      if (hasData) {
+        const effectiveTransactions = allOpenTransactions;
         // Agrupa por data para compor entradas diárias
-        const byDate = new Map<string, typeof openTransactions>();
-        for (const tx of openTransactions) {
+        const byDate = new Map<string, typeof effectiveTransactions>();
+        for (const tx of effectiveTransactions) {
           const d = tx.date || (tx.createdAt ? tx.createdAt.slice(0, 10) : '');
           if (!byDate.has(d)) byDate.set(d, []);
           byDate.get(d)!.push(tx);
