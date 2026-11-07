@@ -3709,5 +3709,22 @@
     "createdAt": "2026-10-30T10:00:00.000Z",
     "updatedAt": "2026-11-04T18:14:55.038Z",
     "patientGlobalId": "gid_1794085612026_8dfa3f"
+  },
+  {
+    "id": "pat-ivs-20261106-01",
+    "fullName": "Paciente Consulta Avulsa (06/11)",
+    "birthDate": "",
+    "sex": "O",
+    "nationality": "BR",
+    "documentType": "CPF",
+    "phoneCountryCode": "+55",
+    "phone": "",
+    "city": "Ponta Porã",
+    "country": "Brasil",
+    "lgpdConsent": true,
+    "lgpdConsentDate": "2026-11-06T14:00:00.000Z",
+    "createdAt": "2026-11-06T14:00:00.000Z",
+    "updatedAt": "2026-11-06T14:00:00.000Z",
+    "patientGlobalId": "gid_1794086859738_15a2b1"
   }
 ]

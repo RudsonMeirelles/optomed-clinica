@@ -4011,5 +4011,20 @@
     "completedAt": "2026-10-30T12:00:00.000Z",
     "createdAt": "2026-10-30T10:00:00.000Z",
     "updatedAt": "2026-11-04T18:14:55.038Z"
+  },
+  {
+    "id": "apt-ivs-20261106-01",
+    "patientId": "pat-ivs-20261106-01",
+    "patientName": "Paciente Consulta Avulsa (06/11)",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "date": "2026-11-06",
+    "time": "14:30",
+    "durationMinutes": 30,
+    "type": "refrativo",
+    "status": "completed",
+    "completedAt": "2026-11-06T15:00:00.000Z",
+    "createdAt": "2026-11-06T14:30:00.000Z",
+    "updatedAt": "2026-11-06T15:00:00.000Z"
   }
 ]
