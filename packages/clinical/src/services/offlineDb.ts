@@ -386,7 +386,7 @@ class OfflineDatabaseService {
   }
 
   /**
-   * Limpeza e saneamento retroativo de registros dummy e marcação de quitação até 30/10/2026.
+   * Limpeza e saneamento retroativo de registros dummy e marcação de quitação até 26/10/2026.
    */
   private cleanupDummyAndLegacyRecords(): void {
     if (typeof localStorage === 'undefined') return;
@@ -408,7 +408,7 @@ class OfflineDatabaseService {
         }
       }
 
-      // 2. Limpa transactions dummy e quita as anteriores a 31/10/2026
+      // 2. Limpa transactions dummy e quita as anteriores a 27/10/2026
       const txKey = this.getKey('financial_transactions', clinicId);
       const rawTxs = localStorage.getItem(txKey);
       if (rawTxs) {
@@ -422,7 +422,7 @@ class OfflineDatabaseService {
             })
             .map(t => {
               const d = t.date || (t.createdAt ? t.createdAt.slice(0, 10) : '');
-              if (d < '2026-10-31' && !t.isSettled) {
+              if (d < '2026-10-27' && !t.isSettled) {
                 modified = true;
                 return { ...t, isSettled: true };
               }
@@ -2730,9 +2730,9 @@ class OfflineDatabaseService {
       const allTransactions = this.getTransactions(clinicId);
       const allAppointments = this.getAppointments(clinicId);
 
-      // Transações em aberto a partir de 31/10/2026 (excluindo deletadas e já quitadas)
-      // Conforme diretriz clínica: em aberto APENAS do dia 31/10/2026 à presente data (todos os anteriores quitados)
-      const CUTOFF_DATE = '2026-10-31';
+      // Transações em aberto a partir de 27/10/2026 (excluindo deletadas e já quitadas)
+      // Conforme demonstrativo do Dr. Meirelles: período em aberto de 27/10/2026 em diante (35 consultas, R$ 2.350,00)
+      const CUTOFF_DATE = '2026-10-27';
       const openTransactions = allTransactions.filter(t => {
         const txDate = t.date || (t.createdAt ? t.createdAt.slice(0, 10) : '');
         const isConsultationCategory = !t.category || t.category === 'consulta' || t.description.toLowerCase().includes('consulta') || t.description.toLowerCase().includes('refração') || t.description.toLowerCase().includes('atendimento');
@@ -2937,7 +2937,7 @@ class OfflineDatabaseService {
 
         const totalProductionAmount = dailyEntries.reduce((acc, e) => acc + e.totalAmount, 0);
 
-        let periodDescription = 'A partir de 31/10/2026';
+        let periodDescription = 'A partir de 27/10/2026';
         if (dailyEntries.length > 0) {
           const firstDate = dailyEntries[0].date;
           const lastDate = dailyEntries[dailyEntries.length - 1].date;
