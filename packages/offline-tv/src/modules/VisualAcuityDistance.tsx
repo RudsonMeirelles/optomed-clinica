@@ -28,6 +28,7 @@ interface VisualAcuityDistanceProps {
   pixelsPerMm: number;
   initialType?: OptotypeType;
   initialEye?: EyeTested;
+  isPatientMode?: boolean;
   onStateChange?: (state: any) => void;
   onBackToMenu?: () => void;
 }
@@ -37,6 +38,7 @@ export const VisualAcuityDistance: React.FC<VisualAcuityDistanceProps> = ({
   pixelsPerMm,
   initialType = 'sloan',
   initialEye = 'OD',
+  isPatientMode = true,
   onBackToMenu
 }) => {
   const [optotypeType, setOptotypeType] = useState<OptotypeType>(initialType);
@@ -112,6 +114,32 @@ export const VisualAcuityDistance: React.FC<VisualAcuityDistanceProps> = ({
         generateRandomStimuli();
       } else if (msg.type === 'SET_EYE') {
         setCurrentEye(msg.eye);
+      } else if (msg.type === 'SET_DIRECTION' && msg.direction) {
+        // Força orientação direta para Tumbling E e Landolt C (0=Direita, 90=Baixo, 180=Esquerda, 270=Cima)
+        const orientMap: Record<string, TumblingEOrientation> = {
+          right: 0,
+          down: 90,
+          left: 180,
+          up: 270
+        };
+        const targetOrient = orientMap[msg.direction];
+        if (targetOrient !== undefined) {
+          setTumblingItems([targetOrient, targetOrient, targetOrient, targetOrient, targetOrient]);
+          setLandoltItems([targetOrient, targetOrient, targetOrient, targetOrient, targetOrient]);
+        }
+      } else if (msg.type === 'PAUSE_EXAM') {
+        setDisplayMode('isolated');
+      } else if (msg.type === 'RESUME_EXAM') {
+        setDisplayMode('full_line');
+      } else if (msg.type === 'RESTART_EXAM') {
+        setAcuityIndex(12); // Restaura para 20/20
+        setDisplayMode('full_line');
+        setCrowding(false);
+        generateRandomStimuli();
+      } else if (msg.type === 'TOGGLE_ISOLATED') {
+        setDisplayMode(prev => prev === 'isolated' ? 'full_line' : 'isolated');
+      } else if (msg.type === 'TOGGLE_CROWDING') {
+        setCrowding(prev => !prev);
       }
     });
 
@@ -179,75 +207,80 @@ export const VisualAcuityDistance: React.FC<VisualAcuityDistanceProps> = ({
 
   return (
     <div className="w-full h-full flex flex-col bg-white text-black relative select-none overflow-hidden">
-      {/* Botão de Retorno Rápido ao Menu (Clicável na tela / mouse / touch) */}
-      <div className="absolute top-4 left-4 z-30 flex items-center gap-2">
-        <button
-          type="button"
-          onClick={() => {
-            if (onBackToMenu) onBackToMenu();
-          }}
-          className="flex items-center gap-2 bg-slate-900 hover:bg-black active:bg-slate-800 text-white px-4 py-2 rounded-xl text-xs font-black shadow-lg border border-slate-700 transition-all cursor-pointer"
-        >
-          <ArrowLeft className="w-4 h-4 text-blue-400" />
-          <span>Menu Principal</span>
-        </button>
-
-        {/* Tipo do Teste Clicável */}
-        <div className="hidden sm:flex bg-slate-100 border border-slate-300 p-1 rounded-xl gap-1 shadow-sm">
-          {(['sloan', 'numbers', 'tumbling_e', 'landolt_c', 'pediatric'] as OptotypeType[]).map((t) => (
+      {/* Botões e seletores visíveis apenas se NÃO estiver em Modo Paciente Estrito */}
+      {!isPatientMode && (
+        <>
+          {/* Botão de Retorno Rápido ao Menu (Clicável na tela / mouse / touch) */}
+          <div className="absolute top-4 left-4 z-30 flex items-center gap-2">
             <button
-              key={t}
               type="button"
-              onClick={() => setOptotypeType(t)}
-              className={`px-3 py-1 rounded-lg text-xs font-bold capitalize transition-all cursor-pointer ${
-                optotypeType === t 
-                  ? 'bg-blue-600 text-white shadow' 
-                  : 'text-slate-700 hover:bg-slate-200'
-              }`}
+              onClick={() => {
+                if (onBackToMenu) onBackToMenu();
+              }}
+              className="flex items-center gap-2 bg-slate-900 hover:bg-black active:bg-slate-800 text-white px-4 py-2 rounded-xl text-xs font-black shadow-lg border border-slate-700 transition-all cursor-pointer"
             >
-              {t === 'sloan' ? 'Letras' : t === 'numbers' ? 'Números' : t === 'tumbling_e' ? 'Tumbling E' : t === 'landolt_c' ? 'Landolt' : 'Infantil'}
+              <ArrowLeft className="w-4 h-4 text-blue-400" />
+              <span>Menu Principal</span>
             </button>
-          ))}
-        </div>
-      </div>
 
-      {/* Botões Flutuantes de Navegação de Linha e Randomização (Clicáveis) */}
-      <div className="absolute top-4 right-4 z-30 flex items-center gap-2">
-        <button
-          type="button"
-          onClick={prevLine}
-          disabled={acuityIndex === 0}
-          className="bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-800 px-3 py-2 rounded-xl border border-slate-300 shadow font-bold flex items-center gap-1 disabled:opacity-30 cursor-pointer transition-all"
-          title="Aumentar Linha [▲]"
-        >
-          <ChevronUp className="w-4 h-4 text-emerald-600" />
-          <span className="text-xs">Maior</span>
-        </button>
-        <button
-          type="button"
-          onClick={nextLine}
-          disabled={acuityIndex === STANDARD_ACUITY_LEVELS.length - 1}
-          className="bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-800 px-3 py-2 rounded-xl border border-slate-300 shadow font-bold flex items-center gap-1 disabled:opacity-30 cursor-pointer transition-all"
-          title="Diminuir Linha [▼]"
-        >
-          <ChevronDown className="w-4 h-4 text-amber-600" />
-          <span className="text-xs">Menor</span>
-        </button>
-        <button
-          type="button"
-          onClick={generateRandomStimuli}
-          className="bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white px-3.5 py-2 rounded-xl border border-indigo-700 shadow font-bold flex items-center gap-1.5 cursor-pointer transition-all"
-          title="Randomizar Letras [OK]"
-        >
-          <Shuffle className="w-4 h-4 text-white" />
-          <span className="text-xs">Trocar</span>
-        </button>
-      </div>
+            {/* Tipo do Teste Clicável */}
+            <div className="hidden sm:flex bg-slate-100 border border-slate-300 p-1 rounded-xl gap-1 shadow-sm">
+              {(['sloan', 'numbers', 'tumbling_e', 'landolt_c', 'pediatric'] as OptotypeType[]).map((t) => (
+                <button
+                  key={t}
+                  type="button"
+                  onClick={() => setOptotypeType(t)}
+                  className={`px-3 py-1 rounded-lg text-xs font-bold capitalize transition-all cursor-pointer ${
+                    optotypeType === t 
+                      ? 'bg-blue-600 text-white shadow' 
+                      : 'text-slate-700 hover:bg-slate-200'
+                  }`}
+                >
+                  {t === 'sloan' ? 'Letras' : t === 'numbers' ? 'Números' : t === 'tumbling_e' ? 'Tumbling E' : t === 'landolt_c' ? 'Landolt' : 'Infantil'}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Botões Flutuantes de Navegação de Linha e Randomização (Clicáveis) */}
+          <div className="absolute top-4 right-4 z-30 flex items-center gap-2">
+            <button
+              type="button"
+              onClick={prevLine}
+              disabled={acuityIndex === 0}
+              className="bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-800 px-3 py-2 rounded-xl border border-slate-300 shadow font-bold flex items-center gap-1 disabled:opacity-30 cursor-pointer transition-all"
+              title="Aumentar Linha [▲]"
+            >
+              <ChevronUp className="w-4 h-4 text-emerald-600" />
+              <span className="text-xs">Maior</span>
+            </button>
+            <button
+              type="button"
+              onClick={nextLine}
+              disabled={acuityIndex === STANDARD_ACUITY_LEVELS.length - 1}
+              className="bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-800 px-3 py-2 rounded-xl border border-slate-300 shadow font-bold flex items-center gap-1 disabled:opacity-30 cursor-pointer transition-all"
+              title="Diminuir Linha [▼]"
+            >
+              <ChevronDown className="w-4 h-4 text-amber-600" />
+              <span className="text-xs">Menor</span>
+            </button>
+            <button
+              type="button"
+              onClick={generateRandomStimuli}
+              className="bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white px-3.5 py-2 rounded-xl border border-indigo-700 shadow font-bold flex items-center gap-1.5 cursor-pointer transition-all"
+              title="Randomizar Letras [OK]"
+            >
+              <Shuffle className="w-4 h-4 text-white" />
+              <span className="text-xs">Trocar</span>
+            </button>
+          </div>
+        </>
+      )}
 
       {/* Área Central dos Estímulos Visuais (Generosamente Espaçada, Sem Sobreposição e Perfeitamente Enquadrada para 1600x900) */}
       <div 
-        onClick={generateRandomStimuli}
-        className="flex-1 w-full flex items-center justify-center p-8 sm:p-12 overflow-hidden bg-white cursor-pointer select-none"
+        onClick={!isPatientMode ? generateRandomStimuli : undefined}
+        className="flex-1 w-full flex items-center justify-center p-8 sm:p-12 overflow-hidden bg-white select-none"
       >
         <div 
           className="flex flex-row items-center justify-center flex-nowrap max-w-[95vw] overflow-visible"
@@ -280,17 +313,19 @@ export const VisualAcuityDistance: React.FC<VisualAcuityDistanceProps> = ({
         </div>
       </div>
 
-      {/* Indicador Minimalista da Acuidade Visual Atual (Canto Inferior Direito) */}
-      <div className="absolute bottom-4 right-4 flex items-center gap-2.5 bg-slate-900 text-white px-4 py-2 rounded-2xl shadow-xl border border-slate-700 z-30">
-        <span className={`text-xs font-black px-2 py-0.5 rounded-md uppercase ${
-          currentEye === 'OD' ? 'bg-emerald-600' : currentEye === 'OE' ? 'bg-amber-600' : 'bg-blue-600'
-        }`}>
-          {currentEye}
-        </span>
-        <span className="font-mono font-black text-lg tracking-wider text-white">
-          {currentAcuity.snellen20}
-        </span>
-      </div>
+      {/* Indicador de Acuidade Atual: Exibido somente no Modo Examinador (!isPatientMode) */}
+      {!isPatientMode && (
+        <div className="absolute bottom-4 right-4 flex items-center gap-2.5 bg-slate-900 text-white px-4 py-2 rounded-2xl shadow-xl border border-slate-700 z-30">
+          <span className={`text-xs font-black px-2 py-0.5 rounded-md uppercase ${
+            currentEye === 'OD' ? 'bg-emerald-600' : currentEye === 'OE' ? 'bg-amber-600' : 'bg-blue-600'
+          }`}>
+            {currentEye}
+          </span>
+          <span className="font-mono font-black text-lg tracking-wider text-white">
+            {currentAcuity.snellen20}
+          </span>
+        </div>
+      )}
     </div>
   );
 };

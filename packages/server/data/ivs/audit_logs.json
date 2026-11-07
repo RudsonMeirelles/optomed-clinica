@@ -19468,5 +19468,1025 @@
     "resourceType": "PRESCRIPTION",
     "resourceId": "1024ed9b-1391-4423-8392-fd524cbf7b09",
     "details": "[IVS] Receita óptica rascunho atualizada para Amelia Sanguina Rodrigues"
+  },
+  {
+    "id": "41d8f888-1954-4a94-a469-6e7a7f2d2b89",
+    "timestamp": "2026-10-17T21:25:16.227Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "a024c354-dbda-4ece-a86e-11a5b36d51b1",
+    "details": "[IVS] Agendamento para ROSA MARIA às 17:25"
+  },
+  {
+    "id": "163605c6-ce15-4f07-ba90-349e7fbfcafb",
+    "timestamp": "2026-10-17T21:25:16.210Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "a024c354-dbda-4ece-a86e-11a5b36d51b1",
+    "details": "[IVS] Atualizado cadastro de ROSA MARIA"
+  },
+  {
+    "id": "65387273-3dc5-4c5e-acf3-8b3d2850ab48",
+    "timestamp": "2026-10-17T21:23:32.639Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "bef09217-8fdb-4c6b-a630-ba85f37bb457",
+    "details": "[IVS] Agendamento para LUIS FERNANDO às 17:23"
+  },
+  {
+    "id": "02e8107b-93a5-461d-8ea0-27eab53a75b6",
+    "timestamp": "2026-10-17T21:23:32.624Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "bef09217-8fdb-4c6b-a630-ba85f37bb457",
+    "details": "[IVS] Atualizado cadastro de LUIS FERNANDO"
+  },
+  {
+    "id": "1db27f04-13c7-4fbb-b297-f2df58dd4b6f",
+    "timestamp": "2026-10-17T18:11:02.082Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "4bf24fab-21b9-4269-981b-bc29cde19176",
+    "details": "[IVS] Agendamento para DANIELE BEATRIZ MENDES DE FREITAS às 14:11"
+  },
+  {
+    "id": "5e6a4628-fec7-47e3-9da2-be54ad2ce14a",
+    "timestamp": "2026-10-17T18:11:02.066Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "4bf24fab-21b9-4269-981b-bc29cde19176",
+    "details": "[IVS] Atualizado cadastro de DANIELE BEATRIZ MENDES DE FREITAS"
+  },
+  {
+    "id": "c9c6007e-c194-4b94-bc24-fe1ec2d00481",
+    "timestamp": "2026-10-17T18:08:46.378Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "1733065d-ce0e-4a95-977b-1933de52c598",
+    "details": "[IVS] Agendamento para MARIELI BARBOSA MENDES às 14:08"
+  },
+  {
+    "id": "97de24a7-76fd-4b8e-b1d5-92cb0f9eb24e",
+    "timestamp": "2026-10-17T18:08:46.357Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "1733065d-ce0e-4a95-977b-1933de52c598",
+    "details": "[IVS] Atualizado cadastro de MARIELI BARBOSA MENDES"
+  },
+  {
+    "id": "220e2d03-26b5-4c11-b1fd-7937779cce15",
+    "timestamp": "2026-10-17T17:14:22.327Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "24a8bc7e-dfbf-434d-93d7-b2c2bc963d0e",
+    "details": "[IVS] Agendamento para FULGENCIA BENITEZ às 13:14"
+  },
+  {
+    "id": "20ee9489-ac86-4d97-99bf-3567f9d7240d",
+    "timestamp": "2026-10-17T17:14:22.307Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "24a8bc7e-dfbf-434d-93d7-b2c2bc963d0e",
+    "details": "[IVS] Atualizado cadastro de FULGENCIA BENITEZ"
+  },
+  {
+    "id": "e2881ad3-e7a4-4cb2-a175-0e0b1eb7a044",
+    "timestamp": "2026-10-17T17:04:28.375Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "8e7dc483-1968-459a-a20b-25cee6ea6859",
+    "details": "[IVS] Agendamento para TAYNARA MARIA MORAIS MONGELOS às 13:04"
+  },
+  {
+    "id": "ead1e634-0406-4c52-8197-ddd3b4fd91a6",
+    "timestamp": "2026-10-17T17:04:28.353Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "8e7dc483-1968-459a-a20b-25cee6ea6859",
+    "details": "[IVS] Atualizado cadastro de TAYNARA MARIA MORAIS MONGELOS"
+  },
+  {
+    "id": "1c7b198d-a108-496d-be33-fb7d196915f9",
+    "timestamp": "2026-10-17T16:58:39.577Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "0cc0cc86-ac1a-4898-a945-f7b6f9373c79",
+    "details": "[IVS] Agendamento para JOAO CANDIDO ROCHA às 12:58"
+  },
+  {
+    "id": "5185a06e-d3fa-43a8-8163-d908687e8225",
+    "timestamp": "2026-10-17T16:58:39.558Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "0cc0cc86-ac1a-4898-a945-f7b6f9373c79",
+    "details": "[IVS] Atualizado cadastro de JOAO CANDIDO ROCHA"
+  },
+  {
+    "id": "769d8dbe-2e8a-4539-86ef-1a579371ad31",
+    "timestamp": "2026-10-17T16:57:15.560Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "03f7ffb9-53b1-468c-bca1-7d2cda8943ca",
+    "details": "[IVS] Agendamento para FERNANDA  D. R. ROCHA às 12:57"
+  },
+  {
+    "id": "940aa03d-a96b-4236-86eb-50819d4e19b8",
+    "timestamp": "2026-10-17T16:57:15.549Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "03f7ffb9-53b1-468c-bca1-7d2cda8943ca",
+    "details": "[IVS] Atualizado cadastro de FERNANDA  D. R. ROCHA"
+  },
+  {
+    "id": "433cb3da-0880-4746-b352-02e25827ada0",
+    "timestamp": "2026-10-17T16:41:30.653Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "a05b65f5-d378-4939-8545-99490386f35b",
+    "details": "[IVS] Agendamento para SANDRA GODOY às 12:41"
+  },
+  {
+    "id": "1e600cb5-d60a-4571-9cbb-fd80f09354ad",
+    "timestamp": "2026-10-17T16:41:30.635Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "a05b65f5-d378-4939-8545-99490386f35b",
+    "details": "[IVS] Atualizado cadastro de SANDRA GODOY"
+  },
+  {
+    "id": "9c8af3d6-a56b-4c34-bb86-346352e9ccad",
+    "timestamp": "2026-10-17T16:34:15.935Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "82cea678-0e00-45a3-96b5-127aad20d184",
+    "details": "[IVS] Agendamento para YENEFFER PAOLA às 12:34"
+  },
+  {
+    "id": "3373138b-882d-44fb-ac76-fb25a2196622",
+    "timestamp": "2026-10-17T16:34:15.919Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "82cea678-0e00-45a3-96b5-127aad20d184",
+    "details": "[IVS] Atualizado cadastro de YENEFFER PAOLA"
+  },
+  {
+    "id": "59984eaf-0b4c-4537-bb34-db3134cb18e0",
+    "timestamp": "2026-10-17T15:27:49.315Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "203cac76-1581-4270-8020-0dbfdbc7b9ec",
+    "details": "[IVS] Agendamento para LARISSA FERNANDA às 11:27"
+  },
+  {
+    "id": "6e35aafc-bc0e-47b9-b542-d41cb8cbc20f",
+    "timestamp": "2026-10-17T15:27:49.301Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "203cac76-1581-4270-8020-0dbfdbc7b9ec",
+    "details": "[IVS] Atualizado cadastro de LARISSA FERNANDA"
+  },
+  {
+    "id": "fa1e7786-f04d-4c11-9fd1-206699cb189b",
+    "timestamp": "2026-10-17T15:21:37.866Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "28f1024c-a364-4278-89b4-9e821880feba",
+    "details": "[IVS] Agendamento para NANCY CRISTALDO SILVA às 11:21"
+  },
+  {
+    "id": "ad11a44a-ee8b-4668-b382-cf27eaaa47ae",
+    "timestamp": "2026-10-17T15:21:37.852Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "28f1024c-a364-4278-89b4-9e821880feba",
+    "details": "[IVS] Atualizado cadastro de NANCY CRISTALDO SILVA"
+  },
+  {
+    "id": "3d34a337-e58e-4dbd-8a7c-929608101269",
+    "timestamp": "2026-10-17T14:47:25.866Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "246aed14-3581-4635-ba21-a33a9e6dbe31",
+    "details": "[IVS] Agendamento para RONALDO FERREIRA MINELLA às 10:47"
+  },
+  {
+    "id": "09bd95a6-e709-4ad8-87f2-c1aecea5ea43",
+    "timestamp": "2026-10-17T14:47:25.850Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "246aed14-3581-4635-ba21-a33a9e6dbe31",
+    "details": "[IVS] Atualizado cadastro de RONALDO FERREIRA MINELLA"
+  },
+  {
+    "id": "b4c72b37-bf4d-492a-a933-22c719ae20d5",
+    "timestamp": "2026-10-17T14:25:59.948Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "1f882891-6be0-4635-a178-4dea88555e5a",
+    "details": "[IVS] Agendamento para AMELIA SANGUINA RAMIREZ às 10:25"
+  },
+  {
+    "id": "465c1154-1184-4b1e-aa17-82729049cd1a",
+    "timestamp": "2026-10-17T14:25:59.927Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "1f882891-6be0-4635-a178-4dea88555e5a",
+    "details": "[IVS] Atualizado cadastro de AMELIA SANGUINA RAMIREZ"
+  },
+  {
+    "id": "4392a260-5b6a-4a63-bfa0-1d3569df8509",
+    "timestamp": "2026-10-17T14:10:41.787Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "7d61ae6b-4b63-41c0-a16c-83b97cc133cf",
+    "details": "[IVS] Agendamento para NELLY BRITOS às 17:36"
+  },
+  {
+    "id": "37cb9504-8447-461b-8669-cb9a81899d7a",
+    "timestamp": "2026-10-17T14:10:41.734Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "7d61ae6b-4b63-41c0-a16c-83b97cc133cf",
+    "details": "[IVS] Atualizado cadastro de NELLY BRITOS"
+  },
+  {
+    "id": "519dcd27-56b0-4049-8429-e6d95a107603",
+    "timestamp": "2026-10-17T14:08:24.710Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "fa6ea586-59e5-40ca-8e02-b722da1f6556",
+    "details": "[IVS] Agendamento para ROSA MARIA às 17:33"
+  },
+  {
+    "id": "0fc7ee39-6b1c-43b5-b100-d77bf5bfcbbd",
+    "timestamp": "2026-10-17T14:08:24.680Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "fa6ea586-59e5-40ca-8e02-b722da1f6556",
+    "details": "[IVS] Atualizado cadastro de ROSA MARIA"
+  },
+  {
+    "id": "f9715b92-817c-4ee9-86e2-ceb293c60fe9",
+    "timestamp": "2026-10-17T14:06:11.516Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "210b943a-bdb7-4f4e-bf77-779be3c5e4c3",
+    "details": "[IVS] Agendamento para LUIS FERNANDO RESQUIN às 17:30"
+  },
+  {
+    "id": "137c2f30-e9a2-4c7d-be70-b7a7c9b5e461",
+    "timestamp": "2026-10-17T14:06:11.488Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "210b943a-bdb7-4f4e-bf77-779be3c5e4c3",
+    "details": "[IVS] Atualizado cadastro de LUIS FERNANDO RESQUIN"
+  },
+  {
+    "id": "0fd1fb29-6a2b-46d6-a8e8-edb09e5817d5",
+    "timestamp": "2026-10-17T14:04:38.605Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "5164c7e7-3026-4629-a30e-d2954704f6c1",
+    "details": "[IVS] Agendamento para DAYANA FRANCO às 10:04"
+  },
+  {
+    "id": "575f7bad-c070-4ef9-943b-c8cdbd44d41d",
+    "timestamp": "2026-10-17T14:04:38.577Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "5164c7e7-3026-4629-a30e-d2954704f6c1",
+    "details": "[IVS] Atualizado cadastro de DAYANA FRANCO"
+  },
+  {
+    "id": "aed243c6-039d-4bc2-ae88-a395c3d5303b",
+    "timestamp": "2026-10-17T14:02:18.617Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "77ccb725-14a0-470c-b593-c86dc21a3e3e",
+    "details": "[IVS] Agendamento para KEILA LESME às 17:00"
+  },
+  {
+    "id": "db9365cb-7974-423d-8aef-02afd0460479",
+    "timestamp": "2026-10-17T14:02:18.561Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "77ccb725-14a0-470c-b593-c86dc21a3e3e",
+    "details": "[IVS] Atualizado cadastro de KEILA LESME"
+  },
+  {
+    "id": "49e62699-62c8-4cb5-8e58-70ef3e4a552e",
+    "timestamp": "2026-10-17T14:00:14.595Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "e8238e08-51ce-4e75-bd0e-ef47b69367fb",
+    "details": "[IVS] Agendamento para CARMINHA CALIXTO às 16:30"
+  },
+  {
+    "id": "926c3e60-9be8-42ac-b264-5bc986e43622",
+    "timestamp": "2026-10-17T14:00:14.564Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "e8238e08-51ce-4e75-bd0e-ef47b69367fb",
+    "details": "[IVS] Atualizado cadastro de CARMINHA CALIXTO"
+  },
+  {
+    "id": "c89981d8-2661-49af-8790-f69451309f99",
+    "timestamp": "2026-10-17T13:52:13.955Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "60647c93-3e24-4974-9b47-7a176a5802c0",
+    "details": "[IVS] Agendamento para MERCEDES PERALTA às 16:06"
+  },
+  {
+    "id": "5bfba5b5-b93a-4030-a279-0c5e7bd3daed",
+    "timestamp": "2026-10-17T13:52:13.935Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "60647c93-3e24-4974-9b47-7a176a5802c0",
+    "details": "[IVS] Atualizado cadastro de MERCEDES PERALTA"
+  },
+  {
+    "id": "6b820d0e-68e6-4fc6-9dfd-126b1b05b4b4",
+    "timestamp": "2026-10-17T13:51:37.003Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "d9d25235-16ac-4f6a-b360-64290d2415c5",
+    "details": "[IVS] Agendamento para LILIAN AGUILERA às 16:03"
+  },
+  {
+    "id": "702fd765-0438-4c5f-9ec8-95a263082618",
+    "timestamp": "2026-10-17T13:51:36.975Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "d9d25235-16ac-4f6a-b360-64290d2415c5",
+    "details": "[IVS] Atualizado cadastro de LILIAN AGUILERA"
+  },
+  {
+    "id": "29dbaf2c-1a64-4616-842b-3a665ec77e05",
+    "timestamp": "2026-10-17T13:49:03.486Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "dd757164-6a36-4476-9973-7ef32f2d1eb5",
+    "details": "[IVS] Agendamento para FLAVIANA CENTURION às 16:00"
+  },
+  {
+    "id": "f95f8198-f123-4273-844d-13229c10b94f",
+    "timestamp": "2026-10-17T13:49:03.466Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "dd757164-6a36-4476-9973-7ef32f2d1eb5",
+    "details": "[IVS] Atualizado cadastro de FLAVIANA CENTURION"
+  },
+  {
+    "id": "40697f0d-cc06-47f9-aa53-491e2192342b",
+    "timestamp": "2026-10-17T13:47:14.684Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "d18357d4-26d8-4e19-b603-2fb0324b3066",
+    "details": "[IVS] Agendamento para DENNIS VANNUCCY TAVARES DE ABREU às 09:47"
+  },
+  {
+    "id": "98c0e5e6-8e23-443e-9e69-59fca90f69b1",
+    "timestamp": "2026-10-17T13:47:14.663Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "d18357d4-26d8-4e19-b603-2fb0324b3066",
+    "details": "[IVS] Atualizado cadastro de DENNIS VANNUCCY TAVARES DE ABREU"
+  },
+  {
+    "id": "45207133-b353-4dd2-88ce-715ee131af41",
+    "timestamp": "2026-10-17T13:45:07.818Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "92581a95-4c28-4542-8ab9-d9f7dc311dbf",
+    "details": "[IVS] Agendamento para FLAVIANA CENTURION às 15:36"
+  },
+  {
+    "id": "be65ebee-471a-4c82-abfb-c7b6667d235d",
+    "timestamp": "2026-10-17T13:45:07.788Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "92581a95-4c28-4542-8ab9-d9f7dc311dbf",
+    "details": "[IVS] Atualizado cadastro de FLAVIANA CENTURION"
+  },
+  {
+    "id": "d17f932b-c121-4425-bf44-1c42d672492d",
+    "timestamp": "2026-10-17T13:41:43.195Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "6454e95c-3155-478c-acef-9006a781a406",
+    "details": "[IVS] Agendamento para RAMONA GONZALEZ às 15:33"
+  },
+  {
+    "id": "14c4b786-a8e1-41d9-a5cd-cfaf4c5cc24a",
+    "timestamp": "2026-10-17T13:41:43.162Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "6454e95c-3155-478c-acef-9006a781a406",
+    "details": "[IVS] Atualizado cadastro de RAMONA GONZALEZ"
+  },
+  {
+    "id": "2e2f1004-144a-48c2-83c5-47df0e5d3d5d",
+    "timestamp": "2026-10-17T13:40:46.929Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "b6234b74-3911-4a7b-b4ea-e30db89ac494",
+    "details": "[IVS] Agendamento para TEREZA ORTELLADO às 15:30"
+  },
+  {
+    "id": "7697c331-5e97-436e-8117-1bc4af5a6139",
+    "timestamp": "2026-10-17T13:40:46.895Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "b6234b74-3911-4a7b-b4ea-e30db89ac494",
+    "details": "[IVS] Atualizado cadastro de TEREZA ORTELLADO"
+  },
+  {
+    "id": "23337f5b-678e-4350-bcb6-8313b51143ab",
+    "timestamp": "2026-10-17T13:39:38.949Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "8b2851f9-25a1-464a-966f-4b7d6a3fa5cf",
+    "details": "[IVS] Agendamento para LILIAN SANCHEZ às 15:09"
+  },
+  {
+    "id": "9bc75cee-78c2-4833-9e4e-1c0a780436a0",
+    "timestamp": "2026-10-17T13:39:38.916Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "8b2851f9-25a1-464a-966f-4b7d6a3fa5cf",
+    "details": "[IVS] Atualizado cadastro de LILIAN SANCHEZ"
+  },
+  {
+    "id": "0bb74ec4-b741-40fe-8b52-c2e04467f990",
+    "timestamp": "2026-10-17T13:38:00.887Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "d8ef181a-5d9d-45a6-9b1b-3a7ebdfa2416",
+    "details": "[IVS] Agendamento para OSVALDA CENTURION às 15:06"
+  },
+  {
+    "id": "68a004bb-9544-4658-a1ec-43eea6116f13",
+    "timestamp": "2026-10-17T13:38:00.856Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "d8ef181a-5d9d-45a6-9b1b-3a7ebdfa2416",
+    "details": "[IVS] Atualizado cadastro de OSVALDA CENTURION"
+  },
+  {
+    "id": "ae70627d-bf2f-4ca2-af1c-48c18a9c74f1",
+    "timestamp": "2026-10-17T13:34:46.119Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "9de4d014-d21c-4775-8c2c-7eebe2f9ebbb",
+    "details": "[IVS] Agendamento para JUAN ANTONIO IRALA às 09:24"
+  },
+  {
+    "id": "2695500b-053a-4fee-aee9-5f2082f984e4",
+    "timestamp": "2026-10-17T13:34:46.086Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "9de4d014-d21c-4775-8c2c-7eebe2f9ebbb",
+    "details": "[IVS] Atualizado cadastro de JUAN ANTONIO IRALA"
+  },
+  {
+    "id": "1203990f-bc0c-4417-a496-20afe714373c",
+    "timestamp": "2026-10-17T13:33:49.461Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "536f4655-44fd-42b7-935d-8edd7f2d0509",
+    "details": "[IVS] Agendamento para ALDO ORTIZ às 15:00"
+  },
+  {
+    "id": "1f7686d9-827f-4a03-bf25-df9d5575a7ee",
+    "timestamp": "2026-10-17T13:33:49.446Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "536f4655-44fd-42b7-935d-8edd7f2d0509",
+    "details": "[IVS] Atualizado cadastro de ALDO ORTIZ"
+  },
+  {
+    "id": "79cf943b-9043-4ec5-b747-67d68c25262f",
+    "timestamp": "2026-10-17T13:30:15.987Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "048c11fc-7cc9-4c44-bc29-273d4fa775f3",
+    "details": "[IVS] Agendamento para ALICE RAMOS DE ALENCAR às 14:36"
+  },
+  {
+    "id": "82b3c9b6-defb-490e-a09e-9e8ce39a9236",
+    "timestamp": "2026-10-17T13:30:15.936Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "048c11fc-7cc9-4c44-bc29-273d4fa775f3",
+    "details": "[IVS] Atualizado cadastro de ALICE RAMOS DE ALENCAR"
+  },
+  {
+    "id": "144eecef-3a89-4518-ac25-8d1c78890923",
+    "timestamp": "2026-10-17T13:28:28.261Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "ed410974-92a3-44a2-aecc-c136e7528989",
+    "details": "[IVS] Agendamento para DANIELI às 14:33"
+  },
+  {
+    "id": "5dfd75f9-ac9e-4cd3-beca-fd370c943479",
+    "timestamp": "2026-10-17T13:28:28.222Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "ed410974-92a3-44a2-aecc-c136e7528989",
+    "details": "[IVS] Atualizado cadastro de DANIELI"
+  },
+  {
+    "id": "59200449-3ac9-4908-8714-fe8a4405666c",
+    "timestamp": "2026-10-17T13:27:34.787Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "80c3cefa-2673-4135-8c85-6050c001f6a6",
+    "details": "[IVS] Agendamento para MARIELI às 14:30"
+  },
+  {
+    "id": "f86fb6f2-8687-40db-813c-eb3387999554",
+    "timestamp": "2026-10-17T13:27:34.765Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "80c3cefa-2673-4135-8c85-6050c001f6a6",
+    "details": "[IVS] Atualizado cadastro de MARIELI"
+  },
+  {
+    "id": "3a9d07e9-b046-4a0a-beb5-7923179fd993",
+    "timestamp": "2026-10-17T13:24:14.023Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "61a62001-3582-40d4-b253-9c2164740a9c",
+    "details": "[IVS] Agendamento para FULGENCIA BENITEZ às 14:06"
+  },
+  {
+    "id": "77c5ed93-530f-4264-a8bf-580170804186",
+    "timestamp": "2026-10-17T13:24:13.996Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "61a62001-3582-40d4-b253-9c2164740a9c",
+    "details": "[IVS] Atualizado cadastro de FULGENCIA BENITEZ"
+  },
+  {
+    "id": "13558ee2-9461-42df-8050-3e086f287518",
+    "timestamp": "2026-10-17T13:23:36.653Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "dba2b74e-277d-405d-b6ef-eff7fef45b3a",
+    "details": "[IVS] Agendamento para KAREN ROCIO às 14:03"
+  },
+  {
+    "id": "dd9fa804-765f-4cfc-b61d-00ec8fc1f877",
+    "timestamp": "2026-10-17T13:23:36.629Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "dba2b74e-277d-405d-b6ef-eff7fef45b3a",
+    "details": "[IVS] Atualizado cadastro de KAREN ROCIO"
+  },
+  {
+    "id": "dac7c51f-c7c2-4378-8951-91d0f04181be",
+    "timestamp": "2026-10-17T13:21:39.088Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "76698d72-23fa-4083-9ebe-44fa5a236892",
+    "details": "[IVS] Agendamento para ELISEO ALEN RODRIGUEZ às 14:00"
+  },
+  {
+    "id": "8bd0ee91-ed17-4154-a25a-3d4a40b3d352",
+    "timestamp": "2026-10-17T13:21:39.068Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "76698d72-23fa-4083-9ebe-44fa5a236892",
+    "details": "[IVS] Atualizado cadastro de ELISEO ALEN RODRIGUEZ"
+  },
+  {
+    "id": "4a04c29f-6ff6-4c20-8f43-e3c6adbde04b",
+    "timestamp": "2026-10-17T13:19:39.328Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "52d20645-5eda-41af-a2f6-4960014d0dbf",
+    "details": "[IVS] Agendamento para FERNANDA RODRIGUES ROCHA às 13:06"
+  },
+  {
+    "id": "42d2013c-c105-4202-b36f-c622aef10529",
+    "timestamp": "2026-10-17T13:19:39.295Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "52d20645-5eda-41af-a2f6-4960014d0dbf",
+    "details": "[IVS] Atualizado cadastro de FERNANDA RODRIGUES ROCHA"
+  },
+  {
+    "id": "9fe5b7f7-77f9-4e58-b462-f42f4605a890",
+    "timestamp": "2026-10-17T13:18:44.333Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "418098f4-399a-4c95-b1b7-ea01cad62fa4",
+    "details": "[IVS] Agendamento para JOAO CANDIDO ROCHA às 13:03"
+  },
+  {
+    "id": "77712b48-d391-40e2-8f25-9072ee7e3d2d",
+    "timestamp": "2026-10-17T13:18:44.299Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "418098f4-399a-4c95-b1b7-ea01cad62fa4",
+    "details": "[IVS] Atualizado cadastro de JOAO CANDIDO ROCHA"
+  },
+  {
+    "id": "620e9d58-1f0f-4bc2-8f55-a2cdf187ea87",
+    "timestamp": "2026-10-17T13:17:20.216Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "daa4f58c-b426-4571-b605-a07b74a023ec",
+    "details": "[IVS] Agendamento para MARIBEL GILL às 13:00"
+  },
+  {
+    "id": "51164ffe-52a2-443c-bf95-930989802bf0",
+    "timestamp": "2026-10-17T13:17:20.189Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "daa4f58c-b426-4571-b605-a07b74a023ec",
+    "details": "[IVS] Atualizado cadastro de MARIBEL GILL"
+  },
+  {
+    "id": "698fc662-5af3-4301-aeb4-69308a1b8b05",
+    "timestamp": "2026-10-17T13:15:34.394Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "874f4d68-0a11-4923-97b4-d7cf93556cef",
+    "details": "[IVS] Agendamento para YENNIFER às 12:30"
+  },
+  {
+    "id": "b3c53a5a-c0da-402c-b4d0-66803debb917",
+    "timestamp": "2026-10-17T13:15:34.373Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "874f4d68-0a11-4923-97b4-d7cf93556cef",
+    "details": "[IVS] Atualizado cadastro de YENNIFER"
+  },
+  {
+    "id": "b2691461-9d13-4acd-b5f4-9bec44b892dd",
+    "timestamp": "2026-10-17T13:14:34.609Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "d53b88d6-1050-4440-ab07-99697c5d42b8",
+    "details": "[IVS] Agendamento para KATIA RODRIGUES às 12:03"
+  },
+  {
+    "id": "28027c22-28fd-4dfe-bd00-1e02713bebf0",
+    "timestamp": "2026-10-17T13:14:34.529Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "d53b88d6-1050-4440-ab07-99697c5d42b8",
+    "details": "[IVS] Atualizado cadastro de KATIA RODRIGUES"
+  },
+  {
+    "id": "b2a28f73-a2bb-48bd-8378-24a49aed566f",
+    "timestamp": "2026-10-31T17:47:47.922Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "8cb85fa8-22ae-438b-9844-f2844b44a886",
+    "details": "[IVS] Agendamento para NILDA DUARTE às 13:47"
+  },
+  {
+    "id": "4d916ebd-513e-46e3-8107-c72d1dd3a1ff",
+    "timestamp": "2026-10-31T17:47:47.891Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "8cb85fa8-22ae-438b-9844-f2844b44a886",
+    "details": "[IVS] Atualizado cadastro de NILDA DUARTE"
+  },
+  {
+    "id": "2856ec09-a936-44e0-8ba5-d36df89c535f",
+    "timestamp": "2026-10-31T17:57:09.083Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "0aa2c045-8be2-4175-8dfb-ee44ede8f994",
+    "details": "[IVS] Agendamento para TANIA VASQUEZ às 13:57"
+  },
+  {
+    "id": "74bcb00d-fd7d-4849-82a7-23234dc08624",
+    "timestamp": "2026-10-31T17:57:09.041Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "0aa2c045-8be2-4175-8dfb-ee44ede8f994",
+    "details": "[IVS] Atualizado cadastro de TANIA VASQUEZ"
+  },
+  {
+    "id": "5ebf1525-8b29-493b-83af-a5dc05ef02ef",
+    "timestamp": "2026-10-31T19:15:43.216Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "41d09ceb-ad68-46bb-8e2b-daeeb75a5dbe",
+    "details": "[IVS] Atualizado cadastro de DALMY DELEON"
+  },
+  {
+    "id": "5e7130ec-e14f-4e4a-bedd-46755690c024",
+    "timestamp": "2026-10-31T19:15:43.263Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "41d09ceb-ad68-46bb-8e2b-daeeb75a5dbe",
+    "details": "[IVS] Agendamento para DALMY DELEON às 15:15"
+  },
+  {
+    "id": "6952052c-8d0e-44e1-9b4b-992d7ed95dac",
+    "timestamp": "2026-10-31T19:54:43.071Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "e8132359-b1d1-4ec3-af74-6f9434676d5e",
+    "details": "[IVS] Agendamento para RUBIA SILVA às 15:54"
+  },
+  {
+    "id": "28363814-c95f-4452-ad28-c82d19f197b9",
+    "timestamp": "2026-10-31T19:54:43.054Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "e8132359-b1d1-4ec3-af74-6f9434676d5e",
+    "details": "[IVS] Atualizado cadastro de RUBIA SILVA"
+  },
+  {
+    "id": "d3f14e82-46a9-4172-b6d8-a35c9b05a57c",
+    "timestamp": "2026-10-31T19:55:27.292Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "8701ab21-75a0-4d4f-a161-c04eebb1b2ab",
+    "details": "[IVS] Atualizado cadastro de GEOVANNA DE ARAUJO"
+  },
+  {
+    "id": "f6799269-a95c-44e8-b096-183fb3d44dac",
+    "timestamp": "2026-10-31T19:55:27.328Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "8701ab21-75a0-4d4f-a161-c04eebb1b2ab",
+    "details": "[IVS] Agendamento para GEOVANNA DE ARAUJO às 15:55"
+  },
+  {
+    "id": "75f9c5bf-aade-45b0-b6b5-fda1eb5a491d",
+    "timestamp": "2026-10-31T20:28:24.429Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "3a1eff01-aa2e-4865-8bfa-e0ad6c4f80e0",
+    "details": "[IVS] Atualizado cadastro de JUAN CARLOS"
+  },
+  {
+    "id": "feefa88b-c916-4fae-a0fa-242ccafd675e",
+    "timestamp": "2026-10-31T20:28:24.491Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "3a1eff01-aa2e-4865-8bfa-e0ad6c4f80e0",
+    "details": "[IVS] Agendamento para JUAN CARLOS às 16:28"
+  },
+  {
+    "id": "fa63de5a-6e94-4656-8127-c1b290cd3161",
+    "timestamp": "2026-10-31T20:29:46.726Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "6f53700d-c95f-42ae-837f-86783bd01c81",
+    "details": "[IVS] Agendamento para SADY VILLAR às 16:29"
+  },
+  {
+    "id": "c79eacd2-57e7-4e56-b7f9-c67bb8572c65",
+    "timestamp": "2026-10-31T20:29:46.704Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "6f53700d-c95f-42ae-837f-86783bd01c81",
+    "details": "[IVS] Atualizado cadastro de SADY VILLAR"
+  },
+  {
+    "id": "01b20780-2295-42c7-b2b2-e31498ef7086",
+    "timestamp": "2026-11-03T19:02:15.598Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "913c76ce-eaf1-4d78-85d2-53648befff47",
+    "details": "[IVS] Agendamento para ANDREA MARECO ACOSTA às 15:02"
+  },
+  {
+    "id": "625cc517-2580-4e60-adfb-ed9206b3dfdf",
+    "timestamp": "2026-11-03T19:02:15.574Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "913c76ce-eaf1-4d78-85d2-53648befff47",
+    "details": "[IVS] Atualizado cadastro de ANDREA MARECO ACOSTA"
+  },
+  {
+    "id": "1f4535ba-a47e-4c6c-b64c-e12718d5f206",
+    "timestamp": "2026-11-03T19:36:36.534Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "3607b025-53fd-4653-944d-78d2dbda47ae",
+    "details": "[IVS] Atualizado cadastro de JESSICA ORTIZ"
+  },
+  {
+    "id": "0de54c2b-c9fc-4acf-9251-63c175039470",
+    "timestamp": "2026-11-03T19:36:36.567Z",
+    "userId": "dr-meirelles",
+    "userName": "Dr. Rudson Meirelles",
+    "action": "UPDATE",
+    "resourceType": "PATIENT",
+    "resourceId": "3607b025-53fd-4653-944d-78d2dbda47ae",
+    "details": "[IVS] Agendamento para JESSICA ORTIZ às 15:36"
   }
 ]

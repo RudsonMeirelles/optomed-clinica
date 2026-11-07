@@ -12,6 +12,18 @@ export default defineConfig(({ command }) => ({
       '@optotipo/shared': path.resolve(__dirname, '../shared/src')
     }
   },
+  build: {
+    target: 'es2020',
+    chunkSizeWarningLimit: 600,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom'],
+          'vendor-icons': ['lucide-react']
+        }
+      }
+    }
+  },
   server: {
     host: true,
     port: 5174,

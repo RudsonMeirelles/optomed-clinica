@@ -10,6 +10,8 @@ export interface TVAppSettings {
   pinCode: string;
   roomName: string;
   serverIp: string;
+  isPatientMode: boolean; // Modo Paciente Estrito (sem botões de controle ou gabarito na tela)
+  clinicId?: string;
 }
 
 export const DEFAULT_TV_SETTINGS: TVAppSettings = {
@@ -18,7 +20,9 @@ export const DEFAULT_TV_SETTINGS: TVAppSettings = {
   soundFeedback: true,
   pinCode: '7492',
   roomName: 'Consultório Meirelles',
-  serverIp: '192.168.1.144'
+  serverIp: '192.168.1.144',
+  isPatientMode: true, // Padrão: Modo Paciente Estrito ativado para privacidade clínica
+  clinicId: 'ivs'
 };
 
 export function loadCalibration(): DisplayCalibrationData {

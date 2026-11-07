@@ -104,8 +104,8 @@ export const SettingsModule: React.FC<SettingsModuleProps> = ({
             <h3 className="text-lg font-bold text-white">Distância Padrão do Exame (Longe)</h3>
           </div>
 
-          <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
-            {[2.0, 2.5, 3.0, 3.5, 4.0, 5.0].map((dist) => (
+          <div className="grid grid-cols-4 sm:grid-cols-7 gap-3">
+            {[2.0, 2.5, 3.0, 3.5, 4.0, 5.0, 6.0].map((dist) => (
               <button
                 key={dist}
                 type="button"
@@ -129,7 +129,33 @@ export const SettingsModule: React.FC<SettingsModuleProps> = ({
             <h3 className="text-lg font-bold text-white">Conexão em Rede (Parear com Computador / Tablet)</h3>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label className="text-xs text-slate-400 font-bold block mb-1">UNIDADE CLÍNICA (ISOLAMENTO):</label>
+              <select
+                value={(localSettings as any).clinicId || 'ivs'}
+                onChange={(e) => setLocalSettings({ ...localSettings, clinicId: e.target.value } as any)}
+                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-sm font-semibold text-white focus:outline-none focus:border-blue-500"
+              >
+                <option value="ivs">IVS — Instituto de Visão e Saúde</option>
+                <option value="megastar">MEGASTAR — Centro Oftalmológico</option>
+                <option value="matriz">Matriz Central</option>
+              </select>
+              <p className="text-[11px] text-slate-500 mt-1">Garante que comandos de outras clínicas não interfiram</p>
+            </div>
+
+            <div>
+              <label className="text-xs text-slate-400 font-bold block mb-1">NOME DA SALA / CONSULTÓRIO:</label>
+              <input
+                type="text"
+                value={localSettings.roomName}
+                onChange={(e) => setLocalSettings({ ...localSettings, roomName: e.target.value })}
+                placeholder="Ex: Consultório 1"
+                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-sm font-semibold text-white focus:outline-none focus:border-blue-500"
+              />
+              <p className="text-[11px] text-slate-500 mt-1">Permite pareamento exclusivo com a sala do examinador</p>
+            </div>
+
             <div>
               <label className="text-xs text-slate-400 font-bold block mb-1">ENDEREÇO IP DO COMPUTADOR:</label>
               <input
@@ -141,16 +167,39 @@ export const SettingsModule: React.FC<SettingsModuleProps> = ({
               />
               <p className="text-[11px] text-slate-500 mt-1">IP do seu computador na rede Wi-Fi</p>
             </div>
+          </div>
 
+          {/* Toggle do Modo Paciente Estrito */}
+          <div className="mt-4 pt-4 border-t border-slate-800 flex items-center justify-between">
             <div>
-              <label className="text-xs text-slate-400 font-bold block mb-1">NOME DA SALA / CONSULTÓRIO:</label>
-              <input
-                type="text"
-                value={localSettings.roomName}
-                onChange={(e) => setLocalSettings({ ...localSettings, roomName: e.target.value })}
-                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-sm font-semibold text-white focus:outline-none focus:border-blue-500"
-              />
+              <div className="text-sm font-bold text-white flex items-center gap-2">
+                <span>Modo Paciente Estrito (Tela Limpa)</span>
+                <span className={`text-[10px] px-2 py-0.5 rounded-full font-black ${
+                  localSettings.isPatientMode !== false ? 'bg-emerald-950 text-emerald-300 border border-emerald-800' : 'bg-slate-800 text-slate-400'
+                }`}>
+                  {localSettings.isPatientMode !== false ? 'ATIVADO' : 'DESATIVADO'}
+                </span>
+              </div>
+              <p className="text-xs text-slate-400 mt-0.5">
+                Oculta botões de controle na tela e rótulos de acuidade para não dar gabarito ao paciente. Os testes continuam 100% controláveis pelo examinador ou controle remoto.
+              </p>
             </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                const next = localSettings.isPatientMode === false ? true : false;
+                const updated = { ...localSettings, isPatientMode: next };
+                handleSave(updated);
+              }}
+              className={`px-4 py-2 rounded-xl text-xs font-black transition-all cursor-pointer ${
+                localSettings.isPatientMode !== false
+                  ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/30'
+                  : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+              }`}
+            >
+              {localSettings.isPatientMode !== false ? 'Ativado' : 'Desativar'}
+            </button>
           </div>
 
           <div className="mt-4 flex justify-end">

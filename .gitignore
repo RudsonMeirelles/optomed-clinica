@@ -1,4 +1,4 @@
-﻿node_modules/
+node_modules/
 dist/
 build/
 .gradle/
@@ -10,3 +10,9 @@ Thumbs.db
 optomed-release.jks
 *.apk
 *.aab
+.secret
+*.secret
+packages/server/data/.secret
+data-staging/
+data-staging-*/
+

@@ -540,6 +540,7 @@ export function App() {
             pixelsPerMm={calibration.pixelsPerMm}
             initialType={currentOptotypeType}
             initialEye={currentEye}
+            isPatientMode={settings.isPatientMode !== false}
             onBackToMenu={() => setActiveModule('menu')}
           />
         )}

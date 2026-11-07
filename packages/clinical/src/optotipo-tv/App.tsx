@@ -547,6 +547,7 @@ export function App({ onBack, isStandalone = false }: TVAppProps = {}) {
             pixelsPerMm={calibration.pixelsPerMm}
             initialType={currentOptotypeType}
             initialEye={currentEye}
+            isPatientMode={settings.isPatientMode !== false}
             onBackToMenu={() => setActiveModule('menu')}
           />
         )}

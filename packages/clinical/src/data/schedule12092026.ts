@@ -64,7 +64,7 @@ export const SEED_PATIENTS_12_09_2026: Patient[] = RAW_SCHEDULE_12_09_2026.map((
     documentNumber: undefined,
     phoneCountryCode: item.nationality === 'PY' ? '+595' : '+55',
     phone: item.phone || undefined,
-    city: item.nationality === 'PY' ? 'Ciudad del Este' : 'Foz do Iguaçu',
+    city: item.nationality === 'PY' ? 'Pedro Juan Caballero' : 'Ponta Porã',
     country: item.nationality === 'PY' ? 'Paraguai' : 'Brasil',
     notes: item.notes || 'Agendamento para 12/09/2026',
     guardianName: item.notes && item.notes.toLowerCase().includes('filh') ? item.notes : undefined,

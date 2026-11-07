@@ -94,30 +94,61 @@ export const CalibrationModal: React.FC<CalibrationModalProps> = ({
           </div>
         </div>
 
+        {/* Predefinições de Telas Frequentes */}
+        <div className="w-full flex items-center justify-between bg-slate-950 px-4 py-2.5 rounded-xl border border-slate-800 mb-4 text-xs">
+          <span className="text-slate-400 font-bold">Predefinição Rápida de Resolução:</span>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setBarPixels(378)}
+              className="px-2.5 py-1 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 rounded-lg font-mono font-bold transition-all cursor-pointer"
+              title="Padrão Full HD 1080p (96 DPI típico - 3.78 px/mm)"
+            >
+              1080p Full HD (378px)
+            </button>
+            <button
+              type="button"
+              onClick={() => setBarPixels(315)}
+              className="px-2.5 py-1 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 rounded-lg font-mono font-bold transition-all cursor-pointer"
+              title="Padrão HD+ 1600x900 (3.15 px/mm)"
+            >
+              1600x900 (315px)
+            </button>
+            <button
+              type="button"
+              onClick={() => setBarPixels(567)}
+              className="px-2.5 py-1 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 rounded-lg font-mono font-bold transition-all cursor-pointer"
+              title="Padrão 4K Ultra HD (5.67 px/mm em telas grandes)"
+            >
+              4K UHD (567px)
+            </button>
+          </div>
+        </div>
+
         {/* Botões de Ajuste */}
         <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
-          <span className="text-xs text-slate-400 mr-2">Ajuste Rápido:</span>
+          <span className="text-xs text-slate-400 mr-2">Ajuste Fino Milimétrico:</span>
           <button
             onClick={() => handleAdjustPixels(-10)}
-            className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-sm font-semibold flex items-center gap-1 active:scale-95 transition-transform"
+            className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-sm font-semibold flex items-center gap-1 active:scale-95 transition-transform cursor-pointer"
           >
             <Minus className="w-4 h-4" /> 10px
           </button>
           <button
             onClick={() => handleAdjustPixels(-1)}
-            className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-sm font-semibold flex items-center gap-1 active:scale-95 transition-transform"
+            className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-sm font-semibold flex items-center gap-1 active:scale-95 transition-transform cursor-pointer"
           >
             <Minus className="w-4 h-4" /> 1px
           </button>
           <button
             onClick={() => handleAdjustPixels(1)}
-            className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-sm font-semibold flex items-center gap-1 active:scale-95 transition-transform"
+            className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-sm font-semibold flex items-center gap-1 active:scale-95 transition-transform cursor-pointer"
           >
             <Plus className="w-4 h-4" /> 1px
           </button>
           <button
             onClick={() => handleAdjustPixels(10)}
-            className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-sm font-semibold flex items-center gap-1 active:scale-95 transition-transform"
+            className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-sm font-semibold flex items-center gap-1 active:scale-95 transition-transform cursor-pointer"
           >
             <Plus className="w-4 h-4" /> 10px
           </button>

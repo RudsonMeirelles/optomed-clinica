@@ -3,11 +3,29 @@
 @tailwind utilities;
 
 @layer base {
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
   body {
     font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
     @apply bg-slate-50 text-slate-800 antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* FASE 29: Acessibilidade de Foco & Navegação por Teclado WCAG 2.1 AA */
+  :focus-visible {
+    outline: 2px solid #2563eb !important;
+    outline-offset: 2px !important;
+  }
+
+  /* Garantia de touch targets confortáveis em dispositivos móveis e touchscreens */
+  button, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
   }
 }
+
 
 /* Custom Clean Scrollbar */
 ::-webkit-scrollbar {
@@ -78,13 +96,33 @@
     visibility: hidden !important;
   }
 
-  /* Torna visível estritamente o conteúdo do modal de impressão ativo */
+  /* Torna visível estritamente o conteúdo do modal de impressão ativo ou do container isolado */
   .unified-print-modal-backdrop,
   .unified-print-modal-backdrop *,
   #unified-print-sheet,
   #unified-print-sheet *,
   .print-page-landscape,
-  .print-page-landscape * {
+  .print-page-landscape *,
+  #optomed-isolated-print-container,
+  #optomed-isolated-print-container *,
+  #reports-print-container,
+  #reports-print-container *,
+  .reports-printable,
+  .reports-printable *,
+  #clinical-report-sheet,
+  #clinical-report-sheet *,
+  #prescription-sheet,
+  #prescription-sheet *,
+  #medical-prescription-sheet,
+  #medical-prescription-sheet *,
+  #clinical-doc-issuance-sheet,
+  #clinical-doc-issuance-sheet *,
+  #license-proposal-sheet,
+  #license-proposal-sheet *,
+  #financial-receipt-sheet,
+  #financial-receipt-sheet *,
+  #settlement-report-sheet,
+  #settlement-report-sheet * {
     visibility: visible !important;
   }
 
@@ -174,6 +212,38 @@
     justify-content: space-between !important;
     page-break-inside: avoid !important;
     break-inside: avoid !important;
+  }
+
+  /* -----------------------------------------------------------------------
+   * MEIA FOLHA VAZIA — Garante que a coluna não usada não deixe marca no papel.
+   * A classe print:invisible do Tailwind gera visibility: hidden, mas é
+   * sobreposta pelo visibility: visible !important do container pai.
+   * Aqui anulamos com opacity + display para garantia dupla.
+   * ----------------------------------------------------------------------- */
+  .print-page-landscape .print\:invisible,
+  #unified-print-sheet .print\:invisible,
+  #prescription-sheet .print\:invisible,
+  #medical-prescription-sheet .print\:invisible,
+  #optomed-isolated-print-container .print\:invisible {
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  /* Reforço para qualquer filho dentro da coluna invisível */
+  .print-page-landscape .print\:invisible *,
+  #optomed-isolated-print-container .print\:invisible * {
+    visibility: hidden !important;
+    opacity: 0 !important;
+  }
+
+  /* print:opacity-0 — garante opacidade zero mesmo dentro do contexto do container isolado */
+  .print-page-landscape .print\:opacity-0,
+  #unified-print-sheet .print\:opacity-0,
+  #prescription-sheet .print\:opacity-0,
+  #medical-prescription-sheet .print\:opacity-0,
+  #optomed-isolated-print-container .print\:opacity-0 {
+    opacity: 0 !important;
   }
 }
 
