@@ -1,0 +1,33 @@
+[
+  {
+    "id": "esp_ivs_1791644243026",
+    "clinicId": "ivs",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "date": "2026-10-10",
+    "startTime": "08:00",
+    "endTime": "18:00",
+    "remunerationType": "fixed_period",
+    "fixedAmount": 1,
+    "status": "active",
+    "notes": "Mutirão Especial de Sábado",
+    "createdAt": "2026-10-10T14:57:23.026Z",
+    "updatedAt": "2026-10-10T14:57:23.026Z",
+    "createdBy": "DR. Rudson Meirelles"
+  },
+  {
+    "id": "esp_ivs_mutirao_1010",
+    "clinicId": "ivs",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "date": "2026-10-10",
+    "startTime": "08:00",
+    "endTime": "12:00",
+    "remunerationType": "fixed_period",
+    "fixedAmount": 350,
+    "status": "active",
+    "notes": "Mutirão Especial de Sábado - R$ 350,00",
+    "createdAt": "2026-10-01T00:00:00.000Z",
+    "updatedAt": "2026-10-01T00:00:00.000Z"
+  }
+]

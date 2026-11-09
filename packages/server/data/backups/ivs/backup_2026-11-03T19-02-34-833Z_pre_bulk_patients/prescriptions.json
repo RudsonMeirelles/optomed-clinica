@@ -1,0 +1,1269 @@
+[
+  {
+    "id": "4cafa0cc-09b4-4df8-b122-2f2ad2c8abf1",
+    "encounterId": "08f076f0-4990-4361-84e7-40bd5d952ab0",
+    "patientId": "4e88c27c-dbd0-4042-8d1c-9212c4d2e290",
+    "patientName": "Maria Valentina",
+    "date": "2026-09-09T13:41:02.397Z",
+    "expirationDate": "2027-09-09",
+    "od": {
+      "sphere": 3,
+      "cylinder": 0,
+      "axis": 180,
+      "visualAcuity": "20/20"
+    },
+    "oe": {
+      "sphere": 2.25,
+      "cylinder": -0.5,
+      "axis": 175,
+      "visualAcuity": "20/20"
+    },
+    "pdDistanceMm": 62,
+    "pdNear": 59,
+    "lensType": "monofocal",
+    "material": "resina",
+    "treatments": [
+      "Antirreflexo Premium",
+      "Proteção UV400"
+    ],
+    "observations": "Uso contínuo conforme adaptação visual.",
+    "returnInstructions": "Retorno anual de rotina para controle."
+  },
+  {
+    "id": "a30fd789-7f6c-4a90-9620-9c119eedb1b7",
+    "encounterId": "d6ce046b-5702-4464-8da8-538ebf40afac",
+    "patientId": "dcbde17f-cf07-4ff6-8460-cc7a16573aa2",
+    "patientName": "Maria José",
+    "date": "2026-09-09T13:12:08.000Z",
+    "expirationDate": "2027-09-09",
+    "od": {
+      "sphere": 0.75,
+      "cylinder": 0,
+      "axis": 90,
+      "visualAcuity": "20/20"
+    },
+    "oe": {
+      "sphere": 0.5,
+      "cylinder": 0,
+      "axis": 90,
+      "visualAcuity": "20/20"
+    },
+    "addition": 2.25,
+    "pdDistanceMm": 62,
+    "lensType": "bifocal",
+    "material": "resina",
+    "treatments": [
+      "Fotossensível (Transitions)",
+      "Antirreflexo Premium"
+    ],
+    "observations": "Adaptação a bifocal/multifocal para leitura.",
+    "returnInstructions": "Retorno em 1 ano para controle."
+  },
+  {
+    "id": "rx-kc-1",
+    "encounterId": "b415f5b6-0696-4006-a117-b00ce9c13ed0",
+    "patientId": "4b5acbb1-e930-4ae0-8d63-aea1582ffb07",
+    "patientName": "Keli Cristina da Rocha Stuck",
+    "date": "2026-09-08T18:00:00.000Z",
+    "expirationDate": "2027-09-08",
+    "od": {
+      "sphere": -2.5,
+      "cylinder": -0.75,
+      "axis": 10,
+      "visualAcuity": "20/20"
+    },
+    "oe": {
+      "sphere": -2.25,
+      "cylinder": -0.5,
+      "axis": 170,
+      "visualAcuity": "20/20"
+    },
+    "addition": 1,
+    "pdDistanceMm": 60,
+    "lensType": "progressiva",
+    "material": "resina",
+    "treatments": [
+      "Antirreflexo Blue Cut",
+      "Filtro Luz Azul"
+    ],
+    "observations": "Uso contínuo.",
+    "returnInstructions": "Retorno em 1 ano."
+  },
+  {
+    "id": "rx-vc-1",
+    "encounterId": "60ab1541-17dc-49e4-9a80-ec52a9c06b94",
+    "patientId": "104b0e68-60aa-454a-aed6-73d49eca088e",
+    "patientName": "Vitoria Coelho Saraiva de Lima",
+    "date": "2026-09-08T18:45:00.000Z",
+    "expirationDate": "2027-09-08",
+    "od": {
+      "sphere": -1.25,
+      "cylinder": -0.5,
+      "axis": 180,
+      "visualAcuity": "20/20"
+    },
+    "oe": {
+      "sphere": -1.5,
+      "cylinder": -0.25,
+      "axis": 175,
+      "visualAcuity": "20/20"
+    },
+    "pdDistanceMm": 58,
+    "lensType": "monofocal",
+    "material": "resina",
+    "treatments": [
+      "Antirreflexo Premium"
+    ],
+    "observations": "Uso em atividades escolares e para longe.",
+    "returnInstructions": "Retorno anual de controle."
+  },
+  {
+    "id": "rx-jf-1",
+    "encounterId": "02981472-b51c-4a98-af43-de22df156bb1",
+    "patientId": "223c8cf2-32ba-42bf-8d46-5b6861c77aa2",
+    "patientName": "Jose Francisco",
+    "date": "2026-09-08T21:25:00.000Z",
+    "expirationDate": "2027-09-08",
+    "od": {
+      "sphere": 0.5,
+      "cylinder": -0.75,
+      "axis": 90,
+      "visualAcuity": "20/20"
+    },
+    "oe": {
+      "sphere": 0.25,
+      "cylinder": -0.5,
+      "axis": 85,
+      "visualAcuity": "20/20"
+    },
+    "addition": 1.75,
+    "pdDistanceMm": 63,
+    "lensType": "multifocal",
+    "material": "resina",
+    "treatments": [
+      "Antirreflexo Digital"
+    ],
+    "observations": "Adaptação multifocal para leitura.",
+    "returnInstructions": "Retorno anual de controle."
+  },
+  {
+    "id": "rx-lnl-1",
+    "encounterId": "enc-lnl-1",
+    "patientId": "3c7f7025-3194-44eb-a96d-6b1cb7d25315",
+    "patientName": "Lidia Noemi Lopez",
+    "date": "2026-09-08T18:30:00.000Z",
+    "expirationDate": "2027-09-08",
+    "od": {
+      "sphere": 1,
+      "cylinder": -0.25,
+      "axis": 180,
+      "visualAcuity": "20/20"
+    },
+    "oe": {
+      "sphere": 1.25,
+      "cylinder": -0.5,
+      "axis": 170,
+      "visualAcuity": "20/20"
+    },
+    "addition": 2,
+    "pdDistanceMm": 61,
+    "lensType": "multifocal",
+    "material": "resina",
+    "treatments": [
+      "Antirreflexo Premium",
+      "UV400"
+    ],
+    "observations": "Uso contínuo.",
+    "returnInstructions": "Retorno anual."
+  },
+  {
+    "id": "rx-jlv-1",
+    "encounterId": "enc-jlv-1",
+    "patientId": "b788e9cd-8a70-4413-a643-74abead2ed50",
+    "patientName": "Jean Lucas Viana",
+    "date": "2026-09-05T08:20:00.000Z",
+    "expirationDate": "2027-09-05",
+    "od": {
+      "sphere": -0.75,
+      "cylinder": -0.5,
+      "axis": 15,
+      "visualAcuity": "20/20"
+    },
+    "oe": {
+      "sphere": -0.75,
+      "cylinder": -0.25,
+      "axis": 165,
+      "visualAcuity": "20/20"
+    },
+    "pdDistanceMm": 64,
+    "lensType": "monofocal",
+    "material": "resina",
+    "treatments": [
+      "Antirreflexo Noturno Drive"
+    ],
+    "observations": "Uso para longe e direção noturna.",
+    "returnInstructions": "Retorno anual de rotina."
+  },
+  {
+    "id": "rx-zsf-1",
+    "encounterId": "enc-zsf-1",
+    "patientId": "290c7900-33b0-4f82-b3b1-6bee5b58c8a0",
+    "patientName": "Zoraide Santos Ferreira",
+    "date": "2026-09-05T09:15:00.000Z",
+    "expirationDate": "2027-09-05",
+    "od": {
+      "sphere": 0.5,
+      "cylinder": -0.5,
+      "axis": 90,
+      "visualAcuity": "20/20"
+    },
+    "oe": {
+      "sphere": 0.75,
+      "cylinder": -0.25,
+      "axis": 80,
+      "visualAcuity": "20/20"
+    },
+    "addition": 1.75,
+    "pdDistanceMm": 62,
+    "lensType": "multifocal",
+    "material": "resina",
+    "treatments": [
+      "Blue Cut",
+      "Antirreflexo"
+    ],
+    "observations": "Uso diário para computador e leitura.",
+    "returnInstructions": "Retorno anual de rotina."
+  },
+  {
+    "id": "rx-lma-1",
+    "encounterId": "enc-lma-1",
+    "patientId": "d0a4662c-f285-47ce-b784-850d14a5b2e0",
+    "patientName": "Larissa Mayara de Almeida",
+    "date": "2026-09-05T09:45:00.000Z",
+    "expirationDate": "2027-09-05",
+    "od": {
+      "sphere": -1,
+      "cylinder": -1.25,
+      "axis": 175,
+      "visualAcuity": "20/20"
+    },
+    "oe": {
+      "sphere": -0.75,
+      "cylinder": -1.5,
+      "axis": 5,
+      "visualAcuity": "20/20"
+    },
+    "pdDistanceMm": 60,
+    "lensType": "monofocal",
+    "material": "resina 1.56",
+    "treatments": [
+      "Antirreflexo Premium"
+    ],
+    "observations": "Uso contínuo.",
+    "returnInstructions": "Retorno anual."
+  },
+  {
+    "id": "rx-gmb-1",
+    "encounterId": "enc-gmb-1",
+    "patientId": "08d90c8b-fcdb-460e-b6d4-99b740042dd0",
+    "patientName": "Gabriel da Mota Brito",
+    "date": "2026-09-05T10:35:00.000Z",
+    "expirationDate": "2027-09-05",
+    "od": {
+      "sphere": -2,
+      "cylinder": -0.5,
+      "axis": 180,
+      "visualAcuity": "20/20"
+    },
+    "oe": {
+      "sphere": -2.25,
+      "cylinder": -0.25,
+      "axis": 170,
+      "visualAcuity": "20/20"
+    },
+    "pdDistanceMm": 63,
+    "lensType": "monofocal",
+    "material": "resina",
+    "treatments": [
+      "Blue UV",
+      "Antirreflexo"
+    ],
+    "observations": "Uso contínuo para longe.",
+    "returnInstructions": "Retorno anual de controle."
+  },
+  {
+    "id": "rx-zm-1",
+    "encounterId": "enc-zm-1",
+    "patientId": "caf37cb8-0da4-45a5-be3e-68afbc55d900",
+    "patientName": "Zeni Martins",
+    "date": "2026-09-05T10:30:00.000Z",
+    "expirationDate": "2027-09-05",
+    "od": {
+      "sphere": 1.5,
+      "cylinder": 0,
+      "axis": 90,
+      "visualAcuity": "20/20"
+    },
+    "oe": {
+      "sphere": 1.5,
+      "cylinder": 0,
+      "axis": 90,
+      "visualAcuity": "20/20"
+    },
+    "addition": 2.5,
+    "pdDistanceMm": 61,
+    "lensType": "multifocal",
+    "material": "resina",
+    "treatments": [
+      "Antirreflexo"
+    ],
+    "observations": "Adaptação para leitura e atividades diárias.",
+    "returnInstructions": "Retorno anual."
+  },
+  {
+    "id": "rx-rrb-1",
+    "encounterId": "enc-rrb-1",
+    "patientId": "ebeceff-1ea4-4de8-829e-a20c3c760090",
+    "patientName": "Ramona Ribeiro Brito",
+    "date": "2026-09-05T11:50:00.000Z",
+    "expirationDate": "2027-09-05",
+    "od": {
+      "sphere": 0.75,
+      "cylinder": -0.5,
+      "axis": 180,
+      "visualAcuity": "20/20"
+    },
+    "oe": {
+      "sphere": 0.75,
+      "cylinder": -0.25,
+      "axis": 170,
+      "visualAcuity": "20/20"
+    },
+    "addition": 1.75,
+    "pdDistanceMm": 62,
+    "lensType": "multifocal",
+    "material": "resina",
+    "treatments": [
+      "Antirreflexo Crizal"
+    ],
+    "observations": "Uso para longe e perto.",
+    "returnInstructions": "Retorno anual de rotina."
+  },
+  {
+    "id": "rx-kc2-1",
+    "encounterId": "enc-kc2-1",
+    "patientId": "a9347272-0529-4b2d-9633-6c6f396e8a40",
+    "patientName": "Kelli Cristina",
+    "date": "2026-09-05T17:30:00.000Z",
+    "expirationDate": "2027-09-05",
+    "od": {
+      "sphere": -1.75,
+      "cylinder": -0.5,
+      "axis": 15,
+      "visualAcuity": "20/20"
+    },
+    "oe": {
+      "sphere": -1.5,
+      "cylinder": -0.75,
+      "axis": 165,
+      "visualAcuity": "20/20"
+    },
+    "pdDistanceMm": 61,
+    "lensType": "monofocal",
+    "material": "resina",
+    "treatments": [
+      "Fotossensível",
+      "Antirreflexo Premium"
+    ],
+    "observations": "Uso contínuo.",
+    "returnInstructions": "Retorno anual."
+  },
+  {
+    "id": "rx-mf-1809",
+    "encounterId": "ae40c571-aa20-4809-b0b9-d995d37f5d75",
+    "patientId": "a84131bd-ba44-47ca-8d71-bff029c6be22",
+    "patientName": "Maira Fernandes",
+    "date": "2026-09-18T20:25:01.507Z",
+    "expirationDate": "2027-03-18",
+    "od": {
+      "sphere": -3,
+      "cylinder": 0,
+      "axis": 0,
+      "visualAcuity": "20/60"
+    },
+    "oe": {
+      "sphere": -3,
+      "cylinder": 0,
+      "axis": 0,
+      "visualAcuity": "20/60"
+    },
+    "lensType": "multifocal",
+    "material": "resina",
+    "treatments": [
+      "Antirreflexo Digital",
+      "Filtro Luz Azul (BlueCut)"
+    ],
+    "observations": "Paciente sob acompanhamento periódico buscando melhora na AV.",
+    "returnInstructions": "Retorno em 6 meses (Acompanhamento)"
+  },
+  {
+    "id": "rx-em-1809",
+    "encounterId": "d5e5ae8c-c78e-4854-a1ab-2da26b708c96",
+    "patientId": "33f6f16d-add7-4e59-8522-8a5f9b345bfd",
+    "patientName": "Elizangela Moura",
+    "date": "2026-09-18T18:48:58.316Z",
+    "expirationDate": "2027-09-18",
+    "od": {
+      "sphere": 3,
+      "cylinder": 0,
+      "axis": 0,
+      "visualAcuity": "20/20"
+    },
+    "oe": {
+      "sphere": 3,
+      "cylinder": 0,
+      "axis": 0,
+      "visualAcuity": "20/20"
+    },
+    "addition": 1.75,
+    "lensType": "multifocal",
+    "material": "resina",
+    "treatments": [
+      "Antirreflexo Digital",
+      "Filtro Luz Azul (BlueCut)",
+      "Fotossensível (Transitions)"
+    ],
+    "observations": "Uso contínuo para longe e perto.",
+    "returnInstructions": "Retorno em 1 ano para controle visual de rotina."
+  },
+  {
+    "id": "rx-er-1809",
+    "encounterId": "c5f5dbc7-bdd0-47c4-a3b0-b3da7cb7eb18",
+    "patientId": "39e695b2-0a56-4f83-b63a-bcbddaf85392",
+    "patientName": "Erika Rodrigues",
+    "date": "2026-09-18T18:37:16.141Z",
+    "expirationDate": "2027-09-18",
+    "od": {
+      "sphere": 0,
+      "cylinder": -0.75,
+      "axis": 180,
+      "visualAcuity": "20/20"
+    },
+    "oe": {
+      "sphere": 0,
+      "cylinder": -0.75,
+      "axis": 180,
+      "visualAcuity": "20/20"
+    },
+    "lensType": "multifocal",
+    "material": "resina",
+    "treatments": [
+      "Antirreflexo Digital",
+      "Filtro Luz Azul (BlueCut)"
+    ],
+    "observations": "Uso contínuo para trabalho e telas.",
+    "returnInstructions": "Retorno em 1 ano para controle visual de rotina."
+  },
+  {
+    "id": "rx-scs-1809",
+    "encounterId": "a86750af-1a63-4e1b-a9b8-6d7c1f7ad1d5",
+    "patientId": "f3f7d16e-95f6-4d8f-8947-0ee9241c10e1",
+    "patientName": "Suzana C. dos Santos",
+    "date": "2026-09-18T13:24:53.136Z",
+    "expirationDate": "2027-09-18",
+    "od": {
+      "sphere": 0,
+      "cylinder": 0,
+      "axis": 0,
+      "visualAcuity": "20/20"
+    },
+    "oe": {
+      "sphere": 0,
+      "cylinder": 0,
+      "axis": 0,
+      "visualAcuity": "20/20"
+    },
+    "lensType": "monofocal",
+    "material": "resina",
+    "treatments": [
+      "Antirreflexo"
+    ],
+    "observations": "Uso conforme necessidade.",
+    "returnInstructions": "Retorno em 1 ano para controle visual de rotina."
+  },
+  {
+    "id": "rx-md-1809",
+    "encounterId": "511baaec-43cb-49d5-b09f-ce03da9ddab0",
+    "patientId": "eb01d056-630d-452f-b6f4-50bb6e0c5ea7",
+    "patientName": "Mauricio Dias",
+    "date": "2026-09-18T12:27:29.919Z",
+    "expirationDate": "2027-09-18",
+    "od": {
+      "sphere": 0,
+      "cylinder": 0,
+      "axis": 0,
+      "visualAcuity": "20/20"
+    },
+    "oe": {
+      "sphere": 0,
+      "cylinder": 0,
+      "axis": 0,
+      "visualAcuity": "20/20"
+    },
+    "lensType": "monofocal",
+    "material": "resina",
+    "treatments": [
+      "Antirreflexo"
+    ],
+    "observations": "Uso conforme necessidade.",
+    "returnInstructions": "Retorno em 1 ano para controle visual de rotina."
+  },
+  {
+    "id": "5857f192-877c-4c54-a3e1-820ae70361d1",
+    "encounterId": "eaa56243-d7c0-40bc-98f8-dec2d043fdf0",
+    "patientId": "2f0ebada-37ef-4ec7-92e5-23025639b7a7",
+    "patientName": "Vanessas Pages",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "date": "2026-10-14T15:20:04.241Z",
+    "expirationDate": "2027-10-14T15:20:04.241Z",
+    "od": {
+      "sphere": -1,
+      "cylinder": -0.75,
+      "axis": 180,
+      "visualAcuity": "20/20"
+    },
+    "oe": {
+      "sphere": -1,
+      "cylinder": -0.5,
+      "axis": 180,
+      "visualAcuity": "20/20"
+    },
+    "pdDistanceMm": 62,
+    "lensType": "multifocal",
+    "material": "resina",
+    "treatments": [
+      "Antirreflexo Digital",
+      "Filtro Luz Azul (BlueCut)"
+    ],
+    "returnInstructions": "Retorno em 1 ano para controle visual de rotina.",
+    "observations": "Adaptação progressiva.",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "examinerRegistry": "CRM/CROO 123456",
+    "version": 1,
+    "isIssued": false
+  },
+  {
+    "id": "d8bc6f97-d67d-43e2-ac33-588937ff6c0b",
+    "encounterId": "9ab056be-fb37-4598-8fb8-8319c85eabc4",
+    "patientId": "3cf664ac-4d88-4d7d-b2fb-309d5bf9cc30",
+    "patientName": "Mareni Vieira",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "date": "2026-10-16T15:22:13.461Z",
+    "expirationDate": "2027-10-16T15:22:13.461Z",
+    "od": {
+      "sphere": -0.75,
+      "cylinder": -0.5,
+      "axis": 180,
+      "visualAcuity": "20/"
+    },
+    "oe": {
+      "sphere": -0.75,
+      "cylinder": 0,
+      "axis": 0,
+      "visualAcuity": "20/"
+    },
+    "pdDistanceMm": 62,
+    "lensType": "multifocal",
+    "material": "resina",
+    "treatments": [
+      "Antirreflexo Digital",
+      "Filtro Luz Azul (BlueCut)"
+    ],
+    "returnInstructions": "Retorno em 1 ano para controle visual de rotina.",
+    "observations": "Adaptação progressiva.",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "examinerRegistry": "CRM/CROO 123456",
+    "version": 1,
+    "isIssued": true
+  },
+  {
+    "id": "rx-1792166228267-ckg3m",
+    "encounterId": "9ab056be-fb37-4598-8fb8-8319c85eabc4",
+    "patientId": "3cf664ac-4d88-4d7d-b2fb-309d5bf9cc30",
+    "patientName": "Mareni Vieira",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "date": "2026-10-16T15:57:08.267Z",
+    "expirationDate": "2027-10-16T15:22:13.461Z",
+    "od": {
+      "sphere": -0.75,
+      "cylinder": -0.5,
+      "axis": 180,
+      "visualAcuity": "20/"
+    },
+    "oe": {
+      "sphere": -0.75,
+      "cylinder": 0,
+      "axis": 0,
+      "visualAcuity": "20/"
+    },
+    "pdDistanceMm": 62,
+    "lensType": "multifocal",
+    "material": "resina",
+    "treatments": [
+      "Antirreflexo Digital",
+      "Filtro Luz Azul (BlueCut)"
+    ],
+    "returnInstructions": "Retorno em 1 ano para controle visual de rotina.",
+    "observations": "Adaptação progressiva.",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "examinerRegistry": "CRM/CROO 123456",
+    "version": 2,
+    "isIssued": true,
+    "supersedesId": "d8bc6f97-d67d-43e2-ac33-588937ff6c0b"
+  },
+  {
+    "id": "rx-1792166473333-qaeyr",
+    "encounterId": "9ab056be-fb37-4598-8fb8-8319c85eabc4",
+    "patientId": "3cf664ac-4d88-4d7d-b2fb-309d5bf9cc30",
+    "patientName": "Mareni Vieira",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "date": "2026-10-16T16:01:13.333Z",
+    "expirationDate": "2027-10-16T15:22:13.461Z",
+    "od": {
+      "sphere": -0.75,
+      "cylinder": -0.5,
+      "axis": 180,
+      "visualAcuity": "20/"
+    },
+    "oe": {
+      "sphere": -0.75,
+      "cylinder": 0,
+      "axis": 0,
+      "visualAcuity": "20/"
+    },
+    "pdDistanceMm": 62,
+    "lensType": "multifocal",
+    "material": "resina",
+    "treatments": [
+      "Antirreflexo Digital",
+      "Filtro Luz Azul (BlueCut)"
+    ],
+    "returnInstructions": "Retorno em 1 ano para controle visual de rotina.",
+    "observations": "Adaptação progressiva.",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "examinerRegistry": "CRM/CROO 123456",
+    "version": 2,
+    "isIssued": true,
+    "supersedesId": "d8bc6f97-d67d-43e2-ac33-588937ff6c0b"
+  },
+  {
+    "id": "rx-1792166586494-38jnj",
+    "encounterId": "9ab056be-fb37-4598-8fb8-8319c85eabc4",
+    "patientId": "3cf664ac-4d88-4d7d-b2fb-309d5bf9cc30",
+    "patientName": "Mareni Vieira",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "date": "2026-10-16T16:03:06.494Z",
+    "expirationDate": "2027-10-16T15:22:13.461Z",
+    "od": {
+      "sphere": -0.75,
+      "cylinder": -0.5,
+      "axis": 180,
+      "visualAcuity": "20/"
+    },
+    "oe": {
+      "sphere": -0.75,
+      "cylinder": 0,
+      "axis": 0,
+      "visualAcuity": "20/"
+    },
+    "pdDistanceMm": 62,
+    "lensType": "multifocal",
+    "material": "resina",
+    "treatments": [
+      "Antirreflexo Digital",
+      "Filtro Luz Azul (BlueCut)"
+    ],
+    "returnInstructions": "Retorno em 1 ano para controle visual de rotina.",
+    "observations": "Adaptação progressiva.",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "examinerRegistry": "CRM/CROO 123456",
+    "version": 2,
+    "isIssued": true,
+    "supersedesId": "d8bc6f97-d67d-43e2-ac33-588937ff6c0b"
+  },
+  {
+    "id": "rx-1792166692791-n19ni",
+    "encounterId": "9ab056be-fb37-4598-8fb8-8319c85eabc4",
+    "patientId": "3cf664ac-4d88-4d7d-b2fb-309d5bf9cc30",
+    "patientName": "Mareni Vieira",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "date": "2026-10-16T16:04:52.791Z",
+    "expirationDate": "2027-10-16T15:22:13.461Z",
+    "od": {
+      "sphere": -0.75,
+      "cylinder": -0.5,
+      "axis": 180,
+      "visualAcuity": "20/"
+    },
+    "oe": {
+      "sphere": -0.75,
+      "cylinder": 0,
+      "axis": 0,
+      "visualAcuity": "20/"
+    },
+    "pdDistanceMm": 62,
+    "lensType": "multifocal",
+    "material": "resina",
+    "treatments": [
+      "Antirreflexo Digital",
+      "Filtro Luz Azul (BlueCut)"
+    ],
+    "returnInstructions": "Retorno em 1 ano para controle visual de rotina.",
+    "observations": "Adaptação progressiva.",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "examinerRegistry": "CRM/CROO 123456",
+    "version": 2,
+    "isIssued": true,
+    "supersedesId": "d8bc6f97-d67d-43e2-ac33-588937ff6c0b"
+  },
+  {
+    "id": "rx-1792167119463-zy2de",
+    "encounterId": "9ab056be-fb37-4598-8fb8-8319c85eabc4",
+    "patientId": "3cf664ac-4d88-4d7d-b2fb-309d5bf9cc30",
+    "patientName": "Mareni Vieira",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "date": "2026-10-16T16:11:59.463Z",
+    "expirationDate": "2027-10-16T15:22:13.461Z",
+    "od": {
+      "sphere": -0.75,
+      "cylinder": -0.5,
+      "axis": 180,
+      "visualAcuity": "20/"
+    },
+    "oe": {
+      "sphere": -0.75,
+      "cylinder": 0,
+      "axis": 0,
+      "visualAcuity": "20/"
+    },
+    "pdDistanceMm": 62,
+    "lensType": "multifocal",
+    "material": "resina",
+    "treatments": [
+      "Antirreflexo Digital",
+      "Filtro Luz Azul (BlueCut)"
+    ],
+    "returnInstructions": "Retorno em 1 ano para controle visual de rotina.",
+    "observations": "Adaptação progressiva.",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "examinerRegistry": "CRM/CROO 123456",
+    "version": 2,
+    "isIssued": true,
+    "supersedesId": "d8bc6f97-d67d-43e2-ac33-588937ff6c0b"
+  },
+  {
+    "id": "b76d1f19-182f-4407-8fb7-785911810bfe",
+    "encounterId": "3d528829-cfac-452f-ad8f-af7cc2fd7380",
+    "patientId": "2a167eb6-e40c-4c28-890e-7c31060ec4f6",
+    "patientName": "Jose Diniz Trindade",
+    "date": "2026-10-15T14:06:46.957Z",
+    "expirationDate": "2027-10-16",
+    "od": {
+      "sphere": 0.5,
+      "cylinder": 0,
+      "axis": 0,
+      "visualAcuity": "20/20"
+    },
+    "oe": {
+      "sphere": 0,
+      "cylinder": 0,
+      "axis": 0,
+      "visualAcuity": "20/20"
+    },
+    "addition": 3,
+    "pdDistanceMm": 62,
+    "lensType": "multifocal",
+    "material": "resina",
+    "treatments": [
+      "Antirreflexo Premium",
+      "Proteção UV400"
+    ],
+    "returnInstructions": "Retorno em 1 ano para controle visual de rotina.",
+    "observations": "Receita óptica de rotina.",
+    "isIssued": true,
+    "clinicId": "ivs",
+    "version": 1
+  },
+  {
+    "id": "ef3122bb-ffac-4de9-b957-ea4b49d0b9cb",
+    "encounterId": "7007e237-8d6d-4058-b853-304e36e1e3a9",
+    "patientId": "abf19eef-0f0b-447e-ad25-5073e987e5c3",
+    "patientName": "Evelin Ester",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "date": "2026-10-16T20:29:38.487Z",
+    "expirationDate": "2027-10-16T20:29:38.487Z",
+    "od": {
+      "sphere": 0,
+      "cylinder": 0,
+      "axis": 0,
+      "visualAcuity": "20/20"
+    },
+    "oe": {
+      "sphere": 0,
+      "cylinder": -0.75,
+      "axis": 180,
+      "visualAcuity": "20/30"
+    },
+    "pdDistanceMm": 62,
+    "lensType": "monofocal_longe",
+    "material": "resina",
+    "treatments": [
+      "Antirreflexo Digital",
+      "Filtro Luz Azul (BlueCut)"
+    ],
+    "returnInstructions": "Retorno em 6 meses (Acompanhamento)",
+    "observations": "Adaptação progressiva.",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "examinerRegistry": "CRM/CROO 123456",
+    "version": 1,
+    "isIssued": true
+  },
+  {
+    "id": "rx-1792182637940-hohbf",
+    "encounterId": "7007e237-8d6d-4058-b853-304e36e1e3a9",
+    "patientId": "abf19eef-0f0b-447e-ad25-5073e987e5c3",
+    "patientName": "Evelin Ester",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "date": "2026-10-16T20:30:37.940Z",
+    "expirationDate": "2027-10-16T20:29:38.487Z",
+    "od": {
+      "sphere": 0,
+      "cylinder": 0,
+      "axis": 0,
+      "visualAcuity": "20/20"
+    },
+    "oe": {
+      "sphere": 0,
+      "cylinder": -0.75,
+      "axis": 180,
+      "visualAcuity": "20/30"
+    },
+    "pdDistanceMm": 62,
+    "lensType": "monofocal_longe",
+    "material": "resina",
+    "treatments": [
+      "Antirreflexo Digital",
+      "Filtro Luz Azul (BlueCut)"
+    ],
+    "returnInstructions": "Retorno em 6 meses (Acompanhamento)",
+    "observations": "Adaptação progressiva.",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "examinerRegistry": "CRM/CROO 123456",
+    "version": 2,
+    "supersedesId": "ef3122bb-ffac-4de9-b957-ea4b49d0b9cb",
+    "isIssued": true
+  },
+  {
+    "id": "e2d28cab-87f2-468c-bb9a-c9975f65a2d7",
+    "encounterId": "e7e7b16a-65db-4d98-a9ff-4e6752ba20a7",
+    "patientId": "57bc37ca-d5f0-4a30-b9e8-0020ec81a60f",
+    "patientName": "Loir Ortega",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "date": "2026-10-17T13:09:29.318Z",
+    "expirationDate": "2027-10-17T13:09:29.318Z",
+    "od": {
+      "sphere": 0.75,
+      "cylinder": 0,
+      "axis": 0,
+      "addition": 3,
+      "visualAcuity": "20/20"
+    },
+    "oe": {
+      "sphere": 0.5,
+      "cylinder": 0,
+      "axis": 0,
+      "addition": 3,
+      "visualAcuity": "20/20"
+    },
+    "addition": 3,
+    "pdDistanceMm": 62,
+    "lensType": "multifocal",
+    "material": "resina",
+    "treatments": [
+      "Antirreflexo Digital",
+      "Filtro Luz Azul (BlueCut)",
+      "Fotossensível (Transitions)"
+    ],
+    "returnInstructions": "Retorno em 1 ano (Controle Anual)",
+    "additionalOpticalInfo": "Adaptação progressiva. Filtro fotossensível para luz solar. Uso contínuo para longe e perto. Proteção digital contra luz azul (computador). Armação com aro fechado recomendada. Conferir DNP na montagem da armação",
+    "observations": "Adaptação progressiva. Filtro fotossensível para luz solar. Uso contínuo para longe e perto. Proteção digital contra luz azul (computador). Armação com aro fechado recomendada. Conferir DNP na montagem da armação",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "examinerRegistry": "CRM/CROO 123456",
+    "version": 1,
+    "isIssued": true
+  },
+  {
+    "id": "686f1618-827d-4c2f-9871-4b7f4742ad1a",
+    "encounterId": "f138da79-145c-4159-9f61-ae2f7e5a0b23",
+    "patientId": "1998dc21-a23e-49fb-8e4a-6818aa4fb900",
+    "patientName": "Jorge Machado Salgueiro",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "date": "2026-10-17T13:18:26.270Z",
+    "expirationDate": "2027-10-17T13:18:26.271Z",
+    "od": {
+      "sphere": 0,
+      "cylinder": 0,
+      "axis": 0,
+      "addition": 3,
+      "visualAcuity": "20/"
+    },
+    "oe": {
+      "sphere": 0,
+      "cylinder": 0,
+      "axis": 0,
+      "addition": 3,
+      "visualAcuity": "20/20"
+    },
+    "addition": 3,
+    "pdDistanceMm": 62,
+    "lensType": "multifocal",
+    "material": "resina",
+    "treatments": [
+      "Antirreflexo Digital",
+      "Filtro Luz Azul (BlueCut)",
+      "Fotossensível (Transitions)"
+    ],
+    "returnInstructions": "Retorno em 1 ano (Controle Anual)",
+    "additionalOpticalInfo": "Adaptação progressiva. Uso contínuo para longe e perto. Armação com aro fechado recomendada. Proteção digital contra luz azul (computador). Conferir DNP na montagem da armação. Filtro fotossensível para luz solar",
+    "observations": "Adaptação progressiva. Uso contínuo para longe e perto. Armação com aro fechado recomendada. Proteção digital contra luz azul (computador). Conferir DNP na montagem da armação. Filtro fotossensível para luz solar",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "examinerRegistry": "CRM/CROO 123456",
+    "version": 1,
+    "isIssued": true
+  },
+  {
+    "id": "rx-1792243147004-pq3w8",
+    "encounterId": "f138da79-145c-4159-9f61-ae2f7e5a0b23",
+    "patientId": "1998dc21-a23e-49fb-8e4a-6818aa4fb900",
+    "patientName": "Jorge Machado Salgueiro",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "date": "2026-10-17T13:19:07.004Z",
+    "expirationDate": "2027-10-17T13:18:26.271Z",
+    "od": {
+      "sphere": 0,
+      "cylinder": 0,
+      "axis": 0,
+      "addition": 3,
+      "visualAcuity": "20/"
+    },
+    "oe": {
+      "sphere": 0,
+      "cylinder": 0,
+      "axis": 0,
+      "addition": 3,
+      "visualAcuity": "20/20"
+    },
+    "addition": 3,
+    "pdDistanceMm": 62,
+    "lensType": "multifocal",
+    "material": "resina",
+    "treatments": [
+      "Antirreflexo Digital",
+      "Filtro Luz Azul (BlueCut)",
+      "Fotossensível (Transitions)"
+    ],
+    "returnInstructions": "Retorno em 1 ano (Controle Anual)",
+    "additionalOpticalInfo": "Adaptação progressiva. Uso contínuo para longe e perto. Armação com aro fechado recomendada. Proteção digital contra luz azul (computador). Conferir DNP na montagem da armação. Filtro fotossensível para luz solar",
+    "observations": "Adaptação progressiva. Uso contínuo para longe e perto. Armação com aro fechado recomendada. Proteção digital contra luz azul (computador). Conferir DNP na montagem da armação. Filtro fotossensível para luz solar",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "examinerRegistry": "CRM/CROO 123456",
+    "version": 2,
+    "supersedesId": "686f1618-827d-4c2f-9871-4b7f4742ad1a",
+    "isIssued": true
+  },
+  {
+    "id": "c26b99ac-f8d7-4bb7-a49b-4b48501ba675",
+    "encounterId": "66416ef3-b589-42e9-a6bc-a31d175c6990",
+    "patientId": "7a9a6a32-ca56-4035-be22-c6d8b8754d02",
+    "patientName": "Lucia Salinas",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "date": "2026-10-17T13:31:47.254Z",
+    "expirationDate": "2027-10-17T13:31:47.254Z",
+    "od": {
+      "sphere": -1,
+      "cylinder": 0,
+      "axis": 0,
+      "visualAcuity": "20/20"
+    },
+    "oe": {
+      "sphere": -1,
+      "cylinder": -1.5,
+      "axis": 5,
+      "visualAcuity": "20/20"
+    },
+    "pdDistanceMm": 62,
+    "lensType": "multifocal",
+    "material": "resina",
+    "treatments": [
+      "Antirreflexo Digital",
+      "Filtro Luz Azul (BlueCut)",
+      "Fotossensível (Transitions)"
+    ],
+    "returnInstructions": "Retorno em 6 meses (Acompanhamento)",
+    "additionalOpticalInfo": "Adaptação progressiva. Filtro fotossensível para luz solar. Uso contínuo para longe e perto. Armação com aro fechado recomendada. Proteção digital contra luz azul (computador). Conferir DNP na montagem da armação",
+    "observations": "Adaptação progressiva. Filtro fotossensível para luz solar. Uso contínuo para longe e perto. Armação com aro fechado recomendada. Proteção digital contra luz azul (computador). Conferir DNP na montagem da armação",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "examinerRegistry": "CRM/CROO 123456",
+    "version": 1,
+    "isIssued": true
+  },
+  {
+    "id": "531e8a27-6aa7-4808-b6d6-560f79e9cc91",
+    "encounterId": "1528323a-f5a7-4efb-9865-a1a7c404f039",
+    "patientId": "1f2f94ad-1148-4096-b18b-30cbe8471249",
+    "patientName": "Mirian Estela Rodrigues",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "date": "2026-10-17T13:43:22.894Z",
+    "expirationDate": "2027-10-17T13:43:22.894Z",
+    "od": {
+      "sphere": 0,
+      "cylinder": 0,
+      "axis": 0,
+      "visualAcuity": "20/20"
+    },
+    "oe": {
+      "sphere": 0,
+      "cylinder": -1,
+      "axis": 30,
+      "visualAcuity": "20/20"
+    },
+    "pdDistanceMm": 62,
+    "lensType": "multifocal",
+    "material": "resina",
+    "treatments": [
+      "Antirreflexo Digital",
+      "Filtro Luz Azul (BlueCut)",
+      "Fotossensível (Transitions)"
+    ],
+    "returnInstructions": "Retorno em 1 ano (Controle Anual)",
+    "additionalOpticalInfo": "Adaptação progressiva. Filtro fotossensível para luz solar. Uso contínuo para longe e perto. Conferir DNP na montagem da armação",
+    "observations": "Adaptação progressiva. Filtro fotossensível para luz solar. Uso contínuo para longe e perto. Conferir DNP na montagem da armação",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "examinerRegistry": "CRM/CROO 123456",
+    "version": 1,
+    "isIssued": true
+  },
+  {
+    "id": "c00ea361-615d-4590-a7c2-769794cf8e4b",
+    "encounterId": "5bdff820-72b5-4b94-b7be-cd3b8b558112",
+    "patientId": "1f08bba6-8986-4e57-967b-81e5256846a5",
+    "patientName": "Carlos Daniel",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "date": "2026-10-17T13:57:28.741Z",
+    "expirationDate": "2027-10-17T13:57:28.741Z",
+    "od": {
+      "sphere": -6.5,
+      "cylinder": -1.5,
+      "axis": 10,
+      "addition": 1.75,
+      "visualAcuity": "20/20"
+    },
+    "oe": {
+      "sphere": -7,
+      "cylinder": -0.75,
+      "axis": 160,
+      "addition": 1.75,
+      "visualAcuity": "20/20"
+    },
+    "addition": 1.75,
+    "pdDistanceMm": 62,
+    "lensType": "multifocal",
+    "material": "resina",
+    "treatments": [
+      "Antirreflexo Digital",
+      "Filtro Luz Azul (BlueCut)"
+    ],
+    "returnInstructions": "Retorno em 1 ano (Controle Anual)",
+    "additionalOpticalInfo": "Adaptação progressiva. Uso contínuo para longe e perto. Filtro fotossensível para luz solar. Armação com aro fechado recomendada. Proteção digital contra luz azul (computador). Conferir DNP na montagem da armação",
+    "observations": "Adaptação progressiva. Uso contínuo para longe e perto. Filtro fotossensível para luz solar. Armação com aro fechado recomendada. Proteção digital contra luz azul (computador). Conferir DNP na montagem da armação",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "examinerRegistry": "CRM/CROO 123456",
+    "version": 1,
+    "isIssued": false
+  },
+  {
+    "id": "10625271-74ae-413a-8fc1-bbbca639f51e",
+    "encounterId": "cc987d7d-4591-404b-9768-b69652699809",
+    "patientId": "4af6398f-ddb6-40ce-a466-747fe678aea9",
+    "patientName": "Vanut  Tavares",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "date": "2026-10-17T14:16:26.456Z",
+    "expirationDate": "2027-10-17T14:16:26.456Z",
+    "od": {
+      "sphere": 0,
+      "cylinder": 0,
+      "axis": 0,
+      "addition": 1,
+      "visualAcuity": "20/20"
+    },
+    "oe": {
+      "sphere": 0,
+      "cylinder": -0.25,
+      "axis": 80,
+      "addition": 1,
+      "visualAcuity": "20/20"
+    },
+    "addition": 1,
+    "pdDistanceMm": 62,
+    "lensType": "multifocal",
+    "material": "resina",
+    "treatments": [
+      "Antirreflexo Digital",
+      "Filtro Luz Azul (BlueCut)",
+      "Fotossensível (Transitions)"
+    ],
+    "returnInstructions": "Retorno em 1 ano para controle visual de rotina.",
+    "additionalOpticalInfo": "Adaptação progressiva. Uso contínuo para longe e perto. Filtro fotossensível para luz solar. Proteção digital contra luz azul (computador)",
+    "observations": "Adaptação progressiva. Uso contínuo para longe e perto. Filtro fotossensível para luz solar. Proteção digital contra luz azul (computador)",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "examinerRegistry": "CRM/CROO 123456",
+    "version": 1,
+    "isIssued": true
+  },
+  {
+    "id": "6eac62ab-d096-4edf-a9cc-7a24ac70033a",
+    "encounterId": "de8d2b19-c814-48f5-b011-39c13dd5e7db",
+    "patientId": "e865eb79-a90a-42bb-accb-61ecddf33c1f",
+    "patientName": "Daina Franco de Lira",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "date": "2026-10-17T14:33:16.560Z",
+    "expirationDate": "2027-10-17T14:33:16.560Z",
+    "od": {
+      "sphere": -3.25,
+      "cylinder": -1.25,
+      "axis": 170,
+      "addition": 1,
+      "visualAcuity": "20/25"
+    },
+    "oe": {
+      "sphere": -3,
+      "cylinder": -2.5,
+      "axis": 10,
+      "addition": 1,
+      "visualAcuity": "20/25"
+    },
+    "addition": 1,
+    "pdDistanceMm": 62,
+    "lensType": "multifocal",
+    "material": "resina",
+    "treatments": [
+      "Antirreflexo Digital",
+      "Filtro Luz Azul (BlueCut)",
+      "Fotossensível (Transitions)"
+    ],
+    "returnInstructions": "Retorno em 6 meses (Acompanhamento)",
+    "additionalOpticalInfo": "Adaptação progressiva. Uso exclusivo para perto / leitura. Uso contínuo para longe e perto. Adaptação progressiva. Uso contínuo para longe e perto. Filtro fotossensível para luz solar. Armação com aro fechado recomendada. Proteção digital contra luz azul (computador). Conferir DNP na montagem da armação",
+    "observations": "Adaptação progressiva. Uso exclusivo para perto / leitura. Uso contínuo para longe e perto. Adaptação progressiva. Uso contínuo para longe e perto. Filtro fotossensível para luz solar. Armação com aro fechado recomendada. Proteção digital contra luz azul (computador). Conferir DNP na montagem da armação",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "examinerRegistry": "CRM/CROO 123456",
+    "version": 1,
+    "isIssued": true
+  },
+  {
+    "id": "rx-1792247614652-6jf2k",
+    "encounterId": "de8d2b19-c814-48f5-b011-39c13dd5e7db",
+    "patientId": "e865eb79-a90a-42bb-accb-61ecddf33c1f",
+    "patientName": "Daina Franco de Lira",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "date": "2026-10-17T14:33:34.652Z",
+    "expirationDate": "2027-10-17T14:33:34.652Z",
+    "od": {
+      "sphere": -3.25,
+      "cylinder": -1.25,
+      "axis": 170,
+      "addition": 1,
+      "visualAcuity": "20/25"
+    },
+    "oe": {
+      "sphere": -3,
+      "cylinder": -2.5,
+      "axis": 10,
+      "addition": 1,
+      "visualAcuity": "20/25"
+    },
+    "addition": 1,
+    "pdDistanceMm": 62,
+    "lensType": "multifocal",
+    "material": "resina",
+    "treatments": [
+      "Antirreflexo Digital",
+      "Filtro Luz Azul (BlueCut)",
+      "Fotossensível (Transitions)"
+    ],
+    "returnInstructions": "Retorno em 6 meses (Acompanhamento)",
+    "additionalOpticalInfo": "Adaptação progressiva. Uso exclusivo para perto / leitura. Uso contínuo para longe e perto. Adaptação progressiva. Uso contínuo para longe e perto. Filtro fotossensível para luz solar. Armação com aro fechado recomendada. Proteção digital contra luz azul (computador). Conferir DNP na montagem da armação",
+    "observations": "Adaptação progressiva. Uso exclusivo para perto / leitura. Uso contínuo para longe e perto. Adaptação progressiva. Uso contínuo para longe e perto. Filtro fotossensível para luz solar. Armação com aro fechado recomendada. Proteção digital contra luz azul (computador). Conferir DNP na montagem da armação",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "examinerRegistry": "CRM/CROO 123456",
+    "version": 2,
+    "supersedesId": "6eac62ab-d096-4edf-a9cc-7a24ac70033a",
+    "isIssued": true
+  },
+  {
+    "id": "1024ed9b-1391-4423-8392-fd524cbf7b09",
+    "encounterId": "c4807bc5-e204-4b7f-a8fb-5905f1ea65e2",
+    "patientId": "232b816e-b1d1-4d09-9556-c8e4e0fd31bf",
+    "patientName": "Amelia Sanguina Rodrigues",
+    "clinicId": "ivs",
+    "clinicName": "IVS - Instituto da Visão e Saúde",
+    "date": "2026-10-17T14:41:43.741Z",
+    "expirationDate": "2027-10-17T14:41:43.741Z",
+    "od": {
+      "sphere": 0,
+      "cylinder": 0,
+      "axis": 0,
+      "addition": 2.5,
+      "visualAcuity": "20/"
+    },
+    "oe": {
+      "sphere": -0.25,
+      "cylinder": 0,
+      "axis": 0,
+      "addition": 2.5,
+      "visualAcuity": "20/20"
+    },
+    "addition": 2.5,
+    "pdDistanceMm": 62,
+    "lensType": "multifocal",
+    "material": "resina",
+    "treatments": [
+      "Antirreflexo Digital",
+      "Filtro Luz Azul (BlueCut)"
+    ],
+    "returnInstructions": "Control en 1 año para evaluación visual de rutina.",
+    "additionalOpticalInfo": "Adaptação progressiva. Filtro fotossensível para luz solar. Proteção digital contra luz azul (computador). Conferir DNP na montagem da armação",
+    "observations": "Adaptação progressiva. Filtro fotossensível para luz solar. Proteção digital contra luz azul (computador). Conferir DNP na montagem da armação",
+    "examinerName": "Dr. Rudson Meirelles (CRM/CROO 123456)",
+    "examinerRegistry": "CRM/CROO 123456",
+    "version": 1,
+    "isIssued": true
+  }
+]

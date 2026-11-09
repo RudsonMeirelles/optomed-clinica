@@ -1,0 +1,43 @@
+[
+  {
+    "id": "closure_ivs_meirelles_20261001_20261008",
+    "clinicId": "ivs",
+    "examinerId": "user-examinador",
+    "examinerName": "Dr. Rudson Meirelles",
+    "startDate": "2026-10-01",
+    "endDate": "2026-10-08",
+    "totalFixedAmount": 1000,
+    "totalAvulsoAmount": 800,
+    "totalExtraordinaryAmount": 0,
+    "totalGrossAmount": 1800,
+    "status": "paid",
+    "closedBy": "Diretoria Financeira",
+    "closedAt": "2026-10-08T18:00:00.000Z",
+    "paidBy": "Diretoria Financeira",
+    "paidAt": "2026-10-08T18:00:00.000Z",
+    "paymentMethod": "pix",
+    "remunerationIds": [
+      "rem_apt_apt-ivs-20261001-01",
+      "rem_apt_apt-ivs-20261001-02",
+      "rem_apt_apt-ivs-20261002-01",
+      "rem_apt_apt-ivs-20261002-02",
+      "rem_apt_apt-ivs-20261005-01",
+      "rem_apt_apt-ivs-20261005-02",
+      "rem_apt_apt-ivs-20261006-01",
+      "rem_apt_apt-ivs-20261006-02",
+      "rem_apt_apt-ivs-20261006-03",
+      "rem_apt_apt-ivs-20261006-04",
+      "rem_apt_apt-ivs-20261006-05",
+      "rem_apt_apt-ivs-20261006-06",
+      "rem_apt_apt-ivs-20261007-01",
+      "rem_apt_apt-ivs-20261007-02",
+      "rem_apt_apt-ivs-20261007-03",
+      "rem_apt_apt-ivs-20261007-04",
+      "rem_apt_apt-ivs-20261007-05",
+      "rem_apt_apt-ivs-20261007-06",
+      "rem_apt_apt-ivs-20261008-01",
+      "rem_apt_apt-ivs-20261008-02"
+    ],
+    "notes": "Fechamento e Liquidação Integral dos atendimentos de 01/10/2026 a 08/10/2026 (Terça 13h-18h R$ 500 + Quarta 08h-13h R$ 500 + 8 Consultas Avulsas R$ 800 = R$ 1.800,00)"
+  }
+]
