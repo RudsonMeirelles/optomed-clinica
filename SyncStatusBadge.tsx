@@ -1,0 +1,299 @@
+import React, { useState, useEffect, useCallback } from 'react';
+import { Wifi, WifiOff, RefreshCw, CheckCircle2, AlertCircle, Loader2, Upload, DownloadCloud } from 'lucide-react';
+import { offlineDb } from '../services/offlineDb';
+
+export const SyncStatusBadge: React.FC = () => {
+  const [syncStatus, setSyncStatus] = useState<string>(() => offlineDb.getSyncStatus());
+  const [pendingCount, setPendingCount] = useState<number>(() => offlineDb.getPendingSyncCount());
+  const [isSyncing, setIsSyncing] = useState<boolean>(false);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+  const [isDownloading, setIsDownloading] = useState<boolean>(false);
+  const [isOnline, setIsOnline] = useState<boolean>(navigator.onLine);
+  const [uploadDone, setUploadDone] = useState<boolean>(false);
+  const [downloadDone, setDownloadDone] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    const onSyncChange = (status: string, pending?: number) => {
+      setSyncStatus(status);
+      if (typeof pending === 'number') {
+        setPendingCount(pending);
+      } else {
+        setPendingCount(offlineDb.getPendingSyncCount());
+      }
+      if (status !== 'syncing') setIsSyncing(false);
+    };
+    offlineDb.addSyncListener(onSyncChange);
+
+    // Polling de fallback espaçado (15s) pois os ouvintes onSyncChange já atualizam em tempo real
+    const interval = setInterval(() => {
+      setPendingCount(offlineDb.getPendingSyncCount());
+    }, 15000);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+      offlineDb.removeSyncListener(onSyncChange);
+      clearInterval(interval);
+    };
+  }, []);
+
+  const handleManualSync = useCallback(async () => {
+    if (isSyncing || isUploading) return;
+    setIsSyncing(true);
+    try {
+      await offlineDb.manualSync();
+      setPendingCount(offlineDb.getPendingSyncCount());
+    } finally {
+      setIsSyncing(false);
+    }
+  }, [isSyncing, isUploading]);
+
+  const handleResetQueue = useCallback(() => {
+    offlineDb.clearSyncQueue();
+    setPendingCount(0);
+    setSyncStatus('synced');
+  }, []);
+
+  const handleForceUpload = useCallback(async () => {
+    if (isSyncing || isUploading) return;
+    setIsUploading(true);
+    try {
+      await offlineDb.forceUploadAll();
+      setPendingCount(offlineDb.getPendingSyncCount());
+      setUploadDone(true);
+      setTimeout(() => setUploadDone(false), 4000);
+    } finally {
+      setIsUploading(false);
+    }
+  }, [isSyncing, isUploading]);
+
+  const handleForceDownload = useCallback(async () => {
+    if (isSyncing || isUploading || isDownloading) return;
+    setIsDownloading(true);
+    try {
+      await offlineDb.forceDownloadAll();
+      setPendingCount(offlineDb.getPendingSyncCount());
+      setDownloadDone(true);
+      setTimeout(() => setDownloadDone(false), 4000);
+    } finally {
+      setIsDownloading(false);
+    }
+  }, [isSyncing, isUploading, isDownloading]);
+
+  const badgeStyle = (() => {
+    if (!isOnline) return 'bg-amber-50 text-amber-700 border border-amber-200 animate-pulse';
+    if (syncStatus === 'synced') return 'bg-emerald-50 text-emerald-700 border border-emerald-200';
+    if (syncStatus === 'syncing') return 'bg-blue-50 text-blue-700 border border-blue-200';
+    if (syncStatus === 'error') return 'bg-red-50 text-red-700 border border-red-200';
+    return 'bg-amber-50 text-amber-700 border border-amber-200';
+  })();
+
+  const label = (() => {
+    if (!isOnline) return 'Offline';
+    if (syncStatus === 'synced') {
+      return pendingCount > 0 ? `Sincronizado (${pendingCount} na fila)` : 'Sincronizado';
+    }
+    if (syncStatus === 'syncing') {
+      return pendingCount > 0 ? `Sincronizando (${pendingCount})…` : 'Sincronizando…';
+    }
+    if (syncStatus === 'error') return 'Sem acesso ao servidor';
+    return pendingCount > 0 ? `Aguardando sync (${pendingCount})` : 'Aguardando sync';
+  })();
+
+  const Icon = (() => {
+    if (!isOnline) return WifiOff;
+    if (syncStatus === 'synced') return CheckCircle2;
+    if (syncStatus === 'syncing') return Loader2;
+    if (syncStatus === 'error') return AlertCircle;
+    return Wifi;
+  })();
+
+  const busy = isSyncing || isUploading || isDownloading;
+
+  return (
+    <div className="flex items-center gap-1.5 text-xs">
+      {/* Badge Limpo de Sincronização: Clique rápido para sincronizar */}
+      <button 
+        type="button"
+        onClick={handleManualSync}
+        disabled={busy}
+        className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full font-medium transition-all cursor-pointer ${badgeStyle} disabled:opacity-50`}
+        title="Status de sincronização. Clique para sincronizar agora."
+      >
+        <Icon className={`w-3.5 h-3.5 ${syncStatus === 'syncing' ? 'animate-spin' : ''}`} />
+        <span>{label}</span>
+      </button>
+
+      {/* Botões avançados de manutenção: aparecem apenas se houver pendência ou erro */}
+      {isOnline && (pendingCount > 0 || syncStatus === 'error') && (
+        <div className="flex items-center gap-1">
+          <button
+            onClick={handleForceDownload}
+            disabled={busy}
+            className="p-1 text-blue-600 hover:bg-blue-50 rounded transition-colors"
+            title="Recarregar dados do servidor"
+          >
+            <DownloadCloud className="w-3.5 h-3.5" />
+          </button>
+          <button
+            onClick={handleForceUpload}
+            disabled={busy}
+            className="p-1 text-amber-600 hover:bg-amber-50 rounded transition-colors"
+            title="Forçar envio ao servidor"
+          >
+            <Upload className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// -------------------------------------------------------------
+// NOVO LOGOTIPO E CONJUNTO COMPLETO DE ÍCONES OFICIAIS OPTOMED
+// -------------------------------------------------------------
+
+// 1. Logotipo Oficial OPTOMED (Ícone Olho Geométrico com Cruz Médica e Arco Protetor + Tipografia)
+export const OptomedBrandLogo: React.FC<{ size?: 'sm' | 'md' | 'lg'; showText?: boolean; className?: string; darkText?: boolean }> = ({
+  size = 'md',
+  showText = true,
+  className = '',
+  darkText = false
+}) => {
+  const sizeMap = {
+    sm: { icon: 28, textMain: 'text-sm', textSub: 'text-[8px]' },
+    md: { icon: 38, textMain: 'text-base', textSub: 'text-[10px]' },
+    lg: { icon: 54, textMain: 'text-2xl', textSub: 'text-xs' }
+  };
+
+  const currentSize = sizeMap[size];
+
+  return (
+    <div className={`flex items-center gap-3 select-none ${className}`}>
+      {/* Ícone Vetorial Oficial OPTOMED */}
+      <div 
+        className="relative shrink-0 flex items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 p-1.5 shadow-sm ring-1 ring-blue-500/20"
+        style={{ width: currentSize.icon + 8, height: currentSize.icon + 8 }}
+      >
+        <svg 
+          viewBox="0 0 64 64" 
+          fill="none" 
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-full h-full"
+        >
+          {/* Arco Protetor Superior em Escudo / Visão */}
+          <path 
+            d="M8 32C8 32 18 16 32 16C46 16 56 32 56 32C56 32 46 48 32 48C18 48 8 32 8 32Z" 
+            stroke="#BFDBFE" 
+            strokeWidth="3.5" 
+            strokeLinecap="round" 
+            strokeLinejoin="round" 
+          />
+          {/* Círculo da Íris */}
+          <circle cx="32" cy="32" r="10" stroke="#FFFFFF" strokeWidth="3" />
+          {/* Cruz Médica no Centro da Pupila */}
+          <path d="M32 27V37" stroke="#38BDF8" strokeWidth="3" strokeLinecap="round" />
+          <path d="M27 32H37" stroke="#38BDF8" strokeWidth="3" strokeLinecap="round" />
+          {/* Detalhe Superior de Precisão */}
+          <circle cx="48" cy="20" r="2.5" fill="#34D399" />
+        </svg>
+      </div>
+
+      {showText && (
+        <div className="flex flex-col leading-tight">
+          <span className={`font-black tracking-tight ${darkText ? 'text-slate-800' : 'text-white'} ${currentSize.textMain} flex items-center gap-1.5`}>
+            OPTOMED
+            <span className="w-1.5 h-1.5 rounded-full bg-teal-500 animate-pulse" />
+          </span>
+          <span className={`font-bold tracking-wider ${darkText ? 'text-teal-700' : 'text-teal-300'} uppercase font-mono ${currentSize.textSub}`}>
+            Instituto de Visão e Saúde
+          </span>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// 2. CONJUNTO COMPLETO DE ÍCONES DE ALTA FIDELIDADE DO SISTEMA (2-TONE BLUE & TEAL)
+
+// Ícone Agenda / Consultório (Calendário com Pulso de Compromisso)
+export const IconAgendaCalendar: React.FC<{ className?: string }> = ({ className = 'w-5 h-5' }) => (
+  <svg viewBox="0 0 24 24" fill="none" className={className}>
+    <rect x="3" y="4" width="18" height="17" rx="3" stroke="#3B82F6" strokeWidth="1.8" />
+    <path d="M16 2V6M8 2V6M3 9H21" stroke="#3B82F6" strokeWidth="1.8" strokeLinecap="round" />
+    <circle cx="7.5" cy="13.5" r="1" fill="#3B82F6" />
+    <circle cx="11.5" cy="13.5" r="1" fill="#3B82F6" />
+    <circle cx="7.5" cy="17.5" r="1" fill="#3B82F6" />
+    <circle cx="17.5" cy="17.5" r="4.5" fill="#0D9488" stroke="#14B8A6" strokeWidth="1.2" />
+    <path d="M15 17.5H16.2L17 15.5L18 19.5L18.8 17.5H20" stroke="#FFFFFF" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+// Ícone Recepção & Pacientes (Crachá com Perfil e Documento de Registro)
+export const IconPatientProfile: React.FC<{ className?: string }> = ({ className = 'w-5 h-5' }) => (
+  <svg viewBox="0 0 24 24" fill="none" className={className}>
+    <rect x="2" y="5" width="16" height="15" rx="3" stroke="#3B82F6" strokeWidth="1.8" />
+    <path d="M7 2H13" stroke="#3B82F6" strokeWidth="1.8" strokeLinecap="round" />
+    <circle cx="10" cy="11" r="3" stroke="#3B82F6" strokeWidth="1.6" />
+    <path d="M5.5 17C6.5 15.2 8.2 14.5 10 14.5C11.8 14.5 13.5 15.2 14.5 17" stroke="#3B82F6" strokeWidth="1.6" strokeLinecap="round" />
+    <rect x="14" y="11" width="8" height="10" rx="1.5" fill="#0D9488" stroke="#14B8A6" strokeWidth="1.2" />
+    <path d="M16 14H20M16 17H19" stroke="#FFFFFF" strokeWidth="1.2" strokeLinecap="round" />
+  </svg>
+);
+
+// Ícone Gestão da Clínica & PDV (Caixa Registradora + Maquininha e Cartão)
+export const IconClinicPOS: React.FC<{ className?: string }> = ({ className = 'w-5 h-5' }) => (
+  <svg viewBox="0 0 24 24" fill="none" className={className}>
+    <path d="M4 14H20L19 20H5L4 14Z" stroke="#3B82F6" strokeWidth="1.8" strokeLinejoin="round" />
+    <rect x="7" y="6" width="10" height="8" rx="1.5" stroke="#3B82F6" strokeWidth="1.8" />
+    <path d="M10 3V6M14 3V6M9 9H15" stroke="#3B82F6" strokeWidth="1.6" strokeLinecap="round" />
+    <circle cx="12" cy="17" r="1.5" fill="#14B8A6" stroke="#0D9488" strokeWidth="1" />
+    <path d="M7 11H8M10 11H11M13 11H14" stroke="#14B8A6" strokeWidth="1.8" strokeLinecap="round" />
+  </svg>
+);
+
+// Ícone Relatórios & Estatísticas (Quadro Analítico com Gráfico de Barras e Linha de Tendência)
+export const IconReportsAnalytics: React.FC<{ className?: string }> = ({ className = 'w-5 h-5' }) => (
+  <svg viewBox="0 0 24 24" fill="none" className={className}>
+    <rect x="3" y="3" width="18" height="18" rx="3" stroke="#3B82F6" strokeWidth="1.8" />
+    <rect x="6.5" y="13" width="2.5" height="5" rx="0.5" fill="#14B8A6" />
+    <rect x="11" y="9" width="2.5" height="9" rx="0.5" fill="#14B8A6" />
+    <rect x="15.5" y="11" width="2.5" height="7" rx="0.5" fill="#14B8A6" />
+    <path d="M6.5 11L11 7L14.5 9.5L18 5" stroke="#3B82F6" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    <circle cx="18" cy="5" r="1.2" fill="#3B82F6" />
+  </svg>
+);
+
+// Ícone Pareamento TV (Monitor Moderno Slim)
+export const IconMonitorTV: React.FC<{ className?: string }> = ({ className = 'w-5 h-5' }) => (
+  <svg viewBox="0 0 24 24" fill="none" className={className}>
+    <rect x="2" y="4" width="20" height="14" rx="2" stroke="#3B82F6" strokeWidth="1.8" />
+    <path d="M9 21H15M12 18V21" stroke="#3B82F6" strokeWidth="1.8" strokeLinecap="round" />
+    <rect x="5" y="7" width="14" height="8" rx="1" fill="#0F172A" stroke="#14B8A6" strokeWidth="1" strokeDasharray="2 2" />
+  </svg>
+);
+
+// Ícone Configurações & Licença (Engrenagem com Documento de Certificado)
+export const IconSettingsLicense: React.FC<{ className?: string }> = ({ className = 'w-5 h-5' }) => (
+  <svg viewBox="0 0 24 24" fill="none" className={className}>
+    <path d="M12 8.5C10.067 8.5 8.5 10.067 8.5 12C8.5 13.933 10.067 15.5 12 15.5C13.933 15.5 15.5 13.933 15.5 12C15.5 10.067 13.933 8.5 12 8.5Z" stroke="#3B82F6" strokeWidth="1.8" />
+    <path d="M19.4 15A1.65 1.65 0 0 0 20 16.3L20.8 17.5L18.8 19.5L17.5 18.7A1.65 1.65 0 0 0 16.2 19.3V21H13.4V19.3A1.65 1.65 0 0 0 12.1 18.7L10.8 19.5L8.8 17.5L9.6 16.2A1.65 1.65 0 0 0 9 14.9H7.3V12.1H9A1.65 1.65 0 0 0 9.6 10.8L8.8 9.5L10.8 7.5L12.1 8.3A1.65 1.65 0 0 0 13.4 7.7V6H16.2V7.7A1.65 1.65 0 0 0 17.5 8.3L18.8 7.5L20.8 9.5L20 10.8A1.65 1.65 0 0 0 19.4 12.1V15Z" stroke="#3B82F6" strokeWidth="1.6" />
+    <rect x="13" y="11" width="9" height="11" rx="1.5" fill="#0D9488" stroke="#14B8A6" strokeWidth="1.2" />
+    <path d="M15 14H19M15 17H18" stroke="#FFFFFF" strokeWidth="1.2" strokeLinecap="round" />
+    <circle cx="19" cy="20" r="1.5" fill="#FBBF24" />
+  </svg>
+);
+
+// Ícone Sair / Logout (Porta de Saída)
+export const IconDoorLogout: React.FC<{ className?: string }> = ({ className = 'w-5 h-5' }) => (
+  <svg viewBox="0 0 24 24" fill="none" className={className}>
+    <path d="M9 21H5C3.89543 21 3 20.1046 3 19V5C3 3.89543 3.89543 3 5 3H9" stroke="#3B82F6" strokeWidth="1.8" strokeLinecap="round" />
+    <path d="M16 17L21 12L16 7" stroke="#14B8A6" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M21 12H9" stroke="#14B8A6" strokeWidth="1.8" strokeLinecap="round" />
+  </svg>
+);
