@@ -1,15 +1,15 @@
 // Atlas Clínico Oftalmológico e Optométrico: Patologias e Ametropias
 // Coleção Completa de Ilustrações Médicas Oficiais em Alta Resolução
 
-import imgAstigmatismo from '../assets/atlas/astigmatismo.png';
-import imgMiopia from '../assets/atlas/miopia.png';
-import imgHipermetropia from '../assets/atlas/hipermetropia.png';
-import imgPresbiopia from '../assets/atlas/presbiopia.png';
-import imgCatarata from '../assets/atlas/catarata.png';
-import imgCeratocone from '../assets/atlas/ceratocone.png';
-import imgGlaucomaDisco from '../assets/atlas/glaucoma_disco_optico.png';
-import imgRetinopatia from '../assets/atlas/retinopatia_diabetica.png';
-import imgMacula from '../assets/atlas/degeneracao_macular.png';
+import imgAstigmatismo from '../assets/atlas/astigmatismo.jpg';
+import imgMiopia from '../assets/atlas/miopia.jpg';
+import imgHipermetropia from '../assets/atlas/hipermetropia.jpg';
+import imgPresbiopia from '../assets/atlas/presbiopia.jpg';
+import imgCatarata from '../assets/atlas/catarata.jpg';
+import imgCeratocone from '../assets/atlas/ceratocone.jpg';
+import imgGlaucomaDisco from '../assets/atlas/glaucoma_disco_optico.jpg';
+import imgRetinopatia from '../assets/atlas/retinopatia_diabetica.jpg';
+import imgMacula from '../assets/atlas/degeneracao_macular.jpg';
 
 export interface OphthalmicCondition {
   id: string;
