@@ -73,14 +73,9 @@ export const ConnectivityIndicator: React.FC = () => {
       >
         <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
         <span>Online</span>
-        {pingLatency !== null && (
-          <span className="text-[10px] text-emerald-600 font-mono font-normal">
-            {pingLatency}ms
-          </span>
-        )}
         {pendingSyncCount > 0 && (
           <span className="ml-1 px-1.5 py-0.2 bg-amber-100 text-amber-900 border border-amber-300 rounded-full font-mono text-[9px] font-bold">
-            {pendingSyncCount} pendente{pendingSyncCount > 1 ? 's' : ''}
+            {pendingSyncCount}
           </span>
         )}
       </div>
