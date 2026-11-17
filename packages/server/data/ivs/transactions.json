@@ -160,16 +160,13 @@
     "category": "consulta",
     "description": "Consulta Oftalmológica & Exame de Refração - Maria Helena",
     "amount": 50,
-    "date": "2026-10-13",
+    "date": "2026-11-13",
     "paymentMethod": "pix",
     "patientName": "Maria Helena dos Santos",
     "receiptNumber": "REC-2026-8801",
     "status": "completed",
     "createdBy": "Recepção",
-    "createdAt": "2026-10-13T18:07:38.158Z",
-    "isSettled": true,
-    "settledAt": "2026-10-26T00:00:00.000Z",
-    "updatedAt": "2026-10-15T20:44:29.729Z"
+    "createdAt": "2026-11-13T19:00:53.478Z"
   },
   {
     "id": "tx_ivs_2",
@@ -178,16 +175,13 @@
     "category": "consulta",
     "description": "Consulta de Retorno (Controle de Rotina) - Retorno Gratuito",
     "amount": 0,
-    "date": "2026-10-13",
+    "date": "2026-11-13",
     "paymentMethod": "cash",
     "patientName": "Enzo Gabriel Silva",
     "receiptNumber": "REC-2026-8802",
     "status": "completed",
     "createdBy": "Recepção",
-    "createdAt": "2026-10-13T18:07:38.158Z",
-    "isSettled": true,
-    "settledAt": "2026-10-26T00:00:00.000Z",
-    "updatedAt": "2026-10-15T20:44:30.089Z"
+    "createdAt": "2026-11-13T19:00:53.478Z"
   },
   {
     "id": "tx_ivs_3",
@@ -196,16 +190,13 @@
     "category": "venda_lentes",
     "description": "Venda de Óculos Completo + Lentes Antirreflexo",
     "amount": 450,
-    "date": "2026-10-13",
+    "date": "2026-11-13",
     "paymentMethod": "credit_card",
     "patientName": "Juan Carlos Benítez",
     "receiptNumber": "REC-2026-8803",
     "status": "completed",
     "createdBy": "Recepção",
-    "createdAt": "2026-10-13T18:07:38.158Z",
-    "isSettled": true,
-    "settledAt": "2026-10-26T00:00:00.000Z",
-    "updatedAt": "2026-10-15T20:44:30.398Z"
+    "createdAt": "2026-11-13T19:00:53.478Z"
   },
   {
     "id": "tx_ivs_4",
@@ -248,15 +239,12 @@
     "category": "procedimento",
     "description": "Caixa Inicial & Faturamento de Exames Acumulado na Semana",
     "amount": 1200,
-    "date": "2026-10-13",
+    "date": "2026-11-13",
     "paymentMethod": "pix",
     "receiptNumber": "REC-2026-8800",
     "status": "completed",
     "createdBy": "Administração",
-    "createdAt": "2026-10-13T18:07:38.158Z",
-    "isSettled": true,
-    "settledAt": "2026-10-26T00:00:00.000Z",
-    "updatedAt": "2026-10-14T21:05:40.150Z"
+    "createdAt": "2026-11-13T19:00:53.478Z"
   },
   {
     "id": "tx_ivs_repasse_quitado_3009",
@@ -272,7 +260,7 @@
     "receiptNumber": "REP-2026-3009",
     "status": "completed",
     "isSettled": true,
-    "settledAt": "2026-10-26T00:00:00.000Z",
+    "settledAt": "2026-09-30T23:59:59.000Z",
     "createdBy": "Direção Administrativa / Financeiro",
     "createdAt": "2026-09-30T20:00:00.000Z"
   },
@@ -1790,5 +1778,23 @@
     "createdBy": "Dr. Rudson Meirelles",
     "createdAt": "2026-11-06T14:30:00.000Z",
     "updatedAt": "2026-11-06T15:00:00.000Z"
+  },
+  {
+    "id": "tx_sangria_zerar_1794925874942",
+    "clinicId": "ivs",
+    "type": "expense",
+    "category": "retirada_sangria",
+    "description": "Sangria / Retirada Geral de Fechamento de Caixa (Zerar Saldo)",
+    "amount": 4650,
+    "amountCents": 465000,
+    "currency": "BRL",
+    "date": "2026-11-17",
+    "paymentMethod": "cash",
+    "status": "completed",
+    "createdBy": "Diretoria Financeira",
+    "createdAt": "2026-11-17T14:31:14.897Z",
+    "updatedAt": "2026-11-17T14:31:14.897Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T14:31:14.897Z"
   }
 ]
