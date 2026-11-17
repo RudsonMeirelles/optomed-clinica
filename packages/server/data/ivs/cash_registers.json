@@ -23,13 +23,31 @@
     "operatorId": "user-ivs-examinador",
     "operatorName": "DR. Rudson Meirelles",
     "openedAt": "2026-10-17T12:32:14.937Z",
-    "status": "open",
+    "status": "closed",
     "openingBalance": 0,
     "openingBalanceCents": 0,
     "totalIncome": 0,
     "totalExpense": 0,
     "expectedBalance": 0,
     "createdAt": "2026-10-17T12:32:14.937Z",
-    "updatedAt": "2026-10-17T12:32:14.937Z"
+    "updatedAt": "2026-11-17T14:31:14.897Z",
+    "closedAt": "2026-11-17T14:31:14.897Z",
+    "declaredBalance": 0,
+    "difference": 0
+  },
+  {
+    "id": "reg_ivs_1794925874942",
+    "clinicId": "ivs",
+    "operatorId": "user-ivs-examinador",
+    "operatorName": "DR. Rudson Meirelles",
+    "openedAt": "2026-11-17T14:31:14.897Z",
+    "status": "open",
+    "openingBalance": 0,
+    "openingBalanceCents": 0,
+    "totalIncome": 0,
+    "totalExpense": 0,
+    "expectedBalance": 0,
+    "createdAt": "2026-11-17T14:31:14.897Z",
+    "updatedAt": "2026-11-17T14:31:14.897Z"
   }
 ]
