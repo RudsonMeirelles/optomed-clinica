@@ -2730,9 +2730,8 @@ class OfflineDatabaseService {
       const allTransactions = this.getTransactions(clinicId);
       const allAppointments = this.getAppointments(clinicId);
 
-      // Transações em aberto a partir de 27/10/2026 (excluindo deletadas e já quitadas)
-      // Conforme demonstrativo do Dr. Meirelles: período em aberto de 27/10/2026 em diante (35 consultas, R$ 2.350,00)
-      const CUTOFF_DATE = '2026-10-27';
+      // Transações em aberto a partir de 17/11/2026 (período anterior até 16/11/2026 quitado integralmente com Dr. Meirelles)
+      const CUTOFF_DATE = '2026-11-17';
       const openTransactions = allTransactions.filter(t => {
         const txDate = t.date || (t.createdAt ? t.createdAt.slice(0, 10) : '');
         const isConsultationCategory = !t.category || t.category === 'consulta' || t.description.toLowerCase().includes('consulta') || t.description.toLowerCase().includes('refração') || t.description.toLowerCase().includes('atendimento');
@@ -2744,14 +2743,14 @@ class OfflineDatabaseService {
           && isConsultationCategory;
       });
 
-      // --- FALLBACK: usar appointments com status 'completed' quando não há transações ---
-      // Isso resolve o caso em que o sistema é acessado via Render.com sem LocalStorage histórico
+      // --- FALLBACK: usar appointments com status 'completed' a partir da data de corte ---
       const completedAppointments = allAppointments.filter(a => {
         const aptDate = a.date || '';
         const aptAny = a as any;
         return aptDate >= CUTOFF_DATE
           && (a.status === 'completed' || aptAny.status === 'atendido')
           && !aptAny._deleted
+          && !a.isSettled
           && (!a.examinerId || a.examinerId === 'user-examinador')
           && (!a.examinerName || a.examinerName.toLowerCase().includes('rudson') || a.examinerName.toLowerCase().includes('meirelles'));
       });
