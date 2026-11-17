@@ -17,7 +17,9 @@
     "room": "Consultório 1",
     "createdAt": "2026-11-03T19:36:36.554Z",
     "updatedAt": "2026-11-04T18:13:59.683Z",
-    "completedAt": "2026-11-03T17:00:00.000Z"
+    "completedAt": "2026-11-03T17:00:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "11663a69-c8bb-4703-b160-636ccab47bba",
@@ -37,7 +39,9 @@
     "room": "Consultório 1",
     "createdAt": "2026-11-03T19:02:15.583Z",
     "updatedAt": "2026-11-04T18:13:59.684Z",
-    "completedAt": "2026-11-03T17:00:00.000Z"
+    "completedAt": "2026-11-03T17:00:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "1d070c65-d75d-4ed1-aba7-dd2c1f29953c",
@@ -57,7 +61,9 @@
     "room": "Consultório 1",
     "createdAt": "2026-10-31T20:29:46.720Z",
     "updatedAt": "2026-11-04T18:13:59.684Z",
-    "completedAt": "2026-10-31T17:00:00.000Z"
+    "completedAt": "2026-10-31T17:00:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "c0eda3fa-ec51-4b5b-bfd2-93153e7eb48b",
@@ -77,7 +83,9 @@
     "room": "Consultório 1",
     "createdAt": "2026-10-31T20:28:24.479Z",
     "updatedAt": "2026-11-04T18:13:59.684Z",
-    "completedAt": "2026-10-31T17:00:00.000Z"
+    "completedAt": "2026-10-31T17:00:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "049163f4-7416-43a4-8113-03a29c11d567",
@@ -97,7 +105,9 @@
     "room": "Consultório 1",
     "createdAt": "2026-10-31T19:55:27.320Z",
     "updatedAt": "2026-11-04T18:13:59.684Z",
-    "completedAt": "2026-10-31T17:00:00.000Z"
+    "completedAt": "2026-10-31T17:00:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "96e58617-c263-4544-bb12-7ebb3f95bc9d",
@@ -117,7 +127,9 @@
     "room": "Consultório 1",
     "createdAt": "2026-10-31T19:54:43.064Z",
     "updatedAt": "2026-11-04T18:13:59.684Z",
-    "completedAt": "2026-10-31T17:00:00.000Z"
+    "completedAt": "2026-10-31T17:00:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "73a6ff70-57c9-49c1-a5b7-1bf89dc63852",
@@ -137,7 +149,9 @@
     "room": "Consultório 1",
     "createdAt": "2026-10-31T19:15:43.247Z",
     "updatedAt": "2026-11-04T18:13:59.684Z",
-    "completedAt": "2026-10-31T17:00:00.000Z"
+    "completedAt": "2026-10-31T17:00:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "15b64f1d-4f90-4fe7-8011-fea217cc32ab",
@@ -157,7 +171,9 @@
     "room": "Consultório 1",
     "createdAt": "2026-10-31T17:57:09.056Z",
     "updatedAt": "2026-11-04T18:13:59.684Z",
-    "completedAt": "2026-10-31T17:00:00.000Z"
+    "completedAt": "2026-10-31T17:00:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "2c0b5888-9705-4444-9f43-d226dc83c26b",
@@ -177,7 +193,9 @@
     "room": "Consultório 1",
     "createdAt": "2026-10-31T17:47:47.910Z",
     "updatedAt": "2026-11-04T18:13:59.684Z",
-    "completedAt": "2026-10-31T17:00:00.000Z"
+    "completedAt": "2026-10-31T17:00:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "6e53d716-0c4c-43fb-809f-b31fcedaa7d2",
@@ -198,7 +216,9 @@
     "isOutOfContractPeriod": false,
     "room": "Consultório 1",
     "createdAt": "2026-10-17T12:37:57.364Z",
-    "updatedAt": "2026-10-17T12:37:57.364Z"
+    "updatedAt": "2026-10-17T12:37:57.364Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "660b5870-59d0-4216-aefd-b4477c383e19",
@@ -218,7 +238,9 @@
     "createdAt": "2026-10-17T14:35:43.261Z",
     "updatedAt": "2026-10-17T14:41:38.927Z",
     "startedAt": "2026-10-17T14:35:43.618Z",
-    "completedAt": "2026-10-17T14:41:38.917Z"
+    "completedAt": "2026-10-17T14:41:38.917Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "7098726d-743a-4943-9f72-5f2d387c3f2f",
@@ -238,7 +260,9 @@
     "createdAt": "2026-10-17T14:22:13.560Z",
     "updatedAt": "2026-10-17T14:33:30.464Z",
     "startedAt": "2026-10-17T14:22:13.951Z",
-    "completedAt": "2026-10-17T14:33:30.451Z"
+    "completedAt": "2026-10-17T14:33:30.451Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "f06a1584-e192-4547-8d33-54681fb87ece",
@@ -257,7 +281,9 @@
     "room": "Consultório 1",
     "createdAt": "2026-10-17T14:01:02.497Z",
     "updatedAt": "2026-10-17T14:20:17.184Z",
-    "completedAt": "2026-10-17T14:12:31.369Z"
+    "completedAt": "2026-10-17T14:12:31.369Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "d4bd49aa-85a2-4673-90f9-5c26791bf5e8",
@@ -277,7 +303,9 @@
     "createdAt": "2026-10-17T13:48:53.489Z",
     "updatedAt": "2026-10-17T13:57:26.809Z",
     "startedAt": "2026-10-17T13:48:53.831Z",
-    "completedAt": "2026-10-17T13:57:26.798Z"
+    "completedAt": "2026-10-17T13:57:26.798Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "ff798254-071d-40be-bb71-a83803fe1779",
@@ -296,7 +324,9 @@
     "room": "Consultório 1",
     "createdAt": "2026-10-17T13:34:38.663Z",
     "updatedAt": "2026-10-17T13:44:44.262Z",
-    "completedAt": "2026-10-17T13:44:44.248Z"
+    "completedAt": "2026-10-17T13:44:44.248Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "a5cb0e6d-38a6-42b6-a557-6f8900c418c6",
@@ -316,7 +346,9 @@
     "createdAt": "2026-10-17T13:21:50.441Z",
     "updatedAt": "2026-10-17T13:33:41.479Z",
     "startedAt": "2026-10-17T13:21:50.824Z",
-    "completedAt": "2026-10-17T13:31:42.270Z"
+    "completedAt": "2026-10-17T13:31:42.270Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "031e2f22-bd21-4ded-9dc0-755bbb4dbf97",
@@ -336,7 +368,9 @@
     "createdAt": "2026-10-17T13:10:57.142Z",
     "updatedAt": "2026-10-17T13:19:36.098Z",
     "startedAt": "2026-10-17T13:10:57.597Z",
-    "completedAt": "2026-10-17T13:19:31.937Z"
+    "completedAt": "2026-10-17T13:19:31.937Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "136c7783-03c7-4894-aef1-f8c9922f0fe3",
@@ -356,7 +390,9 @@
     "createdAt": "2026-10-17T13:03:01.852Z",
     "updatedAt": "2026-10-17T13:09:24.644Z",
     "startedAt": "2026-10-17T13:03:02.184Z",
-    "completedAt": "2026-10-17T13:09:24.633Z"
+    "completedAt": "2026-10-17T13:09:24.633Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "b0608cd1-e07a-415b-9a57-8b5e71a05b5e",
@@ -376,7 +412,9 @@
     "createdAt": "2026-10-16T20:18:33.465Z",
     "updatedAt": "2026-10-16T21:28:18.744Z",
     "startedAt": "2026-10-16T20:18:33.825Z",
-    "completedAt": "2026-10-16T20:34:09.898Z"
+    "completedAt": "2026-10-16T20:34:09.898Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "1eaa831f-4d10-43b5-ac1e-4a6f28f36c77",
@@ -396,7 +434,9 @@
     "createdAt": "2026-10-15T14:19:23.081Z",
     "updatedAt": "2026-10-15T14:48:44.577Z",
     "startedAt": "2026-10-15T14:19:23.402Z",
-    "completedAt": "2026-10-15T14:26:49.296Z"
+    "completedAt": "2026-10-15T14:26:49.296Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "68b38a9b-9c00-472b-807a-478cd8a41c69",
@@ -416,7 +456,9 @@
     "createdAt": "2026-10-15T14:06:45.724Z",
     "updatedAt": "2026-10-15T14:18:12.158Z",
     "startedAt": "2026-10-15T14:06:47.030Z",
-    "completedAt": "2026-10-15T14:17:18.893Z"
+    "completedAt": "2026-10-15T14:17:18.893Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "7c4720bd-823b-4314-a257-0d10dc5feeaf",
@@ -436,7 +478,9 @@
     "createdAt": "2026-10-14T21:48:52.736Z",
     "updatedAt": "2026-10-14T21:54:39.244Z",
     "startedAt": "2026-10-14T21:48:58.548Z",
-    "completedAt": "2026-10-14T21:54:39.233Z"
+    "completedAt": "2026-10-14T21:54:39.233Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "d447cc59-9462-4f9f-af57-9595310ec017",
@@ -456,7 +500,9 @@
     "createdAt": "2026-10-14T20:40:39.507Z",
     "updatedAt": "2026-10-14T20:56:51.937Z",
     "startedAt": "2026-10-14T20:40:39.865Z",
-    "completedAt": "2026-10-14T20:51:39.004Z"
+    "completedAt": "2026-10-14T20:51:39.004Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "24a8e7f8-17de-4367-8594-c9974e2d212b",
@@ -475,7 +521,9 @@
     "room": "Consultório 1",
     "createdAt": "2026-10-14T20:13:05.401Z",
     "updatedAt": "2026-10-14T20:35:57.478Z",
-    "completedAt": "2026-10-14T20:35:57.470Z"
+    "completedAt": "2026-10-14T20:35:57.470Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "62b74971-a990-40a8-855b-4a76df503b7c",
@@ -495,7 +543,9 @@
     "createdAt": "2026-10-14T15:43:40.530Z",
     "updatedAt": "2026-10-14T15:52:43.774Z",
     "startedAt": "2026-10-14T15:43:40.834Z",
-    "completedAt": "2026-10-14T15:52:43.765Z"
+    "completedAt": "2026-10-14T15:52:43.765Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "2a2f3054-cdf0-44aa-94af-4d0b9550818b",
@@ -515,7 +565,9 @@
     "createdAt": "2026-10-14T15:34:07.214Z",
     "updatedAt": "2026-10-14T15:41:38.380Z",
     "startedAt": "2026-10-14T15:34:07.602Z",
-    "completedAt": "2026-10-14T15:41:26.187Z"
+    "completedAt": "2026-10-14T15:41:26.187Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "d47a3c63-16a0-4eaa-9ded-e51ef675f0f8",
@@ -535,7 +587,9 @@
     "createdAt": "2026-10-10T20:49:27.599Z",
     "updatedAt": "2026-10-10T21:00:59.083Z",
     "startedAt": "2026-10-10T20:49:27.839Z",
-    "completedAt": "2026-10-10T20:57:31.436Z"
+    "completedAt": "2026-10-10T20:57:31.436Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "b5a2508b-bdf2-4298-a2f5-3a65990112a7",
@@ -554,7 +608,9 @@
     "room": "Consultório 1",
     "createdAt": "2026-10-10T20:42:08.780Z",
     "updatedAt": "2026-10-10T20:47:55.079Z",
-    "completedAt": "2026-10-10T20:45:51.114Z"
+    "completedAt": "2026-10-10T20:45:51.114Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "376a5b65-464d-4d04-a23a-5b0f166d84f4",
@@ -574,7 +630,9 @@
     "createdAt": "2026-10-10T20:33:53.173Z",
     "updatedAt": "2026-10-10T20:38:01.754Z",
     "startedAt": "2026-10-10T20:33:53.528Z",
-    "completedAt": "2026-10-10T20:38:01.746Z"
+    "completedAt": "2026-10-10T20:38:01.746Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "9effebd6-e567-43be-bd85-14e3c0e2a7d6",
@@ -594,7 +652,9 @@
     "createdAt": "2026-10-10T20:27:23.493Z",
     "updatedAt": "2026-10-10T20:31:43.587Z",
     "startedAt": "2026-10-10T20:27:23.733Z",
-    "completedAt": "2026-10-10T20:31:37.723Z"
+    "completedAt": "2026-10-10T20:31:37.723Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "ea35bb67-72ab-4bec-b3f7-20a302e29d4e",
@@ -613,7 +673,9 @@
     "room": "Consultório 1",
     "createdAt": "2026-10-10T20:19:37.820Z",
     "updatedAt": "2026-10-10T20:26:24.371Z",
-    "completedAt": "2026-10-10T20:24:44.871Z"
+    "completedAt": "2026-10-10T20:24:44.871Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-rec-b788e9cd-8a70-4413-a643-74abead2ed50",
@@ -632,7 +694,9 @@
     "notes": "Exame de refração para direção e estudos",
     "room": "Consultório 1",
     "createdAt": "2026-09-05T08:10:36.060Z",
-    "updatedAt": "2026-09-05T08:10:36.060Z"
+    "updatedAt": "2026-09-05T08:10:36.060Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-rec-290c7900-33b0-4f82-b3b1-6bee5b58c8a0",
@@ -651,7 +715,9 @@
     "notes": "Troca de óculos de leitura e visão computacional",
     "room": "Consultório 1",
     "createdAt": "2026-09-05T09:00:46.920Z",
-    "updatedAt": "2026-09-05T09:00:46.920Z"
+    "updatedAt": "2026-09-05T09:00:46.920Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-rec-d0a4662c-f285-47ce-b784-850d14a5b2e0",
@@ -670,7 +736,9 @@
     "notes": "Astigmatismo miópico moderado",
     "room": "Consultório 1",
     "createdAt": "2026-09-05T09:31:50.795Z",
-    "updatedAt": "2026-09-05T09:31:50.795Z"
+    "updatedAt": "2026-09-05T09:31:50.795Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-rec-caf37cb8-0da4-45a5-be3e-68afbc55d900",
@@ -689,7 +757,9 @@
     "notes": "Presbiopia e hipermetropia",
     "room": "Consultório 1",
     "createdAt": "2026-09-05T10:20:59.540Z",
-    "updatedAt": "2026-09-05T10:20:59.540Z"
+    "updatedAt": "2026-09-05T10:20:59.540Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-rec-08d90c8b-fcdb-460e-b6d4-99b740042dd0",
@@ -708,7 +778,9 @@
     "notes": "Miopia de estudante universitário",
     "room": "Consultório 1",
     "createdAt": "2026-09-05T10:22:03.000Z",
-    "updatedAt": "2026-09-05T10:22:03.000Z"
+    "updatedAt": "2026-09-05T10:22:03.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-rec-ebeceff-1ea4-4de8-829e-a20c3c760090",
@@ -727,7 +799,9 @@
     "notes": "Presbiopia e astigmatismo leve",
     "room": "Consultório 1",
     "createdAt": "2026-09-05T11:41:22.490Z",
-    "updatedAt": "2026-09-05T11:41:22.490Z"
+    "updatedAt": "2026-09-05T11:41:22.490Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-01",
@@ -746,7 +820,9 @@
     "notes": "Consulta agendada",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T08:00:00.000Z",
-    "updatedAt": "2026-09-12T08:00:00.000Z"
+    "updatedAt": "2026-09-12T08:00:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-02",
@@ -765,7 +841,9 @@
     "notes": "Consulta agendada",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T08:03:00.000Z",
-    "updatedAt": "2026-09-12T08:03:00.000Z"
+    "updatedAt": "2026-09-12T08:03:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-03",
@@ -784,7 +862,9 @@
     "notes": "Consulta agendada",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T08:06:00.000Z",
-    "updatedAt": "2026-09-12T08:06:00.000Z"
+    "updatedAt": "2026-09-12T08:06:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-04",
@@ -803,7 +883,9 @@
     "notes": "Consulta agendada",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T08:09:00.000Z",
-    "updatedAt": "2026-09-12T08:09:00.000Z"
+    "updatedAt": "2026-09-12T08:09:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-05",
@@ -822,7 +904,9 @@
     "notes": "Consulta agendada",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T08:17:00.000Z",
-    "updatedAt": "2026-09-12T08:17:00.000Z"
+    "updatedAt": "2026-09-12T08:17:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-06",
@@ -841,7 +925,9 @@
     "notes": "Consulta agendada",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T08:22:00.000Z",
-    "updatedAt": "2026-09-12T08:22:00.000Z"
+    "updatedAt": "2026-09-12T08:22:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-rec-eb01d056-630d-452f-b6f4-50bb6e0c5ea7",
@@ -859,7 +945,9 @@
     "notes": "Consulta Oftalmológica / Refração - Atendimento das 08:19",
     "room": "Consultório 1",
     "createdAt": "2026-09-18T12:19:05.210Z",
-    "updatedAt": "2026-09-18T12:27:29.919Z"
+    "updatedAt": "2026-09-18T12:27:29.919Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-07",
@@ -878,7 +966,9 @@
     "notes": "Consulta agendada",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T08:55:00.000Z",
-    "updatedAt": "2026-09-12T08:55:00.000Z"
+    "updatedAt": "2026-09-12T08:55:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-08",
@@ -897,7 +987,9 @@
     "notes": "Consulta agendada",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T08:58:00.000Z",
-    "updatedAt": "2026-09-12T08:58:00.000Z"
+    "updatedAt": "2026-09-12T08:58:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-09",
@@ -916,7 +1008,9 @@
     "notes": "Consulta agendada",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T09:00:00.000Z",
-    "updatedAt": "2026-09-12T09:00:00.000Z"
+    "updatedAt": "2026-09-12T09:00:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-10",
@@ -935,7 +1029,9 @@
     "notes": "Consulta agendada",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T09:03:00.000Z",
-    "updatedAt": "2026-09-12T09:03:00.000Z"
+    "updatedAt": "2026-09-12T09:03:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "25cb6daa-7b45-4223-83dd-c9eb18d31a86",
@@ -955,7 +1051,9 @@
     "createdAt": "2026-10-10T13:05:59.217Z",
     "updatedAt": "2026-10-10T13:14:34.216Z",
     "startedAt": "2026-10-10T13:06:07.207Z",
-    "completedAt": "2026-10-10T13:14:34.207Z"
+    "completedAt": "2026-10-10T13:14:34.207Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-rec-dcbde17f-cf07-4ff6-8460-cc7a16573aa2",
@@ -974,7 +1072,9 @@
     "notes": "Presbiopia e queixa de fadiga visual",
     "room": "Consultório 1",
     "createdAt": "2026-09-04T12:47:44.495Z",
-    "updatedAt": "2026-09-09T19:09:34.766Z"
+    "updatedAt": "2026-09-09T19:09:34.766Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-11",
@@ -993,7 +1093,9 @@
     "notes": "Consulta agendada",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T09:15:00.000Z",
-    "updatedAt": "2026-09-12T09:15:00.000Z"
+    "updatedAt": "2026-09-12T09:15:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-12",
@@ -1012,7 +1114,9 @@
     "notes": "Filha do Eliezer",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T09:18:00.000Z",
-    "updatedAt": "2026-09-12T09:18:00.000Z"
+    "updatedAt": "2026-09-12T09:18:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-13",
@@ -1031,7 +1135,9 @@
     "notes": "Consulta agendada",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T09:21:00.000Z",
-    "updatedAt": "2026-09-12T09:21:00.000Z"
+    "updatedAt": "2026-09-12T09:21:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-rec-f3f7d16e-95f6-4d8f-8947-0ee9241c10e1",
@@ -1049,7 +1155,9 @@
     "notes": "Consulta Oftalmológica / Refração - Atendimento das 09:24",
     "room": "Consultório 1",
     "createdAt": "2026-09-18T13:24:38.783Z",
-    "updatedAt": "2026-09-18T13:36:59.531Z"
+    "updatedAt": "2026-09-18T13:36:59.531Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-14",
@@ -1068,7 +1176,9 @@
     "notes": "Consulta agendada",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T09:30:00.000Z",
-    "updatedAt": "2026-09-12T09:30:00.000Z"
+    "updatedAt": "2026-09-12T09:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-rec-4e88c27c-dbd0-4042-8d1c-9212c4d2e290",
@@ -1087,7 +1197,9 @@
     "notes": "Exame de refração infantil / triagem",
     "room": "Consultório 1",
     "createdAt": "2026-09-04T13:39:03.173Z",
-    "updatedAt": "2026-09-09T13:54:13.527Z"
+    "updatedAt": "2026-09-09T13:54:13.527Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "7e1c7d23-d287-4cbd-a0cd-c952df2948bf",
@@ -1108,7 +1220,9 @@
     "updatedAt": "2026-10-10T14:06:18.495Z",
     "startedAt": "2026-10-10T13:57:18.411Z",
     "patientDocument": "10995660107",
-    "completedAt": "2026-10-10T14:04:44.368Z"
+    "completedAt": "2026-10-10T14:04:44.368Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-15",
@@ -1127,7 +1241,9 @@
     "notes": "Esposo da Perla",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T10:00:00.000Z",
-    "updatedAt": "2026-09-12T10:00:00.000Z"
+    "updatedAt": "2026-09-12T10:00:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-16",
@@ -1146,7 +1262,9 @@
     "notes": "Consulta agendada",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T10:03:00.000Z",
-    "updatedAt": "2026-09-12T10:03:00.000Z"
+    "updatedAt": "2026-09-12T10:03:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-17",
@@ -1165,7 +1283,9 @@
     "notes": "Consulta agendada",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T10:06:00.000Z",
-    "updatedAt": "2026-09-12T10:06:00.000Z"
+    "updatedAt": "2026-09-12T10:06:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "80191af5-6cb7-4bd4-899c-d03ea74318f2",
@@ -1185,7 +1305,9 @@
     "createdAt": "2026-10-10T14:07:29.459Z",
     "updatedAt": "2026-10-10T14:27:17.902Z",
     "startedAt": "2026-10-10T14:07:29.571Z",
-    "completedAt": "2026-10-10T14:24:18.642Z"
+    "completedAt": "2026-10-10T14:24:18.642Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-18",
@@ -1204,7 +1326,9 @@
     "notes": "Consulta agendada",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T10:09:00.000Z",
-    "updatedAt": "2026-09-12T10:09:00.000Z"
+    "updatedAt": "2026-09-12T10:09:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-19",
@@ -1223,7 +1347,9 @@
     "notes": "Consulta agendada",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T10:12:00.000Z",
-    "updatedAt": "2026-09-12T10:12:00.000Z"
+    "updatedAt": "2026-09-12T10:12:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-20",
@@ -1242,7 +1368,9 @@
     "notes": "Consulta agendada",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T10:15:00.000Z",
-    "updatedAt": "2026-09-12T10:15:00.000Z"
+    "updatedAt": "2026-09-12T10:15:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-21",
@@ -1261,7 +1389,9 @@
     "notes": "Consulta agendada",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T10:27:00.000Z",
-    "updatedAt": "2026-09-12T10:27:00.000Z"
+    "updatedAt": "2026-09-12T10:27:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "d5a7dd49-968d-40f8-829d-d6354498f536",
@@ -1281,7 +1411,9 @@
     "createdAt": "2026-10-10T14:27:55.820Z",
     "updatedAt": "2026-10-10T14:36:33.119Z",
     "startedAt": "2026-10-10T14:27:56.084Z",
-    "completedAt": "2026-10-10T14:32:23.243Z"
+    "completedAt": "2026-10-10T14:32:23.243Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-22",
@@ -1300,7 +1432,9 @@
     "notes": "Filha do Kaique",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T10:30:00.000Z",
-    "updatedAt": "2026-09-12T10:30:00.000Z"
+    "updatedAt": "2026-09-12T10:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "48d9b754-0adb-4e3c-a1e9-385bc0019eee",
@@ -1320,7 +1454,9 @@
     "createdAt": "2026-10-10T16:04:23.430Z",
     "updatedAt": "2026-10-10T16:12:46.842Z",
     "startedAt": "2026-10-10T16:04:25.969Z",
-    "completedAt": "2026-10-10T16:12:25.094Z"
+    "completedAt": "2026-10-10T16:12:25.094Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "104ad68b-6e48-4897-af0d-d2430b297d34",
@@ -1341,7 +1477,9 @@
     "createdAt": "2026-10-10T16:19:31.224Z",
     "updatedAt": "2026-10-10T16:22:00.939Z",
     "startedAt": "2026-10-10T16:19:31.502Z",
-    "completedAt": "2026-10-10T16:21:20.480Z"
+    "completedAt": "2026-10-10T16:21:20.480Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "82b4488f-ecb9-4845-b596-2fe55391174f",
@@ -1361,7 +1499,9 @@
     "createdAt": "2026-10-10T16:23:07.454Z",
     "updatedAt": "2026-10-10T16:31:44.727Z",
     "startedAt": "2026-10-10T16:23:07.712Z",
-    "completedAt": "2026-10-10T16:30:46.065Z"
+    "completedAt": "2026-10-10T16:30:46.065Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-23",
@@ -1380,7 +1520,9 @@
     "notes": "Consulta agendada",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T13:00:00.000Z",
-    "updatedAt": "2026-09-12T13:00:00.000Z"
+    "updatedAt": "2026-09-12T13:00:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-24",
@@ -1399,7 +1541,9 @@
     "notes": "Consulta agendada",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T13:03:00.000Z",
-    "updatedAt": "2026-09-12T13:03:00.000Z"
+    "updatedAt": "2026-09-12T13:03:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-rec-a9347272-0529-4b2d-9633-6c6f396e8a40",
@@ -1418,7 +1562,9 @@
     "notes": "Exame de refração e adaptação",
     "room": "Consultório 1",
     "createdAt": "2026-09-05T17:19:09.550Z",
-    "updatedAt": "2026-09-05T17:19:09.550Z"
+    "updatedAt": "2026-09-05T17:19:09.550Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-25",
@@ -1437,7 +1583,9 @@
     "notes": "Consulta agendada",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T13:30:00.000Z",
-    "updatedAt": "2026-09-12T13:30:00.000Z"
+    "updatedAt": "2026-09-12T13:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "87207112-d033-4925-bb68-4d593642f83f",
@@ -1458,7 +1606,9 @@
     "room": "Consultório 1",
     "createdAt": "2026-10-10T15:56:12.047Z",
     "updatedAt": "2026-10-10T17:34:17.369Z",
-    "completedAt": "2026-10-10T17:34:17.362Z"
+    "completedAt": "2026-10-10T17:34:17.362Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-rec-4b5acbb1-e930-4ae0-8d63-aea1582ffb07",
@@ -1477,7 +1627,9 @@
     "notes": "Há 01 ano com mesmo RX. Usuária de lamotrigina e puran 25mg. Relata queda e cefaleias episódicas.",
     "room": "Consultório 1",
     "createdAt": "2026-09-08T17:48:35.319Z",
-    "updatedAt": "2026-09-08T20:26:33.900Z"
+    "updatedAt": "2026-09-08T20:26:33.900Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-26",
@@ -1496,7 +1648,9 @@
     "notes": "Consulta agendada",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T14:00:00.000Z",
-    "updatedAt": "2026-09-12T14:00:00.000Z"
+    "updatedAt": "2026-09-12T14:00:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "3609a8e4-ecff-4bd1-bd41-f6a30506633f",
@@ -1516,7 +1670,9 @@
     "notes": "",
     "room": "Consultório 1",
     "createdAt": "2026-10-10T15:57:39.123Z",
-    "updatedAt": "2026-10-10T15:57:39.123Z"
+    "updatedAt": "2026-10-10T15:57:39.123Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-27",
@@ -1535,7 +1691,9 @@
     "notes": "Consulta agendada",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T14:03:00.000Z",
-    "updatedAt": "2026-09-12T14:03:00.000Z"
+    "updatedAt": "2026-09-12T14:03:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "524628ec-7601-4d35-aa81-3c4672366240",
@@ -1555,7 +1713,9 @@
     "notes": "",
     "room": "Consultório 1",
     "createdAt": "2026-10-10T15:59:09.427Z",
-    "updatedAt": "2026-10-10T15:59:09.427Z"
+    "updatedAt": "2026-10-10T15:59:09.427Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-28",
@@ -1574,7 +1734,9 @@
     "notes": "Consulta agendada",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T14:06:00.000Z",
-    "updatedAt": "2026-09-12T14:06:00.000Z"
+    "updatedAt": "2026-09-12T14:06:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-29",
@@ -1593,7 +1755,9 @@
     "notes": "Consulta agendada",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T14:09:00.000Z",
-    "updatedAt": "2026-09-12T14:09:00.000Z"
+    "updatedAt": "2026-09-12T14:09:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "e3469aa2-821d-4504-a59a-81a408ec8506",
@@ -1614,7 +1778,9 @@
     "room": "Consultório 1",
     "createdAt": "2026-10-10T16:00:51.261Z",
     "updatedAt": "2026-10-10T19:40:37.912Z",
-    "completedAt": "2026-10-10T19:40:37.904Z"
+    "completedAt": "2026-10-10T19:40:37.904Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "90d8c26a-1080-4b43-ac26-7940cae32441",
@@ -1635,7 +1801,9 @@
     "room": "Consultório 1",
     "createdAt": "2026-10-10T16:02:33.951Z",
     "updatedAt": "2026-10-10T19:28:17.658Z",
-    "completedAt": "2026-10-10T19:27:45.739Z"
+    "completedAt": "2026-10-10T19:27:45.739Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "63dc5094-efcb-451e-8c39-395c18de7fde",
@@ -1655,7 +1823,9 @@
     "createdAt": "2026-10-10T18:22:07.356Z",
     "updatedAt": "2026-10-10T18:27:43.198Z",
     "startedAt": "2026-10-10T18:22:08.898Z",
-    "completedAt": "2026-10-10T18:27:33.091Z"
+    "completedAt": "2026-10-10T18:27:33.091Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-rec-3c7f7025-3194-44eb-a96d-6b1cb7d25315",
@@ -1675,7 +1845,9 @@
     "notes": "Consulta oftalmológica e refração de rotina",
     "room": "Consultório 1",
     "createdAt": "2026-09-08T18:18:36.200Z",
-    "updatedAt": "2026-09-08T18:18:36.200Z"
+    "updatedAt": "2026-09-08T18:18:36.200Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261008_c77aa2",
@@ -1695,7 +1867,9 @@
     "createdAt": "2026-10-08T08:00:00.000Z",
     "updatedAt": "2026-10-08T18:00:00.000Z",
     "startedAt": "2026-10-08T14:30:00.000Z",
-    "completedAt": "2026-10-08T14:30:00.000Z"
+    "completedAt": "2026-10-08T14:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261008_d25315",
@@ -1715,7 +1889,9 @@
     "createdAt": "2026-10-08T08:00:00.000Z",
     "updatedAt": "2026-10-08T18:00:00.000Z",
     "startedAt": "2026-10-08T14:30:00.000Z",
-    "completedAt": "2026-10-08T14:30:00.000Z"
+    "completedAt": "2026-10-08T14:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261007_f28f9e",
@@ -1735,7 +1911,9 @@
     "createdAt": "2026-10-07T08:00:00.000Z",
     "updatedAt": "2026-10-07T18:00:00.000Z",
     "startedAt": "2026-10-07T14:30:00.000Z",
-    "completedAt": "2026-10-07T14:30:00.000Z"
+    "completedAt": "2026-10-07T14:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261007_84fd59",
@@ -1755,7 +1933,9 @@
     "createdAt": "2026-10-07T08:00:00.000Z",
     "updatedAt": "2026-10-07T18:00:00.000Z",
     "startedAt": "2026-10-07T14:30:00.000Z",
-    "completedAt": "2026-10-07T14:30:00.000Z"
+    "completedAt": "2026-10-07T14:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261007_d2e290",
@@ -1775,7 +1955,9 @@
     "createdAt": "2026-10-07T08:00:00.000Z",
     "updatedAt": "2026-10-07T18:00:00.000Z",
     "startedAt": "2026-10-07T14:30:00.000Z",
-    "completedAt": "2026-10-07T14:30:00.000Z"
+    "completedAt": "2026-10-07T14:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261007_573aa2",
@@ -1795,7 +1977,9 @@
     "createdAt": "2026-10-07T08:00:00.000Z",
     "updatedAt": "2026-10-07T18:00:00.000Z",
     "startedAt": "2026-10-07T14:30:00.000Z",
-    "completedAt": "2026-10-07T14:30:00.000Z"
+    "completedAt": "2026-10-07T14:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261007_2ffb07",
@@ -1815,7 +1999,9 @@
     "createdAt": "2026-10-07T08:00:00.000Z",
     "updatedAt": "2026-10-07T18:00:00.000Z",
     "startedAt": "2026-10-07T14:30:00.000Z",
-    "completedAt": "2026-10-07T14:30:00.000Z"
+    "completedAt": "2026-10-07T14:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261007_ca088e",
@@ -1835,7 +2021,9 @@
     "createdAt": "2026-10-07T08:00:00.000Z",
     "updatedAt": "2026-10-07T18:00:00.000Z",
     "startedAt": "2026-10-07T14:30:00.000Z",
-    "completedAt": "2026-10-07T14:30:00.000Z"
+    "completedAt": "2026-10-07T14:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261006_a083e2",
@@ -1855,7 +2043,9 @@
     "createdAt": "2026-10-06T08:00:00.000Z",
     "updatedAt": "2026-10-06T18:00:00.000Z",
     "startedAt": "2026-10-06T14:30:00.000Z",
-    "completedAt": "2026-10-06T14:30:00.000Z"
+    "completedAt": "2026-10-06T14:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261006_55f011",
@@ -1875,7 +2065,9 @@
     "createdAt": "2026-10-06T08:00:00.000Z",
     "updatedAt": "2026-10-06T18:00:00.000Z",
     "startedAt": "2026-10-06T14:30:00.000Z",
-    "completedAt": "2026-10-06T14:30:00.000Z"
+    "completedAt": "2026-10-06T14:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261006_1ce1c7",
@@ -1895,7 +2087,9 @@
     "createdAt": "2026-10-06T08:00:00.000Z",
     "updatedAt": "2026-10-06T18:00:00.000Z",
     "startedAt": "2026-10-06T14:30:00.000Z",
-    "completedAt": "2026-10-06T14:30:00.000Z"
+    "completedAt": "2026-10-06T14:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261006_be285b",
@@ -1915,7 +2109,9 @@
     "createdAt": "2026-10-06T08:00:00.000Z",
     "updatedAt": "2026-10-06T18:00:00.000Z",
     "startedAt": "2026-10-06T14:30:00.000Z",
-    "completedAt": "2026-10-06T14:30:00.000Z"
+    "completedAt": "2026-10-06T14:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261006_d07258",
@@ -1935,7 +2131,9 @@
     "createdAt": "2026-10-06T08:00:00.000Z",
     "updatedAt": "2026-10-06T18:00:00.000Z",
     "startedAt": "2026-10-06T14:30:00.000Z",
-    "completedAt": "2026-10-06T14:30:00.000Z"
+    "completedAt": "2026-10-06T14:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261006_f3d903",
@@ -1955,7 +2153,9 @@
     "createdAt": "2026-10-06T08:00:00.000Z",
     "updatedAt": "2026-10-06T18:00:00.000Z",
     "startedAt": "2026-10-06T14:30:00.000Z",
-    "completedAt": "2026-10-06T14:30:00.000Z"
+    "completedAt": "2026-10-06T14:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261005_711090",
@@ -1975,7 +2175,9 @@
     "createdAt": "2026-10-05T08:00:00.000Z",
     "updatedAt": "2026-10-05T18:00:00.000Z",
     "startedAt": "2026-10-05T14:30:00.000Z",
-    "completedAt": "2026-10-05T14:30:00.000Z"
+    "completedAt": "2026-10-05T14:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261005_0ea324",
@@ -1995,7 +2197,9 @@
     "createdAt": "2026-10-05T08:00:00.000Z",
     "updatedAt": "2026-10-05T18:00:00.000Z",
     "startedAt": "2026-10-05T14:30:00.000Z",
-    "completedAt": "2026-10-05T14:30:00.000Z"
+    "completedAt": "2026-10-05T14:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261002_ee0ac4",
@@ -2015,7 +2219,9 @@
     "createdAt": "2026-10-02T08:00:00.000Z",
     "updatedAt": "2026-10-02T18:00:00.000Z",
     "startedAt": "2026-10-02T14:30:00.000Z",
-    "completedAt": "2026-10-02T14:30:00.000Z"
+    "completedAt": "2026-10-02T14:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261002_1f1dd2",
@@ -2035,7 +2241,9 @@
     "createdAt": "2026-10-02T08:00:00.000Z",
     "updatedAt": "2026-10-02T18:00:00.000Z",
     "startedAt": "2026-10-02T14:30:00.000Z",
-    "completedAt": "2026-10-02T14:30:00.000Z"
+    "completedAt": "2026-10-02T14:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261001_beddc1",
@@ -2055,7 +2263,9 @@
     "createdAt": "2026-10-01T08:00:00.000Z",
     "updatedAt": "2026-10-01T18:00:00.000Z",
     "startedAt": "2026-10-01T14:30:00.000Z",
-    "completedAt": "2026-10-01T14:30:00.000Z"
+    "completedAt": "2026-10-01T14:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261001_af9ffb",
@@ -2075,7 +2285,9 @@
     "createdAt": "2026-10-01T08:00:00.000Z",
     "updatedAt": "2026-10-01T18:00:00.000Z",
     "startedAt": "2026-10-01T14:30:00.000Z",
-    "completedAt": "2026-10-01T14:30:00.000Z"
+    "completedAt": "2026-10-01T14:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-rec-39e695b2-0a56-4f83-b63a-bcbddaf85392",
@@ -2093,7 +2305,9 @@
     "notes": "usuaria de lentes corretivas, Cefaleia frequente, Sensibilidade à luz / Fotofobia, Fadiga visual em telas",
     "room": "Consultório 1",
     "createdAt": "2026-09-18T18:37:16.045Z",
-    "updatedAt": "2026-09-18T18:46:58.131Z"
+    "updatedAt": "2026-09-18T18:46:58.131Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "0c5765fa-4201-440e-85af-395e8d7fdd90",
@@ -2113,7 +2327,9 @@
     "createdAt": "2026-10-10T18:37:04.903Z",
     "updatedAt": "2026-10-10T18:41:52.808Z",
     "startedAt": "2026-10-10T18:37:05.021Z",
-    "completedAt": "2026-10-10T18:41:12.506Z"
+    "completedAt": "2026-10-10T18:41:12.506Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-rec-104b0e68-60aa-454a-aed6-73d49eca088e",
@@ -2132,7 +2348,9 @@
     "notes": "Dificuldade para longe na sala de aula",
     "room": "Consultório 1",
     "createdAt": "2026-09-08T18:34:07.598Z",
-    "updatedAt": "2026-09-08T20:43:42.035Z"
+    "updatedAt": "2026-09-08T20:43:42.035Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "2ab98244-9749-45da-8cab-13eed1506824",
@@ -2152,7 +2370,9 @@
     "createdAt": "2026-10-10T18:43:04.913Z",
     "updatedAt": "2026-10-10T18:53:53.167Z",
     "startedAt": "2026-10-10T18:43:05.187Z",
-    "completedAt": "2026-10-10T18:47:15.519Z"
+    "completedAt": "2026-10-10T18:47:15.519Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-rec-33f6f16d-add7-4e59-8522-8a5f9b345bfd",
@@ -2170,7 +2390,9 @@
     "notes": "rotina - hipertensão gestacional há 21 anos",
     "room": "Consultório 1",
     "createdAt": "2026-09-18T18:48:58.287Z",
-    "updatedAt": "2026-09-18T19:25:18.526Z"
+    "updatedAt": "2026-09-18T19:25:18.526Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "369c0d0a-f1c0-4dfe-9d41-cd1ecfc5351a",
@@ -2190,7 +2412,9 @@
     "createdAt": "2026-10-10T18:54:38.476Z",
     "updatedAt": "2026-10-10T19:01:19.502Z",
     "startedAt": "2026-10-10T18:54:38.756Z",
-    "completedAt": "2026-10-10T19:00:32.669Z"
+    "completedAt": "2026-10-10T19:00:32.669Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-30",
@@ -2209,7 +2433,9 @@
     "notes": "Filho da Juliana",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T15:00:00.000Z",
-    "updatedAt": "2026-09-12T15:00:00.000Z"
+    "updatedAt": "2026-09-12T15:00:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-31",
@@ -2228,7 +2454,9 @@
     "notes": "Consulta agendada",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T15:03:00.000Z",
-    "updatedAt": "2026-09-12T15:03:00.000Z"
+    "updatedAt": "2026-09-12T15:03:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "d4a6345d-dcce-4898-8161-66b636aeaab8",
@@ -2248,7 +2476,9 @@
     "createdAt": "2026-10-10T19:03:35.692Z",
     "updatedAt": "2026-10-10T19:17:09.012Z",
     "startedAt": "2026-10-10T19:03:47.955Z",
-    "completedAt": "2026-10-10T19:13:40.090Z"
+    "completedAt": "2026-10-10T19:13:40.090Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-32",
@@ -2267,7 +2497,9 @@
     "notes": "Consulta agendada",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T15:06:00.000Z",
-    "updatedAt": "2026-09-12T15:06:00.000Z"
+    "updatedAt": "2026-09-12T15:06:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-33",
@@ -2286,7 +2518,9 @@
     "notes": "Mãe do Samuel",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T15:10:00.000Z",
-    "updatedAt": "2026-09-12T15:10:00.000Z"
+    "updatedAt": "2026-09-12T15:10:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261007_6526b5",
@@ -2306,7 +2540,9 @@
     "createdAt": "2026-10-07T08:00:00.000Z",
     "updatedAt": "2026-10-07T18:00:00.000Z",
     "startedAt": "2026-10-07T15:30:00.000Z",
-    "completedAt": "2026-10-07T15:30:00.000Z"
+    "completedAt": "2026-10-07T15:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261007_32d5b9",
@@ -2326,7 +2562,9 @@
     "createdAt": "2026-10-07T08:00:00.000Z",
     "updatedAt": "2026-10-07T18:00:00.000Z",
     "startedAt": "2026-10-07T15:30:00.000Z",
-    "completedAt": "2026-10-07T15:30:00.000Z"
+    "completedAt": "2026-10-07T15:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261007_12f93a",
@@ -2346,7 +2584,9 @@
     "createdAt": "2026-10-07T08:00:00.000Z",
     "updatedAt": "2026-10-07T18:00:00.000Z",
     "startedAt": "2026-10-07T15:30:00.000Z",
-    "completedAt": "2026-10-07T15:30:00.000Z"
+    "completedAt": "2026-10-07T15:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261007_c070d8",
@@ -2366,7 +2606,9 @@
     "createdAt": "2026-10-07T08:00:00.000Z",
     "updatedAt": "2026-10-07T18:00:00.000Z",
     "startedAt": "2026-10-07T15:30:00.000Z",
-    "completedAt": "2026-10-07T15:30:00.000Z"
+    "completedAt": "2026-10-07T15:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261007_777fdb",
@@ -2386,7 +2628,9 @@
     "createdAt": "2026-10-07T08:00:00.000Z",
     "updatedAt": "2026-10-07T18:00:00.000Z",
     "startedAt": "2026-10-07T15:30:00.000Z",
-    "completedAt": "2026-10-07T15:30:00.000Z"
+    "completedAt": "2026-10-07T15:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261007_c94bda",
@@ -2406,7 +2650,9 @@
     "createdAt": "2026-10-07T08:00:00.000Z",
     "updatedAt": "2026-10-07T18:00:00.000Z",
     "startedAt": "2026-10-07T15:30:00.000Z",
-    "completedAt": "2026-10-07T15:30:00.000Z"
+    "completedAt": "2026-10-07T15:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261007_c774d3",
@@ -2426,7 +2672,9 @@
     "createdAt": "2026-10-07T08:00:00.000Z",
     "updatedAt": "2026-10-07T18:00:00.000Z",
     "startedAt": "2026-10-07T15:30:00.000Z",
-    "completedAt": "2026-10-07T15:30:00.000Z"
+    "completedAt": "2026-10-07T15:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261007_28769f",
@@ -2446,7 +2694,9 @@
     "createdAt": "2026-10-07T08:00:00.000Z",
     "updatedAt": "2026-10-07T18:00:00.000Z",
     "startedAt": "2026-10-07T15:30:00.000Z",
-    "completedAt": "2026-10-07T15:30:00.000Z"
+    "completedAt": "2026-10-07T15:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261007_b0286c",
@@ -2466,7 +2716,9 @@
     "createdAt": "2026-10-07T08:00:00.000Z",
     "updatedAt": "2026-10-07T18:00:00.000Z",
     "startedAt": "2026-10-07T15:30:00.000Z",
-    "completedAt": "2026-10-07T15:30:00.000Z"
+    "completedAt": "2026-10-07T15:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261007_1ca763",
@@ -2486,7 +2738,9 @@
     "createdAt": "2026-10-07T08:00:00.000Z",
     "updatedAt": "2026-10-07T18:00:00.000Z",
     "startedAt": "2026-10-07T15:30:00.000Z",
-    "completedAt": "2026-10-07T15:30:00.000Z"
+    "completedAt": "2026-10-07T15:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261007_cded69",
@@ -2506,7 +2760,9 @@
     "createdAt": "2026-10-07T08:00:00.000Z",
     "updatedAt": "2026-10-07T18:00:00.000Z",
     "startedAt": "2026-10-07T15:30:00.000Z",
-    "completedAt": "2026-10-07T15:30:00.000Z"
+    "completedAt": "2026-10-07T15:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261007_22393c",
@@ -2526,7 +2782,9 @@
     "createdAt": "2026-10-07T08:00:00.000Z",
     "updatedAt": "2026-10-07T18:00:00.000Z",
     "startedAt": "2026-10-07T15:30:00.000Z",
-    "completedAt": "2026-10-07T15:30:00.000Z"
+    "completedAt": "2026-10-07T15:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261007_7246f5",
@@ -2546,7 +2804,9 @@
     "createdAt": "2026-10-07T08:00:00.000Z",
     "updatedAt": "2026-10-07T18:00:00.000Z",
     "startedAt": "2026-10-07T15:30:00.000Z",
-    "completedAt": "2026-10-07T15:30:00.000Z"
+    "completedAt": "2026-10-07T15:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261006_e53e0d",
@@ -2566,7 +2826,9 @@
     "createdAt": "2026-10-06T08:00:00.000Z",
     "updatedAt": "2026-10-06T18:00:00.000Z",
     "startedAt": "2026-10-06T15:30:00.000Z",
-    "completedAt": "2026-10-06T15:30:00.000Z"
+    "completedAt": "2026-10-06T15:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261006_4d7070",
@@ -2586,7 +2848,9 @@
     "createdAt": "2026-10-06T08:00:00.000Z",
     "updatedAt": "2026-10-06T18:00:00.000Z",
     "startedAt": "2026-10-06T15:30:00.000Z",
-    "completedAt": "2026-10-06T15:30:00.000Z"
+    "completedAt": "2026-10-06T15:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261006_da0d1a",
@@ -2606,7 +2870,9 @@
     "createdAt": "2026-10-06T08:00:00.000Z",
     "updatedAt": "2026-10-06T18:00:00.000Z",
     "startedAt": "2026-10-06T15:30:00.000Z",
-    "completedAt": "2026-10-06T15:30:00.000Z"
+    "completedAt": "2026-10-06T15:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261006_062135",
@@ -2626,7 +2892,9 @@
     "createdAt": "2026-10-06T08:00:00.000Z",
     "updatedAt": "2026-10-06T18:00:00.000Z",
     "startedAt": "2026-10-06T15:30:00.000Z",
-    "completedAt": "2026-10-06T15:30:00.000Z"
+    "completedAt": "2026-10-06T15:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261006_f27207",
@@ -2646,7 +2914,9 @@
     "createdAt": "2026-10-06T08:00:00.000Z",
     "updatedAt": "2026-10-06T18:00:00.000Z",
     "startedAt": "2026-10-06T15:30:00.000Z",
-    "completedAt": "2026-10-06T15:30:00.000Z"
+    "completedAt": "2026-10-06T15:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261006_1d94dd",
@@ -2666,7 +2936,9 @@
     "createdAt": "2026-10-06T08:00:00.000Z",
     "updatedAt": "2026-10-06T18:00:00.000Z",
     "startedAt": "2026-10-06T15:30:00.000Z",
-    "completedAt": "2026-10-06T15:30:00.000Z"
+    "completedAt": "2026-10-06T15:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261006_826604",
@@ -2686,7 +2958,9 @@
     "createdAt": "2026-10-06T08:00:00.000Z",
     "updatedAt": "2026-10-06T18:00:00.000Z",
     "startedAt": "2026-10-06T15:30:00.000Z",
-    "completedAt": "2026-10-06T15:30:00.000Z"
+    "completedAt": "2026-10-06T15:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261006_36b045",
@@ -2706,7 +2980,9 @@
     "createdAt": "2026-10-06T08:00:00.000Z",
     "updatedAt": "2026-10-06T18:00:00.000Z",
     "startedAt": "2026-10-06T15:30:00.000Z",
-    "completedAt": "2026-10-06T15:30:00.000Z"
+    "completedAt": "2026-10-06T15:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261006_9e1ca2",
@@ -2726,7 +3002,9 @@
     "createdAt": "2026-10-06T08:00:00.000Z",
     "updatedAt": "2026-10-06T18:00:00.000Z",
     "startedAt": "2026-10-06T15:30:00.000Z",
-    "completedAt": "2026-10-06T15:30:00.000Z"
+    "completedAt": "2026-10-06T15:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261006_97cef7",
@@ -2746,7 +3024,9 @@
     "createdAt": "2026-10-06T08:00:00.000Z",
     "updatedAt": "2026-10-06T18:00:00.000Z",
     "startedAt": "2026-10-06T15:30:00.000Z",
-    "completedAt": "2026-10-06T15:30:00.000Z"
+    "completedAt": "2026-10-06T15:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261006_18254a",
@@ -2766,7 +3046,9 @@
     "createdAt": "2026-10-06T08:00:00.000Z",
     "updatedAt": "2026-10-06T18:00:00.000Z",
     "startedAt": "2026-10-06T15:30:00.000Z",
-    "completedAt": "2026-10-06T15:30:00.000Z"
+    "completedAt": "2026-10-06T15:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261009_mvg671",
@@ -2786,7 +3068,9 @@
     "createdAt": "2026-10-09T08:00:00.000Z",
     "updatedAt": "2026-10-09T18:00:00.000Z",
     "startedAt": "2026-10-09T15:30:00.000Z",
-    "completedAt": "2026-10-09T15:30:00.000Z"
+    "completedAt": "2026-10-09T15:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261009_w8edp8",
@@ -2806,7 +3090,9 @@
     "createdAt": "2026-10-09T08:00:00.000Z",
     "updatedAt": "2026-10-09T18:00:00.000Z",
     "startedAt": "2026-10-09T15:30:00.000Z",
-    "completedAt": "2026-10-09T15:30:00.000Z"
+    "completedAt": "2026-10-09T15:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt_ivs_20261009_450998",
@@ -2826,7 +3112,9 @@
     "createdAt": "2026-10-09T08:00:00.000Z",
     "updatedAt": "2026-10-09T18:00:00.000Z",
     "startedAt": "2026-10-09T15:30:00.000Z",
-    "completedAt": "2026-10-09T15:30:00.000Z"
+    "completedAt": "2026-10-09T15:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-34",
@@ -2845,7 +3133,9 @@
     "notes": "Consulta agendada",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T16:00:00.000Z",
-    "updatedAt": "2026-09-12T16:00:00.000Z"
+    "updatedAt": "2026-09-12T16:00:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "2e60e7b0-4bbc-4b4c-ab41-c8db003b2b04",
@@ -2865,7 +3155,9 @@
     "createdAt": "2026-10-09T20:23:34.569Z",
     "updatedAt": "2026-10-09T20:28:32.179Z",
     "startedAt": "2026-10-09T20:28:03.774Z",
-    "completedAt": "2026-10-09T20:28:32.175Z"
+    "completedAt": "2026-10-09T20:28:32.175Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-rec-a84131bd-ba44-47ca-8d71-bff029c6be22",
@@ -2883,7 +3175,9 @@
     "notes": "usuaria de lentes corretivas, alergica a penicilina, Cefaleia frequente",
     "room": "Consultório 1",
     "createdAt": "2026-09-18T20:25:01.291Z",
-    "updatedAt": "2026-09-18T20:47:37.280Z"
+    "updatedAt": "2026-09-18T20:47:37.280Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-35",
@@ -2902,7 +3196,9 @@
     "notes": "[PENDÊNCIA DE HORÁRIO] PENDÊNCIA DE HORÁRIO / REAGENDAMENTO",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T16:30:00.000Z",
-    "updatedAt": "2026-09-12T16:30:00.000Z"
+    "updatedAt": "2026-09-12T16:30:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-36",
@@ -2921,7 +3217,9 @@
     "notes": "Consulta agendada",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T17:00:00.000Z",
-    "updatedAt": "2026-09-12T17:00:00.000Z"
+    "updatedAt": "2026-09-12T17:00:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-12092026-37",
@@ -2940,7 +3238,9 @@
     "notes": "Filha da Manu Priscila",
     "room": "Consultório 1",
     "createdAt": "2026-09-12T17:03:00.000Z",
-    "updatedAt": "2026-09-12T17:03:00.000Z"
+    "updatedAt": "2026-09-12T17:03:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "c746b770-1ae8-4433-83b8-e59a51c91704",
@@ -2960,7 +3260,9 @@
     "createdAt": "2026-10-09T21:04:41.536Z",
     "updatedAt": "2026-10-09T21:11:18.612Z",
     "startedAt": "2026-10-09T21:04:41.672Z",
-    "completedAt": "2026-10-09T21:11:12.077Z"
+    "completedAt": "2026-10-09T21:11:12.077Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-rec-223c8cf2-32ba-42bf-8d46-5b6861c77aa2",
@@ -2979,7 +3281,9 @@
     "notes": "Avaliação refrativa e controle",
     "room": "Consultório 1",
     "createdAt": "2026-09-08T21:17:56.264Z",
-    "updatedAt": "2026-09-08T21:25:45.841Z"
+    "updatedAt": "2026-09-08T21:25:45.841Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "e85133c9-7933-4a0b-98bd-02c74b408ae3",
@@ -2999,7 +3303,9 @@
     "createdAt": "2026-10-14T15:11:55.545Z",
     "updatedAt": "2026-10-14T15:19:47.145Z",
     "startedAt": "2026-10-14T15:11:57.281Z",
-    "completedAt": "2026-10-14T15:19:47.139Z"
+    "completedAt": "2026-10-14T15:19:47.139Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "60a62231-022d-48aa-81e7-8501a7a681fb",
@@ -3019,7 +3325,9 @@
     "createdAt": "2026-10-13T17:49:56.575Z",
     "updatedAt": "2026-10-13T17:58:18.480Z",
     "startedAt": "2026-10-13T17:50:00.498Z",
-    "completedAt": "2026-10-13T17:58:18.456Z"
+    "completedAt": "2026-10-13T17:58:18.456Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "eb24a042-589a-42da-8569-0c4c0d20e748",
@@ -3039,7 +3347,9 @@
     "createdAt": "2026-10-13T17:59:44.749Z",
     "updatedAt": "2026-10-13T18:05:46.275Z",
     "startedAt": "2026-10-13T17:59:45.223Z",
-    "completedAt": "2026-10-13T18:05:46.264Z"
+    "completedAt": "2026-10-13T18:05:46.264Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "1834620d-2160-4a4e-a5ac-621f979f4c12",
@@ -3059,7 +3369,9 @@
     "createdAt": "2026-10-13T18:52:26.324Z",
     "updatedAt": "2026-10-13T18:56:54.882Z",
     "startedAt": "2026-10-13T18:52:26.442Z",
-    "completedAt": "2026-10-13T18:56:54.871Z"
+    "completedAt": "2026-10-13T18:56:54.871Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "09727d23-2433-4fc7-bf7d-b58b6bc0a6e2",
@@ -3079,7 +3391,9 @@
     "createdAt": "2026-10-13T18:57:46.492Z",
     "updatedAt": "2026-10-13T19:03:51.541Z",
     "startedAt": "2026-10-13T18:57:46.760Z",
-    "completedAt": "2026-10-13T19:02:41.465Z"
+    "completedAt": "2026-10-13T19:02:41.465Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "a323f454-d40e-41b7-b888-d03d16bf400f",
@@ -3099,7 +3413,9 @@
     "createdAt": "2026-10-13T19:05:01.155Z",
     "updatedAt": "2026-10-13T19:15:06.910Z",
     "startedAt": "2026-10-13T19:05:01.270Z",
-    "completedAt": "2026-10-13T19:12:07.775Z"
+    "completedAt": "2026-10-13T19:12:07.775Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "1d6e482e-05ee-482c-b389-00467a2e7ffb",
@@ -3119,7 +3435,9 @@
     "createdAt": "2026-10-13T19:19:53.186Z",
     "updatedAt": "2026-10-13T19:52:14.580Z",
     "startedAt": "2026-10-13T19:19:53.612Z",
-    "completedAt": "2026-10-13T19:29:44.819Z"
+    "completedAt": "2026-10-13T19:29:44.819Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "c50796f4-542a-4457-9625-6fd6931c249b",
@@ -3139,7 +3457,9 @@
     "createdAt": "2026-10-13T19:53:07.008Z",
     "updatedAt": "2026-10-13T20:06:06.279Z",
     "startedAt": "2026-10-13T19:53:07.423Z",
-    "completedAt": "2026-10-13T19:59:31.513Z"
+    "completedAt": "2026-10-13T19:59:31.513Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "582c89cc-87a7-4d0c-a5e1-38ed3fcc6f72",
@@ -3159,7 +3479,9 @@
     "createdAt": "2026-10-15T20:46:12.049Z",
     "updatedAt": "2026-10-15T20:53:39.139Z",
     "startedAt": "2026-10-15T20:46:17.192Z",
-    "completedAt": "2026-10-15T20:52:45.099Z"
+    "completedAt": "2026-10-15T20:52:45.099Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "0962e84c-7634-42c2-91b0-e795a7e0fe78",
@@ -3179,7 +3501,9 @@
     "notes": "",
     "room": "Consultório 1",
     "createdAt": "2026-10-10T15:14:45.670Z",
-    "updatedAt": "2026-10-10T15:14:45.670Z"
+    "updatedAt": "2026-10-10T15:14:45.670Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "e28d5bda-7559-4fd8-9ad8-9f830c0ef587",
@@ -3199,7 +3523,9 @@
     "notes": "",
     "room": "Consultório 1",
     "createdAt": "2026-09-28T18:22:26.287Z",
-    "updatedAt": "2026-09-28T18:22:30.398Z"
+    "updatedAt": "2026-09-28T18:22:30.398Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "b2571075-42ba-415f-a582-bf5b6221ed35",
@@ -3219,7 +3545,9 @@
     "notes": "",
     "room": "Consultório 1",
     "createdAt": "2026-09-28T18:23:25.970Z",
-    "updatedAt": "2026-09-28T18:23:29.543Z"
+    "updatedAt": "2026-09-28T18:23:29.543Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "95b52aa0-73f3-468a-b678-46c17e2e362b",
@@ -3239,7 +3567,9 @@
     "notes": "",
     "room": "Consultório 1",
     "createdAt": "2026-09-28T18:23:53.532Z",
-    "updatedAt": "2026-09-28T18:24:29.928Z"
+    "updatedAt": "2026-09-28T18:24:29.928Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "c9dc0e32-7c9e-4a2f-92dc-4823fd98b40f",
@@ -3259,7 +3589,9 @@
     "notes": "",
     "room": "Consultório 1",
     "createdAt": "2026-10-10T15:40:13.154Z",
-    "updatedAt": "2026-10-10T15:40:13.154Z"
+    "updatedAt": "2026-10-10T15:40:13.154Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "2a10e5f6-8581-446d-a646-c793e4a04055",
@@ -3279,7 +3611,9 @@
     "notes": "",
     "room": "Consultório 1",
     "createdAt": "2026-09-28T18:24:18.818Z",
-    "updatedAt": "2026-09-28T18:24:29.632Z"
+    "updatedAt": "2026-09-28T18:24:29.632Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "d3358c09-726b-4d4f-8e8a-760f2b977e1f",
@@ -3299,7 +3633,9 @@
     "createdAt": "2026-09-26T19:38:48.437Z",
     "updatedAt": "2026-09-26T19:44:49.473Z",
     "startedAt": "2026-09-26T19:38:48.636Z",
-    "completedAt": "2026-09-26T19:44:49.471Z"
+    "completedAt": "2026-09-26T19:44:49.471Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "42ac5126-bc66-4ba4-8177-f258e1c7c5bd",
@@ -3318,7 +3654,9 @@
     "room": "Consultório 1",
     "createdAt": "2026-09-26T19:46:28.087Z",
     "updatedAt": "2026-09-26T19:46:28.290Z",
-    "startedAt": "2026-09-26T19:46:28.290Z"
+    "startedAt": "2026-09-26T19:46:28.290Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "5e1d899d-f0e4-4130-85fe-144791f17a11",
@@ -3338,7 +3676,9 @@
     "notes": "Paciente cadastrado na recepção.",
     "room": "Consultório 1",
     "createdAt": "2026-10-17T14:47:25.861Z",
-    "updatedAt": "2026-10-17T14:47:25.861Z"
+    "updatedAt": "2026-10-17T14:47:25.861Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "7da7c5cd-2b55-475e-815f-0125de7b2468",
@@ -3356,7 +3696,9 @@
     "notes": "Paciente cadastrado na recepção.",
     "room": "Consultório 1",
     "createdAt": "2026-10-17T15:21:37.860Z",
-    "updatedAt": "2026-10-17T15:21:37.860Z"
+    "updatedAt": "2026-10-17T15:21:37.860Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "4aaf795c-324a-45c0-aac0-a3ae775dbbdc",
@@ -3375,7 +3717,9 @@
     "notes": "Paciente cadastrado na recepção.",
     "room": "Consultório 1",
     "createdAt": "2026-10-17T15:27:49.310Z",
-    "updatedAt": "2026-10-17T15:27:49.310Z"
+    "updatedAt": "2026-10-17T15:27:49.310Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "97b498ff-9163-4d68-a120-40f35c32b3a9",
@@ -3394,7 +3738,9 @@
     "notes": "Paciente cadastrado na recepção.",
     "room": "Consultório 1",
     "createdAt": "2026-10-17T16:34:15.926Z",
-    "updatedAt": "2026-10-17T16:34:15.926Z"
+    "updatedAt": "2026-10-17T16:34:15.926Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "f67a8f78-a2f4-4f8c-b63d-0268a8ed77ed",
@@ -3414,7 +3760,9 @@
     "notes": "Paciente cadastrado na recepção.",
     "room": "Consultório 1",
     "createdAt": "2026-10-17T16:41:30.640Z",
-    "updatedAt": "2026-10-17T16:41:30.640Z"
+    "updatedAt": "2026-10-17T16:41:30.640Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "aa8be319-9905-4b89-ade6-20483f373edc",
@@ -3433,7 +3781,9 @@
     "notes": "Paciente cadastrado na recepção.",
     "room": "Consultório 1",
     "createdAt": "2026-10-17T16:57:15.555Z",
-    "updatedAt": "2026-10-17T16:57:15.555Z"
+    "updatedAt": "2026-10-17T16:57:15.555Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "20f5524c-0f6c-4b06-b2e6-072b6e92b4af",
@@ -3452,7 +3802,9 @@
     "notes": "Paciente cadastrado na recepção.",
     "room": "Consultório 1",
     "createdAt": "2026-10-17T16:58:39.572Z",
-    "updatedAt": "2026-10-17T16:58:39.572Z"
+    "updatedAt": "2026-10-17T16:58:39.572Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "971f8e06-d4d0-4842-88e9-19c762cc089a",
@@ -3471,7 +3823,9 @@
     "notes": "Paciente cadastrado na recepção.",
     "room": "Consultório 1",
     "createdAt": "2026-10-17T17:04:28.370Z",
-    "updatedAt": "2026-10-17T17:04:28.370Z"
+    "updatedAt": "2026-10-17T17:04:28.370Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "827b1990-a25a-4053-bb7b-71ce5c7823bf",
@@ -3490,7 +3844,9 @@
     "notes": "Paciente cadastrado na recepção.",
     "room": "Consultório 1",
     "createdAt": "2026-10-17T17:14:22.315Z",
-    "updatedAt": "2026-10-17T17:14:22.315Z"
+    "updatedAt": "2026-10-17T17:14:22.315Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "516465d0-3fca-476b-af8f-607e59f23bb7",
@@ -3509,7 +3865,9 @@
     "notes": "Paciente cadastrado na recepção.",
     "room": "Consultório 1",
     "createdAt": "2026-10-17T18:08:46.367Z",
-    "updatedAt": "2026-10-17T18:08:46.367Z"
+    "updatedAt": "2026-10-17T18:08:46.367Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "deb95505-5ad6-4a42-855f-47ae81b66bd3",
@@ -3528,7 +3886,9 @@
     "notes": "Paciente cadastrado na recepção.",
     "room": "Consultório 1",
     "createdAt": "2026-10-17T18:11:02.072Z",
-    "updatedAt": "2026-10-17T18:11:02.072Z"
+    "updatedAt": "2026-10-17T18:11:02.072Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "c2d0de1d-ecf2-49f2-ad48-d10f2b598838",
@@ -3548,7 +3908,9 @@
     "notes": "Paciente cadastrado na recepção.",
     "room": "Consultório 1",
     "createdAt": "2026-10-17T21:23:32.634Z",
-    "updatedAt": "2026-10-17T21:23:32.634Z"
+    "updatedAt": "2026-10-17T21:23:32.634Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "ead92523-5a0c-4360-b0a8-ed3f099d36f4",
@@ -3568,7 +3930,9 @@
     "notes": "Paciente cadastrado na recepção.",
     "room": "Consultório 1",
     "createdAt": "2026-10-17T21:25:16.216Z",
-    "updatedAt": "2026-10-17T21:25:16.216Z"
+    "updatedAt": "2026-10-17T21:25:16.216Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "8325b29a-d525-409c-a4ff-008b6fa51f78",
@@ -3583,7 +3947,9 @@
     "status": "completed",
     "completedAt": "2026-11-04T10:00:00.000Z",
     "createdAt": "2026-11-04T09:30:00.000Z",
-    "updatedAt": "2026-11-04T18:13:59.685Z"
+    "updatedAt": "2026-11-04T18:13:59.685Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "47044c0c-011c-453e-8c73-3c604b9a6f57",
@@ -3598,7 +3964,9 @@
     "status": "completed",
     "completedAt": "2026-11-04T10:30:00.000Z",
     "createdAt": "2026-11-04T10:00:00.000Z",
-    "updatedAt": "2026-11-04T18:13:59.685Z"
+    "updatedAt": "2026-11-04T18:13:59.685Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "699c295f-fa7c-446a-93b7-c73ec85b18e4",
@@ -3613,7 +3981,9 @@
     "status": "completed",
     "completedAt": "2026-11-04T11:00:00.000Z",
     "createdAt": "2026-11-04T10:30:00.000Z",
-    "updatedAt": "2026-11-04T18:13:59.685Z"
+    "updatedAt": "2026-11-04T18:13:59.685Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-ivs-20261028-in-1",
@@ -3629,7 +3999,9 @@
     "isOutOfContractPeriod": false,
     "completedAt": "2026-10-28T11:00:00.000Z",
     "createdAt": "2026-10-28T09:00:00.000Z",
-    "updatedAt": "2026-11-04T18:14:55.038Z"
+    "updatedAt": "2026-11-04T18:14:55.038Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-ivs-20261028-in-2",
@@ -3645,7 +4017,9 @@
     "isOutOfContractPeriod": false,
     "completedAt": "2026-10-28T11:00:00.000Z",
     "createdAt": "2026-10-28T09:00:00.000Z",
-    "updatedAt": "2026-11-04T18:14:55.038Z"
+    "updatedAt": "2026-11-04T18:14:55.038Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-ivs-20261028-in-3",
@@ -3661,7 +4035,9 @@
     "isOutOfContractPeriod": false,
     "completedAt": "2026-10-28T11:00:00.000Z",
     "createdAt": "2026-10-28T09:00:00.000Z",
-    "updatedAt": "2026-11-04T18:14:55.038Z"
+    "updatedAt": "2026-11-04T18:14:55.038Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-ivs-20261031-extra-1",
@@ -3676,7 +4052,9 @@
     "status": "completed",
     "completedAt": "2026-10-31T17:15:00.000Z",
     "createdAt": "2026-10-31T16:45:00.000Z",
-    "updatedAt": "2026-11-04T18:13:59.684Z"
+    "updatedAt": "2026-11-04T18:13:59.684Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-ivs-20261031-extra-2",
@@ -3691,7 +4069,9 @@
     "status": "completed",
     "completedAt": "2026-10-31T17:30:00.000Z",
     "createdAt": "2026-10-31T17:00:00.000Z",
-    "updatedAt": "2026-11-04T18:13:59.684Z"
+    "updatedAt": "2026-11-04T18:13:59.684Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-ivs-20261103-extra-1",
@@ -3706,7 +4086,9 @@
     "status": "completed",
     "completedAt": "2026-11-03T16:30:00.000Z",
     "createdAt": "2026-11-03T16:00:00.000Z",
-    "updatedAt": "2026-11-04T18:13:59.684Z"
+    "updatedAt": "2026-11-04T18:13:59.684Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-ivs-20261103-extra-2",
@@ -3721,7 +4103,9 @@
     "status": "completed",
     "completedAt": "2026-11-03T17:00:00.000Z",
     "createdAt": "2026-11-03T16:30:00.000Z",
-    "updatedAt": "2026-11-04T18:13:59.684Z"
+    "updatedAt": "2026-11-04T18:13:59.684Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-ivs-20261027-01",
@@ -3736,7 +4120,9 @@
     "status": "completed",
     "completedAt": "2026-10-27T18:00:00.000Z",
     "createdAt": "2026-10-27T13:00:00.000Z",
-    "updatedAt": "2026-11-04T18:14:55.037Z"
+    "updatedAt": "2026-11-04T18:14:55.037Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-ivs-20261027-02",
@@ -3751,7 +4137,9 @@
     "status": "completed",
     "completedAt": "2026-10-27T18:00:00.000Z",
     "createdAt": "2026-10-27T13:00:00.000Z",
-    "updatedAt": "2026-11-04T18:14:55.038Z"
+    "updatedAt": "2026-11-04T18:14:55.038Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-ivs-20261027-03",
@@ -3766,7 +4154,9 @@
     "status": "completed",
     "completedAt": "2026-10-27T18:00:00.000Z",
     "createdAt": "2026-10-27T13:00:00.000Z",
-    "updatedAt": "2026-11-04T18:14:55.038Z"
+    "updatedAt": "2026-11-04T18:14:55.038Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-ivs-20261027-04",
@@ -3781,7 +4171,9 @@
     "status": "completed",
     "completedAt": "2026-10-27T18:00:00.000Z",
     "createdAt": "2026-10-27T13:00:00.000Z",
-    "updatedAt": "2026-11-04T18:14:55.038Z"
+    "updatedAt": "2026-11-04T18:14:55.038Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-ivs-20261027-05",
@@ -3796,7 +4188,9 @@
     "status": "completed",
     "completedAt": "2026-10-27T18:00:00.000Z",
     "createdAt": "2026-10-27T13:00:00.000Z",
-    "updatedAt": "2026-11-04T18:14:55.038Z"
+    "updatedAt": "2026-11-04T18:14:55.038Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-ivs-20261027-06",
@@ -3811,7 +4205,9 @@
     "status": "completed",
     "completedAt": "2026-10-27T18:00:00.000Z",
     "createdAt": "2026-10-27T13:00:00.000Z",
-    "updatedAt": "2026-11-04T18:14:55.038Z"
+    "updatedAt": "2026-11-04T18:14:55.038Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-ivs-20261027-07",
@@ -3826,7 +4222,9 @@
     "status": "completed",
     "completedAt": "2026-10-27T18:00:00.000Z",
     "createdAt": "2026-10-27T13:00:00.000Z",
-    "updatedAt": "2026-11-04T18:14:55.038Z"
+    "updatedAt": "2026-11-04T18:14:55.038Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-ivs-20261027-08",
@@ -3841,7 +4239,9 @@
     "status": "completed",
     "completedAt": "2026-10-27T18:00:00.000Z",
     "createdAt": "2026-10-27T13:00:00.000Z",
-    "updatedAt": "2026-11-04T18:14:55.038Z"
+    "updatedAt": "2026-11-04T18:14:55.038Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-ivs-20261027-09",
@@ -3856,7 +4256,9 @@
     "status": "completed",
     "completedAt": "2026-10-27T18:00:00.000Z",
     "createdAt": "2026-10-27T13:00:00.000Z",
-    "updatedAt": "2026-11-04T18:14:55.038Z"
+    "updatedAt": "2026-11-04T18:14:55.038Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-ivs-20261027-10",
@@ -3871,7 +4273,9 @@
     "status": "completed",
     "completedAt": "2026-10-27T18:00:00.000Z",
     "createdAt": "2026-10-27T13:00:00.000Z",
-    "updatedAt": "2026-11-04T18:14:55.038Z"
+    "updatedAt": "2026-11-04T18:14:55.038Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-ivs-20261027-11",
@@ -3886,7 +4290,9 @@
     "status": "completed",
     "completedAt": "2026-10-27T18:00:00.000Z",
     "createdAt": "2026-10-27T13:00:00.000Z",
-    "updatedAt": "2026-11-04T18:14:55.038Z"
+    "updatedAt": "2026-11-04T18:14:55.038Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-ivs-20261027-12",
@@ -3901,7 +4307,9 @@
     "status": "completed",
     "completedAt": "2026-10-27T18:00:00.000Z",
     "createdAt": "2026-10-27T13:00:00.000Z",
-    "updatedAt": "2026-11-04T18:14:55.038Z"
+    "updatedAt": "2026-11-04T18:14:55.038Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-ivs-20261028-out-1",
@@ -3917,7 +4325,9 @@
     "isOutOfContractPeriod": true,
     "completedAt": "2026-10-28T16:00:00.000Z",
     "createdAt": "2026-10-28T14:00:00.000Z",
-    "updatedAt": "2026-11-04T18:14:55.038Z"
+    "updatedAt": "2026-11-04T18:14:55.038Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-ivs-20261028-out-2",
@@ -3933,7 +4343,9 @@
     "isOutOfContractPeriod": true,
     "completedAt": "2026-10-28T16:00:00.000Z",
     "createdAt": "2026-10-28T14:00:00.000Z",
-    "updatedAt": "2026-11-04T18:14:55.038Z"
+    "updatedAt": "2026-11-04T18:14:55.038Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-ivs-20261028-out-3",
@@ -3949,7 +4361,9 @@
     "isOutOfContractPeriod": true,
     "completedAt": "2026-10-28T16:00:00.000Z",
     "createdAt": "2026-10-28T14:00:00.000Z",
-    "updatedAt": "2026-11-04T18:14:55.038Z"
+    "updatedAt": "2026-11-04T18:14:55.038Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-ivs-20261028-out-4",
@@ -3965,7 +4379,9 @@
     "isOutOfContractPeriod": true,
     "completedAt": "2026-10-28T16:00:00.000Z",
     "createdAt": "2026-10-28T14:00:00.000Z",
-    "updatedAt": "2026-11-04T18:14:55.038Z"
+    "updatedAt": "2026-11-04T18:14:55.038Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-ivs-20261030-1",
@@ -3980,7 +4396,9 @@
     "status": "completed",
     "completedAt": "2026-10-30T12:00:00.000Z",
     "createdAt": "2026-10-30T10:00:00.000Z",
-    "updatedAt": "2026-11-04T18:14:55.038Z"
+    "updatedAt": "2026-11-04T18:14:55.038Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-ivs-20261030-2",
@@ -3995,7 +4413,9 @@
     "status": "completed",
     "completedAt": "2026-10-30T12:00:00.000Z",
     "createdAt": "2026-10-30T10:00:00.000Z",
-    "updatedAt": "2026-11-04T18:14:55.038Z"
+    "updatedAt": "2026-11-04T18:14:55.038Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-ivs-20261030-3",
@@ -4010,7 +4430,9 @@
     "status": "completed",
     "completedAt": "2026-10-30T12:00:00.000Z",
     "createdAt": "2026-10-30T10:00:00.000Z",
-    "updatedAt": "2026-11-04T18:14:55.038Z"
+    "updatedAt": "2026-11-04T18:14:55.038Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   },
   {
     "id": "apt-ivs-20261106-01",
@@ -4025,6 +4447,8 @@
     "status": "completed",
     "completedAt": "2026-11-06T15:00:00.000Z",
     "createdAt": "2026-11-06T14:30:00.000Z",
-    "updatedAt": "2026-11-06T15:00:00.000Z"
+    "updatedAt": "2026-11-06T15:00:00.000Z",
+    "isSettled": true,
+    "settledAt": "2026-11-17T16:15:37.728Z"
   }
 ]
